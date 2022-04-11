@@ -1,0 +1,1 @@
+{"files":["./src/**/*.{html,htm,css,js}"],"server":{"baseDir":"/","index":"index.html"},"open":false,"serveStatic":["."],"serveStaticOptions":{"extensions":["html","css","js"]}}
