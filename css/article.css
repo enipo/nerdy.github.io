@@ -1,0 +1,61 @@
+.container .content .article-container {
+  width: 60%;
+  font-size: 1.3em;
+  margin: 30px auto;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.4s ease-out;
+  line-height: 1.8em;
+}
+
+.container .content article {
+  margin: 0 0px 100px;
+  padding: 25px 0px 40px 0px;
+  transition: all 0.2s ease-out;
+}
+
+.container .content article .article-date {
+  color: #0d60ee;
+}
+
+.container .content .article-container::after {
+  /* content: " ";
+  background-image: url(/img/mandelbrot.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  height: 160px;
+  display: block;
+  float: left;
+  width: 100%; */
+}
+
+.container .content article h2 {
+  display: inline-block;
+}
+
+.container .content article h3.teaser {
+  font-size: 1.7em;
+  margin: 3px 0 30px 0;
+  font-style: italic;
+  opacity: 0.6;
+}
+
+.container .content article h3 {
+  font-size: 1.8em;
+  margin: 3px 0 40px 0;
+}
+.container .content article h4 {
+  font-size: 1.4em;
+}
+.container .content article h5 {
+  font-size: 1em;
+}
+
+.container .content article p {
+  font-size: 1em;
+}
+
+.container .content article .tag-code {
+  opacity: 0.5;
+}

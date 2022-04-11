@@ -1,0 +1,133 @@
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="yanm1ng&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      Nerdy
+    
+  </title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" 
+    integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.0/p5.js"></script>
+  <link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/9.6.0/styles/github.min.css">
+  <script src="//cdn.bootcss.com/highlight.js/9.6.0/highlight.min.js"></script>
+	<style>
+		@import url('https://fonts.googleapis.com/css?family=Josefin+Slab|Roboto+Slab|VT323');
+	</style>
+	<link href="/css/style.css" rel="stylesheet" type="text/css" />
+	<link href="/css/article.css" rel="stylesheet" type="text/css" />
+	<link href="/css/header.css" rel="stylesheet" type="text/css" />
+	<link href="/css/media.css" rel="stylesheet" type="text/css" />
+</head>
+
+  <body class="">
+      <div class="debug hide"></div>
+<div id="app">
+  <div id="canvas" class="canvas-bg"></div>
+  <div class="container">
+    <header>
+      
+      <a href="/">
+        <h1 class="logo"><span class="firstChar">N</span><span class="otherChars">ERDY</span></h1>
+      </a>
+      
+      
+      <h2>PUTTING THE Y IN NERDY<br />
+      <small>as in: Why, dear god... Why!?</small></h2>
+      
+
+    </header>
+    <div class="content">
+      <main class="app-body">
+      <div id="article-banner">
+  <h2>Archives</h2>
+  <p class="post-date">文章归档</p>
+</div>
+<main class="app-body" id="archives">
+  
+  
+  
+    <section class="time-section">
+  <h1 class="section-year">
+    2019
+  </h1>
+  <div class="section-list">
+    
+    
+      <div class="section-list-item">
+        <a href="/posts/Gitlab-ci-phpcs-optimization/" class="archive-title">Gitlab CI phpcs optimization</a>
+        <p class="archive-date">06-02</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/posts/Logging-sensor-data-with-firebase/" class="archive-title">Logging sensor data with firebase</a>
+        <p class="archive-date">04-27</p>
+      </div>
+    
+  </div>
+</section>
+  
+    <section class="time-section">
+  <h1 class="section-year">
+    2018
+  </h1>
+  <div class="section-list">
+    
+    
+      <div class="section-list-item">
+        <a href="/posts/music-programming/" class="archive-title">My band without vocals and programming</a>
+        <p class="archive-date">02-16</p>
+      </div>
+    
+      <div class="section-list-item">
+        <a href="/posts/Puzzle-Solver/" class="archive-title">Puzzle solver</a>
+        <p class="archive-date">02-16</p>
+      </div>
+    
+  </div>
+</section>
+  
+</main>
+
+<script>
+  (function () {
+    var url = 'https://nerdy.nl/tags/code-challenge/index.html';
+  })();
+</script>
+    				</main>
+				
+				<div class="footer">
+					<h3 class="logo">&copy; NERDY {{new Date().getFullYear()}}</h3>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+
+	<script src="/js/p5.scribble.js"></script>
+	<script src="/js/kip.js"></script>
+	<script src="/js/app.js"></script>
+	<script>
+		// hljs.initHighlightingOnLoad();
+	// if (document.querySelector('.canvas-bg')) {
+		const p = new p5(s, 'canvas');
+		const sc = new Scribble(p); 
+		sc.bowing = 0;          // changes the bowing of lines
+		sc.roughness = 0;       // changes the roughness of lines
+		sc.maxOffset = 0;       // coordinates will get an offset, here you define the max offset
+		sc.numEllipseSteps = 0; // defines how much curves will be used to draw an ellipse
+
+	// }
+	const app = new Vue({
+		el: '#app',
+	});
+	</script>
+  </body>
+</html>

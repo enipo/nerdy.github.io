@@ -1,0 +1,33 @@
+html, body { 
+  background-color: #000;
+  overflow: hidden;
+}
+.debug {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: rgba(10, 40, 100, 0.9);
+  padding: 20px;
+  opacity: 0.6;
+  text-align: right;
+  background-color: rgba(0, 0, 0);
+  white-space: hard;
+  border: 1px solid #ccc;
+  z-index: 1000;
+  color: #fff;
+  font-size: 17px;
+}
+.hide {
+  display: none;
+}
+
+.debug h3 {
+  margin: 0;
+}
+
+.debug span {
+  display: inline-block;
+  float: left;
+  width: 150px;
+  text-align: left;
+}
