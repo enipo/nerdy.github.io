@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nerdia — An Atlas of the Discovered Lands</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='85'%3E🗺️%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=IM+Fell+DW+Pica:ital@0;1&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --parch:#e8d7a6;--parch-dark:#c9b380;--parch-edge:#a88d4f;
+  --ink:#2a1a08;--ink-soft:#52381c;--sepia:#7a4a1a;
+  --sea:#3a6a7a;--sea-deep:#2a5668;--gold:#c8882a;--rose:#a64028;
+  --disp:'UnifrakturMaguntia',serif;--body:'Cormorant Garamond',Georgia,serif;--fell:'IM Fell DW Pica',Georgia,serif;
+}
+html,body{background:#7a5c3a;font-family:var(--body);color:var(--ink);min-height:100vh;line-height:1.6}
+a{color:inherit;text-decoration:none}
+body{padding:2rem 1rem;background-image:
+  radial-gradient(circle at 30% 20%,rgba(0,0,0,.18) 0%,transparent 40%),
+  radial-gradient(circle at 70% 80%,rgba(0,0,0,.2) 0%,transparent 40%)}
+
+.atlas{max-width:1180px;margin:0 auto;background:var(--parch);position:relative;
+  box-shadow:0 8px 40px rgba(0,0,0,.4),inset 0 0 120px rgba(90,60,20,.35);
+  padding:3rem 2.5rem 2.5rem;border-radius:3px}
+/* stained edges */
+.atlas::before{content:'';position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 0 0,rgba(60,30,10,.4) 0,transparent 140px),
+    radial-gradient(ellipse at 100% 0,rgba(60,30,10,.35) 0,transparent 140px),
+    radial-gradient(ellipse at 0 100%,rgba(60,30,10,.4) 0,transparent 140px),
+    radial-gradient(ellipse at 100% 100%,rgba(60,30,10,.35) 0,transparent 140px);
+  mix-blend-mode:multiply}
+/* subtle texture */
+.atlas::after{content:'';position:absolute;inset:0;pointer-events:none;opacity:.25;
+  background-image:repeating-linear-gradient(43deg,transparent 0 3px,rgba(90,60,20,.2) 3px 4px)}
+
+.pageborder{position:absolute;inset:1.2rem;border:1.5px solid var(--ink);pointer-events:none}
+.pageborder::before{content:'';position:absolute;inset:-.6rem;border:.5px solid var(--ink);pointer-events:none}
+
+/* ═══ CARTOUCHE HEADER ═══ */
+.cartouche{text-align:center;padding:1rem 0 2rem;position:relative;z-index:1}
+.cartouche .motto-top{font-family:var(--fell);font-style:italic;font-size:.95rem;color:var(--sepia);letter-spacing:.12em;margin-bottom:.4rem}
+.cartouche h1{font-family:var(--disp);font-size:clamp(3rem,7vw,5.2rem);font-weight:400;color:var(--ink);line-height:1;letter-spacing:.02em}
+.cartouche h1 em{display:block;font-family:var(--body);font-style:italic;font-weight:400;font-size:.32em;color:var(--sepia);letter-spacing:.3em;margin-top:.5rem;text-transform:uppercase}
+.cartouche .scroll{max-width:620px;margin:1rem auto 0;font-family:var(--body);font-style:italic;font-size:1.15rem;color:var(--ink-soft);padding:0 1rem;line-height:1.5}
+.cartouche .year{font-family:var(--fell);font-size:.85rem;margin-top:1rem;color:var(--sepia);letter-spacing:.2em;font-style:italic}
+
+/* ornament */
+.ornament{display:flex;justify-content:center;align-items:center;gap:1rem;margin:1rem 0 1.5rem;color:var(--sepia)}
+.ornament::before,.ornament::after{content:'';flex:1;max-width:140px;height:1px;background:repeating-linear-gradient(90deg,var(--sepia) 0 6px,transparent 6px 10px)}
+.ornament span{font-family:var(--disp);font-size:1.6rem}
+
+/* ═══ MAP PANEL ═══ */
+.map-frame{position:relative;background:#d4c091;border:2px double var(--ink);padding:1rem;margin-bottom:2rem;z-index:1;
+  box-shadow:inset 0 0 30px rgba(90,60,20,.3)}
+.map-frame svg{display:block;width:100%;height:auto}
+
+/* legend beneath */
+.map-legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem 2rem;padding:1rem;border-top:1px solid var(--ink-soft);margin-top:.5rem;font-family:var(--fell);font-style:italic;font-size:.88rem;color:var(--ink-soft)}
+.map-legend div{display:flex;align-items:center;gap:.5rem}
+.map-legend b{font-style:normal;font-family:var(--body);color:var(--ink)}
+
+/* ═══ LANDS (project entries) ═══ */
+.lands{display:grid;grid-template-columns:repeat(2,1fr);gap:1.8rem 2.5rem;position:relative;z-index:1;margin-bottom:2rem}
+.land{border-top:2px solid var(--ink);padding-top:.8rem;position:relative}
+.land::after{content:'';position:absolute;top:-2px;left:0;width:40px;height:2px;background:var(--rose)}
+.land .sigil{float:right;font-size:2rem;color:var(--sepia);opacity:.7;margin-left:.6rem}
+.land h2{font-family:var(--disp);font-size:2rem;font-weight:400;color:var(--ink);line-height:1;margin-bottom:.15rem}
+.land h2 em{font-family:var(--body);font-style:italic;font-weight:400;font-size:.55rem;display:block;color:var(--sepia);letter-spacing:.18em;margin-top:.25rem;text-transform:uppercase}
+.land .flavor{font-family:var(--fell);font-style:italic;font-size:.95rem;color:var(--sepia);margin-bottom:.5rem}
+.land p{font-size:1.05rem;line-height:1.55;color:var(--ink-soft)}
+.land p::first-letter{font-family:var(--disp);font-size:2.6rem;float:left;line-height:.8;padding:.2rem .45rem 0 0;color:var(--rose)}
+.land .coords{font-family:var(--fell);font-style:italic;font-size:.78rem;color:var(--sepia);letter-spacing:.1em;margin-top:.6rem;border-top:1px dotted var(--sepia);padding-top:.4rem}
+
+/* ═══ COMPASS & SCALE ═══ */
+.apparatus{display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr;gap:1.5rem;align-items:center;padding:1rem 0;border-top:2px double var(--ink);border-bottom:2px double var(--ink);position:relative;z-index:1;margin-bottom:2rem;text-align:center}
+.apparatus > .div{background:var(--ink-soft);width:1px;height:80%;opacity:.5}
+.apparatus h3{font-family:var(--disp);font-size:1.3rem;color:var(--ink)}
+.apparatus .txt{font-family:var(--fell);font-style:italic;font-size:.9rem;color:var(--ink-soft)}
+.apparatus svg{margin:0 auto}
+
+/* ═══ MARGINALIA ═══ */
+.marg{position:relative;z-index:1;padding:1rem 0;border-top:2px solid var(--ink)}
+.marg h2{font-family:var(--disp);font-size:1.6rem;color:var(--ink);margin-bottom:.6rem}
+.marg p{font-family:var(--fell);font-style:italic;font-size:1rem;color:var(--ink-soft);line-height:1.6;margin-bottom:.5rem}
+.marg p em{color:var(--rose);font-style:normal;font-family:var(--body);font-weight:600}
+
+.colophon{position:relative;z-index:1;text-align:center;margin-top:2rem;padding-top:1rem;border-top:1px solid var(--sepia);font-family:var(--fell);font-style:italic;font-size:.85rem;color:var(--sepia);letter-spacing:.08em}
+.colophon a{color:var(--rose);border-bottom:1px dotted}
+
+/* svg styling */
+.m-sea{font-family:'IM Fell DW Pica',serif;font-style:italic;fill:#1a3a45;font-size:13px;letter-spacing:1.5px}
+.m-land{font-family:'UnifrakturMaguntia',serif;fill:#2a1a08;font-size:16px}
+.m-label{font-family:'IM Fell DW Pica',serif;font-style:italic;fill:#52381c;font-size:10px}
+.m-tiny{font-family:'IM Fell DW Pica',serif;font-style:italic;fill:#52381c;font-size:8px;letter-spacing:.5px}
+
+@media(max-width:780px){
+  .lands{grid-template-columns:1fr}
+  .apparatus{grid-template-columns:1fr;gap:1rem}
+  .apparatus > .div{display:none}
+  .atlas{padding:2rem 1.2rem 1.5rem}
+  .cartouche h1{font-size:2.4rem}
+}
+</style>
+</head>
+<body>
+
+<article class="atlas">
+  <div class="pageborder"></div>
+
+  <header class="cartouche">
+    <p class="motto-top">&diams; Tabula Geographica &diams;</p>
+    <h1>Nerdia<em>A true and faithfull mappe</em></h1>
+    <p class="scroll">Herein are depicted the discovered lands of one GERTJAN, a domestick philosopher of the low countries, together with his sundry strange pursuits, his islands of hobby, and the darker wildernesses wherein his cables lie coiled.</p>
+    <p class="year">&sect; Drawn at Nerdhaven &sect; MMXXVI &sect; Edition Nova</p>
+  </header>
+
+  <div class="ornament"><span>&#10070;</span><span>&#10086;</span><span>&#10070;</span></div>
+
+  <!-- MAP -->
+  <div class="map-frame">
+    <svg viewBox="0 0 1000 540" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="waves" patternUnits="userSpaceOnUse" width="30" height="14">
+          <path d="M0 8 Q7 2 14 8 T28 8" stroke="#3a6a7a" stroke-width=".7" fill="none" opacity=".55"/>
+          <path d="M0 12 Q7 6 14 12" stroke="#3a6a7a" stroke-width=".5" fill="none" opacity=".35"/>
+        </pattern>
+      </defs>
+
+      <!-- parchment sea -->
+      <rect width="1000" height="540" fill="#cbb98a"/>
+      <rect width="1000" height="540" fill="url(#waves)"/>
+
+      <!-- decorative border -->
+      <rect x="6" y="6" width="988" height="528" fill="none" stroke="#2a1a08" stroke-width="1"/>
+      <rect x="12" y="12" width="976" height="516" fill="none" stroke="#2a1a08" stroke-width=".4"/>
+
+      <!-- graticule marks -->
+      <g stroke="#52381c" stroke-width=".4" opacity=".5">
+        <line x1="6" y1="140" x2="994" y2="140"/>
+        <line x1="6" y1="280" x2="994" y2="280"/>
+        <line x1="6" y1="420" x2="994" y2="420"/>
+        <line x1="200" y1="6" x2="200" y2="534"/>
+        <line x1="400" y1="6" x2="400" y2="534"/>
+        <line x1="600" y1="6" x2="600" y2="534"/>
+        <line x1="800" y1="6" x2="800" y2="534"/>
+      </g>
+
+      <!-- Continents / islands -->
+      <!-- Terminus Major -->
+      <path d="M120 160 Q80 110 150 80 Q220 70 280 110 Q350 130 340 200 Q320 240 260 230 Q200 220 150 240 Q100 240 90 200 Q80 175 120 160 Z"
+            fill="#c9b380" stroke="#2a1a08" stroke-width="1.2"/>
+      <path d="M120 160 Q80 110 150 80 Q220 70 280 110 Q350 130 340 200 Q320 240 260 230 Q200 220 150 240 Q100 240 90 200 Q80 175 120 160 Z"
+            fill="none" stroke="#52381c" stroke-width=".4" stroke-dasharray="2 3" opacity=".6"/>
+      <!-- trees -->
+      <g fill="#5c4828" stroke="#2a1a08" stroke-width=".3">
+        <circle cx="180" cy="140" r="4"/><circle cx="200" cy="145" r="3.5"/>
+        <circle cx="220" cy="130" r="4"/><circle cx="250" cy="160" r="3.5"/>
+      </g>
+      <!-- city -->
+      <g transform="translate(220 180)">
+        <rect x="-5" y="-5" width="10" height="10" fill="#7a4a1a" stroke="#2a1a08" stroke-width=".6"/>
+        <rect x="-2" y="-12" width="4" height="7" fill="#7a4a1a" stroke="#2a1a08" stroke-width=".6"/>
+      </g>
+      <text x="230" y="196" class="m-land">Terminus Major</text>
+      <text x="230" y="210" class="m-label">seat of the keyboard</text>
+
+      <!-- Clusters Isles -->
+      <g>
+        <path d="M500 90 Q530 75 545 95 Q550 115 520 120 Q495 115 500 90 Z" fill="#c9b380" stroke="#2a1a08" stroke-width="1"/>
+        <path d="M570 110 Q600 100 608 120 Q602 135 580 135 Q565 125 570 110 Z" fill="#c9b380" stroke="#2a1a08" stroke-width="1"/>
+        <path d="M540 150 Q565 140 572 160 Q565 175 548 175 Q535 168 540 150 Z" fill="#c9b380" stroke="#2a1a08" stroke-width="1"/>
+        <path d="M620 80 Q640 70 650 85 Q647 98 630 100 Q617 92 620 80 Z" fill="#c9b380" stroke="#2a1a08" stroke-width="1"/>
+        <path d="M490 150 Q502 145 510 155 Q506 163 495 162 Q486 157 490 150 Z" fill="#c9b380" stroke="#2a1a08" stroke-width="1"/>
+      </g>
+      <text x="520" y="190" class="m-land">Clusters Isles</text>
+      <text x="520" y="204" class="m-label">a small archipelago · too many</text>
+
+      <!-- Gateway Peninsula -->
+      <path d="M720 180 Q680 210 700 260 Q740 280 800 270 Q870 255 900 210 Q885 175 830 165 Q770 165 720 180 Z"
+            fill="#c9b380" stroke="#2a1a08" stroke-width="1.2"/>
+      <!-- roads to mainland -->
+      <path d="M720 220 Q650 230 580 220" stroke="#7a4a1a" stroke-width="1.2" stroke-dasharray="4 3" fill="none"/>
+      <path d="M870 220 Q920 240 970 250" stroke="#7a4a1a" stroke-width="1.2" stroke-dasharray="4 3" fill="none"/>
+      <text x="790" y="226" class="m-land" text-anchor="middle">Pontis Peninsula</text>
+      <text x="790" y="240" class="m-label" text-anchor="middle">MCP — bridge of tongues</text>
+
+      <!-- Pixel Archipelago (square islands) -->
+      <g>
+        <rect x="820" y="340" width="28" height="28" fill="#c9b380" stroke="#2a1a08" stroke-width="1"/>
+        <rect x="860" y="350" width="22" height="22" fill="#c9b380" stroke="#2a1a08" stroke-width="1"/>
+        <rect x="830" y="380" width="20" height="20" fill="#c9b380" stroke="#2a1a08" stroke-width="1"/>
+        <rect x="870" y="385" width="18" height="18" fill="#c9b380" stroke="#2a1a08" stroke-width="1"/>
+      </g>
+      <text x="840" y="425" class="m-land">Pixel Isles</text>
+      <text x="840" y="437" class="m-label">4-bit colour · 8-bit sorrow</text>
+
+      <!-- Basement Deep -->
+      <path d="M100 400 Q160 380 220 400 Q290 420 340 450 Q300 490 220 490 Q130 480 100 460 Z"
+            fill="#a89568" stroke="#2a1a08" stroke-width="1.2"/>
+      <text x="210" y="452" class="m-land">Subterra Workshop</text>
+      <text x="210" y="468" class="m-label">sawdust risings</text>
+
+      <!-- Mazu Bay -->
+      <path d="M420 380 Q410 360 440 340 Q490 330 510 360 Q520 400 470 420 Q430 410 420 380 Z"
+            fill="#c9b380" stroke="#2a1a08" stroke-width="1"/>
+      <text x="465" y="388" class="m-land" text-anchor="middle">Mazu Bay</text>
+      <text x="465" y="402" class="m-label" text-anchor="middle">drum-thunder heard</text>
+
+      <!-- Domestic Hold -->
+      <path d="M610 380 Q600 360 640 350 Q680 355 690 385 Q685 415 650 420 Q615 415 610 380 Z"
+            fill="#c9b380" stroke="#2a1a08" stroke-width="1"/>
+      <text x="650" y="395" class="m-land" text-anchor="middle">Domus Automatus</text>
+      <text x="650" y="409" class="m-label" text-anchor="middle">held by zigbee</text>
+
+      <!-- Sea labels -->
+      <text x="450" y="60" class="m-sea" text-anchor="middle">MARE TYPOGRAPHICUM</text>
+      <text x="140" y="310" class="m-sea" transform="rotate(-8 140 310)">MARE INCERTUM</text>
+      <text x="600" y="300" class="m-sea" text-anchor="middle">sinus interruptus</text>
+
+      <!-- sea monster -->
+      <g fill="none" stroke="#2a1a08" stroke-width="1.2">
+        <path d="M380 70 Q400 60 420 75 Q440 85 460 70 Q480 60 500 75"/>
+        <circle cx="385" cy="70" r="2" fill="#2a1a08"/>
+      </g>
+      <text x="440" y="50" class="m-tiny" text-anchor="middle">Hic sunt daemones</text>
+
+      <!-- ship -->
+      <g transform="translate(750 440)">
+        <path d="M0 0 L30 0 L26 8 L4 8 Z" fill="#7a4a1a" stroke="#2a1a08" stroke-width=".6"/>
+        <line x1="15" y1="0" x2="15" y2="-20" stroke="#2a1a08" stroke-width=".8"/>
+        <path d="M15 -18 Q18 -15 22 -18 Q18 -10 15 -10" fill="#e8d7a6" stroke="#2a1a08" stroke-width=".5"/>
+      </g>
+
+      <!-- Compass rose -->
+      <g transform="translate(90 460)">
+        <circle r="30" fill="#e8d7a6" stroke="#2a1a08" stroke-width=".8"/>
+        <polygon points="0,-28 5,0 0,28 -5,0" fill="#2a1a08"/>
+        <polygon points="-28,0 0,-5 28,0 0,5" fill="#7a4a1a"/>
+        <text x="0" y="-33" text-anchor="middle" class="m-tiny" font-size="9">N</text>
+        <text x="0" y="39" text-anchor="middle" class="m-tiny" font-size="9">S</text>
+        <text x="35" y="3" class="m-tiny" font-size="9">E</text>
+        <text x="-38" y="3" class="m-tiny" font-size="9">W</text>
+      </g>
+
+      <!-- scale -->
+      <g transform="translate(780 500)">
+        <rect x="0" y="0" width="25" height="6" fill="#2a1a08"/>
+        <rect x="25" y="0" width="25" height="6" fill="#e8d7a6" stroke="#2a1a08" stroke-width=".5"/>
+        <rect x="50" y="0" width="25" height="6" fill="#2a1a08"/>
+        <rect x="75" y="0" width="25" height="6" fill="#e8d7a6" stroke="#2a1a08" stroke-width=".5"/>
+        <text x="50" y="-4" text-anchor="middle" class="m-tiny">0         1 leag.         2</text>
+        <text x="50" y="20" text-anchor="middle" class="m-tiny" font-style="italic">scala geographica</text>
+      </g>
+
+    </svg>
+    <div class="map-legend">
+      <div>&#10070;<b>Terminus Major</b> — the keyboard capital</div>
+      <div>&#10070;<b>Clusters Isles</b> — too many for one ruler</div>
+      <div>&#10070;<b>Pontis Peninsula</b> — bridge of tongues</div>
+      <div>&#10070;<b>Subterra Workshop</b> — under-ground works</div>
+      <div>&#10070;<b>Mazu Bay</b> — drum-thunder</div>
+      <div>&#10070;<b>Domus Automatus</b> — held by zigbee</div>
+    </div>
+  </div>
+
+  <!-- Lands descriptions -->
+  <section class="lands">
+
+    <div class="land">
+      <span class="sigil">&#9874;</span>
+      <h2>Terminus Major<em>Chief city &amp; keyboard capital</em></h2>
+      <p class="flavor">Where nothing moves without a key-press.</p>
+      <p>A prosperous and somewhat stubborn city. Multiple terminal sessions throng its harbour; none of them use a mouse. Its tavern-keeper famously asked, &ldquo;why move my hand thirty centimeters when I could press two keys?&rdquo; and was elected mayor the following year.</p>
+      <div class="coords">Lat 52° N &middot; Long 5° E &middot; Nerdia, eastern shore</div>
+    </div>
+
+    <div class="land">
+      <span class="sigil">&#10041;</span>
+      <h2>Clusters Isles<em>An archipelago of computations</em></h2>
+      <p class="flavor">Here be GitOps. Proceed with caution.</p>
+      <p>Five islands where one would suffice. Each governs itself by an ancient YAML scroll that must be re-copied daily. The ruling council, when pressed for a reason, merely whispered &ldquo;GitOps&rdquo; and returned to its terminal.</p>
+      <div class="coords">Lat 53° N &middot; Long 8° E &middot; reachable only by control-plane</div>
+    </div>
+
+    <div class="land">
+      <span class="sigil">&#8646;</span>
+      <h2>Pontis Peninsula<em>The MCP Bridgehead</em></h2>
+      <p class="flavor">Where tongues meet and trade context.</p>
+      <p>A narrow peninsula which the inhabitants have fashioned into a great bridge. Slack, Jira, Grafana, Postgres, and Tailscale merchants all dock here. A single gatekeeper — the MCP — lets none pass without proper credentials and a well-formed schema.</p>
+      <div class="coords">Lat 51° N &middot; Long 10° E &middot; a narrow place of broad tongues</div>
+    </div>
+
+    <div class="land">
+      <span class="sigil">&#9632;</span>
+      <h2>Pixel Isles<em>Islands of low resolution</em></h2>
+      <p class="flavor">Square islands, square sorrows, sharp edges.</p>
+      <p>A crude archipelago whose coasts are made entirely of right angles. Small tanks roam the streets, firing upon each other with enthusiasm. Historians argue whether the pixel-art is retro by choice or by the limits of the draughtsman; the distinction, locally, means nothing.</p>
+      <div class="coords">Lat 50° N &middot; Long 14° E &middot; 16 colours, sometimes fewer</div>
+    </div>
+
+    <div class="land">
+      <span class="sigil">&#9774;</span>
+      <h2>Mazu Bay<em>A cove of drum-thunder</em></h2>
+      <p class="flavor">No lyrics. None requested.</p>
+      <p>A curved bay where an instrumental-stoner vessel named Mazu is most often moored. The drums are heard for some leagues inland; the neighbours have registered their opinions with local authority, who filed them neatly and returned to their drink.</p>
+      <div class="coords">Lat 50° N &middot; Long 7° E &middot; 60–80 BPM, seasonally</div>
+    </div>
+
+    <div class="land">
+      <span class="sigil">&#9742;</span>
+      <h2>Domus Automatus<em>A dwelling held by zigbee</em></h2>
+      <p class="flavor">WAF dangerously low; smart lights beloved.</p>
+      <p>A private holding where every lamp, door, and curtain is bound by invisible threads of radio. Three children reside within, who care nothing for clusters but everything for the lights. The lady of the house is unconvinced, but tolerates the arrangement.</p>
+      <div class="coords">Lat 52° N &middot; Long 5° E &middot; 600 lines of YAML</div>
+    </div>
+
+  </section>
+
+  <!-- Apparatus -->
+  <section class="apparatus">
+    <div>
+      <h3>The Compass</h3>
+      <p class="txt">As in life: one cannot move forward without first agreeing upon which way is North. Nerdia's North is &ldquo;less meetings&rdquo;.</p>
+    </div>
+    <div class="div"></div>
+    <div>
+      <h3>The Scale</h3>
+      <p class="txt">One league is roughly the distance a YAML file will grow between Monday and Friday.</p>
+    </div>
+    <div class="div"></div>
+    <div>
+      <h3>The Motto</h3>
+      <p class="txt">Putting the Y in Nerdy — Why, dear God, why?</p>
+    </div>
+  </section>
+
+  <!-- Marginalia -->
+  <section class="marg">
+    <h2>Marginalia &amp; Annotations</h2>
+    <p>&diams; The land known as <em>TBD</em> is rumoured to lie north of Terminus Major, and holds the promise of a personal productivity app. It has been sighted but not yet charted. Its coastline is said to be simple: captures, projects, tasks.</p>
+    <p>&diams; Travellers report that the cartographer himself — one &ldquo;<em>enipo</em>&rdquo; — can be petitioned via the scroll at <em>github.com/enipo</em>, provided the petitioner brings reasonable questions and no additional meetings.</p>
+    <p>&diams; Beware the <em>Sinus Interruptus</em>, a bay which appears calm but swallows untested deployments whole.</p>
+    <p>&diams; A sea-monster was drawn near the top of the map. The cartographer insists it is &ldquo;just a bug&rdquo;.</p>
+  </section>
+
+  <footer class="colophon">
+    Printed at Nerdhaven &middot; &copy; MMXXVI nerdy.nl &middot; <a href="https://github.com/enipo">github.com/enipo</a> &middot; &ldquo;here be nerds&rdquo;
+  </footer>
+
+</article>
+
+</body>
+</html>

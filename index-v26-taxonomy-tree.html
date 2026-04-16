@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Systema Nerdiae — A Taxonomic Treatise</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='85'%3E🌿%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Libre+Caslon+Text:ital@0;1&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --page:#f3ecda;--page-dark:#e1d7bd;--card:#faf4e2;
+  --ink:#1d2010;--ink2:#3b3d22;--forest:#3f5c2e;--moss:#6a7d46;--leaf:#8aa05a;
+  --cedar:#6b4a2a;--rust:#a94d1a;--gold:#b88a2a;
+  --display:'EB Garamond','Libre Caslon Text',Georgia,serif;--body:'Libre Caslon Text',Georgia,serif;--mono:'JetBrains Mono',monospace;
+}
+html,body{background:var(--page);color:var(--ink);font-family:var(--body);min-height:100vh;line-height:1.6;
+  background-image:
+    repeating-linear-gradient(0deg,transparent 0 32px,rgba(107,74,42,.05) 32px 33px)}
+a{color:inherit;text-decoration:none}
+
+.book{max-width:1180px;margin:0 auto;padding:2.5rem 2rem 2rem}
+
+/* ═══ TITLE PAGE ═══ */
+.title{text-align:center;padding:2rem 0 2.5rem;border-bottom:2px solid var(--ink)}
+.title .kicker{font-family:var(--display);font-style:italic;font-size:.95rem;color:var(--cedar);letter-spacing:.3em;margin-bottom:.5rem;text-transform:uppercase}
+.title h1{font-family:var(--display);font-size:clamp(2.8rem,6.5vw,4.6rem);font-weight:400;font-style:italic;color:var(--forest);line-height:.95;margin-bottom:.3rem}
+.title h1 small{display:block;font-family:var(--display);font-style:normal;font-size:.32em;letter-spacing:.3em;color:var(--ink2);margin-top:.6rem;text-transform:uppercase;font-weight:400}
+.title .subtitle{font-family:var(--display);font-style:italic;font-size:1.15rem;color:var(--ink2);max-width:640px;margin:.8rem auto 0}
+.title .author{font-family:var(--display);font-style:italic;font-size:.95rem;color:var(--cedar);margin-top:1rem;letter-spacing:.05em}
+.title .vol{font-family:var(--mono);font-size:.7rem;color:var(--ink2);letter-spacing:.2em;margin-top:.8rem;text-transform:uppercase}
+
+/* flourish */
+.flourish{display:flex;align-items:center;justify-content:center;gap:.8rem;color:var(--cedar);font-size:1.4rem;margin:.8rem 0}
+.flourish::before,.flourish::after{content:'';flex:1;max-width:180px;height:1px;background:var(--cedar);opacity:.5}
+
+/* ═══ LAYOUT: tree left, species cards right ═══ */
+.body{display:grid;grid-template-columns:1fr 1.3fr;gap:2.5rem;padding:2rem 0;border-bottom:2px solid var(--ink)}
+
+/* ═══ TREE (dendrogram) ═══ */
+.tree{position:sticky;top:1rem;align-self:start;background:var(--card);border:1px solid var(--cedar);padding:1.5rem 1rem;
+  box-shadow:3px 3px 0 rgba(107,74,42,.12)}
+.tree h2{font-family:var(--display);font-style:italic;font-size:1.6rem;color:var(--forest);margin-bottom:.3rem}
+.tree .lead{font-family:var(--display);font-style:italic;font-size:.95rem;color:var(--ink2);margin-bottom:1rem;border-bottom:1px solid var(--cedar);padding-bottom:.8rem}
+
+.tree svg{display:block;width:100%;height:auto}
+.tree-label{font-family:'EB Garamond',serif;font-size:11px;fill:var(--ink)}
+.tree-label-it{font-family:'EB Garamond',serif;font-style:italic;font-size:10.5px;fill:var(--ink2)}
+.tree-rank{font-family:'JetBrains Mono',monospace;font-size:8px;fill:var(--cedar);letter-spacing:.5px}
+.node-circle{fill:var(--forest);stroke:var(--ink);stroke-width:1}
+.node-leaf{fill:var(--rust);stroke:var(--ink);stroke-width:1}
+.tree-branch{stroke:var(--ink);stroke-width:1.2;fill:none}
+
+/* ═══ SPECIES CARDS ═══ */
+.species-list{display:flex;flex-direction:column;gap:1.8rem}
+.species{background:var(--card);border:1px solid var(--cedar);padding:1.4rem 1.6rem;position:relative;
+  box-shadow:3px 3px 0 rgba(107,74,42,.12)}
+.species::before{content:attr(data-no);position:absolute;top:.7rem;right:1rem;font-family:var(--mono);font-size:.62rem;color:var(--cedar);letter-spacing:.12em}
+.s-head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid var(--cedar);padding-bottom:.5rem;margin-bottom:.7rem;gap:1rem}
+.s-name{font-family:var(--display);font-size:1.6rem;font-style:italic;color:var(--forest);line-height:1.1}
+.s-name b{font-style:normal;color:var(--ink)}
+.s-common{font-family:var(--display);font-size:.85rem;color:var(--cedar);letter-spacing:.2em;text-transform:uppercase;margin-top:.2rem;font-style:normal}
+
+.s-illus{flex-shrink:0;width:90px;height:90px;border:1px solid var(--cedar);background:var(--page);
+  display:flex;align-items:center;justify-content:center;padding:.4rem}
+
+.s-meta{display:grid;grid-template-columns:auto 1fr;gap:.25rem 1rem;font-size:.88rem;margin-bottom:.6rem;font-family:var(--display)}
+.s-meta dt{font-style:italic;color:var(--cedar);letter-spacing:.05em}
+.s-meta dd{color:var(--ink)}
+
+.s-body{font-size:1.05rem;line-height:1.6;color:var(--ink2)}
+.s-body::first-letter{font-family:var(--display);font-size:2.8rem;float:left;line-height:.85;padding:.2rem .45rem 0 0;color:var(--forest);font-style:italic;font-weight:600}
+
+.s-footnote{margin-top:.8rem;font-family:var(--display);font-style:italic;font-size:.82rem;color:var(--cedar);border-top:1px dashed var(--cedar);padding-top:.4rem}
+
+/* subspecies chips */
+.chips{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.4rem}
+.chip{font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;padding:.18rem .5rem;border:.8px solid var(--moss);color:var(--moss);background:rgba(138,160,90,.1);border-radius:12px}
+
+/* ═══ APPENDIX ═══ */
+.appendix{padding:2rem 0 1rem}
+.appendix h2{font-family:var(--display);font-style:italic;font-size:2rem;color:var(--forest);text-align:center;margin-bottom:.3rem}
+.appendix .lead{font-family:var(--display);font-style:italic;font-size:1rem;color:var(--ink2);text-align:center;max-width:620px;margin:0 auto 1.5rem}
+.keys{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin-top:1.4rem}
+.key-item{border-left:2px solid var(--forest);padding:.5rem 0 .5rem 1rem;font-size:.95rem;line-height:1.5;color:var(--ink2)}
+.key-item b{font-family:var(--display);font-style:italic;color:var(--forest);font-size:1.05rem;display:block}
+.key-item span{font-family:var(--mono);font-size:.62rem;color:var(--cedar);letter-spacing:.1em;display:block;margin-top:.15rem}
+
+/* ═══ COLOPHON ═══ */
+.colophon{text-align:center;font-family:var(--display);font-style:italic;font-size:.9rem;color:var(--cedar);padding:1.4rem 0 0;border-top:1px solid var(--cedar);margin-top:2rem;letter-spacing:.05em}
+.colophon a{color:var(--rust);border-bottom:1px dotted}
+
+@media(max-width:880px){
+  .body{grid-template-columns:1fr}
+  .tree{position:relative;top:0}
+  .s-head{flex-direction:column}
+  .s-illus{width:70px;height:70px;align-self:flex-end}
+}
+</style>
+</head>
+<body>
+
+<article class="book">
+
+  <header class="title">
+    <p class="kicker">Natural History · Vol. I</p>
+    <h1>Systema Nerdiae<small>Being a rigorous classification</small></h1>
+    <div class="flourish"><span>&#10049;</span></div>
+    <p class="subtitle">In which are catalogued the known species, varieties and hybrids inhabiting one Gertjan of the Low Countries &mdash; with illustrations, tabular keys and binomial names in the Linnaean manner.</p>
+    <p class="author">drawn from life by the author &bull; Nerdhaven, anno MMXXVI</p>
+    <p class="vol">Kingdom · Nerdia &mdash; 7 species described</p>
+  </header>
+
+  <section class="body">
+
+    <!-- ═══ TREE ═══ -->
+    <aside class="tree">
+      <h2>Phylogeny</h2>
+      <p class="lead">A provisional dendrogram of the kingdom <em>Nerdia</em>, with its seven principal species.</p>
+
+      <svg viewBox="0 0 400 540" xmlns="http://www.w3.org/2000/svg">
+        <!-- root: Nerdia -->
+        <g>
+          <line class="tree-branch" x1="30" y1="270" x2="80" y2="270"/>
+          <line class="tree-branch" x1="80" y1="90" x2="80" y2="450"/>
+          <circle cx="30" cy="270" r="5" class="node-circle"/>
+          <text x="10" y="262" text-anchor="end" class="tree-rank">KINGDOM</text>
+          <text x="10" y="275" text-anchor="end" class="tree-label-it" style="font-size:12px">Nerdia</text>
+        </g>
+
+        <!-- Branch: Computatrix -->
+        <line class="tree-branch" x1="80" y1="140" x2="160" y2="140"/>
+        <line class="tree-branch" x1="160" y1="90" x2="160" y2="210"/>
+        <circle cx="80" cy="140" r="3.5" class="node-circle"/>
+        <text x="85" y="134" class="tree-rank">PHYLUM · Computatrix</text>
+
+        <!-- order A: Terminalia -->
+        <line class="tree-branch" x1="160" y1="90" x2="240" y2="90"/>
+        <circle cx="160" cy="90" r="3" class="node-circle"/>
+        <text x="163" y="86" class="tree-rank">Terminalia</text>
+        <circle cx="240" cy="90" r="6" class="node-leaf"/>
+        <text x="250" y="88" class="tree-label-it">Tabulus nerdicus</text>
+        <text x="250" y="101" class="tree-label" style="font-size:9px">Nerdy Terminal</text>
+
+        <!-- order B: Clusteria -->
+        <line class="tree-branch" x1="160" y1="140" x2="240" y2="140"/>
+        <circle cx="160" cy="140" r="3" class="node-circle"/>
+        <text x="163" y="136" class="tree-rank">Clusteria</text>
+        <circle cx="240" cy="140" r="6" class="node-leaf"/>
+        <text x="250" y="138" class="tree-label-it">Clusterum excessivum</text>
+        <text x="250" y="151" class="tree-label" style="font-size:9px">Kubernetes</text>
+
+        <!-- order C: Pontifia -->
+        <line class="tree-branch" x1="160" y1="190" x2="240" y2="190"/>
+        <circle cx="160" cy="190" r="3" class="node-circle"/>
+        <text x="163" y="186" class="tree-rank">Pontifia</text>
+        <circle cx="240" cy="190" r="6" class="node-leaf"/>
+        <text x="250" y="188" class="tree-label-it">Pontifex multiplex</text>
+        <text x="250" y="201" class="tree-label" style="font-size:9px">MCP Gateway</text>
+
+        <!-- Branch: Ludica -->
+        <line class="tree-branch" x1="80" y1="250" x2="160" y2="250"/>
+        <circle cx="80" cy="250" r="3.5" class="node-circle"/>
+        <text x="85" y="244" class="tree-rank">PHYLUM · Ludica</text>
+        <line class="tree-branch" x1="160" y1="240" x2="240" y2="240"/>
+        <circle cx="160" cy="240" r="3" class="node-circle"/>
+        <text x="163" y="236" class="tree-rank">Pixelia</text>
+        <circle cx="240" cy="240" r="6" class="node-leaf"/>
+        <text x="250" y="238" class="tree-label-it">Tankus octoseedicus</text>
+        <text x="250" y="251" class="tree-label" style="font-size:9px">Pixel Tanks</text>
+
+        <!-- Branch: Sonora -->
+        <line class="tree-branch" x1="80" y1="320" x2="160" y2="320"/>
+        <circle cx="80" cy="320" r="3.5" class="node-circle"/>
+        <text x="85" y="314" class="tree-rank">PHYLUM · Sonora</text>
+        <line class="tree-branch" x1="160" y1="300" x2="240" y2="300"/>
+        <line class="tree-branch" x1="160" y1="300" x2="160" y2="345"/>
+        <circle cx="160" cy="300" r="3" class="node-circle"/>
+        <circle cx="240" cy="300" r="6" class="node-leaf"/>
+        <text x="250" y="298" class="tree-label-it">Mazu instrumentalis</text>
+        <text x="250" y="311" class="tree-label" style="font-size:9px">Drums</text>
+
+        <line class="tree-branch" x1="160" y1="345" x2="240" y2="345"/>
+        <circle cx="240" cy="345" r="6" class="node-leaf"/>
+        <text x="250" y="343" class="tree-label-it">Chorda enthusiasta</text>
+        <text x="250" y="356" class="tree-label" style="font-size:9px">Guitar</text>
+
+        <!-- Branch: Domestica -->
+        <line class="tree-branch" x1="80" y1="410" x2="160" y2="410"/>
+        <circle cx="80" cy="410" r="3.5" class="node-circle"/>
+        <text x="85" y="404" class="tree-rank">PHYLUM · Domestica</text>
+        <line class="tree-branch" x1="160" y1="390" x2="240" y2="390"/>
+        <line class="tree-branch" x1="160" y1="390" x2="160" y2="440"/>
+        <circle cx="160" cy="390" r="3" class="node-circle"/>
+        <circle cx="240" cy="390" r="6" class="node-leaf"/>
+        <text x="250" y="388" class="tree-label-it">Domus automatum</text>
+        <text x="250" y="401" class="tree-label" style="font-size:9px">Home Assistant</text>
+
+        <line class="tree-branch" x1="160" y1="440" x2="240" y2="440"/>
+        <circle cx="240" cy="440" r="6" class="node-leaf"/>
+        <text x="250" y="438" class="tree-label-it">Subterra pulverifera</text>
+        <text x="250" y="451" class="tree-label" style="font-size:9px">Basement Workshop</text>
+
+        <!-- legend bottom -->
+        <g transform="translate(20 500)" class="tree-rank" style="font-size:9px">
+          <circle cx="0" cy="-4" r="4" class="node-circle"/>
+          <text x="10" y="-1">internal node</text>
+          <circle cx="130" cy="-4" r="5" class="node-leaf"/>
+          <text x="140" y="-1">described species</text>
+        </g>
+      </svg>
+    </aside>
+
+    <!-- ═══ SPECIES LIST ═══ -->
+    <div class="species-list">
+
+      <article class="species" data-no="№ I">
+        <div class="s-head">
+          <div>
+            <h3 class="s-name"><em>Tabulus nerdicus</em> <b>&mdash;</b> <br><span class="s-common">The Nerdy Terminal</span></h3>
+          </div>
+          <div class="s-illus">
+            <svg viewBox="0 0 60 60" fill="none" stroke="#3f5c2e" stroke-width="1.5">
+              <rect x="5" y="10" width="50" height="40" rx="3"/>
+              <path d="M11 22 l5 4 -5 4 M20 30 l8 0"/>
+            </svg>
+          </div>
+        </div>
+        <dl class="s-meta">
+          <dt>Habitat</dt><dd>macOS deciduous forests</dd>
+          <dt>Behaviour</dt><dd>keyboard-dominant, mouse-averse</dd>
+          <dt>Range</dt><dd>cosmopolitan, preferring dim rooms</dd>
+        </dl>
+        <p class="s-body">A diurnal species with pronounced aversion to pointing devices. Multiple sessions may be observed in a single individual, switched between by rapid percussion of the finger-tips. A typical call, recorded in the field, runs: &ldquo;why would I move my hand thirty centimeters when I could press two keys?&rdquo; Researchers report no satisfactory answer has yet been given.</p>
+        <div class="chips"><span class="chip">tmux</span><span class="chip">zsh</span><span class="chip">vim</span><span class="chip">no mouse</span></div>
+        <div class="s-footnote">&dagger; Type specimen: first observed roosting in ~/.config, anno MMXXIV.</div>
+      </article>
+
+      <article class="species" data-no="№ II">
+        <div class="s-head">
+          <div>
+            <h3 class="s-name"><em>Clusterum excessivum</em> <b>&mdash;</b> <br><span class="s-common">The Over-Engineered Cluster</span></h3>
+          </div>
+          <div class="s-illus">
+            <svg viewBox="0 0 60 60" fill="none" stroke="#3f5c2e" stroke-width="1.2">
+              <polygon points="30,10 45,18 45,36 30,44 15,36 15,18"/>
+              <polygon points="18,30 26,34 26,44 18,48 10,44 10,34" opacity=".7"/>
+              <polygon points="42,30 50,34 50,44 42,48 34,44 34,34" opacity=".7"/>
+            </svg>
+          </div>
+        </div>
+        <dl class="s-meta">
+          <dt>Habitat</dt><dd>private datacentres &amp; home closets</dd>
+          <dt>Behaviour</dt><dd>self-replicating, occasionally unreachable</dd>
+          <dt>Range</dt><dd>n = 5, where 1 would suffice</dd>
+        </dl>
+        <p class="s-body">Notable for its baroque organisation. The organism operates its own control plane, consisting of far more clusters than any reasonable observer would deem necessary. When asked for a reason, the operator has been recorded staring into the middle distance, whispering a single word &mdash; &ldquo;GitOps&rdquo; &mdash; before returning to its burrow.</p>
+        <div class="chips"><span class="chip">argocd</span><span class="chip">flux</span><span class="chip">helm</span><span class="chip">yaml-rich</span></div>
+        <div class="s-footnote">&dagger; Closely related to <em>C. productionis</em>, a larger but equally unnecessary variant.</div>
+      </article>
+
+      <article class="species" data-no="№ III">
+        <div class="s-head">
+          <div>
+            <h3 class="s-name"><em>Pontifex multiplex</em> <b>&mdash;</b> <br><span class="s-common">The MCP Gateway</span></h3>
+          </div>
+          <div class="s-illus">
+            <svg viewBox="0 0 60 60" fill="none" stroke="#3f5c2e" stroke-width="1.2">
+              <circle cx="30" cy="30" r="6"/>
+              <path d="M30 30 L10 10 M30 30 L50 10 M30 30 L10 50 M30 30 L50 50"/>
+              <circle cx="10" cy="10" r="3"/><circle cx="50" cy="10" r="3"/>
+              <circle cx="10" cy="50" r="3"/><circle cx="50" cy="50" r="3"/>
+            </svg>
+          </div>
+        </div>
+        <dl class="s-meta">
+          <dt>Habitat</dt><dd>interstices between APIs</dd>
+          <dt>Behaviour</dt><dd>polyglot, context-carrying</dd>
+          <dt>Symbiosis</dt><dd>Slack, Jira, Grafana, Postgres, Tailscale</dd>
+        </dl>
+        <p class="s-body">A generalist bridging species. <em>P. multiplex</em> forms stable mutualisms with a surprising number of otherwise isolated organisms, carrying context between them as a pollinator carries grains. The specimen&rsquo;s nomenclatural author describes it, with characteristic understatement, as &ldquo;the thing that makes the other things talk to each other.&rdquo;</p>
+        <div class="chips"><span class="chip">MCP</span><span class="chip">protocol</span><span class="chip">agents</span></div>
+        <div class="s-footnote">&dagger; Endangered only in environments strictly resistant to schemas.</div>
+      </article>
+
+      <article class="species" data-no="№ IV">
+        <div class="s-head">
+          <div>
+            <h3 class="s-name"><em>Tankus octoseedicus</em> <b>&mdash;</b> <br><span class="s-common">The Pixel Tank</span></h3>
+          </div>
+          <div class="s-illus">
+            <svg viewBox="0 0 60 60" fill="none" shape-rendering="crispEdges">
+              <rect x="12" y="30" width="36" height="16" fill="#3f5c2e"/>
+              <rect x="22" y="22" width="16" height="10" fill="#3f5c2e"/>
+              <rect x="36" y="24" width="14" height="4" fill="#3f5c2e"/>
+              <rect x="16" y="42" width="4" height="4" fill="#a94d1a"/>
+              <rect x="40" y="42" width="4" height="4" fill="#a94d1a"/>
+            </svg>
+          </div>
+        </div>
+        <dl class="s-meta">
+          <dt>Habitat</dt><dd>LAN parties, basements, Tuesdays</dd>
+          <dt>Resolution</dt><dd>intentionally low</dd>
+          <dt>Packs</dt><dd>2 to many friends</dd>
+        </dl>
+        <p class="s-body">A small, angular predator with a penchant for open ground and sudden flanking manoeuvres. Its distinctive blocky plumage is often attributed, by the untrained, to the draughtsman&rsquo;s limited ability; specialists agree, however, that the pixel-art is intentional retro, and that what appears to be low resolution is in fact the species&rsquo; preferred aesthetic.</p>
+        <div class="chips"><span class="chip">multiplayer</span><span class="chip">LAN</span><span class="chip">no-lyrics</span></div>
+        <div class="s-footnote">&dagger; Known to sever friendships in bloom cycles of ~45 seconds.</div>
+      </article>
+
+      <article class="species" data-no="№ V">
+        <div class="s-head">
+          <div>
+            <h3 class="s-name"><em>Mazu instrumentalis</em> <b>&mdash;</b> <br><span class="s-common">The Instrumental Stoner Drummer</span></h3>
+          </div>
+          <div class="s-illus">
+            <svg viewBox="0 0 60 60" fill="none" stroke="#3f5c2e" stroke-width="1.2">
+              <ellipse cx="30" cy="38" rx="18" ry="6"/>
+              <line x1="12" y1="38" x2="12" y2="52"/>
+              <line x1="48" y1="38" x2="48" y2="52"/>
+              <ellipse cx="30" cy="34" rx="18" ry="4"/>
+              <circle cx="45" cy="18" r="5"/>
+              <line x1="45" y1="22" x2="50" y2="36"/>
+            </svg>
+          </div>
+        </div>
+        <dl class="s-meta">
+          <dt>Habitat</dt><dd>rehearsal rooms, stages, vans</dd>
+          <dt>Call</dt><dd>60–80 BPM, bass-dominant</dd>
+          <dt>Lyrics</dt><dd>none (diagnostic)</dd>
+        </dl>
+        <p class="s-body">A persistent vocal-suppressing species: though capable of sound at volume, <em>M. instrumentalis</em> produces no lyrics whatsoever. Its presence is most easily confirmed by the distinct thrum that reaches the neighbours&rsquo; homes. Said neighbours have been observed filing formal opinions; said opinions, so far, have had no measurable effect on the species&rsquo; continued performance.</p>
+        <div class="chips"><span class="chip">drums</span><span class="chip">stoner</span><span class="chip">loud</span></div>
+        <div class="s-footnote">&dagger; Sister species: <em>Chorda enthusiasta</em> (the enthusiastic-but-bad guitarist).</div>
+      </article>
+
+      <article class="species" data-no="№ VI">
+        <div class="s-head">
+          <div>
+            <h3 class="s-name"><em>Domus automatum</em> <b>&mdash;</b> <br><span class="s-common">The Home of Automations</span></h3>
+          </div>
+          <div class="s-illus">
+            <svg viewBox="0 0 60 60" fill="none" stroke="#3f5c2e" stroke-width="1.2">
+              <path d="M10 35 L30 15 L50 35 L50 52 L10 52 Z"/>
+              <rect x="25" y="40" width="10" height="12"/>
+              <circle cx="20" cy="30" r="2" fill="#b88a2a"/>
+              <circle cx="40" cy="30" r="2" fill="#b88a2a"/>
+            </svg>
+          </div>
+        </div>
+        <dl class="s-meta">
+          <dt>Habitat</dt><dd>a dwelling, three kids, zigbee</dd>
+          <dt>WAF</dt><dd>sub-zero (diagnostic)</dd>
+          <dt>Approved by</dt><dd>smart lights; toddlers</dd>
+        </dl>
+        <p class="s-body">A cohabitant species, forming complex mutualisms with lamps, blinds and other household organisms. Its yaml-secreting glands produce upward of 600 lines per season. The Wife Acceptance Factor associated with its activity remains historically low; however, the smart lights &mdash; reportedly approved by the three resident children &mdash; are the single known use-case with a WAF above zero.</p>
+        <div class="chips"><span class="chip">home assistant</span><span class="chip">zigbee</span><span class="chip">yaml</span><span class="chip">dad × 3</span></div>
+        <div class="s-footnote">&dagger; Threatened by power outages, toddler reach, and skeptical partners.</div>
+      </article>
+
+      <article class="species" data-no="№ VII">
+        <div class="s-head">
+          <div>
+            <h3 class="s-name"><em>Subterra pulverifera</em> <b>&mdash;</b> <br><span class="s-common">The Basement Workshop</span></h3>
+          </div>
+          <div class="s-illus">
+            <svg viewBox="0 0 60 60" fill="none" stroke="#3f5c2e" stroke-width="1.2">
+              <rect x="10" y="20" width="40" height="30"/>
+              <path d="M15 20 L25 35 M30 20 L40 35"/>
+              <circle cx="18" cy="42" r="2" fill="#6b4a2a"/>
+              <circle cx="42" cy="42" r="2" fill="#6b4a2a"/>
+              <path d="M5 50 Q12 48 18 50 M30 50 Q38 48 44 50" opacity=".5"/>
+            </svg>
+          </div>
+        </div>
+        <dl class="s-meta">
+          <dt>Habitat</dt><dd>basements, preferably low-ceilinged</dd>
+          <dt>Substrate</dt><dd>sawdust, ambition</dd>
+          <dt>Tools</dt><dd>&ldquo;investments&rdquo; (always)</dd>
+        </dl>
+        <p class="s-body">A hypogeal species of recent emergence. <em>S. pulverifera</em> is characterised by constant low-frequency dust production, an ever-growing arsenal of tooling, and a deep and abiding belief that each new purchase qualifies, somehow, as an investment rather than a hobby. Its natural environment consists of plans drawn on napkins and projects begun over long weekends.</p>
+        <div class="chips"><span class="chip">wood</span><span class="chip">dust</span><span class="chip">napkin plans</span></div>
+        <div class="s-footnote">&dagger; Also known to harbour a specimen of &ldquo;TBD&rdquo;, a personal productivity app still being catalogued.</div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- Appendix -->
+  <section class="appendix">
+    <h2>Appendix · Tabular Key to Related Forms</h2>
+    <p class="lead">The following specimens are observed in the vicinity, not yet fully classified, and may be re-described in later editions.</p>
+    <div class="keys">
+      <div class="key-item">
+        <b>TBD — Opus tacitum</b>
+        <span>GENUS · PRODUCTIVITY</span>
+        A personal productivity application: captures, projects, tasks. No bells. No whistles. Just the things that need doing.
+      </div>
+      <div class="key-item">
+        <b>Editorialis absens</b>
+        <span>GENUS · NON-CONTENT</span>
+        No blog. No thought leadership. No content strategy. Everything worth saying has already been generated somewhere; this is only a workbench.
+      </div>
+      <div class="key-item">
+        <b>Kinderus ×&nbsp;3</b>
+        <span>HYBRID · DOMESTIC</span>
+        Three hybrid specimens, collectively indifferent to clusters but deeply attached to smart lights. Only WAF-positive observed use-case.</div>
+      <div class="key-item">
+        <b>Why? — Nerdia enigmaticus</b>
+        <span>HOLOTYPE · QUESTION</span>
+        The diagnostic call of the entire kingdom. Putting the Y in Nerdy &mdash; as in, why, dear god, why?
+      </div>
+    </div>
+  </section>
+
+  <footer class="colophon">
+    &sect; Systema Nerdiae, Vol. I &sect; printed by nerdy.nl &sect; revised editions forthcoming &sect; enquiries to <a href="https://github.com/enipo">github.com/enipo</a>
+  </footer>
+
+</article>
+
+</body>
+</html>

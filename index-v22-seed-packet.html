@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nerdy Seed Co. — Heirloom Varieties</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='85'%3E🌱%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --paper:#ead9b8;--paper-dark:#d4c095;--stain:#c4a97e;
+  --ink:#2a1f12;--ink-soft:#4a3a24;--sage:#6b7d4f;--moss:#4a5d36;
+  --rust:#a84418;--indigo:#2a3855;--butter:#e5b94a;
+  --serif:'IM Fell English',Georgia,serif;--body:'Cormorant Garamond',Georgia,serif;--type:'Special Elite',monospace;
+}
+html,body{background:#c0a877;font-family:var(--body);color:var(--ink);line-height:1.55;min-height:100vh}
+body{padding:2rem 1rem;background-image:
+  radial-gradient(ellipse at 20% 30%,rgba(74,58,36,.08) 0%,transparent 40%),
+  radial-gradient(ellipse at 80% 70%,rgba(74,58,36,.06) 0%,transparent 40%)}
+a{color:inherit;text-decoration:none}
+
+.shelf{max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:2.5rem}
+
+/* ═══ PACKET ═══ */
+.packet{background:var(--paper);position:relative;padding:2rem 2rem 2.5rem;
+  box-shadow:0 3px 0 rgba(60,40,20,.1),0 12px 24px rgba(40,20,8,.35),inset 0 0 60px rgba(120,85,40,.18);
+  border-radius:2px}
+.packet::before{content:'';position:absolute;inset:12px;border:1.5px solid var(--ink);pointer-events:none;opacity:.85}
+.packet::after{content:'';position:absolute;inset:16px;border:.5px solid var(--ink);pointer-events:none;opacity:.5}
+
+/* tear strip top */
+.tear{position:absolute;top:0;left:0;right:0;height:28px;
+  background:repeating-linear-gradient(135deg,transparent 0 8px,rgba(40,20,8,.1) 8px 9px);
+  mask:linear-gradient(#000,#000) top/100% 22px no-repeat,
+    radial-gradient(circle at 0 100%,transparent 3px,#000 3.5px) left bottom / 8px 6px repeat-x;
+  -webkit-mask:linear-gradient(#000,#000) top/100% 22px no-repeat,
+    radial-gradient(circle at 0 100%,transparent 3px,#000 3.5px) left bottom / 8px 6px repeat-x}
+
+.stamp{position:absolute;top:1.1rem;right:1.6rem;width:72px;height:72px;border:2px solid var(--rust);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;flex-direction:column;color:var(--rust);
+  font-family:var(--type);font-size:.52rem;letter-spacing:.1em;text-align:center;line-height:1.2;
+  transform:rotate(-8deg);opacity:.78}
+.stamp strong{font-size:.8rem;display:block;margin:2px 0}
+
+/* header */
+.masthead{text-align:center;padding:1.2rem 0 1rem;border-bottom:1px dashed var(--ink-soft)}
+.brand-small{font-family:var(--type);font-size:.68rem;letter-spacing:.25em;color:var(--moss);text-transform:uppercase;margin-bottom:.4rem}
+.variety{font-family:var(--serif);font-size:clamp(2.2rem,5.5vw,3.4rem);font-weight:400;line-height:1;color:var(--ink);
+  font-style:italic;margin-bottom:.2rem}
+.latin{font-family:var(--serif);font-style:italic;font-size:.9rem;color:var(--ink-soft);letter-spacing:.05em}
+.packet-no{position:absolute;top:1.5rem;left:1.6rem;font-family:var(--type);font-size:.65rem;color:var(--ink-soft);letter-spacing:.15em}
+
+/* illustration */
+.illus{display:flex;align-items:center;justify-content:center;padding:1.4rem 0 1rem}
+.illus svg{max-width:220px;height:auto;filter:sepia(.3)}
+
+/* body columns */
+.info{display:grid;grid-template-columns:1fr 1fr;gap:1rem 1.8rem;padding:1.4rem 0 0;border-top:1px dashed var(--ink-soft)}
+.info-block h4{font-family:var(--type);font-size:.62rem;letter-spacing:.22em;color:var(--rust);margin-bottom:.35rem;text-transform:uppercase}
+.info-block p{font-size:1rem;line-height:1.5;color:var(--ink-soft)}
+.info-block .value{font-family:var(--serif);font-size:1.05rem;color:var(--ink);font-style:italic;margin-bottom:.15rem}
+
+.desc{margin-top:1.2rem;padding:1rem 0;font-size:1.08rem;line-height:1.65;color:var(--ink)}
+.desc::first-letter{font-family:var(--serif);font-size:3rem;float:left;line-height:.85;padding:.3rem .5rem 0 0;color:var(--rust)}
+
+/* stats strip */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:1.2rem -2rem 0;padding:.7rem 2rem;border-top:1px dashed var(--ink-soft);border-bottom:1px dashed var(--ink-soft);background:rgba(196,169,126,.25);font-family:var(--type);font-size:.58rem;letter-spacing:.15em;color:var(--ink);text-transform:uppercase;text-align:center}
+.stats b{display:block;font-family:var(--serif);font-style:italic;font-size:.95rem;letter-spacing:.02em;color:var(--rust);text-transform:none;margin-top:2px}
+
+/* footer */
+.footline{margin-top:1.4rem;display:flex;justify-content:space-between;font-family:var(--type);font-size:.6rem;letter-spacing:.16em;color:var(--ink-soft);text-transform:uppercase}
+
+/* ═══ SHELF HEADER ═══ */
+.shelf-header{text-align:center;color:var(--paper);padding:1rem 1rem 1.5rem}
+.shelf-header h1{font-family:var(--serif);font-size:clamp(2.4rem,6vw,4rem);font-weight:400;text-shadow:2px 2px 0 rgba(40,20,8,.25)}
+.shelf-header .sub{font-family:var(--body);font-style:italic;font-size:1.1rem;margin-top:.3rem;color:#f0e0c0}
+.shelf-header .est{font-family:var(--type);font-size:.65rem;letter-spacing:.3em;margin-top:.6rem;color:#d8c49a}
+
+/* catalog index at bottom */
+.catalog{background:rgba(40,25,10,.78);color:var(--paper);padding:2rem;border-radius:2px;margin-top:1rem;
+  box-shadow:inset 0 0 40px rgba(0,0,0,.3)}
+.catalog h2{font-family:var(--serif);font-style:italic;font-size:1.6rem;text-align:center;margin-bottom:1rem;color:var(--butter)}
+.catalog-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem}
+.entry{border-left:2px solid var(--butter);padding-left:.8rem;font-size:.9rem;line-height:1.5}
+.entry-name{font-family:var(--serif);font-style:italic;color:var(--butter);font-size:1.05rem}
+.entry-price{font-family:var(--type);font-size:.6rem;color:#c8a878;letter-spacing:.1em;margin-top:.15rem}
+
+.finefoot{text-align:center;margin-top:2rem;color:var(--paper);font-family:var(--type);font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;opacity:.75}
+.finefoot a{color:var(--butter);border-bottom:1px dotted}
+
+/* color variations per packet */
+.packet--sage{background:#d8d5b5}
+.packet--sage .variety{color:var(--moss)}
+.packet--dusk{background:#d8c8b0}
+.packet--dusk .variety{color:var(--indigo)}
+.packet--rust{background:#e5c9a8}
+.packet--rust .variety{color:var(--rust)}
+.packet--butter{background:#ead09a}
+.packet--butter .variety{color:var(--ink)}
+
+@media(max-width:640px){
+  .info{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,1fr);gap:.4rem}
+  .packet{padding:1.6rem 1.3rem 2rem}
+  .stamp{width:56px;height:56px;top:.8rem;right:.8rem}
+  .packet-no{top:1rem;left:.9rem}
+}
+</style>
+</head>
+<body>
+<div class="shelf">
+
+  <header class="shelf-header">
+    <h1>Nerdy &amp; Co. Heirloom Seeds</h1>
+    <p class="sub">Rare varieties for the discerning nerd · est. this afternoon</p>
+    <p class="est">Catalog № VII — Spring Issue</p>
+  </header>
+
+  <!-- Packet 1: Terminal -->
+  <article class="packet packet--sage">
+    <div class="tear"></div>
+    <div class="packet-no">N° 001</div>
+    <div class="stamp">CERTIFIED<strong>NERDY</strong>ORIGIN NL</div>
+    <div class="masthead">
+      <div class="brand-small">Keyboard Vine · Vining Habit</div>
+      <h2 class="variety">The Nerdy Terminal</h2>
+      <p class="latin">Tabulus keyboardicus &ldquo;Nerdy&rdquo;</p>
+    </div>
+    <div class="illus">
+      <svg viewBox="0 0 220 140" fill="none">
+        <path d="M110 130 Q108 90 100 70 Q92 50 105 28 Q120 12 115 8" stroke="#4a5d36" stroke-width="1.5" fill="none"/>
+        <ellipse cx="80" cy="70" rx="22" ry="10" fill="#6b7d4f" transform="rotate(-25 80 70)"/>
+        <ellipse cx="140" cy="55" rx="24" ry="11" fill="#6b7d4f" transform="rotate(20 140 55)"/>
+        <ellipse cx="95" cy="35" rx="18" ry="9" fill="#7a8a5a" transform="rotate(-10 95 35)"/>
+        <circle cx="110" cy="8" r="6" fill="#a84418"/>
+        <circle cx="110" cy="8" r="2" fill="#e5b94a"/>
+        <path d="M110 130 L110 140" stroke="#4a3a24" stroke-width="2"/>
+        <path d="M80 138 Q110 134 140 138" stroke="#4a3a24" stroke-width=".8" fill="none"/>
+      </svg>
+    </div>
+    <div class="info">
+      <div class="info-block">
+        <h4>Habit</h4>
+        <div class="value">Perennial, keyboard-bound</div>
+        <p>Climbs quickly; anchors itself to any macOS surface within hours of first key-press.</p>
+      </div>
+      <div class="info-block">
+        <h4>Germination</h4>
+        <div class="value">2–3 keystrokes</div>
+        <p>No mouse required. Plant shies from pointing devices and tends to wilt in proximity.</p>
+      </div>
+    </div>
+    <div class="desc">
+      A hardy heirloom terminal manager cultivated over many long winters of dotfile obsession. Plants multiple sessions at once and switches between them with a single touch. The cultivator famously asked, &ldquo;why move my hand thirty centimeters when I could press two keys?&rdquo;
+    </div>
+    <div class="stats">
+      <div>Hardy<b>zone 9b</b></div>
+      <div>Height<b>tmux tall</b></div>
+      <div>Bloom<b>on demand</b></div>
+      <div>Sun<b>amber phosphor</b></div>
+    </div>
+    <div class="footline"><span>Packed for '26 season</span><span>Weight: 0.0 grams</span></div>
+  </article>
+
+  <!-- Packet 2: Kubernetes -->
+  <article class="packet packet--dusk">
+    <div class="tear"></div>
+    <div class="packet-no">N° 014</div>
+    <div class="stamp">CERTIFIED<strong>GITOPS</strong>PURE STRAIN</div>
+    <div class="masthead">
+      <div class="brand-small">Cluster Creeper · Proliferating Habit</div>
+      <h2 class="variety">Kubernetes Over-Engineered</h2>
+      <p class="latin">Clusterum excessivum var. &ldquo;one-person&rdquo;</p>
+    </div>
+    <div class="illus">
+      <svg viewBox="0 0 220 140" fill="none">
+        <g stroke="#2a3855" stroke-width="1.2" fill="#2a3855" opacity=".8">
+          <polygon points="110,20 130,32 130,55 110,67 90,55 90,32"/>
+          <polygon points="60,60 75,68 75,85 60,93 45,85 45,68" opacity=".7"/>
+          <polygon points="160,60 175,68 175,85 160,93 145,85 145,68" opacity=".7"/>
+          <polygon points="85,100 98,108 98,122 85,130 72,122 72,108" opacity=".55"/>
+          <polygon points="135,100 148,108 148,122 135,130 122,122 122,108" opacity=".55"/>
+        </g>
+        <path d="M110 67 L60 68 M110 67 L160 68 M85 100 L98 93 M135 100 L148 93" stroke="#a84418" stroke-width=".8" stroke-dasharray="2 2"/>
+      </svg>
+    </div>
+    <div class="info">
+      <div class="info-block">
+        <h4>Soil</h4>
+        <div class="value">YAML-rich, acidic</div>
+        <p>Requires excellent drainage or will pool into config drift. Tolerates neglect only briefly.</p>
+      </div>
+      <div class="info-block">
+        <h4>Companion plants</h4>
+        <div class="value">ArgoCD, FluxCD, Helm</div>
+        <p>Avoid plants with conflicting control loops. Monitor for namespace spread.</p>
+      </div>
+    </div>
+    <div class="desc">
+      A vigorous strain bred for one-person operations far beyond what any reasonable gardener would attempt. Produces five clusters where one would do. When asked why, the cultivator stares into the distance, whispers &ldquo;GitOps,&rdquo; and returns to his terminal.
+    </div>
+    <div class="stats">
+      <div>Nodes<b>more than needed</b></div>
+      <div>Uptime<b>mostly</b></div>
+      <div>Cost<b>negotiable</b></div>
+      <div>WAF<b>sub-zero</b></div>
+    </div>
+    <div class="footline"><span>Best sown beside Tailscale</span><span>Weight: 3.2 MiB etcd</span></div>
+  </article>
+
+  <!-- Packet 3: MCP Gateway -->
+  <article class="packet packet--rust">
+    <div class="tear"></div>
+    <div class="packet-no">N° 042</div>
+    <div class="stamp">CERTIFIED<strong>BRIDGED</strong>ROOT STOCK</div>
+    <div class="masthead">
+      <div class="brand-small">Bridge Moss · Spreading Habit</div>
+      <h2 class="variety">MCP Gateway Vine</h2>
+      <p class="latin">Pontifex multiplex &ldquo;agent-aware&rdquo;</p>
+    </div>
+    <div class="illus">
+      <svg viewBox="0 0 220 140" fill="none">
+        <circle cx="110" cy="70" r="14" fill="#a84418"/>
+        <g stroke="#4a3a24" stroke-width="1.2" fill="none">
+          <path d="M110 70 Q60 40 30 30"/>
+          <path d="M110 70 Q160 40 190 30"/>
+          <path d="M110 70 Q60 100 30 115"/>
+          <path d="M110 70 Q160 100 190 115"/>
+          <path d="M110 70 L110 20"/>
+          <path d="M110 70 L110 125"/>
+        </g>
+        <g fill="#2a1f12" font-family="Special Elite" font-size="8">
+          <circle cx="30" cy="30" r="5" fill="#6b7d4f"/><text x="10" y="20">slack</text>
+          <circle cx="190" cy="30" r="5" fill="#6b7d4f"/><text x="180" y="20">jira</text>
+          <circle cx="30" cy="115" r="5" fill="#6b7d4f"/><text x="6" y="130">db</text>
+          <circle cx="190" cy="115" r="5" fill="#6b7d4f"/><text x="165" y="130">grafana</text>
+          <circle cx="110" cy="20" r="5" fill="#6b7d4f"/><text x="90" y="10">tailscale</text>
+          <circle cx="110" cy="125" r="5" fill="#6b7d4f"/><text x="94" y="138">agent</text>
+        </g>
+      </svg>
+    </div>
+    <div class="info">
+      <div class="info-block">
+        <h4>Ecosystem</h4>
+        <div class="value">Tolerates mixed flora</div>
+        <p>Forms mutualistic bonds with Slack, Jira, Grafana, Postgres, and anything with an API.</p>
+      </div>
+      <div class="info-block">
+        <h4>Protocol</h4>
+        <div class="value">MCP — polliniser strain</div>
+        <p>One gateway between them all. Transfers context instead of pollen.</p>
+      </div>
+    </div>
+    <div class="desc">
+      A climbing vine that bridges otherwise isolated gardens. The cultivator describes it as &ldquo;the thing that makes the other things talk to each other,&rdquo; which is approximately what every bridge in history has been described as, and it is still somehow underselling it.
+    </div>
+    <div class="stats">
+      <div>Branches<b>every tool</b></div>
+      <div>Roots<b>deep</b></div>
+      <div>Pollen<b>JSON</b></div>
+      <div>Blooms<b>year-round</b></div>
+    </div>
+    <div class="footline"><span>Avoid monocrops</span><span>Weight: context-dependent</span></div>
+  </article>
+
+  <!-- Packet 4: Pixel Tanks -->
+  <article class="packet packet--butter">
+    <div class="tear"></div>
+    <div class="packet-no">N° 007</div>
+    <div class="stamp">CERTIFIED<strong>RETRO</strong>LOW-RES</div>
+    <div class="masthead">
+      <div class="brand-small">Sprite Fern · Ground Cover</div>
+      <h2 class="variety">Pixel Tank Blossom</h2>
+      <p class="latin">Tankus octoseedicus &ldquo;8-bit&rdquo;</p>
+    </div>
+    <div class="illus">
+      <svg viewBox="0 0 220 140" fill="none" shape-rendering="crispEdges">
+        <g fill="#4a3a24">
+          <rect x="70" y="80" width="80" height="30"/>
+          <rect x="90" y="65" width="40" height="20"/>
+          <rect x="125" y="68" width="30" height="8"/>
+        </g>
+        <g fill="#a84418">
+          <rect x="85" y="82" width="6" height="6"/>
+          <rect x="125" y="82" width="6" height="6"/>
+        </g>
+        <g fill="#6b7d4f">
+          <rect x="0" y="110" width="220" height="4"/>
+          <rect x="20" y="112" width="4" height="8"/>
+          <rect x="180" y="112" width="4" height="8"/>
+        </g>
+        <g fill="#e5b94a">
+          <rect x="153" y="70" width="4" height="4"/>
+          <rect x="160" y="68" width="3" height="3"/>
+        </g>
+      </svg>
+    </div>
+    <div class="info">
+      <div class="info-block">
+        <h4>Resolution</h4>
+        <div class="value">Intentionally low</div>
+        <p>Pixels are a feature, not a limitation. Do not water with high-DPI displays.</p>
+      </div>
+      <div class="info-block">
+        <h4>Multiplayer</h4>
+        <div class="value">2 to many friends</div>
+        <p>Destroys friendships in bloom cycles of 45 seconds. Keep apologies on hand.</p>
+      </div>
+    </div>
+    <div class="desc">
+      Top-down multiplayer tank combat, bred for the joy of destroying your friends in a low resolution. Sources close to the project report the pixel art is &ldquo;intentionally retro&rdquo; and not the result of limited artistic ability.
+    </div>
+    <div class="stats">
+      <div>Palette<b>16 colors</b></div>
+      <div>Sprites<b>12×12</b></div>
+      <div>Audio<b>square wave</b></div>
+      <div>Bugs<b>endearing</b></div>
+    </div>
+    <div class="footline"><span>Coop mode recommended</span><span>Weight: 64 KB</span></div>
+  </article>
+
+  <!-- Packet 5: Home Assistant / Dad -->
+  <article class="packet packet--sage">
+    <div class="tear"></div>
+    <div class="packet-no">N° 220</div>
+    <div class="stamp">CERTIFIED<strong>HOME</strong>WAF LOW</div>
+    <div class="masthead">
+      <div class="brand-small">Living Room Moss · Domestic Habit</div>
+      <h2 class="variety">Home Automation &amp; Kin</h2>
+      <p class="latin">Domus automatum &ldquo;dad-x-three&rdquo;</p>
+    </div>
+    <div class="illus">
+      <svg viewBox="0 0 220 140" fill="none">
+        <path d="M50 80 L110 30 L170 80 L170 120 L50 120 Z" stroke="#4a3a24" stroke-width="1.5" fill="#e5c9a8"/>
+        <rect x="100" y="90" width="20" height="30" fill="#4a3a24"/>
+        <circle cx="85" cy="70" r="6" fill="#e5b94a" opacity=".9"/>
+        <circle cx="135" cy="70" r="6" fill="#e5b94a" opacity=".9"/>
+        <path d="M85 70 L85 50" stroke="#e5b94a" stroke-width=".5"/>
+        <path d="M135 70 L135 50" stroke="#e5b94a" stroke-width=".5"/>
+        <g stroke="#4a5d36" stroke-width=".8" fill="none">
+          <path d="M30 120 Q40 100 45 90"/>
+          <path d="M190 120 Q180 100 175 90"/>
+        </g>
+      </svg>
+    </div>
+    <div class="info">
+      <div class="info-block">
+        <h4>Kids</h4>
+        <div class="value">Three, all louder than YAML</div>
+        <p>Do not care about clusters. Do care about smart lights. Only WAF &gt; 0 use-case on record.</p>
+      </div>
+      <div class="info-block">
+        <h4>Other hobbies</h4>
+        <div class="value">Drums, guitar, sawdust</div>
+        <p>Plays drums in Mazu (instrumental stoner). Plays guitar badly. Builds a workshop in the basement.</p>
+      </div>
+    </div>
+    <div class="desc">
+      Held together by Zigbee and stubbornness. Every weekend spent automating the living room is justified as &ldquo;investment in the hobby.&rdquo; Wife acceptance factor has reached historic lows, but the smart lights remain beloved by the only audience that matters.
+    </div>
+    <div class="stats">
+      <div>Zigbee<b>mesh strong</b></div>
+      <div>YAML<b>600 lines</b></div>
+      <div>WAF<b>0.2</b></div>
+      <div>Kids<b>approve lights</b></div>
+    </div>
+    <div class="footline"><span>Store out of reach of toddlers</span><span>Weight: domestic</span></div>
+  </article>
+
+  <!-- Catalog index -->
+  <section class="catalog">
+    <h2>Also in the catalog</h2>
+    <div class="catalog-grid">
+      <div class="entry">
+        <div class="entry-name">TBD</div>
+        <div class="entry-price">PACKET N° 099 · F/W '26</div>
+        Personal productivity. Captures, projects, tasks. No bells. No whistles. Just the things that need doing.
+      </div>
+      <div class="entry">
+        <div class="entry-name">Mazu</div>
+        <div class="entry-price">PACKET N° 033 · AUDIO GRADE</div>
+        Instrumental stoner band. Drums loud, guitars louder. No lyrics — blessedly, none.
+      </div>
+      <div class="entry">
+        <div class="entry-name">Basement Workshop</div>
+        <div class="entry-price">PACKET N° 112 · WOOD STOCK</div>
+        Sawdust. Ambition. Power tools that cost more than they should. Plans drawn on napkins.
+      </div>
+      <div class="entry">
+        <div class="entry-name">Editorial Note</div>
+        <div class="entry-price">PACKET N° 000 · HOUSE RULES</div>
+        No blog. No thought leadership. Putting the Y in Nerdy — as in: Why, dear god, why?
+      </div>
+    </div>
+  </section>
+
+  <footer class="finefoot">
+    &copy; nerdy.nl seed co. · <a href="https://github.com/enipo">github.com/enipo</a> · all seeds guaranteed germinated at least once
+  </footer>
+
+</div>
+</body>
+</html>

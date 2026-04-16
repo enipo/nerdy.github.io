@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>nerdy.nl — Stratigraphic Survey</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='85'%3E⛰️%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Cutive+Mono&family=Lora:ital,wght@0,400;0,600;1,400&family=Oswald:wght@300;500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --page:#eae3d4;--rock-sand:#d9c19b;--rock-clay:#b88d63;--rock-shale:#5d5042;
+  --rock-basalt:#2f2a24;--rock-ochre:#b85e1c;--rock-chalk:#f2ead9;--rock-seam:#3a2e20;
+  --ink:#1f1a12;--ink2:#4a3f2e;--rule:#8a7a5c;--accent:#a8441a;
+  --mono:'Cutive Mono',monospace;--body:'Lora',Georgia,serif;--disp:'Oswald',sans-serif;
+}
+html,body{background:var(--page);color:var(--ink);font-family:var(--body);min-height:100vh}
+body{background-image:
+  repeating-linear-gradient(0deg,transparent 0,transparent 30px,rgba(138,122,92,.08) 30px,rgba(138,122,92,.08) 31px),
+  repeating-linear-gradient(90deg,transparent 0,transparent 30px,rgba(138,122,92,.08) 30px,rgba(138,122,92,.08) 31px)}
+a{color:inherit;text-decoration:none}
+
+/* ═══ HEADER ═══ */
+.header{padding:1.8rem 2rem 1rem;border-bottom:2px solid var(--ink);background:var(--rock-chalk)}
+.header-top{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--mono);font-size:.68rem;letter-spacing:.18em;color:var(--ink2);text-transform:uppercase;margin-bottom:.8rem}
+.header h1{font-family:var(--disp);font-size:clamp(1.8rem,4.5vw,3rem);font-weight:700;letter-spacing:.18em;text-transform:uppercase;line-height:1}
+.header .sub{font-family:var(--body);font-style:italic;color:var(--ink2);font-size:1rem;margin-top:.2rem}
+.header .coord{font-family:var(--mono);font-size:.65rem;color:var(--ink2);margin-top:.6rem;letter-spacing:.1em}
+
+/* ═══ LAYOUT ═══ */
+.main{display:grid;grid-template-columns:140px 1fr 1fr;gap:0;min-height:calc(100vh - 180px)}
+
+/* depth scale */
+.scale{border-right:1.5px solid var(--ink);padding:1rem .6rem;font-family:var(--mono);font-size:.62rem;color:var(--ink2);letter-spacing:.1em;background:var(--rock-chalk);position:sticky;top:0;align-self:start;height:100%}
+.scale-title{font-family:var(--disp);font-size:.7rem;letter-spacing:.22em;font-weight:500;color:var(--ink);margin-bottom:.5rem;text-transform:uppercase}
+.tick{display:flex;justify-content:space-between;padding:.28rem 0;border-top:.5px solid rgba(74,63,46,.3)}
+.tick:first-of-type{border-top:none}
+.tick em{color:var(--accent);font-style:normal}
+
+/* cross-section column */
+.section{display:flex;flex-direction:column;border-right:1.5px solid var(--ink)}
+.stratum{padding:1.3rem 1.4rem;position:relative;color:var(--ink);border-bottom:1.5px solid rgba(31,26,18,.35);flex:1;min-height:170px;display:flex;flex-direction:column;justify-content:center}
+.stratum::before{content:attr(data-code);position:absolute;top:.7rem;right:.8rem;font-family:var(--mono);font-size:.58rem;letter-spacing:.14em;color:rgba(31,26,18,.55);background:rgba(242,234,217,.7);padding:2px 6px;border-radius:2px}
+.stratum .era{font-family:var(--mono);font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;margin-bottom:.3rem;opacity:.75}
+.stratum .name{font-family:var(--disp);font-size:clamp(1.2rem,2.2vw,1.7rem);font-weight:700;letter-spacing:.04em;line-height:1;text-transform:uppercase;margin-bottom:.4rem}
+.stratum .note{font-size:.95rem;line-height:1.5;font-family:var(--body)}
+
+/* stratum textures per rock */
+.s-sand{background:
+  repeating-linear-gradient(92deg,transparent 0 3px,rgba(0,0,0,.05) 3px 4px),
+  radial-gradient(circle at 30% 40%,rgba(0,0,0,.08) 1px,transparent 2px),
+  var(--rock-sand)}
+.s-clay{background:
+  repeating-linear-gradient(88deg,transparent 0 2px,rgba(0,0,0,.06) 2px 3px),
+  var(--rock-clay);color:#1a1108}
+.s-shale{background:
+  repeating-linear-gradient(0deg,rgba(255,255,255,.03) 0 1px,transparent 1px 5px),
+  var(--rock-shale);color:#e8e0d0}
+.s-basalt{background:
+  radial-gradient(circle at 20% 30%,rgba(255,255,255,.04) 1px,transparent 2px),
+  radial-gradient(circle at 70% 80%,rgba(255,255,255,.03) 1px,transparent 2px),
+  var(--rock-basalt);color:#d8cebb}
+.s-ochre{background:
+  repeating-linear-gradient(95deg,transparent 0 3px,rgba(0,0,0,.08) 3px 4px),
+  var(--rock-ochre);color:#fff4e2}
+.s-chalk{background:
+  repeating-linear-gradient(91deg,transparent 0 4px,rgba(138,122,92,.15) 4px 5px),
+  var(--rock-chalk)}
+.s-coal{background:
+  repeating-linear-gradient(93deg,rgba(255,255,255,.04) 0 1px,transparent 1px 3px),
+  #1a1510;color:#d8d0ba}
+
+/* fossil icons */
+.fossil{position:absolute;bottom:.6rem;right:.8rem;opacity:.35;font-size:1.2rem}
+
+/* ═══ SIDEBAR NOTES ═══ */
+.notes{padding:0;background:var(--rock-chalk);overflow-y:auto}
+.notes-header{padding:1rem 1.4rem .6rem;border-bottom:1.5px solid var(--ink);font-family:var(--disp);font-weight:500;letter-spacing:.22em;font-size:.72rem;text-transform:uppercase;position:sticky;top:0;background:var(--rock-chalk);z-index:2}
+.note{padding:1.2rem 1.4rem;border-bottom:1px dashed var(--rule);font-size:.95rem;line-height:1.55}
+.note-num{display:inline-block;font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;color:var(--accent);margin-bottom:.25rem}
+.note h3{font-family:var(--disp);font-size:.95rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.35rem}
+.note .meta{font-family:var(--mono);font-size:.58rem;letter-spacing:.12em;color:var(--ink2);margin-top:.4rem;text-transform:uppercase}
+
+.legend{padding:1.2rem 1.4rem;background:var(--rock-chalk);border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+.legend h3{font-family:var(--disp);font-size:.8rem;letter-spacing:.2em;font-weight:700;text-transform:uppercase;margin-bottom:.6rem}
+.legend-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.4rem .8rem;font-family:var(--mono);font-size:.62rem;color:var(--ink2)}
+.legend-grid div{display:flex;align-items:center;gap:.5rem}
+.swatch{width:18px;height:12px;border:.5px solid var(--ink);flex-shrink:0}
+
+/* ═══ FOOTER ═══ */
+.foot{padding:1.2rem 2rem;border-top:2px solid var(--ink);background:var(--ink);color:var(--rock-chalk);font-family:var(--mono);font-size:.65rem;letter-spacing:.14em;display:flex;justify-content:space-between;text-transform:uppercase}
+.foot a{color:var(--rock-sand);border-bottom:1px dotted}
+
+@media(max-width:880px){
+  .main{grid-template-columns:60px 1fr;grid-template-rows:auto auto}
+  .notes{grid-column:1/-1}
+  .scale{font-size:.55rem;padding:.8rem .3rem}
+  .scale-title{font-size:.55rem;letter-spacing:.1em}
+  .tick{font-size:.55rem}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-top">
+    <span>Geological Survey · Nerdy Formation</span>
+    <span>Sheet 14 of 16</span>
+    <span>NL ¶ 52.0°N 5.1°E</span>
+  </div>
+  <h1>Nerdy Stratigraphy</h1>
+  <p class="sub">A vertical cross-section of projects, habits, and mild obsessions — arranged by depth of unreasonableness.</p>
+  <div class="coord">Core sample N-001 · logged 2026 · scale 1 : true</div>
+</header>
+
+<main class="main">
+
+  <!-- depth scale -->
+  <aside class="scale">
+    <div class="scale-title">Depth (m)</div>
+    <div class="tick"><em>0</em><span>∎ surface</span></div>
+    <div class="tick"><em>5</em><span></span></div>
+    <div class="tick"><em>12</em><span></span></div>
+    <div class="tick"><em>28</em><span></span></div>
+    <div class="tick"><em>47</em><span></span></div>
+    <div class="tick"><em>68</em><span></span></div>
+    <div class="tick"><em>95</em><span></span></div>
+    <div class="tick"><em>130</em><span>∎ basement</span></div>
+    <div style="margin-top:1.5rem;padding-top:.8rem;border-top:1px solid var(--ink2);font-style:italic;line-height:1.5;color:var(--ink2);font-family:var(--body);font-size:.7rem">Depth scales with how hard it would be to explain the thing at a dinner party.</div>
+  </aside>
+
+  <!-- stratigraphic cross-section -->
+  <section class="section">
+
+    <div class="stratum s-sand" data-code="Q-01">
+      <div class="era">Recent · Surface</div>
+      <h2 class="name">Nerdy Terminal</h2>
+      <p class="note">Young deposit. Keyboard-first terminal manager for macOS. Session-switching sediment, highly friable.</p>
+      <div class="fossil">⌨</div>
+    </div>
+
+    <div class="stratum s-chalk" data-code="P-04">
+      <div class="era">Pleistocene · Writable</div>
+      <h2 class="name">TBD — Productivity</h2>
+      <p class="note">Captures, projects, tasks. Chalk-white note-taking substrate. No bells, no whistles, no fossils of promises unkept.</p>
+      <div class="fossil">✎</div>
+    </div>
+
+    <div class="stratum s-clay" data-code="N-07">
+      <div class="era">Neogene · Bridging</div>
+      <h2 class="name">MCP Gateway</h2>
+      <p class="note">Ductile layer, bridges the competent fauna above with the brittle infrastructure below. Slack, Jira, DBs, Tailscale all fossilized in one bed.</p>
+      <div class="fossil">⇌</div>
+    </div>
+
+    <div class="stratum s-ochre" data-code="O-12">
+      <div class="era">Oligocene · Over-engineered</div>
+      <h2 class="name">Kubernetes Control Plane</h2>
+      <p class="note">Iron-rich strata of YAML. Shows rhythmic banding from successive GitOps events. Possibly too many clusters per unit area.</p>
+      <div class="fossil">⬡</div>
+    </div>
+
+    <div class="stratum s-shale" data-code="E-19">
+      <div class="era">Eocene · Recreational</div>
+      <h2 class="name">Pixel Tanks</h2>
+      <p class="note">Fine-grained shale, dark. Contains well-preserved sprite fauna and low-resolution shrapnel. Friendships fossilised mid-trajectory.</p>
+      <div class="fossil">◼</div>
+    </div>
+
+    <div class="stratum s-basalt" data-code="P-28">
+      <div class="era">Paleogene · Domestic</div>
+      <h2 class="name">Home Automation</h2>
+      <p class="note">Igneous layer. Zigbee extrusions. WAF measurements at this depth consistently sub-zero; kids approve of the smart lights nonetheless.</p>
+      <div class="fossil">⌂</div>
+    </div>
+
+    <div class="stratum s-coal" data-code="C-44">
+      <div class="era">Carboniferous · Bass Frequency</div>
+      <h2 class="name">Drums — Mazu</h2>
+      <p class="note">Carbon-rich, extremely dense. Instrumental stoner band. Layer vibrates at 60–80 BPM. Neighbors' opinions fossilised in periphery.</p>
+      <div class="fossil">♩</div>
+    </div>
+
+    <div class="stratum s-clay" data-code="B-99" style="min-height:140px">
+      <div class="era">Basement · Bedrock</div>
+      <h2 class="name">The Workshop</h2>
+      <p class="note">Unconformity marked by rising sawdust. Every tool interpreted as &ldquo;investment.&rdquo; End of core.</p>
+      <div class="fossil">⚒</div>
+    </div>
+
+  </section>
+
+  <!-- notes sidebar -->
+  <aside class="notes">
+    <div class="notes-header">Field Notes</div>
+
+    <div class="note">
+      <span class="note-num">§ 01 · Q-01</span>
+      <h3>Surface Observations</h3>
+      Terminal manager layer lies directly atop everyday life. Extensive keyboard shortcuts suggest prolonged adaptation to mouse aversion. &ldquo;Why move my hand thirty centimeters,&rdquo; subject has been heard to mutter, &ldquo;when I could press two keys?&rdquo;
+      <div class="meta">outcrop · macOS-exposed</div>
+    </div>
+
+    <div class="note">
+      <span class="note-num">§ 02 · O-12</span>
+      <h3>Unconformity: Why So Many Clusters?</h3>
+      An abrupt layer change marks the transition from single-node hobbyism to production-grade overkill. When questioned, the operator stared into the middle distance, whispered &ldquo;GitOps,&rdquo; and returned to his terminal.
+      <div class="meta">interbed · ArgoCD + FluxCD</div>
+    </div>
+
+    <div class="note">
+      <span class="note-num">§ 03 · P-28</span>
+      <h3>Igneous Intrusion, Domestic</h3>
+      Home Assistant formation cuts violently across all other strata. Smart-light node count: 47. YAML mass: approximately 600 lines. Family members unanimously prefer speaking to the devices, which occasionally listen.
+      <div class="meta">intrusion · zigbee-bearing</div>
+    </div>
+
+    <div class="note">
+      <span class="note-num">§ 04 · C-44</span>
+      <h3>Bass Frequency Deposition</h3>
+      Drum-kit substrate interbedded with distorted guitar. Subject reports playing guitar &ldquo;badly but enthusiastically.&rdquo; Long-term data: neighbors have opinions; opinions have no effect on stratigraphy.
+      <div class="meta">bedding · instrumental, stoner</div>
+    </div>
+
+    <div class="legend">
+      <h3>Rock Key</h3>
+      <div class="legend-grid">
+        <div><span class="swatch s-sand"></span>Surface sand</div>
+        <div><span class="swatch s-clay"></span>Bridging clay</div>
+        <div><span class="swatch s-shale"></span>Fine shale</div>
+        <div><span class="swatch s-basalt"></span>Domestic basalt</div>
+        <div><span class="swatch s-ochre"></span>YAML ochre</div>
+        <div><span class="swatch s-coal"></span>Bass-carbon</div>
+      </div>
+    </div>
+
+    <div class="note">
+      <span class="note-num">§ 05 · conclusion</span>
+      <h3>Putting the Y in Nerdy</h3>
+      The &ldquo;Y&rdquo; is not a letter but a question, pressed repeatedly downward through the strata: <em>why, why, why</em>. Every answer yields a new layer.
+      <div class="meta">field closed — core to archive</div>
+    </div>
+  </aside>
+
+</main>
+
+<footer class="foot">
+  <span>&copy; nerdy.nl · Stratigraphic Survey</span>
+  <span>Formation N-001</span>
+  <a href="https://github.com/enipo">github.com/enipo</a>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KNMI-like — Nerdy Synoptic Chart</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='85'%3E🌀%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;600&family=Work+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --sky:#eaf4fb;--sky2:#d8e7f2;--sky3:#c1d6e8;
+  --sea:#84b0ce;--land:#f6f1e4;--grid:#8ba7bc;
+  --ink:#13293d;--ink2:#2d4f6e;--dim:#6b869a;
+  --high:#b03a1e;--low:#1a4fa0;--warm:#d45a2a;--cold:#1a4fa0;
+  --mono:'IBM Plex Mono',monospace;--body:'Work Sans',sans-serif;
+}
+html,body{background:var(--sky);color:var(--ink);font-family:var(--body);min-height:100vh}
+a{color:inherit;text-decoration:none}
+
+.wrap{max-width:1280px;margin:0 auto;padding:1rem}
+
+/* ═══ HEADER ═══ */
+.header{padding:1rem 1.4rem;border:1.5px solid var(--ink);background:var(--land);
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;margin-bottom:1rem}
+.header h1{font-family:var(--body);font-size:clamp(1.4rem,3vw,2rem);font-weight:700;letter-spacing:.02em;line-height:1.05}
+.header h1 small{display:block;font-family:var(--mono);font-size:.68rem;color:var(--ink2);letter-spacing:.18em;font-weight:400;margin-top:.2rem;text-transform:uppercase}
+.header .meta{font-family:var(--mono);font-size:.7rem;color:var(--ink2);letter-spacing:.08em;text-align:right}
+.header .meta span{display:block;margin-bottom:.2rem}
+.header .issued{color:var(--high);font-weight:600}
+
+/* ═══ MAP AREA ═══ */
+.map-wrap{position:relative;border:1.5px solid var(--ink);background:linear-gradient(180deg,var(--sky) 0%,var(--sky3) 100%);overflow:hidden}
+.map-wrap svg{display:block;width:100%;height:auto}
+
+/* caption strip */
+.caption-strip{display:grid;grid-template-columns:repeat(4,1fr);background:var(--ink);color:var(--sky);font-family:var(--mono);font-size:.68rem;letter-spacing:.1em}
+.caption-strip > div{padding:.55rem .8rem;border-right:1px solid rgba(255,255,255,.18);text-transform:uppercase}
+.caption-strip > div:last-child{border-right:none}
+.caption-strip b{color:#e9d9a6}
+
+/* ═══ BELOW MAP: LEGEND + FORECAST ═══ */
+.below{display:grid;grid-template-columns:1fr 1.1fr;gap:1rem;margin-top:1rem}
+@media(max-width:820px){.below{grid-template-columns:1fr}}
+
+.panel{border:1.5px solid var(--ink);background:var(--land);padding:1rem 1.2rem}
+.panel h2{font-family:var(--mono);font-size:.78rem;letter-spacing:.2em;font-weight:600;text-transform:uppercase;
+  border-bottom:1px solid var(--ink);padding-bottom:.4rem;margin-bottom:.7rem}
+
+/* legend */
+.legend-rows{display:grid;grid-template-columns:1fr 1fr;gap:.4rem .8rem;font-size:.85rem;line-height:1.4}
+.legend-rows div{display:flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.72rem}
+.sym-h,.sym-l{width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-family:var(--body);font-size:.75rem}
+.sym-h{background:var(--high)}.sym-l{background:var(--low)}
+.sym-front{width:30px;height:6px;border-radius:3px}
+.sym-warm{background:var(--warm)}.sym-cold{background:var(--cold)}
+.sym-iso{width:30px;height:0;border-top:1.5px dashed var(--ink2)}
+.sym-station{width:14px;height:14px;border:1.5px solid var(--ink);border-radius:50%;background:#fff}
+
+/* forecast */
+.f-item{padding:.7rem 0;border-bottom:1px dashed var(--dim)}
+.f-item:last-child{border-bottom:none}
+.f-head{display:flex;justify-content:space-between;align-items:baseline;gap:.6rem}
+.f-region{font-weight:700;font-size:1rem;letter-spacing:.02em}
+.f-code{font-family:var(--mono);font-size:.68rem;color:var(--dim);letter-spacing:.1em}
+.f-body{font-size:.9rem;line-height:1.5;color:var(--ink2);margin-top:.2rem}
+.f-body .pres{color:var(--high);font-weight:600;font-family:var(--mono);font-size:.78rem;letter-spacing:.04em}
+
+/* stations table */
+.stations{margin-top:1rem}
+.stations table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:.72rem}
+.stations th,.stations td{text-align:left;padding:.4rem .5rem;border-bottom:1px solid var(--sky3)}
+.stations th{background:var(--ink);color:var(--sky);font-weight:400;letter-spacing:.1em;font-size:.62rem;text-transform:uppercase}
+.stations tr:nth-child(even) td{background:rgba(193,214,232,.25)}
+.stations td b{color:var(--high)}
+.stations td.warm{color:var(--high)}
+.stations td.cool{color:var(--low)}
+
+/* ticker */
+.ticker{margin-top:1rem;border:1.5px solid var(--ink);background:var(--ink);color:var(--sky);padding:.7rem 1rem;font-family:var(--mono);font-size:.78rem;letter-spacing:.04em;overflow:hidden;position:relative;white-space:nowrap}
+.ticker span{display:inline-block;animation:tick 45s linear infinite;padding-right:3rem}
+@keyframes tick{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+.foot{margin-top:1rem;padding:.6rem 1rem;border-top:1px solid var(--ink2);font-family:var(--mono);font-size:.65rem;letter-spacing:.14em;color:var(--ink2);display:flex;justify-content:space-between;text-transform:uppercase}
+.foot a{color:var(--high);border-bottom:1px dotted}
+
+/* SVG label styling (hooked in SVG) */
+.svg-label{font-family:var(--mono);font-size:9px;fill:var(--ink)}
+.svg-h{font-family:var(--body);font-weight:700;font-size:28px;fill:var(--high)}
+.svg-l{font-family:var(--body);font-weight:700;font-size:28px;fill:var(--low)}
+.svg-place{font-family:var(--mono);font-size:8.5px;fill:var(--ink2);letter-spacing:.5px;text-transform:uppercase}
+.svg-title{font-family:var(--mono);font-size:10px;fill:var(--ink);letter-spacing:2px;text-transform:uppercase}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="header">
+  <h1>Nerdy Synoptic Chart<small>NERDY METEOROLOGICAL SERVICE · 24-HR OUTLOOK</small></h1>
+  <div class="meta">
+    <span>Chart № <b>N-026</b></span>
+    <span id="issued">ISSUED <b>04:00 UTC</b></span>
+    <span class="issued">VALID 24 HRS</span>
+  </div>
+</header>
+
+<!-- ═══ MAP ═══ -->
+<div class="map-wrap">
+<svg viewBox="0 0 1000 520" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="sea-pat" width="6" height="6" patternUnits="userSpaceOnUse">
+      <rect width="6" height="6" fill="#84b0ce"/>
+      <path d="M0 3 Q1.5 1 3 3 Q4.5 5 6 3" stroke="#9cc0db" stroke-width=".5" fill="none"/>
+    </pattern>
+    <pattern id="land-pat" width="100" height="100" patternUnits="userSpaceOnUse">
+      <rect width="100" height="100" fill="#f6f1e4"/>
+    </pattern>
+  </defs>
+
+  <!-- background sea -->
+  <rect width="1000" height="520" fill="url(#sea-pat)"/>
+
+  <!-- lat/lon grid -->
+  <g stroke="#8ba7bc" stroke-width=".5" opacity=".5">
+    <line x1="0" y1="80" x2="1000" y2="80"/>
+    <line x1="0" y1="180" x2="1000" y2="180"/>
+    <line x1="0" y1="280" x2="1000" y2="280"/>
+    <line x1="0" y1="380" x2="1000" y2="380"/>
+    <line x1="0" y1="480" x2="1000" y2="480"/>
+    <line x1="150" y1="0" x2="150" y2="520"/>
+    <line x1="350" y1="0" x2="350" y2="520"/>
+    <line x1="550" y1="0" x2="550" y2="520"/>
+    <line x1="750" y1="0" x2="750" y2="520"/>
+    <line x1="900" y1="0" x2="900" y2="520"/>
+  </g>
+  <g class="svg-label" opacity=".7">
+    <text x="4" y="78">55°N</text><text x="4" y="178">52°N</text><text x="4" y="278">49°N</text><text x="4" y="378">46°N</text>
+    <text x="150" y="514">0°</text><text x="350" y="514">5°E</text><text x="550" y="514">10°E</text><text x="750" y="514">15°E</text>
+  </g>
+
+  <!-- abstract land masses -->
+  <g fill="url(#land-pat)" stroke="#13293d" stroke-width="1.2">
+    <path d="M110 100 Q180 70 250 80 Q320 95 370 140 Q400 180 380 220 Q340 240 290 225 Q230 215 180 240 Q120 260 90 230 Q70 180 110 100 Z"/>
+    <path d="M420 300 Q480 280 560 290 Q640 305 700 340 Q740 380 720 430 Q670 450 600 440 Q520 430 450 410 Q410 370 420 300 Z"/>
+    <path d="M760 70 Q820 60 890 80 Q940 110 930 170 Q900 200 840 190 Q790 175 760 140 Q745 100 760 70 Z"/>
+  </g>
+
+  <!-- isobars -->
+  <g fill="none" stroke="#2d4f6e" stroke-width="1" stroke-dasharray="5 4" opacity=".8">
+    <ellipse cx="260" cy="170" rx="200" ry="80" transform="rotate(-10 260 170)"/>
+    <ellipse cx="260" cy="170" rx="140" ry="55" transform="rotate(-10 260 170)"/>
+    <ellipse cx="260" cy="170" rx="80" ry="30" transform="rotate(-10 260 170)"/>
+    <ellipse cx="620" cy="360" rx="170" ry="70" transform="rotate(18 620 360)"/>
+    <ellipse cx="620" cy="360" rx="110" ry="45" transform="rotate(18 620 360)"/>
+    <ellipse cx="620" cy="360" rx="60" ry="24" transform="rotate(18 620 360)"/>
+    <ellipse cx="860" cy="150" rx="80" ry="40"/>
+    <ellipse cx="860" cy="150" rx="45" ry="22"/>
+  </g>
+
+  <!-- pressure system centers -->
+  <g>
+    <text x="260" y="182" text-anchor="middle" class="svg-h">H</text>
+    <text x="260" y="200" text-anchor="middle" class="svg-label" fill="#b03a1e">1028 hPa</text>
+    <text x="260" y="215" text-anchor="middle" class="svg-place">KUBERNETES ANTICYCLONE</text>
+
+    <text x="620" y="370" text-anchor="middle" class="svg-l">L</text>
+    <text x="620" y="390" text-anchor="middle" class="svg-label" fill="#1a4fa0">996 hPa</text>
+    <text x="620" y="405" text-anchor="middle" class="svg-place">MCP TROUGH</text>
+
+    <text x="860" y="160" text-anchor="middle" class="svg-h">H</text>
+    <text x="860" y="178" text-anchor="middle" class="svg-label" fill="#b03a1e">1022 hPa</text>
+    <text x="860" y="193" text-anchor="middle" class="svg-place">TERMINAL RIDGE</text>
+  </g>
+
+  <!-- cold front -->
+  <g>
+    <path d="M400 100 Q500 150 580 250 Q640 330 680 420" stroke="#1a4fa0" stroke-width="2.5" fill="none"/>
+    <g fill="#1a4fa0">
+      <polygon points="420,110 432,95 444,115"/>
+      <polygon points="470,145 484,132 492,152"/>
+      <polygon points="530,205 544,195 551,217"/>
+      <polygon points="590,280 604,272 608,296"/>
+      <polygon points="645,355 660,350 661,374"/>
+    </g>
+  </g>
+  <!-- warm front -->
+  <g>
+    <path d="M120 300 Q220 330 340 320 Q460 310 560 360" stroke="#d45a2a" stroke-width="2.5" fill="none"/>
+    <g fill="#d45a2a">
+      <circle cx="170" cy="318" r="7"/>
+      <circle cx="245" cy="328" r="7"/>
+      <circle cx="320" cy="322" r="7"/>
+      <circle cx="395" cy="313" r="7"/>
+      <circle cx="475" cy="325" r="7"/>
+    </g>
+  </g>
+
+  <!-- wind barbs -->
+  <g stroke="#13293d" stroke-width="1.2" fill="none">
+    <g transform="translate(150 120) rotate(30)"><line x1="0" y1="0" x2="0" y2="22"/><line x1="0" y1="22" x2="9" y2="18"/><line x1="0" y1="18" x2="7" y2="15"/></g>
+    <g transform="translate(440 250) rotate(-20)"><line x1="0" y1="0" x2="0" y2="26"/><line x1="0" y1="26" x2="11" y2="21"/><line x1="0" y1="22" x2="11" y2="17"/></g>
+    <g transform="translate(700 200) rotate(60)"><line x1="0" y1="0" x2="0" y2="22"/><line x1="0" y1="22" x2="9" y2="18"/></g>
+    <g transform="translate(850 300) rotate(-10)"><line x1="0" y1="0" x2="0" y2="24"/><line x1="0" y1="24" x2="10" y2="19"/></g>
+  </g>
+
+  <!-- stations -->
+  <g>
+    <g transform="translate(210 170)"><circle r="6" fill="white" stroke="#13293d" stroke-width="1.3"/><text x="10" y="-4" class="svg-place">TERMINAL-STN</text><text x="10" y="8" class="svg-label" fill="#b03a1e">18°C · 1028</text></g>
+    <g transform="translate(330 210)"><circle r="6" fill="white" stroke="#13293d" stroke-width="1.3"/><text x="10" y="-4" class="svg-place">PROJECTS-PT</text><text x="10" y="8" class="svg-label" fill="#b03a1e">16°C · 1024</text></g>
+    <g transform="translate(510 360)"><circle r="6" fill="white" stroke="#13293d" stroke-width="1.3"/><text x="-60" y="-4" class="svg-place">PIXEL-LOWLANDS</text><text x="-48" y="8" class="svg-label" fill="#1a4fa0">9°C · 998</text></g>
+    <g transform="translate(650 420)"><circle r="6" fill="white" stroke="#13293d" stroke-width="1.3"/><text x="-50" y="-4" class="svg-place">BASEMENT</text><text x="-36" y="8" class="svg-label" fill="#1a4fa0">7°C · 996</text></g>
+    <g transform="translate(830 140)"><circle r="6" fill="white" stroke="#13293d" stroke-width="1.3"/><text x="10" y="-4" class="svg-place">TBD-RIDGE</text><text x="10" y="8" class="svg-label" fill="#b03a1e">17°C · 1021</text></g>
+    <g transform="translate(470 120)"><circle r="6" fill="white" stroke="#13293d" stroke-width="1.3"/><text x="10" y="-4" class="svg-place">MAZU-BAY</text><text x="10" y="8" class="svg-label" fill="#1a4fa0">11°C · 1010</text></g>
+  </g>
+
+  <!-- title on map -->
+  <text x="20" y="28" class="svg-title">SURFACE ANALYSIS · 1000 hPa</text>
+  <text x="980" y="28" text-anchor="end" class="svg-title">NMS-N026</text>
+</svg>
+
+<div class="caption-strip">
+  <div>Chart <b>N-026</b></div>
+  <div>Base time <b>2026-04-16 04Z</b></div>
+  <div>Outlook <b>24 h</b></div>
+  <div>Confidence <b>moderate</b></div>
+</div>
+</div>
+
+<!-- ═══ BELOW ═══ -->
+<div class="below">
+
+  <aside class="panel">
+    <h2>Chart Legend</h2>
+    <div class="legend-rows">
+      <div><span class="sym-h">H</span> High pressure</div>
+      <div><span class="sym-l">L</span> Low pressure</div>
+      <div><span class="sym-front sym-warm"></span> Warm front</div>
+      <div><span class="sym-front sym-cold"></span> Cold front</div>
+      <div><span class="sym-iso"></span> Isobar (4 hPa)</div>
+      <div><span class="sym-station"></span> Nerdy station</div>
+    </div>
+
+    <div style="margin-top:1.2rem">
+      <h2>Project Stations</h2>
+      <div class="stations">
+        <table>
+          <thead><tr><th>ID</th><th>Project</th><th>Press.</th><th>Temp</th><th>Visib.</th></tr></thead>
+          <tbody>
+            <tr><td>N-TRM</td><td>Nerdy Terminal</td><td><b>1028</b></td><td class="warm">18°C</td><td>∞</td></tr>
+            <tr><td>K8S-OX</td><td>Kubernetes</td><td><b>1024</b></td><td class="warm">16°C</td><td>12 km</td></tr>
+            <tr><td>MCP-GW</td><td>MCP Gateway</td><td>996</td><td class="cool">9°C</td><td>haze</td></tr>
+            <tr><td>PXL-T</td><td>Pixel Tanks</td><td>998</td><td class="cool">7°C</td><td>8-bit</td></tr>
+            <tr><td>TBD-RDG</td><td>TBD</td><td><b>1021</b></td><td class="warm">17°C</td><td>clear</td></tr>
+            <tr><td>MAZ-BAY</td><td>Mazu (drums)</td><td>1010</td><td class="cool">11°C</td><td>loud</td></tr>
+            <tr><td>HA-LOW</td><td>Home Assistant</td><td>996</td><td class="cool">7°C</td><td>zigbee</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </aside>
+
+  <aside class="panel">
+    <h2>Forecast Discussion</h2>
+
+    <div class="f-item">
+      <div class="f-head"><span class="f-region">Nerdy Terminal</span><span class="f-code">N-TRM · H1028</span></div>
+      <div class="f-body"><span class="pres">STRONG HIGH.</span> Stable keyboard-first conditions continue across macOS region. Extended ridging; no mouse activity expected. Sessions multiplying. Winds calm but precise.</div>
+    </div>
+    <div class="f-item">
+      <div class="f-head"><span class="f-region">Kubernetes</span><span class="f-code">K8S · anticyclone</span></div>
+      <div class="f-body"><span class="pres">OVER-ENGINEERED HIGH.</span> Blocking pattern dominating the forecast. Too many clusters in one airmass. When asked about dissipation, the operator stared into the distance and whispered &ldquo;GitOps.&rdquo;</div>
+    </div>
+    <div class="f-item">
+      <div class="f-head"><span class="f-region">MCP Gateway</span><span class="f-code">MCP · trough</span></div>
+      <div class="f-body"><span class="pres">ACTIVE FRONT.</span> Warm air (Slack, Jira) meets cold air (database) along the MCP boundary. Expect heavy context-transfer showers. Agents should pack an umbrella.</div>
+    </div>
+    <div class="f-item">
+      <div class="f-head"><span class="f-region">Home / Domestic</span><span class="f-code">HA · basement low</span></div>
+      <div class="f-body"><span class="pres">LOW 996 hPa.</span> Wife Acceptance Factor continues subnormal. Smart lights remain the only fair weather feature. Children approve. Outlook: perpetual YAML with patches of stubbornness.</div>
+    </div>
+    <div class="f-item">
+      <div class="f-head"><span class="f-region">Mazu / Basement Workshop</span><span class="f-code">MAZ · BAS</span></div>
+      <div class="f-body"><span class="pres">LOCAL DISTURBANCE.</span> Sustained 60–80 BPM tremors. Sawdust suspended in the air. Neighbors have opinions. Opinions have no effect on the forecast.</div>
+    </div>
+  </aside>
+</div>
+
+<div class="ticker"><span>&raquo; GALE WARNING: strong opinions expected around YAML &middot; &raquo; SMALL CRAFT ADVISORY: mouse users should seek shelter &middot; &raquo; STATION MAZU reports continued instrumental stoner weather &middot; &raquo; WAF remains historically low, light smart-lights expected overnight &middot; &raquo; GALE WARNING: strong opinions expected around YAML &middot; &raquo; SMALL CRAFT ADVISORY: mouse users should seek shelter &middot; </span></div>
+
+<footer class="foot">
+  <span>&copy; nerdy.nl Meteorological Service</span>
+  <span id="dt"></span>
+  <a href="https://github.com/enipo">github.com/enipo</a>
+</footer>
+
+</div>
+<script>
+document.getElementById('dt').textContent=new Date().toISOString().replace('T',' ').slice(0,16)+' Z';
+</script>
+</body>
+</html>
