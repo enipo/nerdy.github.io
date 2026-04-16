@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nerdy 95</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23008080'/%3E%3Crect x='10' y='10' width='80' height='80' fill='%23c0c0c0' stroke='%23000' stroke-width='3'/%3E%3Ctext y='.92em' x='25' font-size='65' font-family='Tahoma,sans-serif' fill='%23000'%3EN%3C/text%3E%3C/svg%3E">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --gray:#c0c0c0;
+  --gray-d:#808080;
+  --gray-l:#dfdfdf;
+  --black:#000;
+  --blue:#000080;
+  --teal:#008080;
+  --hi:#0a246a;
+  --face:#c0c0c0;
+}
+html,body{
+  background:var(--teal);
+  font-family:'Tahoma','MS Sans Serif','Lucida Sans Unicode',sans-serif;
+  font-size:11px;
+  color:#000;
+  min-height:100vh;
+  overflow:hidden;
+  height:100vh;
+}
+.desktop{position:absolute;inset:0 0 30px 0;overflow:hidden}
+.dico{position:absolute;width:74px;display:flex;flex-direction:column;align-items:center;cursor:pointer;text-align:center;color:#fff;text-shadow:1px 1px 0 #000}
+.dico .img{width:32px;height:32px;margin-bottom:4px;display:flex;align-items:center;justify-content:center}
+.dico .img svg{width:32px;height:32px}
+.dico .lbl{font-size:11px;padding:1px 3px;line-height:1.2;border:1px dotted transparent}
+.dico:hover .lbl,.dico.sel .lbl{background:var(--hi);border:1px dotted #fff}
+.taskbar{position:fixed;bottom:0;left:0;right:0;height:30px;background:var(--gray);border-top:1px solid #fff;box-shadow:inset 0 1px 0 #fff;display:flex;align-items:center;padding:2px;gap:4px;z-index:1000}
+.start-btn{display:flex;align-items:center;gap:4px;background:var(--gray);border:1px solid;border-color:#fff #000 #000 #fff;box-shadow:inset 1px 1px 0 #dfdfdf,inset -1px -1px 0 #808080;padding:2px 6px 2px 4px;font-weight:700;cursor:pointer;font-size:11px;height:24px}
+.start-btn:active,.start-btn.open{border-color:#000 #fff #fff #000;box-shadow:inset -1px -1px 0 #dfdfdf,inset 1px 1px 0 #808080}
+.start-btn .logo{width:16px;height:16px}
+.task-items{display:flex;gap:3px;flex:1;margin-left:4px;overflow:hidden}
+.task-item{background:var(--gray);border:1px solid;border-color:#fff #000 #000 #fff;box-shadow:inset 1px 1px 0 #dfdfdf,inset -1px -1px 0 #808080;padding:2px 6px;font-size:11px;cursor:pointer;display:flex;align-items:center;gap:4px;height:24px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.task-item.active{border-color:#000 #fff #fff #000;box-shadow:inset -1px -1px 0 #dfdfdf,inset 1px 1px 0 #808080;background:repeating-linear-gradient(45deg,#bdbdbd 0 2px,#cdcdcd 2px 4px)}
+.tray{display:flex;align-items:center;gap:6px;border:1px solid;border-color:#000 #fff #fff #000;box-shadow:inset -1px -1px 0 #dfdfdf,inset 1px 1px 0 #808080;padding:2px 8px;font-size:11px;height:24px}
+.tray .ico-mini{width:16px;height:16px}
+.startmenu{position:fixed;bottom:30px;left:2px;width:230px;background:var(--gray);border:1px solid;border-color:#fff #000 #000 #fff;box-shadow:inset 1px 1px 0 #dfdfdf,inset -1px -1px 0 #808080,2px 2px 4px rgba(0,0,0,.4);z-index:1100;display:none;flex-direction:row}
+.startmenu.show{display:flex}
+.startmenu .strip{width:24px;background:linear-gradient(180deg,var(--blue),#3a3aaa);color:#fff;writing-mode:vertical-rl;transform:rotate(180deg);text-align:center;font-size:18px;font-weight:700;letter-spacing:1px;padding:8px 0;font-style:italic}
+.startmenu .strip span{display:inline-block}
+.startmenu ul{flex:1;list-style:none}
+.startmenu li{display:flex;align-items:center;gap:8px;padding:6px 10px 6px 8px;cursor:pointer;border-bottom:1px solid #b0b0b0;font-size:12px}
+.startmenu li:last-child{border-bottom:none}
+.startmenu li:hover{background:var(--hi);color:#fff}
+.startmenu li svg{width:24px;height:24px}
+.startmenu li.sep{padding:0;border-top:1px solid #fff;border-bottom:1px solid #808080;height:0;margin:0}
+.win{position:absolute;background:var(--gray);border:1px solid;border-color:#fff #000 #000 #fff;box-shadow:inset 1px 1px 0 #dfdfdf,inset -1px -1px 0 #808080,2px 2px 6px rgba(0,0,0,.5);min-width:300px;max-width:580px;width:90vw;display:flex;flex-direction:column}
+.titlebar{background:linear-gradient(90deg,#000080,#1084d0);color:#fff;padding:3px 4px;display:flex;align-items:center;gap:4px;cursor:move;font-weight:700;font-size:11px;user-select:none}
+.titlebar.inactive{background:linear-gradient(90deg,#7a7a7a,#a0a0a0);color:#dfdfdf}
+.titlebar .ti{display:flex;align-items:center;gap:4px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.titlebar svg{width:14px;height:14px;flex-shrink:0}
+.titlebar .btns{display:flex;gap:1px}
+.tb-btn{width:16px;height:14px;background:var(--gray);border:1px solid;border-color:#fff #000 #000 #fff;box-shadow:inset 1px 1px 0 #dfdfdf,inset -1px -1px 0 #808080;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:10px;color:#000;font-family:inherit;line-height:1;font-weight:700;padding:0}
+.tb-btn:active{border-color:#000 #fff #fff #000;box-shadow:inset -1px -1px 0 #dfdfdf,inset 1px 1px 0 #808080}
+.menubar2{display:flex;gap:0;padding:1px;background:var(--gray);border-bottom:1px solid #808080;font-size:11px}
+.menubar2 span{padding:2px 6px;cursor:default}
+.menubar2 span:hover{background:var(--hi);color:#fff}
+.menubar2 .u{text-decoration:underline}
+.win-body{padding:8px 10px 10px;background:#fff;border:2px solid;border-color:#808080 #fff #fff #808080;margin:4px;flex:1;overflow:auto;font-size:12px;line-height:1.45;max-height:64vh}
+.win-body p{margin-bottom:6px}
+.win-body h3{font-size:13px;margin:6px 0 4px;color:var(--blue)}
+.win-body ul{padding-left:20px;margin-bottom:6px}
+.win-body a{color:var(--blue)}
+.row-ic{display:flex;gap:8px;align-items:flex-start;margin:4px 0}
+.row-ic svg{width:32px;height:32px;flex-shrink:0}
+.divider{border:none;border-top:1px solid #c0c0c0;margin:6px 0;border-bottom:1px solid #fff}
+.statusbar{padding:2px 6px;font-size:11px;color:#000;background:var(--gray);border-top:1px solid #fff;display:flex;gap:10px}
+.statusbar > span{border:1px solid;border-color:#808080 #fff #fff #808080;padding:1px 6px}
+.btn-95{background:var(--gray);border:1px solid;border-color:#fff #000 #000 #fff;box-shadow:inset 1px 1px 0 #dfdfdf,inset -1px -1px 0 #808080;padding:3px 14px;font-size:11px;cursor:pointer;font-family:inherit;margin:4px 4px 0 0}
+.btn-95:active{border-color:#000 #fff #fff #000;box-shadow:inset -1px -1px 0 #dfdfdf,inset 1px 1px 0 #808080}
+@media (max-width:600px){
+  .win{position:fixed!important;left:5vw!important;top:30px!important;width:90vw!important;max-height:calc(100vh - 80px)}
+  .dico{position:relative!important;display:inline-flex;left:auto!important;top:auto!important;margin:8px}
+  .desktop{display:flex;flex-wrap:wrap;align-items:flex-start;padding:8px}
+}
+</style>
+</head>
+<body>
+
+<div class="desktop" id="desk">
+  <div class="dico" data-win="my-pc" style="left:14px;top:14px">
+    <div class="img"><svg viewBox="0 0 32 32"><rect x="3" y="6" width="22" height="14" fill="#cfcfcf" stroke="#000"/><rect x="5" y="8" width="18" height="10" fill="#80b0c0"/><rect x="2" y="20" width="24" height="4" fill="#a0a0a0" stroke="#000"/><rect x="8" y="24" width="12" height="3" fill="#a0a0a0" stroke="#000"/><rect x="20" y="14" width="10" height="14" fill="#cfcfcf" stroke="#000"/><circle cx="22" cy="17" r="1" fill="#000"/></svg></div>
+    <div class="lbl">My Computer</div>
+  </div>
+  <div class="dico" data-win="projects" style="left:14px;top:96px">
+    <div class="img"><svg viewBox="0 0 32 32"><path d="M2 8 L12 8 L14 11 L30 11 L30 27 L2 27 Z" fill="#dfd070" stroke="#000"/></svg></div>
+    <div class="lbl">Projects</div>
+  </div>
+  <div class="dico" data-win="readme" style="left:14px;top:178px">
+    <div class="img"><svg viewBox="0 0 32 32"><polygon points="6,2 22,2 28,8 28,30 6,30" fill="#fff" stroke="#000"/><polygon points="22,2 22,8 28,8" fill="#cfcfcf" stroke="#000"/><line x1="10" y1="14" x2="24" y2="14" stroke="#000"/><line x1="10" y1="18" x2="24" y2="18" stroke="#000"/><line x1="10" y1="22" x2="20" y2="22" stroke="#000"/></svg></div>
+    <div class="lbl">readme.txt</div>
+  </div>
+  <div class="dico" data-win="music" style="left:14px;top:260px">
+    <div class="img"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="13" fill="#1a1a1a" stroke="#000"/><circle cx="16" cy="16" r="4" fill="#cfcfcf" stroke="#000"/><circle cx="16" cy="16" r="1.2" fill="#000"/></svg></div>
+    <div class="lbl">Noise.cda</div>
+  </div>
+  <div class="dico" data-win="workshop" style="left:14px;top:342px">
+    <div class="img"><svg viewBox="0 0 32 32"><rect x="3" y="14" width="26" height="14" fill="#cfa060" stroke="#000"/><rect x="6" y="6" width="20" height="8" fill="#dfb070" stroke="#000"/><line x1="3" y1="20" x2="29" y2="20" stroke="#000"/></svg></div>
+    <div class="lbl">Workshop</div>
+  </div>
+  <div class="dico" data-win="family" style="left:14px;top:424px">
+    <div class="img"><svg viewBox="0 0 32 32"><circle cx="11" cy="10" r="4" fill="#fdd" stroke="#000"/><circle cx="22" cy="10" r="4" fill="#fdd" stroke="#000"/><path d="M5 28 Q5 18 11 18 Q17 18 17 28 Z" fill="#80b0c0" stroke="#000"/><path d="M16 28 Q16 18 22 18 Q28 18 28 28 Z" fill="#c08080" stroke="#000"/></svg></div>
+    <div class="lbl">Family</div>
+  </div>
+  <div class="dico" data-win="bin" style="left:14px;top:506px">
+    <div class="img"><svg viewBox="0 0 32 32"><path d="M6 8 L26 8 L24 28 L8 28 Z" fill="#cfcfcf" stroke="#000"/><line x1="13" y1="12" x2="13" y2="24" stroke="#000"/><line x1="19" y1="12" x2="19" y2="24" stroke="#000"/><rect x="4" y="4" width="24" height="4" fill="#cfcfcf" stroke="#000"/><rect x="13" y="2" width="6" height="2" fill="#cfcfcf" stroke="#000"/></svg></div>
+    <div class="lbl">Recycle Bin</div>
+  </div>
+</div>
+
+<div id="windows"></div>
+
+<div class="startmenu" id="startmenu">
+  <div class="strip"><span>Nerdy</span><span style="font-weight:400">95</span></div>
+  <ul>
+    <li data-win="projects"><svg viewBox="0 0 24 24"><path d="M2 6 L9 6 L11 8 L22 8 L22 20 L2 20 Z" fill="#dfd070" stroke="#000"/></svg> Programs</li>
+    <li data-win="music"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#1a1a1a" stroke="#000"/><circle cx="12" cy="12" r="3" fill="#cfcfcf"/></svg> Documents</li>
+    <li data-win="workshop"><svg viewBox="0 0 24 24"><rect x="2" y="10" width="20" height="10" fill="#cfa060" stroke="#000"/></svg> Workshop</li>
+    <li data-win="family"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3" fill="#fdd" stroke="#000"/><circle cx="16" cy="8" r="3" fill="#fdd" stroke="#000"/><rect x="3" y="13" width="18" height="9" fill="#80b0c0" stroke="#000"/></svg> Family</li>
+    <li class="sep"></li>
+    <li data-win="readme"><svg viewBox="0 0 24 24"><polygon points="4,2 16,2 22,8 22,22 4,22" fill="#fff" stroke="#000"/></svg> Readme</li>
+    <li data-win="bsod"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" fill="#0000aa" stroke="#000"/><line x1="6" y1="7" x2="18" y2="7" stroke="#fff"/><line x1="6" y1="10" x2="14" y2="10" stroke="#fff"/></svg> Run...</li>
+    <li class="sep"></li>
+    <li><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#ff0000" stroke="#000"/><rect x="6" y="11" width="12" height="2" fill="#fff"/></svg> Shut Down...</li>
+  </ul>
+</div>
+
+<div class="taskbar">
+  <button class="start-btn" id="startbtn">
+    <svg class="logo" viewBox="0 0 16 16"><rect x="1" y="1" width="6" height="6" fill="#ff0000"/><rect x="9" y="1" width="6" height="6" fill="#00aa00"/><rect x="1" y="9" width="6" height="6" fill="#0000ff"/><rect x="9" y="9" width="6" height="6" fill="#ffff00"/></svg>
+    Start
+  </button>
+  <div class="task-items" id="tasks"></div>
+  <div class="tray">
+    <svg class="ico-mini" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" fill="#0050a0" stroke="#000"/><line x1="8" y1="2" x2="8" y2="14" stroke="#fff"/></svg>
+    <svg class="ico-mini" viewBox="0 0 16 16"><rect x="2" y="4" width="12" height="8" fill="#dfd070" stroke="#000"/></svg>
+    <span id="tray-clock">12:00 PM</span>
+  </div>
+</div>
+
+<template id="tpl-readme">
+  <div class="win" style="width:380px;left:130px;top:50px">
+    <div class="titlebar"><div class="ti"><svg viewBox="0 0 14 14"><polygon points="3,1 9,1 12,4 12,13 3,13" fill="#fff" stroke="#000"/></svg> Readme.txt - Notepad</div><div class="btns"><button class="tb-btn">_</button><button class="tb-btn">▢</button><button class="tb-btn close">×</button></div></div>
+    <div class="menubar2"><span><span class="u">F</span>ile</span><span><span class="u">E</span>dit</span><span><span class="u">S</span>earch</span><span><span class="u">H</span>elp</span></div>
+    <div class="win-body" style="font-family:'Courier New',monospace;font-size:12px;background:#fff">
+      <p>===========================================</p>
+      <p>  NERDY.NL — een persoonlijke website</p>
+      <p>===========================================</p>
+      <p>&nbsp;</p>
+      <p>Welkom in een UI die je vader nog snapt.</p>
+      <p>&nbsp;</p>
+      <p>Dubbelklik iconen op het bureaublad om</p>
+      <p>vensters te openen. Sleep titlebars, klik</p>
+      <p>X om te sluiten. Start-menu werkt ook.</p>
+      <p>&nbsp;</p>
+      <p>Geen virus. Geen crapware. Wel YAML.</p>
+    </div>
+    <div class="statusbar"><span>Ln 1, Col 1</span></div>
+  </div>
+</template>
+
+<template id="tpl-my-pc">
+  <div class="win" style="width:440px;left:160px;top:80px">
+    <div class="titlebar"><div class="ti"><svg viewBox="0 0 14 14"><rect x="1" y="2" width="11" height="7" fill="#cfcfcf" stroke="#000"/><rect x="3" y="9" width="7" height="2" fill="#a0a0a0"/></svg> My Computer</div><div class="btns"><button class="tb-btn">_</button><button class="tb-btn">▢</button><button class="tb-btn close">×</button></div></div>
+    <div class="menubar2"><span><span class="u">F</span>ile</span><span><span class="u">E</span>dit</span><span><span class="u">V</span>iew</span><span><span class="u">H</span>elp</span></div>
+    <div class="win-body" style="background:#fff">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(80px,1fr));gap:14px">
+        <div style="text-align:center;cursor:default"><svg width="32" height="32" viewBox="0 0 32 32"><rect x="4" y="6" width="24" height="20" fill="#dfdfdf" stroke="#000"/><circle cx="10" cy="22" r="2" fill="#000"/></svg><div>3½ Floppy (A:)</div></div>
+        <div style="text-align:center;cursor:default"><svg width="32" height="32" viewBox="0 0 32 32"><rect x="4" y="8" width="24" height="16" fill="#dfdfdf" stroke="#000"/><rect x="6" y="11" width="20" height="2" fill="#80b0c0"/></svg><div>Brain (C:)</div></div>
+        <div style="text-align:center;cursor:default"><svg width="32" height="32" viewBox="0 0 32 32"><rect x="4" y="8" width="24" height="16" fill="#dfdfdf" stroke="#000"/></svg><div>Workshop (D:)</div></div>
+        <div style="text-align:center;cursor:default"><svg width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="13" fill="#dfdfdf" stroke="#000"/><circle cx="16" cy="16" r="4" fill="#fff" stroke="#000"/></svg><div>Mazu (E:)</div></div>
+        <div style="text-align:center;cursor:default"><svg width="32" height="32" viewBox="0 0 32 32"><rect x="3" y="6" width="22" height="14" fill="#cfcfcf" stroke="#000"/><rect x="2" y="20" width="24" height="4" fill="#a0a0a0" stroke="#000"/></svg><div>Control Panel</div></div>
+        <div style="text-align:center;cursor:default"><svg width="32" height="32" viewBox="0 0 32 32"><polygon points="3,8 12,8 14,11 29,11 29,26 3,26" fill="#dfd070" stroke="#000"/></svg><div>Printers</div></div>
+      </div>
+    </div>
+    <div class="statusbar"><span>6 object(s)</span><span>Free space: 2.4MB (lol)</span></div>
+  </div>
+</template>
+
+<template id="tpl-projects">
+  <div class="win" style="width:520px;left:200px;top:60px">
+    <div class="titlebar"><div class="ti"><svg viewBox="0 0 14 14"><path d="M1 4 L5 4 L7 6 L13 6 L13 12 L1 12 Z" fill="#dfd070" stroke="#000"/></svg> Projects</div><div class="btns"><button class="tb-btn">_</button><button class="tb-btn">▢</button><button class="tb-btn close">×</button></div></div>
+    <div class="menubar2"><span><span class="u">F</span>ile</span><span><span class="u">E</span>dit</span><span><span class="u">V</span>iew</span><span><span class="u">H</span>elp</span></div>
+    <div class="win-body">
+      <div class="row-ic"><svg viewBox="0 0 32 32"><rect x="2" y="4" width="28" height="20" fill="#000"/><rect x="4" y="6" width="24" height="14" fill="#1c1c1c"/><text x="6" y="14" fill="#0f0" font-family="Courier" font-size="6">$_</text></svg><div><b>Nerdy Terminal</b><br><small>Sessie-manager voor macOS, keyboard-first. Tabs, instant switching, geen muis. Productiviteit gemeten in toetsaanslagen.</small></div></div>
+      <hr class="divider">
+      <div class="row-ic"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="12" fill="#80a0c0" stroke="#000"/><path d="M5 16 L27 16 M16 5 L16 27" stroke="#000"/></svg><div><b>MCP Gateway</b><br><small>Bridge tussen AI-agents en de echte wereld: Slack, Jira, databases, Grafana, Tailscale. Eén gateway, veel poorten.</small></div></div>
+      <hr class="divider">
+      <div class="row-ic"><svg viewBox="0 0 32 32"><rect x="3" y="10" width="26" height="14" fill="#80a080" stroke="#000"/><rect x="8" y="14" width="4" height="6" fill="#000"/><rect x="20" y="14" width="4" height="6" fill="#000"/></svg><div><b>Pixel Tanks</b><br><small>Top-down multiplayer tank-combat. Vrienden vernietigen in lage resolutie. Hoge consequenties voor de groepschat.</small></div></div>
+      <hr class="divider">
+      <div class="row-ic"><svg viewBox="0 0 32 32"><polygon points="16,3 28,9 28,21 16,28 4,21 4,9" fill="#80a0c0" stroke="#000"/></svg><div><b>Eigen Kubernetes platform</b><br><small>Een paar clusters te veel. Reden: GitOps. Andere reden: niet de juiste. Werkt verder als een trein.</small></div></div>
+      <hr class="divider">
+      <div class="row-ic"><svg viewBox="0 0 32 32"><rect x="4" y="4" width="24" height="24" fill="#fff" stroke="#000"/><rect x="6" y="8" width="20" height="2" fill="#80a0c0"/><rect x="6" y="14" width="14" height="2" fill="#a0a0a0"/></svg><div><b>TBD</b><br><small>Persoonlijke productivity. Captures, projecten, taken. Geen bel, geen fluit, wel werk.</small></div></div>
+    </div>
+    <div class="statusbar"><span>5 object(s)</span><span>Total: 4 successful exits</span></div>
+  </div>
+</template>
+
+<template id="tpl-music">
+  <div class="win" style="width:380px;left:240px;top:120px">
+    <div class="titlebar"><div class="ti"><svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" fill="#1a1a1a" stroke="#000"/><circle cx="7" cy="7" r="2" fill="#cfcfcf"/></svg> Noise.cda - Media Player</div><div class="btns"><button class="tb-btn">_</button><button class="tb-btn">▢</button><button class="tb-btn close">×</button></div></div>
+    <div class="menubar2"><span><span class="u">F</span>ile</span><span><span class="u">D</span>evice</span><span><span class="u">S</span>cale</span><span><span class="u">H</span>elp</span></div>
+    <div class="win-body">
+      <h3>Mazu — Drums</h3>
+      <p>Instrumentale stoner-band. De soort muziek waarbij niemand naar de tekst vraagt. Volgende show: TBA. Volume: ja.</p>
+      <hr class="divider">
+      <h3>Gitaar — Solo</h3>
+      <p>Slecht maar luid. Buren hebben meningen. Ik niet.</p>
+      <hr class="divider">
+      <p><b>Now playing:</b> <i>Riff in E, herhaling 47 / ∞</i></p>
+      <div style="background:#000;color:#0f0;padding:6px;font-family:monospace;font-size:11px;border:2px inset #808080;margin:6px 0">
+        ▰▰▰▰▰▰▰▱▱▱▱  03:42 / ∞:∞∞
+      </div>
+      <button class="btn-95">▶ Play</button>
+      <button class="btn-95">■ Stop</button>
+      <button class="btn-95">⏪ Rew</button>
+      <button class="btn-95">⏩ Fwd</button>
+    </div>
+    <div class="statusbar"><span>Track 47</span><span>Mode: REPEAT</span></div>
+  </div>
+</template>
+
+<template id="tpl-workshop">
+  <div class="win" style="width:400px;left:280px;top:140px">
+    <div class="titlebar"><div class="ti"><svg viewBox="0 0 14 14"><rect x="1" y="6" width="12" height="6" fill="#cfa060" stroke="#000"/></svg> Workshop</div><div class="btns"><button class="tb-btn">_</button><button class="tb-btn">▢</button><button class="tb-btn close">×</button></div></div>
+    <div class="menubar2"><span><span class="u">F</span>ile</span><span><span class="u">E</span>dit</span><span><span class="u">V</span>iew</span><span><span class="u">H</span>elp</span></div>
+    <div class="win-body">
+      <h3>Lopende builds</h3>
+      <table style="width:100%;border-collapse:collapse;font-size:11px">
+        <thead><tr style="background:#cfcfcf"><th style="border:1px solid #808080;padding:3px;text-align:left">Build</th><th style="border:1px solid #808080;padding:3px">Materiaal</th><th style="border:1px solid #808080;padding:3px">%</th></tr></thead>
+        <tbody>
+          <tr><td style="border:1px solid #808080;padding:3px">Werkbank</td><td style="border:1px solid #808080;padding:3px">Beuken</td><td style="border:1px solid #808080;padding:3px">90</td></tr>
+          <tr><td style="border:1px solid #808080;padding:3px">Plankenkast (zoon)</td><td style="border:1px solid #808080;padding:3px">Berk multi</td><td style="border:1px solid #808080;padding:3px">40</td></tr>
+          <tr><td style="border:1px solid #808080;padding:3px">Schaafbank-board</td><td style="border:1px solid #808080;padding:3px">MDF</td><td style="border:1px solid #808080;padding:3px">5</td></tr>
+        </tbody>
+      </table>
+      <hr class="divider">
+      <h3>Recente "investeringen"</h3>
+      <ul>
+        <li>Festool TS55 — €····</li>
+        <li>Domino DF500 — €····</li>
+        <li>Klemmen, weer — €···</li>
+      </ul>
+      <p><b>Vingers / project:</b> 10 (target: 10) — status: 🟢</p>
+    </div>
+    <div class="statusbar"><span>Sawdust level: rising</span></div>
+  </div>
+</template>
+
+<template id="tpl-family">
+  <div class="win" style="width:380px;left:200px;top:160px">
+    <div class="titlebar"><div class="ti"><svg viewBox="0 0 14 14"><circle cx="5" cy="5" r="2.5" fill="#fdd" stroke="#000"/><circle cx="10" cy="5" r="2.5" fill="#fdd" stroke="#000"/></svg> Family - Properties</div><div class="btns"><button class="tb-btn">_</button><button class="tb-btn">▢</button><button class="tb-btn close">×</button></div></div>
+    <div class="win-body">
+      <h3>WAF (Wife Acceptance Factor)</h3>
+      <p>YAML automatisering<br>
+        <progress value="2" max="10" style="width:100%;height:14px"></progress> 2/10
+      </p>
+      <p>Slimme lampen<br>
+        <progress value="7" max="10" style="width:100%;height:14px"></progress> 7/10
+      </p>
+      <p>Robot-stofzuiger<br>
+        <progress value="9" max="10" style="width:100%;height:14px"></progress> 9/10
+      </p>
+      <hr class="divider">
+      <h3>Kids — frequent dialog</h3>
+      <ul>
+        <li>"Papa, doe het licht roze"</li>
+        <li>"Papa, mag de iPad nog 5 minuten?"</li>
+        <li>"Papa, wat doe jij eigenlijk?"</li>
+      </ul>
+      <p><i>"Ik regel dingen."</i></p>
+    </div>
+    <div class="statusbar"><span>2 child(ren) · 0 explained clusters</span></div>
+  </div>
+</template>
+
+<template id="tpl-bin">
+  <div class="win" style="width:340px;left:300px;top:90px">
+    <div class="titlebar"><div class="ti"><svg viewBox="0 0 14 14"><path d="M3 4 L11 4 L10 12 L4 12 Z" fill="#cfcfcf" stroke="#000"/></svg> Recycle Bin</div><div class="btns"><button class="tb-btn">_</button><button class="tb-btn">▢</button><button class="tb-btn close">×</button></div></div>
+    <div class="win-body" style="background:#fff">
+      <p><b>Recycle Bin</b> — 3 item(s)</p>
+      <hr class="divider">
+      <ul>
+        <li>idea_rewrite_in_rust.docx</li>
+        <li>plan_2024.txt</li>
+        <li>newsletter_draft_v17.docx</li>
+      </ul>
+      <button class="btn-95">Empty Recycle Bin</button>
+    </div>
+    <div class="statusbar"><span>Disposable thoughts</span></div>
+  </div>
+</template>
+
+<template id="tpl-bsod">
+  <div class="win" style="width:520px;left:120px;top:60px">
+    <div class="titlebar"><div class="ti"><svg viewBox="0 0 14 14"><rect x="1" y="2" width="12" height="9" fill="#0000aa"/></svg> Run...</div><div class="btns"><button class="tb-btn close">×</button></div></div>
+    <div class="win-body" style="background:#0000aa;color:#fff;font-family:'Courier New',monospace;font-size:12px;line-height:1.45">
+      <p>A fatal exception 0E has occurred at 0028:NERDY in your YAML config. The current application will be terminated.</p>
+      <p>* Press any key to terminate the application.</p>
+      <p>* Press CTRL+ALT+DEL to restart your computer. You will lose any unsaved information in all applications.</p>
+      <p style="text-align:center;margin-top:14px">Press any key to continue _</p>
+    </div>
+    <div class="statusbar"><span>Press CTRL+ALT+DEL</span></div>
+  </div>
+</template>
+
+<script>
+(function(){
+  const windows=document.getElementById('windows');
+  const tasks=document.getElementById('tasks');
+  const startbtn=document.getElementById('startbtn');
+  const startmenu=document.getElementById('startmenu');
+  let z=10;
+  const isTouch=window.matchMedia('(hover:none)').matches || 'ontouchstart' in window;
+
+  function clock(){
+    const d=new Date();
+    const h=d.getHours()%12||12, m=String(d.getMinutes()).padStart(2,'0');
+    const ap=d.getHours()<12?'AM':'PM';
+    document.getElementById('tray-clock').textContent=h+':'+m+' '+ap;
+  }
+  clock(); setInterval(clock,30000);
+
+  function focusWin(node){
+    document.querySelectorAll('.titlebar').forEach(t=>t.classList.add('inactive'));
+    const tb=node.querySelector('.titlebar');
+    if(tb) tb.classList.remove('inactive');
+    node.style.zIndex=++z;
+    document.querySelectorAll('.task-item').forEach(t=>t.classList.remove('active'));
+    const ti=tasks.querySelector('[data-for="'+node.dataset.id+'"]');
+    if(ti) ti.classList.add('active');
+  }
+
+  function makeTask(node,id,label){
+    const t=document.createElement('button');
+    t.className='task-item active';
+    t.dataset.for=id;
+    const span=document.createElement('span');
+    span.textContent=label;
+    t.appendChild(span);
+    t.addEventListener('click',()=>focusWin(node));
+    tasks.appendChild(t);
+    return t;
+  }
+
+  function open(id){
+    const existing=windows.querySelector('.win[data-id="'+id+'"]');
+    if(existing){ focusWin(existing); return; }
+    const tpl=document.getElementById('tpl-'+id);
+    if(!tpl) return;
+    const node=tpl.content.firstElementChild.cloneNode(true);
+    node.dataset.id=id;
+    const baseTop=parseInt(node.style.top||'80');
+    const baseLeft=parseInt(node.style.left||'120');
+    const offset=windows.children.length*20;
+    node.style.top=(baseTop+offset)+'px';
+    node.style.left=(baseLeft+offset)+'px';
+    windows.appendChild(node);
+    const label=node.querySelector('.titlebar .ti').textContent.trim();
+    const task=makeTask(node,id,label);
+    bind(node,task);
+    focusWin(node);
+  }
+
+  function bind(node,task){
+    node.querySelectorAll('.tb-btn.close, .close').forEach(b=>b.addEventListener('click',e=>{
+      e.stopPropagation();
+      node.remove();
+      task.remove();
+    }));
+    node.addEventListener('mousedown',()=>focusWin(node),true);
+    node.addEventListener('touchstart',()=>focusWin(node),true);
+    const tb=node.querySelector('.titlebar');
+    let drag=null;
+    function start(e){
+      const ev=e.touches?e.touches[0]:e;
+      const r=node.getBoundingClientRect();
+      drag={dx:ev.clientX-r.left,dy:ev.clientY-r.top};
+      e.preventDefault();
+    }
+    function move(e){
+      if(!drag)return;
+      const ev=e.touches?e.touches[0]:e;
+      let nl=ev.clientX-drag.dx, nt=ev.clientY-drag.dy;
+      nt=Math.max(0,nt);
+      node.style.left=nl+'px';
+      node.style.top=nt+'px';
+    }
+    function end(){drag=null}
+    tb.addEventListener('mousedown',start);
+    tb.addEventListener('touchstart',start,{passive:false});
+    document.addEventListener('mousemove',move);
+    document.addEventListener('touchmove',move,{passive:false});
+    document.addEventListener('mouseup',end);
+    document.addEventListener('touchend',end);
+  }
+
+  function bindIcons(){
+    document.querySelectorAll('.dico').forEach(el=>{
+      const open_=()=>open(el.dataset.win);
+      el.addEventListener('dblclick',open_);
+      if(isTouch) el.addEventListener('click',open_);
+      else el.addEventListener('click',()=>{
+        document.querySelectorAll('.dico').forEach(x=>x.classList.remove('sel'));
+        el.classList.add('sel');
+      });
+    });
+  }
+  bindIcons();
+
+  startbtn.addEventListener('click',e=>{
+    e.stopPropagation();
+    startmenu.classList.toggle('show');
+    startbtn.classList.toggle('open');
+  });
+  document.addEventListener('click',()=>{startmenu.classList.remove('show');startbtn.classList.remove('open');});
+  startmenu.addEventListener('click',e=>e.stopPropagation());
+  startmenu.querySelectorAll('li[data-win]').forEach(li=>li.addEventListener('click',()=>{
+    open(li.dataset.win);
+    startmenu.classList.remove('show');
+    startbtn.classList.remove('open');
+  }));
+  open('readme');
+})();
+</script>
+</body>
+</html>

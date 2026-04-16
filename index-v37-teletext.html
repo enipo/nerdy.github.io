@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NERDY 100 — Teletext</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23000'/%3E%3Ctext y='.92em' x='10' font-size='80' font-family='monospace' fill='%23ff0'%3EN%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:#111;font-family:'VT323',monospace;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem}
+.tv{background:#000;border:14px solid #2a2a2a;border-radius:18px;box-shadow:0 0 0 4px #111,0 14px 50px rgba(0,0,0,.7),inset 0 0 80px rgba(0,0,0,.6);max-width:920px;width:100%;padding:18px 22px 24px;position:relative}
+.tv::before{content:'';position:absolute;top:6px;right:18px;width:8px;height:8px;background:#3a0;border-radius:50%;box-shadow:0 0 6px #3f0}
+.tv::after{content:'';position:absolute;inset:18px 22px 24px;pointer-events:none;background:repeating-linear-gradient(transparent,transparent 3px,rgba(0,0,0,.25) 3px,rgba(0,0,0,.25) 4px);border-radius:6px}
+.scr-wrap{position:relative;z-index:1;font-size:clamp(13px,1.7vw,20px);line-height:1.05;letter-spacing:.04em;min-height:580px}
+.page{display:none;white-space:pre-wrap;font-family:'VT323',monospace}
+.page.active{display:block}
+.row{display:block;min-height:1.05em}
+.k{color:#000}.r{color:#f33}.g{color:#3f3}.y{color:#ff3}.b{color:#36f}.m{color:#f3f}.c{color:#3ff}.w{color:#fff}
+.bg-r{background:#a00;color:#fff}.bg-g{background:#060;color:#fff}.bg-y{background:#aa0;color:#000}.bg-b{background:#005;color:#fff}.bg-m{background:#606;color:#fff}.bg-c{background:#066;color:#fff}.bg-w{background:#bbb;color:#000}.bg-k{background:#000;color:#fff}
+.bg-rr{background:#f33;color:#000}.bg-yy{background:#ff3;color:#000}.bg-cc{background:#3ff;color:#000}.bg-gg{background:#3f3;color:#000}.bg-mm{background:#f3f;color:#000}
+.dbl{display:inline-block;font-size:1.7em;line-height:.8;vertical-align:bottom;letter-spacing:.18em;font-weight:700}
+.flash{animation:fl .9s steps(2) infinite}
+@keyframes fl{50%{opacity:0}}
+.controls{display:flex;flex-wrap:wrap;gap:6px;margin-top:18px;justify-content:center;position:relative;z-index:2}
+.btn{font-family:inherit;font-size:1.1rem;background:#222;color:#ff3;border:2px solid #444;padding:.25rem .85rem;cursor:pointer;border-radius:3px;letter-spacing:.06em}
+.btn:hover{background:#333;color:#fff}
+.btn.active{background:#ff3;color:#000;border-color:#ff3}
+.numpad{display:grid;grid-template-columns:repeat(5,auto);gap:6px;margin-top:8px;justify-content:center;position:relative;z-index:2}
+.np{font-family:inherit;font-size:.95rem;background:#1a1a1a;color:#bbb;border:1px solid #333;width:42px;padding:.2rem;cursor:pointer;border-radius:3px}
+.np:hover{background:#333;color:#fff}
+.hint{text-align:center;font-size:.95rem;color:#666;margin-top:10px}
+.hint kbd{background:#222;color:#ff3;padding:1px 6px;border:1px solid #333;border-radius:3px;font-family:inherit}
+.clk{color:#3f3}
+.flash-bg{background:#600!important;transition:background .15s}
+</style>
+</head>
+<body>
+<main class="tv">
+<div class="scr-wrap" id="scr">
+<div class="page active" data-pg="100">
+<span class="row"><span class="bg-y"> NERDY  100 </span><span class="w"> Index                  </span><span class="c">P100</span> <span class="clk">Sat 00:00:00</span></span>
+<span class="row"> </span>
+<span class="row"><span class="dbl y">N E R D Y . N L</span></span>
+<span class="row"> </span>
+<span class="row"> </span>
+<span class="row"><span class="c">100 </span><span class="w">Index</span>           <span class="c">400 </span><span class="w">Workshop</span></span>
+<span class="row"><span class="c">200 </span><span class="w">Projects</span>        <span class="c">500 </span><span class="w">Family</span></span>
+<span class="row"><span class="c">300 </span><span class="w">Music</span>           <span class="c">700 </span><span class="w">Hold page</span></span>
+<span class="row"> </span>
+<span class="row"><span class="bg-r"> HEADLINE </span> <span class="y">Nerdy Terminal v3 released.</span></span>
+<span class="row"><span class="w">Tab-based session manager. Mouse</span></span>
+<span class="row"><span class="w">remains untouched. Productivity</span></span>
+<span class="row"><span class="w">measured in keystrokes per second.</span></span>
+<span class="row"> </span>
+<span class="row"><span class="bg-g"> WEATHER  </span> <span class="c">Inside:</span> <span class="y">21°C</span> <span class="c">Outside:</span> <span class="b">irrelevant</span></span>
+<span class="row"> </span>
+<span class="row"><span class="bg-m"> SPORT    </span> <span class="w">Mazu live in May. Loud.</span></span>
+<span class="row"> </span>
+<span class="row"><span class="bg-c"> FINANCE  </span> <span class="w">Cluster bills steady — therapy bills</span></span>
+<span class="row"><span class="w">           rising commensurately.</span></span>
+<span class="row"> </span>
+<span class="row"><span class="r flash">◆</span> <span class="y">Hold 700</span>  <span class="r flash">◆</span> <span class="g">Reveal 400</span>  <span class="r flash">◆</span> <span class="m">Mix 200</span></span>
+<span class="row"> </span>
+<span class="row"><span class="bg-b"> nerdy.nl   100 of 700                     </span></span>
+</div>
+
+<div class="page" data-pg="200">
+<span class="row"><span class="bg-y"> NERDY  100 </span><span class="w"> Projects               </span><span class="c">P200</span> <span class="clk">Sat 00:00:00</span></span>
+<span class="row"> </span>
+<span class="row"><span class="dbl c">P R O J E C T S</span></span>
+<span class="row"> </span>
+<span class="row"> </span>
+<span class="row"><span class="bg-rr"> 1 </span> <span class="y">Nerdy Terminal</span>          <span class="g">macOS</span></span>
+<span class="row">    Keyboard-first sessie-manager.</span>
+<span class="row">    Tabs, switching, ZERO muis.</span>
+<span class="row"> </span>
+<span class="row"><span class="bg-yy"> 2 </span> <span class="y">MCP Gateway</span>             <span class="g">Node</span></span>
+<span class="row">    Bridge AI ↔ Slack/Jira/DB/Grafana.</span>
+<span class="row">    "Thing that makes things talk."</span>
+<span class="row"> </span>
+<span class="row"><span class="bg-cc"> 3 </span> <span class="y">Pixel Tanks</span>             <span class="g">Web</span></span>
+<span class="row">    Top-down multiplayer. Lage res,</span>
+<span class="row">    hoge boosheid. Vriendschap getest.</span>
+<span class="row"> </span>
+<span class="row"><span class="bg-gg"> 4 </span> <span class="y">Eigen Kubernetes platform</span> <span class="g">k8s</span></span>
+<span class="row">    Een paar clusters te veel. Reden:</span>
+<span class="row">    GitOps. Verder geen excuus.</span>
+<span class="row"> </span>
+<span class="row"><span class="bg-mm"> 5 </span> <span class="y">TBD</span>                       <span class="g">WIP</span></span>
+<span class="row">    Capture, project, taak. Geen bel.</span>
+<span class="row">    Geen fluit. Wel werk.</span>
+<span class="row"> </span>
+<span class="row"><span class="bg-b"> nerdy.nl   200 of 700                     </span></span>
+</div>
+
+<div class="page" data-pg="300">
+<span class="row"><span class="bg-y"> NERDY  100 </span><span class="w"> Music                  </span><span class="c">P300</span> <span class="clk">Sat 00:00:00</span></span>
+<span class="row"> </span>
+<span class="row"><span class="dbl m">N O I S E</span></span>
+<span class="row"> </span>
+<span class="row"> </span>
+<span class="row"><span class="bg-rr"> ♫ </span> <span class="y">Mazu</span> — instrumentale stoner.</span>
+<span class="row">     Niemand vraagt naar de tekst.</span>
+<span class="row">     Volgende show: TBA.</span>
+<span class="row"> </span>
+<span class="row"><span class="bg-yy"> ♪ </span> <span class="y">Gitaar</span> — slecht maar luid.</span>
+<span class="row">     Buren hebben meningen.</span>
+<span class="row"> </span>
+<span class="row"><span class="c">SETUP</span></span>
+<span class="row"><span class="w">  Drumkit    : 4-piece, te veel cymbals</span></span>
+<span class="row"><span class="w">  Versterker : meer dan nodig</span></span>
+<span class="row"><span class="w">  Pedalen    : nooit genoeg</span></span>
+<span class="row"> </span>
+<span class="row"><span class="r flash">▶</span> <span class="y">Now playing:</span> <span class="g">Riff in E, herhaling 47</span></span>
+<span class="row"> </span>
+<span class="row"><span class="bg-b"> nerdy.nl   300 of 700                     </span></span>
+</div>
+
+<div class="page" data-pg="400">
+<span class="row"><span class="bg-y"> NERDY  100 </span><span class="w"> Workshop               </span><span class="c">P400</span> <span class="clk">Sat 00:00:00</span></span>
+<span class="row"> </span>
+<span class="row"><span class="dbl g">W O R K S H O P</span></span>
+<span class="row"> </span>
+<span class="row"> </span>
+<span class="row"><span class="y">Kelder. Houtbewerking. Zaagsel.</span></span>
+<span class="row"> </span>
+<span class="row"><span class="c">CURRENT BUILDS</span></span>
+<span class="row"><span class="bg-gg"> ■ </span> Werkbank, beuken           <span class="g">90%</span></span>
+<span class="row"><span class="bg-yy"> ■ </span> Plankenkast voor zoon      <span class="y">40%</span></span>
+<span class="row"><span class="bg-rr"> ■ </span> Schaafbank-toolboard       <span class="r"> 5%</span></span>
+<span class="row"> </span>
+<span class="row"><span class="c">RECENT BUYS</span> <span class="w">("investering")</span></span>
+<span class="row"><span class="w">  Festool TS55             €····</span></span>
+<span class="row"><span class="w">  Domino DF500             €····</span></span>
+<span class="row"><span class="w">  Klemmen, weer            €···</span></span>
+<span class="row"> </span>
+<span class="row"><span class="m flash">⚠</span> <span class="w">Vingers per project: 10. Streefdoel:</span></span>
+<span class="row">  <span class="w">10. Indicator: groen.</span></span>
+<span class="row"> </span>
+<span class="row"><span class="bg-b"> nerdy.nl   400 of 700                     </span></span>
+</div>
+
+<div class="page" data-pg="500">
+<span class="row"><span class="bg-y"> NERDY  100 </span><span class="w"> Family                 </span><span class="c">P500</span> <span class="clk">Sat 00:00:00</span></span>
+<span class="row"> </span>
+<span class="row"><span class="dbl r">F A M I L I E</span></span>
+<span class="row"> </span>
+<span class="row"> </span>
+<span class="row"><span class="y">2 kinderen. 0 interesse in clusters.</span></span>
+<span class="row"> </span>
+<span class="row"><span class="c">WAF (Wife Acceptance Factor)</span></span>
+<span class="row"><span class="bg-rr"> ■ </span> YAML automatisering        <span class="r"> 2/10</span></span>
+<span class="row"><span class="bg-yy"> ■ </span> Slimme lampen              <span class="y"> 7/10</span></span>
+<span class="row"><span class="bg-gg"> ■ </span> Robot-stofzuiger           <span class="g"> 9/10</span></span>
+<span class="row"> </span>
+<span class="row"><span class="c">KIDS USE-CASES</span></span>
+<span class="row"><span class="w">  "Papa, doe het licht roze"</span></span>
+<span class="row"><span class="w">  "Papa, mag de iPad nog 5 min?"</span></span>
+<span class="row"><span class="w">  "Papa, wat doe jij eigenlijk?"</span></span>
+<span class="row"> </span>
+<span class="row"><span class="m">Antwoord: "Ik regel dingen."</span></span>
+<span class="row"> </span>
+<span class="row"><span class="bg-b"> nerdy.nl   500 of 700                     </span></span>
+</div>
+
+<div class="page" data-pg="700">
+<span class="row"><span class="bg-y"> NERDY  100 </span><span class="w"> Hold                   </span><span class="c">P700</span> <span class="clk">Sat 00:00:00</span></span>
+<span class="row"> </span>
+<span class="row"><span class="dbl w">H O L D</span></span>
+<span class="row"> </span>
+<span class="row"> </span>
+<span class="row"><span class="y">Pagina opzettelijk leeg.</span></span>
+<span class="row"><span class="w">Net als veel productroadmaps.</span></span>
+<span class="row"> </span>
+<span class="row"><span class="r flash">●</span> <span class="c">DRUK OP REVEAL</span> <span class="r flash">●</span></span>
+<span class="row"> </span>
+<span class="row"><span class="g">                .--.</span></span>
+<span class="row"><span class="g">               |o_o |</span></span>
+<span class="row"><span class="g">               |:_/ |</span></span>
+<span class="row"><span class="g">              //   \ \</span></span>
+<span class="row"><span class="g">             (|     | )</span></span>
+<span class="row"><span class="g">            /'\_   _/`\</span></span>
+<span class="row"><span class="g">            \___)=(___/</span></span>
+<span class="row"> </span>
+<span class="row"><span class="m">contact</span> <span class="w">→ <a href="mailto:nerdy@nerdy.nl" style="color:#fff;text-decoration:underline">nerdy [at] nerdy.nl</a></span></span>
+<span class="row"><span class="m">code   </span> <span class="w">→ <a href="https://github.com/enipo" style="color:#fff;text-decoration:underline">github.com/enipo</a></span></span>
+<span class="row"> </span>
+<span class="row"><span class="bg-b"> nerdy.nl   700 of 700                     </span></span>
+</div>
+</div>
+
+<div class="controls">
+<button class="btn active" data-pg="100">100 Index</button>
+<button class="btn" data-pg="200">200 Projects</button>
+<button class="btn" data-pg="300">300 Music</button>
+<button class="btn" data-pg="400">400 Workshop</button>
+<button class="btn" data-pg="500">500 Family</button>
+<button class="btn" data-pg="700">700 Hold</button>
+</div>
+<div class="numpad">
+<button class="np" data-d="1">1</button><button class="np" data-d="2">2</button><button class="np" data-d="3">3</button><button class="np" data-d="4">4</button><button class="np" data-d="5">5</button>
+<button class="np" data-d="6">6</button><button class="np" data-d="7">7</button><button class="np" data-d="8">8</button><button class="np" data-d="9">9</button><button class="np" data-d="0">0</button>
+</div>
+<div class="hint">Type <kbd>3 cijfers</kbd> of klik een knop. CEEFAX-stijl.</div>
+</main>
+<script>
+(function(){
+  const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const scr=document.getElementById('scr');
+  const pages=scr.querySelectorAll('.page');
+  const btns=document.querySelectorAll('.btn');
+  let buf='';
+  function show(pg){
+    pages.forEach(p=>p.classList.toggle('active',p.dataset.pg===pg));
+    btns.forEach(b=>b.classList.toggle('active',b.dataset.pg===pg));
+  }
+  function tick(){
+    const d=new Date();
+    const t=days[d.getDay()]+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')+':'+String(d.getSeconds()).padStart(2,'0');
+    document.querySelectorAll('.clk').forEach(c=>c.textContent=t);
+  }
+  btns.forEach(b=>b.addEventListener('click',()=>show(b.dataset.pg)));
+  document.querySelectorAll('.np').forEach(b=>b.addEventListener('click',()=>type(b.dataset.d)));
+  function type(d){
+    buf+=d;
+    if(buf.length===3){
+      const valid=Array.from(pages).some(p=>p.dataset.pg===buf);
+      if(valid) show(buf);
+      else { scr.classList.add('flash-bg'); setTimeout(()=>scr.classList.remove('flash-bg'),150); }
+      buf='';
+    }
+  }
+  document.addEventListener('keydown',e=>{ if(/^[0-9]$/.test(e.key)) type(e.key); });
+  tick(); setInterval(tick,1000);
+})();
+</script>
+</body>
+</html>

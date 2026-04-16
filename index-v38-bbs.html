@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NerdyNet BBS — Node 1</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23000080'/%3E%3Ctext y='.92em' font-size='80' font-family='monospace' fill='%2300ffff' x='15'%3EN%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  /* ANSI 16 */
+  --c0:#000000;--c1:#0000aa;--c2:#00aa00;--c3:#00aaaa;
+  --c4:#aa0000;--c5:#aa00aa;--c6:#aa5500;--c7:#aaaaaa;
+  --c8:#555555;--c9:#5555ff;--c10:#55ff55;--c11:#55ffff;
+  --c12:#ff5555;--c13:#ff55ff;--c14:#ffff55;--c15:#ffffff;
+}
+html,body{background:#000;color:var(--c7);font-family:'IBM Plex Mono',Consolas,'Courier New',monospace;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem}
+.term{background:#000;width:100%;max-width:780px;padding:0;border:2px solid #222;box-shadow:0 0 0 6px #111,0 12px 36px rgba(0,0,0,.6),inset 0 0 80px rgba(0,80,80,.05);position:relative;overflow:hidden}
+.term::after{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(transparent,transparent 2px,rgba(0,0,0,.18) 2px,rgba(0,0,0,.18) 3px)}
+.crt{padding:14px 18px 16px;font-size:14px;line-height:1.15;letter-spacing:.02em;white-space:pre-wrap;word-break:break-word}
+.crt a{color:var(--c11);text-decoration:none}
+.crt a:hover{text-decoration:underline}
+.row{display:block;min-height:1.15em}
+/* fg */
+.f0{color:var(--c0)}.f1{color:var(--c1)}.f2{color:var(--c2)}.f3{color:var(--c3)}.f4{color:var(--c4)}.f5{color:var(--c5)}.f6{color:var(--c6)}.f7{color:var(--c7)}.f8{color:var(--c8)}.f9{color:var(--c9)}.f10{color:var(--c10)}.f11{color:var(--c11)}.f12{color:var(--c12)}.f13{color:var(--c13)}.f14{color:var(--c14)}.f15{color:var(--c15)}
+/* bg */
+.b0{background:var(--c0)}.b1{background:var(--c1)}.b2{background:var(--c2)}.b3{background:var(--c3)}.b4{background:var(--c4)}.b5{background:var(--c5)}.b6{background:var(--c6)}.b7{background:var(--c7)}
+.bold{font-weight:700}
+.blink{animation:bk 1s steps(2) infinite}
+@keyframes bk{50%{opacity:0}}
+.modem{background:#001a1a;color:var(--c11);font-size:12px;padding:8px 12px;border-bottom:1px solid #022;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.modem span b{color:var(--c14);font-weight:400}
+.menu{display:none}
+.menu.active{display:block}
+.prompt-bar{background:#001;color:var(--c14);padding:8px 12px;border-top:2px double var(--c1);display:flex;align-items:center;gap:6px;font-size:14px}
+.prompt-bar .pfx{color:var(--c11)}
+.prompt-bar input{flex:1;background:transparent;border:none;outline:none;color:var(--c15);font-family:inherit;font-size:14px;caret-color:var(--c14)}
+.prompt-bar .cur{display:inline-block;width:9px;height:14px;background:var(--c14);animation:bk 1s steps(2) infinite;vertical-align:middle}
+.shadow{color:var(--c8)}
+.bar{display:inline-block}
+@media(max-width:600px){.crt{font-size:12px}.modem{font-size:10px}}
+</style>
+</head>
+<body>
+<main class="term">
+<div class="modem">
+<span><b>CONNECT</b> 14400/ARQ/V32/LAPM/V42BIS</span>
+<span>Node 1 • <span id="time">00:00:00</span> • CPS 1680</span>
+</div>
+<div class="crt" id="crt">
+
+<div class="menu active" data-id="welcome">
+<span class="row"><span class="f9">╔══════════════════════════════════════════════╗</span></span>
+<span class="row"><span class="f9">║</span> <span class="f14 bold">N E R D Y N E T   B B S</span>  <span class="f7">·</span> <span class="f11">est. 1994 (sort of)</span>     <span class="f9">║</span></span>
+<span class="row"><span class="f9">║</span> <span class="f10">Sysop:</span> <span class="f15">enipo</span>  <span class="f7">·</span> <span class="f10">Lines:</span> <span class="f15">1</span>  <span class="f7">·</span> <span class="f10">Speed:</span> <span class="f15">14k4</span>     <span class="f9">║</span></span>
+<span class="row"><span class="f9">╚══════════════════════════════════════════════╝</span></span>
+<span class="row"> </span>
+<span class="row"><span class="f3">         ▄▄▄  ▄▄▄▄ ▄▄▄  ▄▄▄  ▄  ▄</span></span>
+<span class="row"><span class="f11">         █ █  █▄▄  █▄▄▀ █  █ ▀▄▀</span></span>
+<span class="row"><span class="f3">         █ █  █    █▄▄▀ █  █  █</span></span>
+<span class="row"><span class="f11">         ▀ ▀  ▀▀▀▀ ▀ ▀▀ ▀▀▀▀  ▀</span></span>
+<span class="row"> </span>
+<span class="row"><span class="f7">Welcome aboard. We have:</span></span>
+<span class="row"> </span>
+<span class="row"> <span class="f14">·</span> <span class="f15">Doors</span> <span class="shadow">............</span> projects you can play with</span>
+<span class="row"> <span class="f14">·</span> <span class="f15">Message base</span> <span class="shadow">.....</span> the things I think</span>
+<span class="row"> <span class="f14">·</span> <span class="f15">File area</span> <span class="shadow">........</span> stuff worth downloading</span>
+<span class="row"> <span class="f14">·</span> <span class="f15">Sysop info</span> <span class="shadow">.......</span> about the operator</span>
+<span class="row"> </span>
+<span class="row"><span class="f10 blink">►</span> <span class="f14">Press</span> <span class="f15 bold">[ENTER]</span> <span class="f14">to log in as GUEST...</span></span>
+</div>
+
+<div class="menu" data-id="main">
+<span class="row"><span class="f9">┌─[</span> <span class="f14 bold"> NERDYNET MAIN MENU </span> <span class="f9">]──────────────────┐</span></span>
+<span class="row"><span class="f9">│</span> <span class="f7">Logged in as:</span> <span class="f15 bold">GUEST</span>  <span class="f7">Time left:</span> <span class="f10">59:59</span>  <span class="f9">│</span></span>
+<span class="row"><span class="f9">└──────────────────────────────────────────┘</span></span>
+<span class="row"> </span>
+<span class="row">  [<span class="f14 bold">D</span>] <span class="f15">Doors</span>           <span class="shadow">Try the projects, jack in</span></span>
+<span class="row">  [<span class="f14 bold">M</span>] <span class="f15">Message base</span>    <span class="shadow">Latest sysop musings</span></span>
+<span class="row">  [<span class="f14 bold">F</span>] <span class="f15">File area</span>       <span class="shadow">Sound, code, opinions</span></span>
+<span class="row">  [<span class="f14 bold">S</span>] <span class="f15">Sysop info</span>      <span class="shadow">Who's behind the curtain</span></span>
+<span class="row">  [<span class="f14 bold">C</span>] <span class="f15">Chat sysop</span>      <span class="shadow">He's probably busy</span></span>
+<span class="row">  [<span class="f14 bold">G</span>] <span class="f15">Goodbye</span>         <span class="shadow">/HANGUP</span></span>
+<span class="row"> </span>
+<span class="row"><span class="f10">Tip:</span> <span class="f7">type the letter and press</span> <span class="f15">[ENTER]</span></span>
+</div>
+
+<div class="menu" data-id="doors">
+<span class="row"><span class="f13">▓▓▓ DOOR GAMES &amp; UTILITIES ▓▓▓</span></span>
+<span class="row"> </span>
+<span class="row">  <span class="f14">[1]</span> <span class="f15 bold">NERDY TERMINAL</span>     <span class="f10">[macOS]</span></span>
+<span class="row">      Sessie-manager, keyboard-first.</span>
+<span class="row">      Muis bestaat hier niet.</span>
+<span class="row"> </span>
+<span class="row">  <span class="f14">[2]</span> <span class="f15 bold">PIXEL TANKS</span>        <span class="f10">[multiplayer]</span></span>
+<span class="row">      Top-down tank-combat. Lage res,</span>
+<span class="row">      hoge schade aan vriendschappen.</span>
+<span class="row"> </span>
+<span class="row">  <span class="f14">[3]</span> <span class="f15 bold">MCP GATEWAY</span>        <span class="f10">[Node]</span></span>
+<span class="row">      AI-bridge: Slack, Jira, DB,</span>
+<span class="row">      Grafana, Tailscale. Eén gateway.</span>
+<span class="row"> </span>
+<span class="row">  <span class="f14">[4]</span> <span class="f15 bold">KUBERNETES</span>         <span class="f10">[clusters: te veel]</span></span>
+<span class="row">      Eigen control plane. Reden:</span>
+<span class="row">      GitOps. Het kon altijd erger.</span>
+<span class="row"> </span>
+<span class="row">  <span class="f14">[5]</span> <span class="f15 bold">TBD</span>                <span class="f10">[WIP]</span></span>
+<span class="row">      Capture, project, taak.</span>
+<span class="row">      Geen feature-bloat.</span>
+<span class="row"> </span>
+<span class="row"><span class="f3">[B]</span> <span class="f7">Back to main</span></span>
+</div>
+
+<div class="menu" data-id="msgs">
+<span class="row"><span class="f13">▓▓▓ MESSAGE BASE — General ▓▓▓</span></span>
+<span class="row"><span class="f9">─────────────────────────────────────────</span></span>
+<span class="row"> </span>
+<span class="row"><span class="f10">From:</span> <span class="f15">SYSOP</span>      <span class="f10">To:</span> <span class="f15">ALL</span>      <span class="f10">#1</span></span>
+<span class="row"><span class="f10">Subj:</span> <span class="f14">Wat doe ik hier?</span></span>
+<span class="row"><span class="f9">─────────────────────────────────────────</span></span>
+<span class="row">Ik bouw spullen. Sommige werken. De rest</span>
+<span class="row">leert me waarom de eerste werkten.</span>
+<span class="row"> </span>
+<span class="row"><span class="f10">From:</span> <span class="f15">SYSOP</span>      <span class="f10">To:</span> <span class="f15">ALL</span>      <span class="f10">#2</span></span>
+<span class="row"><span class="f10">Subj:</span> <span class="f14">Home Assistant Update</span></span>
+<span class="row"><span class="f9">─────────────────────────────────────────</span></span>
+<span class="row">YAML weer kapot na update. Niet erg, ik</span>
+<span class="row">heb het toch nooit aan iemand uitgelegd.</span>
+<span class="row">WAF blijft laag. Lampen werken meestal.</span>
+<span class="row"> </span>
+<span class="row"><span class="f10">From:</span> <span class="f15">SYSOP</span>      <span class="f10">To:</span> <span class="f15">ALL</span>      <span class="f10">#3</span></span>
+<span class="row"><span class="f10">Subj:</span> <span class="f14">Mazu — show next month</span></span>
+<span class="row"><span class="f9">─────────────────────────────────────────</span></span>
+<span class="row">Drumkit gestemd, riffs herhaald. Komt</span>
+<span class="row">goed. Volume: ja.</span>
+<span class="row"> </span>
+<span class="row"><span class="f3">[B]</span> <span class="f7">Back to main</span></span>
+</div>
+
+<div class="menu" data-id="files">
+<span class="row"><span class="f13">▓▓▓ FILE AREA ▓▓▓</span></span>
+<span class="row"> </span>
+<span class="row"><span class="f7">Filename       Size    Date     Description</span></span>
+<span class="row"><span class="f9">─────────────────────────────────────────</span></span>
+<span class="row"><span class="f15">NERDYTRM.ZIP</span>  <span class="f10">42K</span>  <span class="f3">2025</span>  <span class="f7">Terminal-app, src</span></span>
+<span class="row"><span class="f15">PIXTANKS.ZIP</span>  <span class="f10">128K</span> <span class="f3">2024</span>  <span class="f7">Tank-game, web</span></span>
+<span class="row"><span class="f15">MCPGATE.TGZ </span>  <span class="f10">96K</span>  <span class="f3">2025</span>  <span class="f7">Gateway-server</span></span>
+<span class="row"><span class="f15">K8SLAB.TXT  </span>  <span class="f10">8K</span>   <span class="f3">2024</span>  <span class="f7">Cluster-overzicht</span></span>
+<span class="row"><span class="f15">MAZU-RIFF.MP3</span> <span class="f10">3.2M</span> <span class="f3">2025</span>  <span class="f7">Repetitie-tape</span></span>
+<span class="row"><span class="f15">SAWDUST.LOG </span>  <span class="f10">12K</span>  <span class="f3">2025</span>  <span class="f7">Werkbank-build</span></span>
+<span class="row"><span class="f15">YAML-PAIN.TXT</span> <span class="f10">66K</span>  <span class="f3">∞</span>     <span class="f7">Onafgemaakt</span></span>
+<span class="row"> </span>
+<span class="row"><span class="f10">Total:</span> 7 files, ~3.6M</span>
+<span class="row"><span class="f10">Note:</span> "Download" = scroll, dit is een homepage.</span>
+<span class="row"> </span>
+<span class="row"><span class="f3">[B]</span> <span class="f7">Back to main</span></span>
+</div>
+
+<div class="menu" data-id="sysop">
+<span class="row"><span class="f13">▓▓▓ SYSOP INFO ▓▓▓</span></span>
+<span class="row"> </span>
+<span class="row"><span class="f10">Handle      :</span> <span class="f15 bold">enipo</span></span>
+<span class="row"><span class="f10">Real name   :</span> <span class="f15">Gertjan</span></span>
+<span class="row"><span class="f10">Location    :</span> <span class="f15">Nederland</span></span>
+<span class="row"><span class="f10">Day job     :</span> <span class="f15">software, soms wel, soms te veel</span></span>
+<span class="row"><span class="f10">Hobbies     :</span> <span class="f15">drums, hout, YAML, kinderen</span></span>
+<span class="row"><span class="f10">Operating   :</span> <span class="f15">macOS / Linux / Beuken</span></span>
+<span class="row"> </span>
+<span class="row"><span class="f10">Quote       :</span></span>
+<span class="row"> </span>
+<span class="row">  <span class="f14">"Twee kinderen. Ze geven niets om mijn</span></span>
+<span class="row">  <span class="f14"> Kubernetes-clusters. Wel om de slimme</span></span>
+<span class="row">  <span class="f14"> lampen. Enige use-case met WAF &gt; 0."</span></span>
+<span class="row"> </span>
+<span class="row"><span class="f10">Mail        :</span> <a href="mailto:nerdy@nerdy.nl">nerdy@nerdy.nl</a></span>
+<span class="row"><span class="f10">Code        :</span> <a href="https://github.com/enipo">github.com/enipo</a></span>
+<span class="row"> </span>
+<span class="row"><span class="f3">[B]</span> <span class="f7">Back to main</span></span>
+</div>
+
+<div class="menu" data-id="chat">
+<span class="row"><span class="f13">▓▓▓ CHAT SYSOP ▓▓▓</span></span>
+<span class="row"> </span>
+<span class="row"><span class="f14">Paging sysop</span><span class="blink">...</span></span>
+<span class="row"> </span>
+<span class="row"><span class="f12">RING. RING. RING.</span></span>
+<span class="row"> </span>
+<span class="row"><span class="f10">Sysop is</span> <span class="f15 bold">AFK</span> <span class="f10">— probably:</span></span>
+<span class="row"><span class="f7">  · in de werkplaats (zaagsel)</span></span>
+<span class="row"><span class="f7">  · achter een drumkit</span></span>
+<span class="row"><span class="f7">  · YAML aan het herschrijven</span></span>
+<span class="row"><span class="f7">  · een kind aan het uitleggen wat een</span></span>
+<span class="row"><span class="f7">    cluster is (vergeefs)</span></span>
+<span class="row"> </span>
+<span class="row"><span class="f10">Try mail instead:</span> <a href="mailto:nerdy@nerdy.nl">nerdy@nerdy.nl</a></span>
+<span class="row"> </span>
+<span class="row"><span class="f3">[B]</span> <span class="f7">Back to main</span></span>
+</div>
+
+<div class="menu" data-id="bye">
+<span class="row"> </span>
+<span class="row"><span class="f14 bold">Thanks for calling NerdyNet.</span></span>
+<span class="row"> </span>
+<span class="row"><span class="f10">Connection time:</span> <span class="f15">00:00:42</span></span>
+<span class="row"><span class="f10">Bytes sent     :</span> <span class="f15">~12345</span></span>
+<span class="row"><span class="f10">Bytes recv     :</span> <span class="f15">~98765</span></span>
+<span class="row"> </span>
+<span class="row"><span class="f3">NO CARRIER</span></span>
+<span class="row"> </span>
+<span class="row"><span class="f7">(refresh om opnieuw in te loggen)</span></span>
+</div>
+
+</div>
+<div class="prompt-bar">
+<span class="pfx">NerdyNet&gt;</span>
+<input id="cmd" autocomplete="off" autofocus spellcheck="false" maxlength="40" placeholder="">
+<span class="cur"></span>
+</div>
+</main>
+<script>
+(function(){
+  const crt=document.getElementById('crt');
+  const cmd=document.getElementById('cmd');
+  const menus=crt.querySelectorAll('.menu');
+  let cur='welcome';
+  function show(id){
+    cur=id;
+    menus.forEach(m=>m.classList.toggle('active',m.dataset.id===id));
+    cmd.value='';
+  }
+  const map={
+    welcome:{'':'main',ENTER:'main'},
+    main:{D:'doors',M:'msgs',F:'files',S:'sysop',C:'chat',G:'bye'},
+    doors:{B:'main','1':'doors','2':'doors','3':'doors','4':'doors','5':'doors'},
+    msgs:{B:'main'},files:{B:'main'},sysop:{B:'main'},chat:{B:'main'},bye:{}
+  };
+  cmd.addEventListener('keydown',e=>{
+    if(e.key!=='Enter')return;
+    const v=cmd.value.trim().toUpperCase();
+    const m=map[cur]||{};
+    const next=m[v]||(v===''?m['']:null);
+    if(next) show(next);
+    else { cmd.value=''; flash(); }
+  });
+  function flash(){ document.querySelector('.term').style.boxShadow='0 0 0 6px #800,0 12px 36px rgba(0,0,0,.6)'; setTimeout(()=>document.querySelector('.term').style.boxShadow='',180); }
+  // clock
+  function tick(){ const d=new Date(); document.getElementById('time').textContent=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')+':'+String(d.getSeconds()).padStart(2,'0'); }
+  tick(); setInterval(tick,1000);
+  cmd.focus();
+  document.body.addEventListener('click',()=>cmd.focus());
+})();
+</script>
+</body>
+</html>

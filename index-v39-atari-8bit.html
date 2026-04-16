@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NERDY — ATARI BASIC</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231a4789'/%3E%3Ctext y='.92em' x='15' font-size='80' font-family='monospace' fill='%23ffffff'%3EN%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#1a4789;       /* atari blue */
+  --fg:#a4d3ff;       /* light blue text */
+  --hi:#ffffff;
+  --orange:#f1a35e;   /* logo orange */
+  --rust:#a8511c;
+  --shadow:#0e2c5a;
+  --casing:#d3c5a5;
+  --casing-d:#a89878;
+  --keyface:#222;
+}
+html,body{background:#0a1628;min-height:100vh;font-family:'VT323',monospace;color:var(--fg);display:flex;flex-direction:column;align-items:center;padding:1.2rem;gap:18px}
+.frame{width:100%;max-width:880px}
+.crt-shell{background:var(--casing);padding:18px 22px;border-radius:14px 14px 4px 4px;box-shadow:0 8px 30px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.4)}
+.bezel{background:#222;padding:18px;border-radius:8px;box-shadow:inset 0 0 30px rgba(0,0,0,.7)}
+.crt{background:var(--bg);color:var(--fg);padding:22px 26px;border-radius:6px;font-size:clamp(14px,1.7vw,20px);line-height:1.05;letter-spacing:.04em;min-height:520px;position:relative;overflow:hidden;box-shadow:inset 0 0 40px rgba(0,0,0,.45);text-shadow:0 0 1px rgba(255,255,255,.18)}
+.crt::after{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(transparent,transparent 2px,rgba(0,0,0,.18) 2px,rgba(0,0,0,.18) 4px)}
+.crt::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,.4) 100%)}
+.line{display:block;min-height:1.05em;white-space:pre-wrap}
+/* atari color helpers */
+.fg-h{color:var(--hi)}
+.fg-o{color:var(--orange)}
+.fg-r{color:#ff7676}
+.fg-g{color:#9efb6a}
+.fg-y{color:#fff080}
+.fg-p{color:#ffa6ff}
+.fg-c{color:#9beaff}
+.inv{background:var(--fg);color:var(--bg);padding:0 .15em}
+.inv-o{background:var(--orange);color:var(--bg);padding:0 .15em}
+.inv-y{background:#fff080;color:var(--bg);padding:0 .15em}
+.inv-g{background:#9efb6a;color:var(--bg);padding:0 .15em}
+.cur{display:inline-block;width:.65em;height:1em;background:var(--fg);vertical-align:bottom;animation:bk 1s steps(2) infinite}
+@keyframes bk{50%{opacity:0}}
+.title{font-size:1.6em;letter-spacing:.18em;display:inline-block}
+.bar{display:inline-block;background:var(--orange);color:var(--bg);padding:0 .5em;letter-spacing:.18em}
+hr.atari{border:none;height:.5em;background:repeating-linear-gradient(90deg,var(--orange) 0 1.2em,var(--bg) 1.2em 1.6em);margin:.6em 0}
+/* keyboard */
+.kbd{background:var(--casing);padding:14px 18px 16px;margin-top:-6px;border-radius:0 0 18px 18px;box-shadow:0 12px 24px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.4)}
+.kbd-grid{display:grid;grid-template-columns:repeat(13,1fr);gap:5px}
+.k{background:#1f1f1f;color:#cdcdcd;font-family:inherit;font-size:.9rem;padding:.45rem .25rem;border-radius:4px;cursor:pointer;border:1px solid #000;text-align:center;box-shadow:inset 0 -2px 0 rgba(0,0,0,.5),0 1px 0 #888;letter-spacing:.04em}
+.k.fkey{background:linear-gradient(180deg,#e8a85a,#b87a3a);color:#1a1a1a;font-weight:700;grid-column:span 1}
+.k.system{background:linear-gradient(180deg,#5a5a5a,#2c2c2c)}
+.k:hover{background:#333;color:#fff}
+.k.active{outline:2px solid var(--orange)}
+.legend{margin-top:8px;font-size:.85rem;color:#3a2a18;text-align:center;letter-spacing:.05em}
+.brand{margin-top:14px;text-align:center;color:var(--orange);font-size:1.2rem;letter-spacing:.4em;text-shadow:0 1px 0 rgba(0,0,0,.3)}
+.brand b{color:#1a1a1a}
+a{color:#fff080;text-decoration:none}
+a:hover{text-decoration:underline}
+.screen{display:none}
+.screen.active{display:block}
+.power{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.power .led{width:7px;height:7px;border-radius:50%;background:#ff5530;box-shadow:0 0 6px #ff7050;display:inline-block;margin-left:6px}
+.power span{color:#3a2a18;font-size:.85rem;letter-spacing:.18em}
+@media(max-width:600px){.kbd-grid{grid-template-columns:repeat(8,1fr)}.crt{padding:14px}}
+</style>
+</head>
+<body>
+<div class="frame">
+<div class="crt-shell">
+<div class="power"><span>ATARI 800XL — NERDY EDITION</span><span>POWER<span class="led"></span></span></div>
+<div class="bezel">
+<div class="crt" id="crt">
+
+<div class="screen active" data-id="ready">
+<span class="line"><span class="bar">ATARI BASIC II</span></span>
+<span class="line"><span class="fg-h">(C) 1984 OPTIMIZED SYSTEMS SOFTWARE INC.</span></span>
+<span class="line"> </span>
+<span class="line"><span class="fg-o">READY</span></span>
+<span class="line">LOAD "D1:NERDY.BAS"</span>
+<span class="line"><span class="fg-o">READY</span></span>
+<span class="line">LIST</span>
+<span class="line"> </span>
+<span class="line"><span class="fg-c">10</span>  REM <span class="fg-y">*** NERDY.NL HOMEPAGE ***</span></span>
+<span class="line"><span class="fg-c">20</span>  GRAPHICS 0:SETCOLOR 2,8,2</span>
+<span class="line"><span class="fg-c">30</span>  PRINT "<span class="inv-o"> NERDY </span>"</span>
+<span class="line"><span class="fg-c">40</span>  PRINT "BUILDS THINGS NOBODY ASKED FOR"</span>
+<span class="line"><span class="fg-c">50</span>  PRINT</span>
+<span class="line"><span class="fg-c">60</span>  PRINT "CHOOSE A PROGRAM:"</span>
+<span class="line"><span class="fg-c">70</span>  PRINT " 1 PROJECTS"</span>
+<span class="line"><span class="fg-c">80</span>  PRINT " 2 MUSIC"</span>
+<span class="line"><span class="fg-c">90</span>  PRINT " 3 WORKSHOP"</span>
+<span class="line"><span class="fg-c">100</span> PRINT " 4 FAMILY"</span>
+<span class="line"><span class="fg-c">110</span> PRINT " 5 ABOUT"</span>
+<span class="line"><span class="fg-c">120</span> INPUT N$:GOTO 200+VAL(N$)*10</span>
+<span class="line"> </span>
+<span class="line"><span class="fg-o">READY</span></span>
+<span class="line">RUN<span class="cur"></span></span>
+</div>
+
+<div class="screen" data-id="main">
+<span class="line"> </span>
+<span class="line">    <span class="inv-o">  N E R D Y  </span></span>
+<span class="line">    <span class="fg-h">BUILDS THINGS NOBODY ASKED FOR</span></span>
+<span class="line"> </span>
+<span class="line"><span class="fg-y">CHOOSE A PROGRAM:</span></span>
+<span class="line"> </span>
+<span class="line">  <span class="inv">1</span>  <span class="fg-h">PROJECTS</span>      <span class="fg-c">apps, code, games</span></span>
+<span class="line">  <span class="inv">2</span>  <span class="fg-h">MUSIC</span>         <span class="fg-c">drums, riffs, mazu</span></span>
+<span class="line">  <span class="inv">3</span>  <span class="fg-h">WORKSHOP</span>      <span class="fg-c">hout, klemmen, zaagsel</span></span>
+<span class="line">  <span class="inv">4</span>  <span class="fg-h">FAMILY</span>        <span class="fg-c">2 kids, 0 begrip clusters</span></span>
+<span class="line">  <span class="inv">5</span>  <span class="fg-h">ABOUT</span>         <span class="fg-c">de sysop &amp; quotes</span></span>
+<span class="line"> </span>
+<span class="line"><span class="fg-o">READY</span></span>
+<span class="line">? <span class="cur"></span></span>
+<span class="line"> </span>
+<span class="line"><span class="fg-y">HINT:</span> druk een cijfer (<span class="inv">1</span>-<span class="inv">5</span>) of <span class="inv-y">F1</span>-<span class="inv-y">F5</span>.</span>
+</div>
+
+<div class="screen" data-id="projects">
+<span class="line"><span class="bar">  PROJECTS  </span></span>
+<span class="line"> </span>
+<span class="line"><span class="fg-y">10 LET P$="NERDY TERMINAL"</span></span>
+<span class="line">   <span class="fg-h">Sessie-manager voor macOS,</span></span>
+<span class="line">   <span class="fg-h">keyboard-first. Tabs &amp; instant</span></span>
+<span class="line">   <span class="fg-h">switching. Muis: niet nodig.</span></span>
+<span class="line"> </span>
+<span class="line"><span class="fg-y">20 LET P$="MCP GATEWAY"</span></span>
+<span class="line">   <span class="fg-h">Bridge tussen AI-agents en de</span></span>
+<span class="line">   <span class="fg-h">echte wereld: Slack, Jira, DB,</span></span>
+<span class="line">   <span class="fg-h">Grafana, Tailscale.</span></span>
+<span class="line"> </span>
+<span class="line"><span class="fg-y">30 LET P$="PIXEL TANKS"</span></span>
+<span class="line">   <span class="fg-h">Top-down tank-combat, web-based.</span></span>
+<span class="line">   <span class="fg-h">Vrienden vernietigen in lage res.</span></span>
+<span class="line"> </span>
+<span class="line"><span class="fg-y">40 LET P$="KUBERNETES PLATFORM"</span></span>
+<span class="line">   <span class="fg-h">Eigen control plane. Een paar</span></span>
+<span class="line">   <span class="fg-h">clusters te veel. Reden: GitOps.</span></span>
+<span class="line"> </span>
+<span class="line"><span class="fg-y">50 LET P$="TBD"</span></span>
+<span class="line">   <span class="fg-h">Persoonlijke productivity. Geen</span></span>
+<span class="line">   <span class="fg-h">bel, geen fluit, wel werk.</span></span>
+<span class="line"> </span>
+<span class="line"><span class="fg-o">READY</span> <span class="fg-c">[0=BACK]</span><span class="cur"></span></span>
+</div>
+
+<div class="screen" data-id="music">
+<span class="line"><span class="bar">  MUSIC  </span></span>
+<span class="line"> </span>
+<span class="line"><span class="inv-y">SOUND</span> 0,200,10,8 : <span class="fg-c">REM kick</span></span>
+<span class="line"><span class="inv-y">SOUND</span> 1,121,10,6 : <span class="fg-c">REM snare</span></span>
+<span class="line"> </span>
+<span class="line"><span class="fg-h">BAND   :</span> <span class="fg-y">MAZU</span></span>
+<span class="line"><span class="fg-h">GENRE  :</span> <span class="fg-y">INSTRUMENTAL STONER</span></span>
+<span class="line"><span class="fg-h">ROL    :</span> <span class="fg-y">DRUMMER</span></span>
+<span class="line"> </span>
+<span class="line">  <span class="fg-c">"DE SOORT MUZIEK WAARBIJ NIEMAND</span></span>
+<span class="line">  <span class="fg-c"> NAAR DE TEKST VRAAGT."</span></span>
+<span class="line"> </span>
+<span class="line"><span class="fg-h">EXTRA  :</span> <span class="fg-y">GITAAR (SLECHT, ENTHOUSIAST)</span></span>
+<span class="line"><span class="fg-h">BUREN  :</span> <span class="fg-y">HEBBEN MENINGEN</span></span>
+<span class="line"> </span>
+<span class="line"><span class="fg-y">100 PLAY 5,3,15,250 : REM RIFF #47</span></span>
+<span class="line"> </span>
+<span class="line"><span class="fg-o">READY</span> <span class="fg-c">[0=BACK]</span><span class="cur"></span></span>
+</div>
+
+<div class="screen" data-id="workshop">
+<span class="line"><span class="bar">  WORKSHOP  </span></span>
+<span class="line"> </span>
+<span class="line"><span class="fg-h">LOCATION:</span> <span class="fg-y">KELDER</span></span>
+<span class="line"><span class="fg-h">STATE   :</span> <span class="fg-y">ZAAGSEL + AMBITIE</span></span>
+<span class="line"> </span>
+<span class="line"><span class="fg-c">CURRENT BUILDS</span></span>
+<span class="line">  <span class="inv-g">▓▓▓▓▓▓▓▓▓░</span> WERKBANK BEUKEN     90%</span>
+<span class="line">  <span class="inv-y">▓▓▓▓░░░░░░</span> KAST VOOR ZOON      40%</span>
+<span class="line">  <span class="inv-o">▓░░░░░░░░░</span> SCHAAFBANK-BOARD    10%</span>
+<span class="line"> </span>
+<span class="line"><span class="fg-c">RECENT BUYS</span> <span class="fg-h">("INVESTERING")</span></span>
+<span class="line">  · FESTOOL TS55          ····</span>
+<span class="line">  · DOMINO DF500          ····</span>
+<span class="line">  · KLEMMEN, WEER         ···</span>
+<span class="line"> </span>
+<span class="line"><span class="fg-r">!! VINGERS_PER_PROJECT = 10</span></span>
+<span class="line">   <span class="fg-g">STATUS: GROEN.</span></span>
+<span class="line"> </span>
+<span class="line"><span class="fg-o">READY</span> <span class="fg-c">[0=BACK]</span><span class="cur"></span></span>
+</div>
+
+<div class="screen" data-id="family">
+<span class="line"><span class="bar">  FAMILY  </span></span>
+<span class="line"> </span>
+<span class="line"><span class="fg-h">DIM KIDS(2) :</span> <span class="fg-c">REM TWEE STUKS</span></span>
+<span class="line"><span class="fg-h">CARE_ABOUT_CLUSTERS = 0</span></span>
+<span class="line"><span class="fg-h">CARE_ABOUT_LAMPEN  = 1</span></span>
+<span class="line"> </span>
+<span class="line"><span class="fg-y">WAF (WIFE ACCEPTANCE FACTOR)</span></span>
+<span class="line">  <span class="fg-r">[2/10]</span> YAML AUTOMATIE</span>
+<span class="line">  <span class="fg-y">[7/10]</span> SLIMME LAMPEN</span>
+<span class="line">  <span class="fg-g">[9/10]</span> ROBOT-STOFZUIGER</span>
+<span class="line"> </span>
+<span class="line"><span class="fg-c">QUOTES</span></span>
+<span class="line">  <span class="fg-h">"PAPA, DOE HET LICHT ROZE"</span></span>
+<span class="line">  <span class="fg-h">"PAPA, MAG IK NOG 5 MIN IPAD"</span></span>
+<span class="line">  <span class="fg-h">"PAPA, WAT DOE JE EIGENLIJK?"</span></span>
+<span class="line"> </span>
+<span class="line">  <span class="fg-y">→ "IK REGEL DINGEN."</span></span>
+<span class="line"> </span>
+<span class="line"><span class="fg-o">READY</span> <span class="fg-c">[0=BACK]</span><span class="cur"></span></span>
+</div>
+
+<div class="screen" data-id="about">
+<span class="line"><span class="bar">  ABOUT  </span></span>
+<span class="line"> </span>
+<span class="line"><span class="fg-h">HANDLE  :</span> <span class="fg-y">ENIPO</span></span>
+<span class="line"><span class="fg-h">REAL    :</span> <span class="fg-y">GERTJAN</span></span>
+<span class="line"><span class="fg-h">LOCATION:</span> <span class="fg-y">NEDERLAND</span></span>
+<span class="line"><span class="fg-h">DAY JOB :</span> <span class="fg-y">SOFTWARE, MEESTAL TE VEEL</span></span>
+<span class="line"><span class="fg-h">SETUP   :</span> <span class="fg-y">macOS / LINUX / BEUKEN</span></span>
+<span class="line"> </span>
+<span class="line"><span class="fg-c">10  PRINT "ZIJN HOBBIES:"</span></span>
+<span class="line">     · DRUMS</span>
+<span class="line">     · HOUT</span>
+<span class="line">     · YAML</span>
+<span class="line">     · KINDEREN</span>
+<span class="line"> </span>
+<span class="line"><span class="fg-o">CONTACT</span></span>
+<span class="line">  MAIL: <a href="mailto:nerdy@nerdy.nl">nerdy@nerdy.nl</a></span>
+<span class="line">  CODE: <a href="https://github.com/enipo">github.com/enipo</a></span>
+<span class="line"> </span>
+<span class="line"><span class="fg-o">READY</span> <span class="fg-c">[0=BACK]</span><span class="cur"></span></span>
+</div>
+
+</div>
+</div>
+</div>
+<div class="kbd">
+<div class="kbd-grid" id="kbd">
+<button class="k fkey" data-go="ready">RST</button>
+<button class="k fkey" data-go="main">F1</button>
+<button class="k fkey" data-go="projects">F2</button>
+<button class="k fkey" data-go="music">F3</button>
+<button class="k fkey" data-go="workshop">F4</button>
+<button class="k fkey" data-go="family">F5</button>
+<button class="k fkey" data-go="about">F6</button>
+<button class="k system">HELP</button>
+<button class="k system">START</button>
+<button class="k system">SELECT</button>
+<button class="k system">OPTION</button>
+<button class="k">BREAK</button>
+<button class="k">RETURN</button>
+<button class="k" data-key="1">1</button>
+<button class="k" data-key="2">2</button>
+<button class="k" data-key="3">3</button>
+<button class="k" data-key="4">4</button>
+<button class="k" data-key="5">5</button>
+<button class="k" data-key="0">0</button>
+<button class="k">Q</button>
+<button class="k">W</button>
+<button class="k">E</button>
+<button class="k">R</button>
+<button class="k">T</button>
+<button class="k">Y</button>
+<button class="k">U</button>
+</div>
+<div class="legend">F1 = MENU · 1-5 = KIES · 0 = BACK · RST = SCHERM</div>
+</div>
+<div class="brand">A<b>T</b>A<b>R</b>I × <b>N</b>E<b>R</b>D<b>Y</b></div>
+</div>
+<script>
+(function(){
+  const screens=document.querySelectorAll('.screen');
+  const map={'1':'projects','2':'music','3':'workshop','4':'family','5':'about','0':'main'};
+  function show(id){
+    if(!Array.from(screens).some(s=>s.dataset.id===id))return;
+    screens.forEach(s=>s.classList.toggle('active',s.dataset.id===id));
+  }
+  document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.go)));
+  document.querySelectorAll('[data-key]').forEach(b=>b.addEventListener('click',()=>{
+    const k=b.dataset.key; const go=map[k]; if(go) show(go);
+  }));
+  document.addEventListener('keydown',e=>{
+    if(map[e.key]) show(map[e.key]);
+    if(e.key==='F1'){e.preventDefault();show('main');}
+    if(e.key==='F2'){e.preventDefault();show('projects');}
+    if(e.key==='F3'){e.preventDefault();show('music');}
+    if(e.key==='F4'){e.preventDefault();show('workshop');}
+    if(e.key==='F5'){e.preventDefault();show('family');}
+    if(e.key==='F6'){e.preventDefault();show('about');}
+    if(e.key==='Escape') show('ready');
+  });
+})();
+</script>
+</body>
+</html>

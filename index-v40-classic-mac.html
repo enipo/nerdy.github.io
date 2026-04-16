@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nerdy.HD :: Macintosh System 6</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23bbbbbb'/%3E%3Ctext y='.92em' x='15' font-size='80' font-family='Chicago,sans-serif' fill='%23000'%3EN%3C/text%3E%3C/svg%3E">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:none;font-smooth:never}
+:root{
+  --paper:#ffffff;
+  --ink:#000000;
+  --desktop:#aaaaaa;
+}
+html,body{
+  background:var(--desktop);
+  /* dot pattern Mac System 1-6 */
+  background-image:
+    radial-gradient(circle at 0 0, #888 1px, transparent 1.5px),
+    radial-gradient(circle at 1px 1px, #888 1px, transparent 1.5px);
+  background-size:2px 2px;
+  font-family:'Chicago',-apple-system,'Lucida Grande','Geneva',sans-serif;
+  color:var(--ink);
+  min-height:100vh;
+  padding-top:24px;
+}
+/* menubar */
+.menubar{position:fixed;top:0;left:0;right:0;height:22px;background:#fff;border-bottom:1px solid #000;display:flex;align-items:center;padding:0 8px;font-size:13px;z-index:100;letter-spacing:.04em}
+.menubar .apple{font-size:14px;margin-right:14px;cursor:default}
+.menubar .item{margin-right:16px;cursor:default;padding:2px 4px;border-radius:1px}
+.menubar .item:hover{background:#000;color:#fff}
+.menubar .clock{margin-left:auto;font-size:12px;letter-spacing:.05em}
+/* desktop icons */
+.icons{display:grid;grid-template-columns:repeat(auto-fit,minmax(80px,1fr));gap:18px;max-width:880px;margin:14px auto;padding:0 16px}
+.ico{display:flex;flex-direction:column;align-items:center;cursor:pointer;text-align:center;width:80px;justify-self:center}
+.ico .pic{width:48px;height:48px;background:#fff;border:1px solid #000;display:flex;align-items:center;justify-content:center;margin-bottom:4px;position:relative}
+.ico .label{font-size:11px;background:#fff;padding:1px 4px;border-radius:1px;line-height:1.2;max-width:90px}
+.ico:hover .label{background:#000;color:#fff}
+.ico.disk .pic{background:repeating-linear-gradient(0deg,#fff 0 4px,#ddd 4px 5px)}
+.ico .pic svg{width:36px;height:36px}
+/* windows */
+.win{position:absolute;background:#fff;border:1px solid #000;box-shadow:1px 1px 0 #000;min-width:280px;max-width:560px;width:90vw}
+.titlebar{height:18px;border-bottom:1px solid #000;display:flex;align-items:center;padding:0 4px;background:repeating-linear-gradient(0deg,#000 0 1px,#fff 1px 3px);position:relative;cursor:move;user-select:none}
+.titlebar .close{width:11px;height:11px;border:1px solid #000;background:#fff;cursor:pointer;flex-shrink:0}
+.titlebar .close:hover{background:#000}
+.titlebar h2{flex:1;text-align:center;background:#fff;padding:0 8px;font-size:12px;font-weight:normal;letter-spacing:.04em;margin:0 6px}
+.titlebar .stripe-spacer{width:11px}
+.win-body{padding:12px 14px 14px;font-size:12px;line-height:1.5;max-height:60vh;overflow-y:auto;background:#fff}
+.win-body h3{font-size:13px;margin:8px 0 4px;letter-spacing:.04em}
+.win-body p{margin-bottom:6px}
+.win-body ul{padding-left:18px;margin-bottom:6px}
+.win-body li{margin-bottom:2px}
+.win-body a{color:#000;text-decoration:underline}
+.win-body .row2{display:flex;gap:10px;margin-bottom:6px;align-items:flex-start}
+.win-body .pic-sm{width:32px;height:32px;border:1px solid #000;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:#fff}
+.win-body .pic-sm svg{width:24px;height:24px}
+.win-body .meta{font-size:11px;color:#444;margin-bottom:6px}
+.btn{display:inline-block;border:1px solid #000;background:#fff;padding:2px 12px;font-size:12px;font-family:inherit;cursor:pointer;border-radius:8px;box-shadow:1px 1px 0 #000;letter-spacing:.04em;margin-top:6px}
+.btn:active{transform:translate(1px,1px);box-shadow:none}
+.alert{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border:2px solid #000;padding:14px 18px;width:280px;text-align:center;z-index:200;box-shadow:3px 3px 0 #000;display:none}
+.alert.show{display:block}
+.alert .ico-bomb{font-size:28px;margin-bottom:6px}
+.dim{color:#666}
+.kbd{font-family:Monaco,'Courier New',monospace;font-size:11px;background:#eee;padding:0 4px;border:1px solid #999}
+.divider{border-top:1px dashed #000;margin:8px 0}
+.trash{position:fixed;bottom:14px;right:14px;display:flex;flex-direction:column;align-items:center;cursor:pointer;text-align:center}
+.trash svg{width:36px;height:48px}
+.trash .label{font-size:11px;background:#fff;padding:1px 4px;margin-top:2px}
+@media (max-width:520px){
+  .win{position:relative!important;left:auto!important;top:auto!important;margin:14px auto;width:94vw}
+  .icons{grid-template-columns:repeat(auto-fit,minmax(72px,1fr));gap:12px}
+}
+.toolbar{font-size:11px;color:#444;border-bottom:1px solid #000;padding:3px 8px;background:#fff}
+</style>
+</head>
+<body>
+
+<div class="menubar">
+  <span class="apple">&#63743;</span>
+  <span class="item">File</span>
+  <span class="item">Edit</span>
+  <span class="item">View</span>
+  <span class="item">Special</span>
+  <span class="item">Nerdy</span>
+  <span class="clock" id="clk">Sun 12:00 PM</span>
+</div>
+
+<div class="icons">
+  <div class="ico disk" data-win="readme">
+    <div class="pic">
+      <svg viewBox="0 0 36 36"><rect x="6" y="3" width="24" height="30" fill="#fff" stroke="#000"/><line x1="10" y1="9" x2="26" y2="9" stroke="#000"/><line x1="10" y1="13" x2="26" y2="13" stroke="#000"/><line x1="10" y1="17" x2="26" y2="17" stroke="#000"/><line x1="10" y1="21" x2="22" y2="21" stroke="#000"/></svg>
+    </div>
+    <div class="label">README</div>
+  </div>
+  <div class="ico" data-win="projects">
+    <div class="pic">
+      <svg viewBox="0 0 36 36"><rect x="3" y="11" width="30" height="20" fill="#fff" stroke="#000"/><path d="M3 11 L9 5 L21 5 L24 11" fill="#fff" stroke="#000"/></svg>
+    </div>
+    <div class="label">Projects</div>
+  </div>
+  <div class="ico" data-win="music">
+    <div class="pic">
+      <svg viewBox="0 0 36 36"><rect x="3" y="11" width="30" height="20" fill="#fff" stroke="#000"/><path d="M3 11 L9 5 L21 5 L24 11" fill="#fff" stroke="#000"/></svg>
+    </div>
+    <div class="label">Noise</div>
+  </div>
+  <div class="ico" data-win="workshop">
+    <div class="pic">
+      <svg viewBox="0 0 36 36"><rect x="3" y="11" width="30" height="20" fill="#fff" stroke="#000"/><path d="M3 11 L9 5 L21 5 L24 11" fill="#fff" stroke="#000"/></svg>
+    </div>
+    <div class="label">Workshop</div>
+  </div>
+  <div class="ico" data-win="family">
+    <div class="pic">
+      <svg viewBox="0 0 36 36"><rect x="3" y="11" width="30" height="20" fill="#fff" stroke="#000"/><path d="M3 11 L9 5 L21 5 L24 11" fill="#fff" stroke="#000"/></svg>
+    </div>
+    <div class="label">Family</div>
+  </div>
+  <div class="ico" data-win="about">
+    <div class="pic">
+      <svg viewBox="0 0 36 36"><rect x="6" y="6" width="24" height="24" fill="#fff" stroke="#000"/><circle cx="18" cy="14" r="3" fill="#000"/><path d="M10 30 Q18 18 26 30" fill="#000"/></svg>
+    </div>
+    <div class="label">About Me</div>
+  </div>
+  <div class="ico" data-win="bomb">
+    <div class="pic">
+      <svg viewBox="0 0 36 36"><circle cx="20" cy="22" r="10" fill="#000"/><line x1="26" y1="14" x2="32" y2="8" stroke="#000" stroke-width="2"/><polygon points="32,4 34,10 28,8" fill="#000"/></svg>
+    </div>
+    <div class="label">Sad Mac</div>
+  </div>
+</div>
+
+<div id="windows"></div>
+
+<div class="trash" data-win="trash">
+  <svg viewBox="0 0 36 48"><rect x="4" y="14" width="28" height="30" fill="#fff" stroke="#000"/><line x1="2" y1="14" x2="34" y2="14" stroke="#000"/><line x1="10" y1="20" x2="10" y2="40" stroke="#000"/><line x1="18" y1="20" x2="18" y2="40" stroke="#000"/><line x1="26" y1="20" x2="26" y2="40" stroke="#000"/><rect x="12" y="9" width="12" height="5" fill="#fff" stroke="#000"/></svg>
+  <div class="label">Trash</div>
+</div>
+
+<!-- Window templates (hidden, cloned on open) -->
+<template id="tpl-readme">
+  <div class="win" style="left:120px;top:60px;width:340px;z-index:10">
+    <div class="titlebar"><div class="close"></div><h2>README.txt</h2><div class="stripe-spacer"></div></div>
+    <div class="toolbar">3 items · 410K in disk · 798K available</div>
+    <div class="win-body">
+      <h3>Welkom op Nerdy.HD</h3>
+      <p>Dit is een persoonlijke schijf van iemand die te veel YAML schrijft, te veel klemmen koopt, en in zijn vrije tijd dingen bouwt waar niemand om vroeg.</p>
+      <div class="divider"></div>
+      <p><b>Dubbelklik</b> een icoon op het bureaublad om een venster te openen. Sleep titlebars om te verplaatsen.</p>
+      <p class="dim">Versie 1.0 · System 6.0.8 · Compatible</p>
+      <button class="btn close-btn">OK</button>
+    </div>
+  </div>
+</template>
+
+<template id="tpl-projects">
+  <div class="win" style="left:200px;top:120px;width:440px;z-index:10">
+    <div class="titlebar"><div class="close"></div><h2>Projects</h2><div class="stripe-spacer"></div></div>
+    <div class="toolbar">5 items · last modified: today</div>
+    <div class="win-body">
+      <div class="row2"><div class="pic-sm"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="14" fill="#fff" stroke="#000"/><line x1="4" y1="20" x2="20" y2="20" stroke="#000"/><line x1="9" y1="18" x2="9" y2="22" stroke="#000"/><line x1="15" y1="18" x2="15" y2="22" stroke="#000"/></svg></div><div><b>Nerdy Terminal</b><div class="meta">app · macOS</div>Sessie-manager, keyboard-first. Tabs, instant switching, geen muis. Productiviteit gemeten in toetsaanslagen per seconde.</div></div>
+      <div class="divider"></div>
+      <div class="row2"><div class="pic-sm"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="#fff" stroke="#000"/><path d="M5 12 L19 12 M12 5 L12 19" stroke="#000"/></svg></div><div><b>MCP Gateway</b><div class="meta">server · node</div>Bridge tussen AI-agents en de echte wereld: Slack, Jira, databases, Grafana, Tailscale. Eén poort, veel routes.</div></div>
+      <div class="divider"></div>
+      <div class="row2"><div class="pic-sm"><svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="12" fill="#fff" stroke="#000"/><rect x="6" y="11" width="3" height="5" fill="#000"/><rect x="15" y="11" width="3" height="5" fill="#000"/></svg></div><div><b>Pixel Tanks</b><div class="meta">game · web</div>Top-down multiplayer tank-combat. Vrienden vernietigen in lage resolutie, hoge intensiteit.</div></div>
+      <div class="divider"></div>
+      <div class="row2"><div class="pic-sm"><svg viewBox="0 0 24 24"><polygon points="12,3 21,8 21,16 12,21 3,16 3,8" fill="#fff" stroke="#000"/></svg></div><div><b>Eigen Kubernetes</b><div class="meta">infra · clusters</div>Een paar clusters te veel. Reden: GitOps. Andere reden: niet de juiste.</div></div>
+      <div class="divider"></div>
+      <div class="row2"><div class="pic-sm"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" fill="#fff" stroke="#000"/><line x1="4" y1="9" x2="20" y2="9" stroke="#000"/><circle cx="8" cy="14" r="1.5" fill="#000"/></svg></div><div><b>TBD</b><div class="meta">app · WIP</div>Persoonlijke productivity. Captures, projecten, taken. Geen bel, geen fluit, wel werk.</div></div>
+    </div>
+  </div>
+</template>
+
+<template id="tpl-music">
+  <div class="win" style="left:160px;top:160px;width:380px;z-index:10">
+    <div class="titlebar"><div class="close"></div><h2>Noise</h2><div class="stripe-spacer"></div></div>
+    <div class="toolbar">2 items · genre: stoner</div>
+    <div class="win-body">
+      <h3>Mazu — drums</h3>
+      <p>Instrumentale stoner-band. De soort muziek waarbij niemand naar de tekst vraagt.</p>
+      <div class="divider"></div>
+      <h3>Gitaar — solo</h3>
+      <p>Slecht maar luid. Buren hebben meningen. Ik niet.</p>
+      <div class="divider"></div>
+      <p class="dim">Now playing: <i>Riff in E, herhaling 47/∞</i></p>
+      <button class="btn">▶ Play</button>
+      <button class="btn">■ Stop</button>
+    </div>
+  </div>
+</template>
+
+<template id="tpl-workshop">
+  <div class="win" style="left:240px;top:200px;width:380px;z-index:10">
+    <div class="titlebar"><div class="close"></div><h2>Workshop</h2><div class="stripe-spacer"></div></div>
+    <div class="toolbar">3 builds · 4 tools "investering"</div>
+    <div class="win-body">
+      <h3>Lopende builds</h3>
+      <ul>
+        <li>Werkbank, beuken — 90%</li>
+        <li>Plankenkast voor zoon — 40%</li>
+        <li>Schaafbank-toolboard — 5%</li>
+      </ul>
+      <div class="divider"></div>
+      <h3>Recente aankopen</h3>
+      <ul>
+        <li>Festool TS55 ("investering")</li>
+        <li>Domino DF500 ("investering")</li>
+        <li>Klemmen, weer ("investering")</li>
+      </ul>
+      <div class="divider"></div>
+      <p><b>Indicator vingers:</b> 10/10. Status: groen.</p>
+    </div>
+  </div>
+</template>
+
+<template id="tpl-family">
+  <div class="win" style="left:140px;top:240px;width:360px;z-index:10">
+    <div class="titlebar"><div class="close"></div><h2>Family</h2><div class="stripe-spacer"></div></div>
+    <div class="toolbar">2 kids · WAF: laag</div>
+    <div class="win-body">
+      <h3>WAF (Wife Acceptance Factor)</h3>
+      <ul>
+        <li>YAML automatisering — 2/10</li>
+        <li>Slimme lampen — 7/10</li>
+        <li>Robot-stofzuiger — 9/10</li>
+      </ul>
+      <div class="divider"></div>
+      <p><b>Veelgehoorde quotes</b></p>
+      <ul>
+        <li>"Papa, doe het licht roze"</li>
+        <li>"Papa, mag de iPad nog 5 minuten?"</li>
+        <li>"Papa, wat doe jij eigenlijk?"</li>
+      </ul>
+      <p class="dim">Antwoord: "ik regel dingen."</p>
+    </div>
+  </div>
+</template>
+
+<template id="tpl-about">
+  <div class="win" style="left:220px;top:80px;width:340px;z-index:10">
+    <div class="titlebar"><div class="close"></div><h2>About Me</h2><div class="stripe-spacer"></div></div>
+    <div class="win-body">
+      <p><b>Handle:</b> enipo</p>
+      <p><b>Naam:</b> Gertjan</p>
+      <p><b>Locatie:</b> Nederland</p>
+      <p><b>Specialisme:</b> dingen bouwen waar niemand om vroeg</p>
+      <div class="divider"></div>
+      <p><i>"Ik bouw spullen. Sommige werken. De rest leert me waarom de eerste werkten."</i></p>
+      <div class="divider"></div>
+      <p><b>Mail:</b> <a href="mailto:nerdy@nerdy.nl">nerdy@nerdy.nl</a></p>
+      <p><b>Code:</b> <a href="https://github.com/enipo">github.com/enipo</a></p>
+    </div>
+  </div>
+</template>
+
+<template id="tpl-trash">
+  <div class="win" style="left:300px;top:140px;width:300px;z-index:10">
+    <div class="titlebar"><div class="close"></div><h2>Trash</h2><div class="stripe-spacer"></div></div>
+    <div class="win-body">
+      <p><b>The Trash is empty.</b></p>
+      <div class="divider"></div>
+      <ul>
+        <li class="dim">'Idea: rebuild legacy in Rust'</li>
+        <li class="dim">'Newsletter draft'</li>
+        <li class="dim">'2024 plans'</li>
+      </ul>
+      <p class="dim" style="margin-top:6px">(Eigenlijk vol — Finder houdt vol van niet.)</p>
+    </div>
+  </div>
+</template>
+
+<template id="tpl-bomb">
+  <div class="win" style="left:280px;top:100px;width:320px;z-index:10">
+    <div class="titlebar"><div class="close"></div><h2>System Error</h2><div class="stripe-spacer"></div></div>
+    <div class="win-body" style="text-align:center">
+      <div style="font-size:42px;margin:6px 0">💣</div>
+      <p><b>Sorry, a system error occurred.</b></p>
+      <p style="margin-top:6px">"YAML parser exception in <span class="kbd">home.yaml</span>"</p>
+      <p class="dim" style="margin-top:6px">ID = 02</p>
+      <button class="btn close-btn" style="margin-top:10px">Restart</button>
+    </div>
+  </div>
+</template>
+
+<script>
+(function(){
+  const windows=document.getElementById('windows');
+  let z=10;
+  function clock(){
+    const d=new Date();
+    const h=d.getHours()%12||12, m=String(d.getMinutes()).padStart(2,'0');
+    const ap=d.getHours()<12?'AM':'PM';
+    const day=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()];
+    document.getElementById('clk').textContent=day+' '+h+':'+m+' '+ap;
+  }
+  clock(); setInterval(clock,30000);
+
+  function open(id){
+    // close existing of same id
+    const existing=windows.querySelector('.win[data-id="'+id+'"]');
+    if(existing){ bring(existing); return; }
+    const tpl=document.getElementById('tpl-'+id);
+    if(!tpl) return;
+    const node=tpl.content.firstElementChild.cloneNode(true);
+    node.dataset.id=id;
+    // offset
+    const count=windows.children.length;
+    const baseTop=parseInt(node.style.top||'80');
+    const baseLeft=parseInt(node.style.left||'120');
+    node.style.top=(baseTop+count*16)+'px';
+    node.style.left=(baseLeft+count*16)+'px';
+    node.style.zIndex=++z;
+    windows.appendChild(node);
+    bind(node);
+  }
+  function bring(n){ n.style.zIndex=++z; }
+
+  function bind(node){
+    const close=node.querySelector('.close');
+    if(close) close.addEventListener('click',()=>node.remove());
+    node.querySelectorAll('.close-btn').forEach(b=>b.addEventListener('click',()=>node.remove()));
+    node.addEventListener('mousedown',()=>bring(node),true);
+    // drag
+    const tb=node.querySelector('.titlebar');
+    let drag=null;
+    function start(e){
+      const ev=e.touches?e.touches[0]:e;
+      const r=node.getBoundingClientRect();
+      drag={dx:ev.clientX-r.left,dy:ev.clientY-r.top};
+      e.preventDefault();
+    }
+    function move(e){
+      if(!drag)return;
+      const ev=e.touches?e.touches[0]:e;
+      node.style.left=(ev.clientX-drag.dx)+'px';
+      node.style.top=(ev.clientY-drag.dy)+'px';
+    }
+    function end(){drag=null}
+    tb.addEventListener('mousedown',start);
+    tb.addEventListener('touchstart',start,{passive:false});
+    document.addEventListener('mousemove',move);
+    document.addEventListener('touchmove',move,{passive:false});
+    document.addEventListener('mouseup',end);
+    document.addEventListener('touchend',end);
+  }
+
+  document.querySelectorAll('[data-win]').forEach(el=>{
+    el.addEventListener('dblclick',()=>open(el.dataset.win));
+    el.addEventListener('click',()=>{
+      // touch / single-click also opens for accessibility
+      if(window.matchMedia('(hover:none)').matches) open(el.dataset.win);
+    });
+  });
+  // open readme on first load
+  open('readme');
+})();
+</script>
+</body>
+</html>
