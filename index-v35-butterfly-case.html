@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Nerdy — Lepidoptera Cabinet</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.88em' font-size='85'%3E🦋%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Petit+Formal+Script&family=EB+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --velvet:#2a1a28;--wood:#6e4a28;--wood-d:#3a2410;--wood-l:#a07a4a;
+  --cream:#f4ead0;--ink:#1a140c;--dim:#5a4a2a;--pin:#d8d0b8;--pin-d:#6a5e44;
+  --gold:#b99048;--rose:#b8685a;--mint:#7ba67a;--sulphur:#d9b948;--violet:#7a5a8a;--copper:#b66a3a;
+  --serif:'Old Standard TT',Georgia,serif;--script:'Petit Formal Script',cursive;--text:'EB Garamond',Georgia,serif;
+}
+html,body{background:linear-gradient(180deg,#1a0f18,#0a0608);min-height:100vh;color:var(--ink);font-family:var(--text)}
+body{padding:clamp(.8rem,2.5vw,2rem);display:flex;flex-direction:column;align-items:center;gap:1.4rem}
+
+/* cabinet */
+.case{max-width:1040px;width:100%;position:relative;
+  background:
+    repeating-linear-gradient(92deg,rgba(0,0,0,.15) 0 1px,transparent 1px 4px,rgba(255,255,255,.04) 4px 5px),
+    linear-gradient(135deg,var(--wood) 0%,var(--wood-d) 50%,var(--wood) 100%);
+  border-radius:6px;padding:.9rem;box-shadow:0 20px 50px rgba(0,0,0,.6),inset 0 0 0 2px rgba(0,0,0,.4)}
+.case::before{content:'';position:absolute;inset:8px;border:1px solid var(--wood-l);border-radius:3px;pointer-events:none}
+.case::after{content:'';position:absolute;inset:18px;border:1px dashed rgba(184,148,84,.4);pointer-events:none}
+
+.interior{background:
+  radial-gradient(ellipse at 30% 20%,#f9f1d8,var(--cream) 40%,#d9ceab 100%);
+  border-radius:3px;padding:1.4rem 1.4rem 1.8rem;position:relative;
+  background-image:
+    radial-gradient(ellipse at 30% 20%,#f9f1d8,var(--cream) 40%,#d9ceab 100%),
+    repeating-linear-gradient(transparent 0 60px,rgba(122,90,42,.04) 60px 61px);
+}
+
+/* label plate */
+.plate{text-align:center;padding:.5rem 0 1.2rem;border-bottom:2px double var(--dim);margin-bottom:1.2rem;position:relative}
+.plate::before{content:'— CABINET VII —';position:absolute;top:0;left:50%;transform:translateX(-50%);font-family:var(--serif);letter-spacing:.3em;font-size:.6rem;color:var(--dim)}
+.plate h1{font-family:var(--serif);font-weight:700;font-size:clamp(2.4rem,5vw,3.6rem);letter-spacing:.06em;color:var(--ink);margin-top:1rem;line-height:1}
+.plate .sub{font-family:var(--script);font-size:1.25rem;color:var(--rose);margin-top:.1rem}
+.plate .latin{font-family:var(--serif);font-style:italic;font-size:.9rem;color:var(--dim);margin-top:.4rem;letter-spacing:.04em}
+.plate .curator{font-family:var(--serif);font-size:.7rem;letter-spacing:.3em;color:var(--dim);margin-top:.6rem;text-transform:uppercase}
+
+/* specimens grid */
+.drawer{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:.2rem;position:relative;
+  padding:1rem 0;background-image:
+    repeating-linear-gradient(90deg,transparent 0 calc(33.33% - 1px),rgba(122,90,42,.2) calc(33.33% - 1px) 33.33%),
+    repeating-linear-gradient(0deg,transparent 0 calc(50% - 1px),rgba(122,90,42,.2) calc(50% - 1px) 50%)}
+.specimen{padding:1rem .8rem 1.2rem;text-align:center;position:relative;min-height:260px;display:flex;flex-direction:column;align-items:center}
+.specimen .pin{position:absolute;top:.6rem;left:50%;transform:translateX(-50%);width:10px;height:10px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#fff,var(--pin) 45%,var(--pin-d));
+  box-shadow:0 2px 3px rgba(0,0,0,.4),inset 0 -1px 0 rgba(0,0,0,.2);z-index:3}
+.specimen .pin::after{content:'';position:absolute;top:-2px;left:50%;transform:translateX(-50%);width:2px;height:4px;background:linear-gradient(#d8d0b8,#9a8860)}
+.wing-wrap{margin:1.6rem auto .8rem;width:140px;height:100px;position:relative}
+.wing-wrap svg{width:100%;height:100%;filter:drop-shadow(1px 2px 2px rgba(0,0,0,.15))}
+.shadow{position:absolute;left:50%;bottom:-2px;transform:translateX(-50%);width:60%;height:6px;background:radial-gradient(ellipse,rgba(0,0,0,.18),transparent 70%)}
+
+.tag{background:var(--cream);border:1px solid var(--dim);padding:.35rem .5rem;max-width:85%;margin-top:.3rem;position:relative;
+  box-shadow:1px 1px 2px rgba(0,0,0,.15);font-family:var(--serif)}
+.tag::before{content:'';position:absolute;top:-4px;left:50%;width:1px;height:4px;background:var(--pin-d);transform:translateX(-50%)}
+.tag .name{font-family:var(--serif);font-weight:700;font-size:.88rem;color:var(--ink);letter-spacing:.05em}
+.tag .lat{font-family:var(--serif);font-style:italic;font-size:.75rem;color:var(--rose)}
+.tag .loc{font-family:var(--serif);font-size:.65rem;color:var(--dim);margin-top:.15rem;letter-spacing:.08em}
+.specimen p{font-family:var(--text);font-size:.82rem;color:var(--dim);line-height:1.4;margin-top:.45rem;font-style:italic;max-width:90%}
+
+/* apothecary strip on bottom */
+.strip{margin-top:1.5rem;padding:1rem 0 0;border-top:2px double var(--dim);display:grid;grid-template-columns:1fr 1fr;gap:1.4rem}
+.strip h3{font-family:var(--script);font-size:1.25rem;color:var(--rose);margin-bottom:.35rem}
+.strip .pane{background:var(--cream);padding:.8rem 1rem;border:1px solid var(--dim);box-shadow:inset 0 0 12px rgba(122,90,42,.1);font-family:var(--text);font-size:.9rem;line-height:1.5;color:var(--ink)}
+.strip .pane em{font-style:italic;color:var(--rose)}
+.strip .pane strong{font-family:var(--serif);font-weight:700;letter-spacing:.05em}
+
+.footer-sig{margin-top:1.2rem;padding-top:.8rem;text-align:center;font-family:var(--serif);font-size:.72rem;letter-spacing:.25em;color:var(--dim);text-transform:uppercase}
+.footer-sig a{color:var(--rose);border-bottom:1px solid var(--rose);text-decoration:none}
+
+.hinge{position:absolute;width:30px;height:40px;background:linear-gradient(135deg,#c9a457,#8b6b28);border-radius:2px;box-shadow:0 2px 4px rgba(0,0,0,.4)}
+.hinge.l{left:-15px;top:30%}.hinge.r{right:-15px;top:60%}
+
+@media(max-width:640px){
+  .strip{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="case">
+  <div class="hinge l"></div><div class="hinge r"></div>
+  <div class="interior">
+    <div class="plate">
+      <h1>Lepidoptera Nerdensis</h1>
+      <p class="sub">— a cabinet of pinned projects —</p>
+      <p class="latin">Coll. G. Bazuin · Holland · MMXXV</p>
+      <p class="curator">Specimens arranged by genus · 52°22′N, 4°53′E</p>
+    </div>
+
+    <div class="drawer">
+      <!-- Terminal -->
+      <div class="specimen">
+        <div class="pin"></div>
+        <div class="wing-wrap">
+          <svg viewBox="0 0 200 140">
+            <g stroke="#1a140c" stroke-width="1">
+              <path d="M100,70 C60,20 20,30 30,70 C20,110 70,110 100,75 Z" fill="#7ba67a"/>
+              <path d="M100,70 C140,20 180,30 170,70 C180,110 130,110 100,75 Z" fill="#7ba67a"/>
+              <path d="M100,65 C75,40 35,45 45,65 C40,85 70,90 100,70 Z" fill="#4d7a4d" opacity=".6"/>
+              <path d="M100,65 C125,40 165,45 155,65 C160,85 130,90 100,70 Z" fill="#4d7a4d" opacity=".6"/>
+              <circle cx="60" cy="55" r="5" fill="#f4ead0" stroke="#1a140c"/>
+              <circle cx="140" cy="55" r="5" fill="#f4ead0" stroke="#1a140c"/>
+              <circle cx="60" cy="55" r="2" fill="#1a140c"/>
+              <circle cx="140" cy="55" r="2" fill="#1a140c"/>
+              <ellipse cx="100" cy="75" rx="4" ry="20" fill="#1a140c"/>
+              <line x1="100" y1="58" x2="92" y2="42" stroke="#1a140c"/>
+              <line x1="100" y1="58" x2="108" y2="42" stroke="#1a140c"/>
+            </g>
+          </svg>
+        </div>
+        <div class="shadow"></div>
+        <div class="tag"><div class="name">The Terminal</div><div class="lat">Clavimanus velox</div><div class="loc">Rotterdam · IX.2024</div></div>
+        <p>Keyboard-first. Sessions flit between tabs. The mouse never catches it.</p>
+      </div>
+
+      <!-- MCP Gateway -->
+      <div class="specimen">
+        <div class="pin"></div>
+        <div class="wing-wrap">
+          <svg viewBox="0 0 200 140">
+            <g stroke="#1a140c" stroke-width="1">
+              <path d="M100,70 C50,10 10,40 25,70 C10,105 75,105 100,75 Z" fill="#a4c8e0"/>
+              <path d="M100,70 C150,10 190,40 175,70 C190,105 125,105 100,75 Z" fill="#a4c8e0"/>
+              <path d="M40,55 Q60,45 85,60 M160,55 Q140,45 115,60" fill="none" stroke="#4a7aa0" stroke-width="1.2"/>
+              <path d="M35,75 Q60,85 85,75 M165,75 Q140,85 115,75" fill="none" stroke="#4a7aa0" stroke-width="1.2"/>
+              <circle cx="50" cy="65" r="4" fill="#fff" stroke="#1a140c"/>
+              <circle cx="150" cy="65" r="4" fill="#fff" stroke="#1a140c"/>
+              <ellipse cx="100" cy="75" rx="3.5" ry="18" fill="#1a140c"/>
+            </g>
+          </svg>
+        </div>
+        <div class="shadow"></div>
+        <div class="tag"><div class="name">The Gateway</div><div class="lat">Pons pontium</div><div class="loc">Home cluster · III.2025</div></div>
+        <p>A single bridge between Slack, Jira, Grafana, Tailscale, databases — and patience.</p>
+      </div>
+
+      <!-- Kubernetes -->
+      <div class="specimen">
+        <div class="pin"></div>
+        <div class="wing-wrap">
+          <svg viewBox="0 0 200 140">
+            <g stroke="#1a140c" stroke-width="1">
+              <path d="M100,70 C55,15 15,35 30,70 C15,108 75,110 100,75 Z" fill="#b8685a"/>
+              <path d="M100,70 C145,15 185,35 170,70 C185,108 125,110 100,75 Z" fill="#b8685a"/>
+              <g fill="#3a1814">
+                <circle cx="60" cy="45" r="3"/><circle cx="45" cy="65" r="3"/>
+                <circle cx="70" cy="80" r="3"/><circle cx="55" cy="90" r="3"/>
+                <circle cx="140" cy="45" r="3"/><circle cx="155" cy="65" r="3"/>
+                <circle cx="130" cy="80" r="3"/><circle cx="145" cy="90" r="3"/>
+              </g>
+              <ellipse cx="100" cy="75" rx="3.5" ry="20" fill="#1a140c"/>
+            </g>
+          </svg>
+        </div>
+        <div class="shadow"></div>
+        <div class="tag"><div class="name">The Control-Plane</div><div class="lat">Grex ineptus</div><div class="loc">Cluster wilderness</div></div>
+        <p>Five clusters. One household. Reconciliation loops persist beyond reasonable behaviour.</p>
+      </div>
+
+      <!-- Pixel Tanks -->
+      <div class="specimen">
+        <div class="pin"></div>
+        <div class="wing-wrap">
+          <svg viewBox="0 0 200 140" shape-rendering="crispEdges">
+            <g stroke="#1a140c" stroke-width="1">
+              <rect x="30" y="45" width="60" height="8" fill="#6aa86a"/>
+              <rect x="20" y="53" width="80" height="8" fill="#6aa86a"/>
+              <rect x="25" y="61" width="70" height="8" fill="#6aa86a"/>
+              <rect x="35" y="69" width="55" height="8" fill="#6aa86a"/>
+              <rect x="45" y="77" width="40" height="8" fill="#6aa86a"/>
+              <rect x="110" y="45" width="60" height="8" fill="#6aa86a"/>
+              <rect x="100" y="53" width="80" height="8" fill="#6aa86a"/>
+              <rect x="105" y="61" width="70" height="8" fill="#6aa86a"/>
+              <rect x="110" y="69" width="55" height="8" fill="#6aa86a"/>
+              <rect x="115" y="77" width="40" height="8" fill="#6aa86a"/>
+              <rect x="96" y="40" width="8" height="60" fill="#1a140c"/>
+            </g>
+          </svg>
+        </div>
+        <div class="shadow"></div>
+        <div class="tag"><div class="name">The Pixel Tank</div><div class="lat">Amicitia destructor</div><div class="loc">Low-res. field</div></div>
+        <p>Wings rendered in 8-bit resolution. Hostile to nearby specimens of Amicitia.</p>
+      </div>
+
+      <!-- TBD -->
+      <div class="specimen">
+        <div class="pin"></div>
+        <div class="wing-wrap">
+          <svg viewBox="0 0 200 140">
+            <g stroke="#1a140c" stroke-width="1" stroke-dasharray="2 2">
+              <path d="M100,70 C60,20 20,30 30,70 C20,110 70,110 100,75 Z" fill="#c8a2d6" opacity=".4"/>
+              <path d="M100,70 C140,20 180,30 170,70 C180,110 130,110 100,75 Z" fill="#c8a2d6" opacity=".4"/>
+            </g>
+            <ellipse cx="100" cy="75" rx="3.5" ry="18" fill="#1a140c"/>
+            <text x="100" y="78" text-anchor="middle" font-family="Petit Formal Script" font-size="11" fill="#1a140c">tbd</text>
+          </svg>
+        </div>
+        <div class="shadow"></div>
+        <div class="tag"><div class="name">The Unnamed</div><div class="lat">Productivitas embryonica</div><div class="loc">In nursery · ongoing</div></div>
+        <p>Not yet pinned. Captures and tasks. Awaiting its final markings.</p>
+      </div>
+
+      <!-- Mazu -->
+      <div class="specimen">
+        <div class="pin"></div>
+        <div class="wing-wrap">
+          <svg viewBox="0 0 200 140">
+            <g stroke="#1a140c" stroke-width="1">
+              <path d="M100,70 C60,15 20,40 28,70 C18,108 68,108 100,75 Z" fill="#d9b948"/>
+              <path d="M100,70 C140,15 180,40 172,70 C182,108 132,108 100,75 Z" fill="#d9b948"/>
+              <path d="M45,60 Q60,50 85,65 M155,60 Q140,50 115,65" fill="none" stroke="#6a5020" stroke-width="1.4"/>
+              <circle cx="55" cy="85" r="5" fill="#6a5020" opacity=".7"/>
+              <circle cx="145" cy="85" r="5" fill="#6a5020" opacity=".7"/>
+              <ellipse cx="100" cy="75" rx="3.5" ry="20" fill="#1a140c"/>
+            </g>
+          </svg>
+        </div>
+        <div class="shadow"></div>
+        <div class="tag"><div class="name">The Mazu</div><div class="lat">Tympanum profundus</div><div class="loc">Rehearsal room</div></div>
+        <p>Low-frequency wing-beats. Instrumental. No lyrics on the underside.</p>
+      </div>
+
+      <!-- Home Assistant -->
+      <div class="specimen">
+        <div class="pin"></div>
+        <div class="wing-wrap">
+          <svg viewBox="0 0 200 140">
+            <g stroke="#1a140c" stroke-width="1">
+              <path d="M100,70 C55,20 15,35 28,70 C15,108 75,108 100,75 Z" fill="#7a5a8a"/>
+              <path d="M100,70 C145,20 185,35 172,70 C185,108 125,108 100,75 Z" fill="#7a5a8a"/>
+              <path d="M50,55 L55,62 L50,70 L55,78 L50,85" stroke="#f4ead0" stroke-width="1" fill="none"/>
+              <path d="M150,55 L145,62 L150,70 L145,78 L150,85" stroke="#f4ead0" stroke-width="1" fill="none"/>
+              <ellipse cx="100" cy="75" rx="3.5" ry="20" fill="#1a140c"/>
+            </g>
+          </svg>
+        </div>
+        <div class="shadow"></div>
+        <div class="tag"><div class="name">Home Assistant</div><div class="lat">Domus yamlensis</div><div class="loc">Hallway · meter cabinet</div></div>
+        <p>A curious species. Fluorescent Zigbee antennae. Thrives in YAML; repelled by tolerance.</p>
+      </div>
+
+      <!-- Workshop -->
+      <div class="specimen">
+        <div class="pin"></div>
+        <div class="wing-wrap">
+          <svg viewBox="0 0 200 140">
+            <g stroke="#1a140c" stroke-width="1">
+              <path d="M100,70 C60,18 18,38 28,70 C18,108 68,108 100,75 Z" fill="#b66a3a"/>
+              <path d="M100,70 C140,18 182,38 172,70 C182,108 132,108 100,75 Z" fill="#b66a3a"/>
+              <g fill="#3a2410" opacity=".6"><circle cx="50" cy="60" r="1.2"/><circle cx="70" cy="55" r="1"/><circle cx="60" cy="75" r="1.4"/><circle cx="45" cy="85" r="1"/><circle cx="75" cy="90" r="1.2"/><circle cx="150" cy="60" r="1.2"/><circle cx="130" cy="55" r="1"/><circle cx="140" cy="75" r="1.4"/><circle cx="155" cy="85" r="1"/><circle cx="125" cy="90" r="1.2"/></g>
+              <ellipse cx="100" cy="75" rx="3.5" ry="20" fill="#1a140c"/>
+            </g>
+          </svg>
+        </div>
+        <div class="shadow"></div>
+        <div class="tag"><div class="name">The Workshop</div><div class="lat">Scobis perpetua</div><div class="loc">Basement</div></div>
+        <p>Dusted in sawdust scales. Every tool purchase justified as investment.</p>
+      </div>
+
+      <!-- Dad×3 -->
+      <div class="specimen">
+        <div class="pin"></div>
+        <div class="wing-wrap">
+          <svg viewBox="0 0 200 140">
+            <g stroke="#1a140c" stroke-width="1">
+              <path d="M100,70 C55,20 18,35 30,70 C18,108 75,108 100,75 Z" fill="#b8685a" opacity=".8"/>
+              <path d="M100,70 C145,20 182,35 170,70 C182,108 125,108 100,75 Z" fill="#b8685a" opacity=".8"/>
+              <g fill="#fff"><circle cx="58" cy="52" r="5"/><circle cx="62" cy="80" r="5"/><circle cx="40" cy="70" r="5"/><circle cx="142" cy="52" r="5"/><circle cx="138" cy="80" r="5"/><circle cx="160" cy="70" r="5"/></g>
+              <g fill="#3a1814"><circle cx="58" cy="52" r="1.5"/><circle cx="62" cy="80" r="1.5"/><circle cx="40" cy="70" r="1.5"/><circle cx="142" cy="52" r="1.5"/><circle cx="138" cy="80" r="1.5"/><circle cx="160" cy="70" r="1.5"/></g>
+              <ellipse cx="100" cy="75" rx="3.5" ry="20" fill="#1a140c"/>
+            </g>
+          </svg>
+        </div>
+        <div class="shadow"></div>
+        <div class="tag"><div class="name">Pater × III</div><div class="lat">Familia loquax</div><div class="loc">Living room</div></div>
+        <p>Three juveniles. Uninterested in clusters; fiercely interested in smart-bulb colour.</p>
+      </div>
+    </div>
+
+    <div class="strip">
+      <div class="pane">
+        <h3>Curator's note</h3>
+        <p><strong>G. Bazuin</strong> collects the improbable. These specimens owe their existence less to necessity than to the stubborn belief that a thing worth doing is worth <em>over-engineering</em>. The cabinet is built of Dutch oak and weekend hours.</p>
+      </div>
+      <div class="pane">
+        <h3>Field conditions</h3>
+        <p>All specimens trapped with a homebrew net. Pins and labels hand-lettered. Preserved under a bell-jar of Nederland-time and instrumental stoner rock. Visitors welcome; small humans must be accompanied by an adult Kubernetes cluster.</p>
+      </div>
+    </div>
+
+    <div class="footer-sig">— Cabinet maintained by <a href="https://github.com/enipo">github.com/enipo</a> —</div>
+  </div>
+</div>
+</body>
+</html>

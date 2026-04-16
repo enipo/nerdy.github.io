@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Nerdy — Field Paleontology</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.88em' font-size='85'%3E🦴%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Courier+Prime&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --sand:#d8c28e;--sand-d:#b5985c;--sand-l:#ebd9ab;
+  --rock-1:#9a7a4a;--rock-2:#7a5a33;--rock-3:#5a3e20;--rock-4:#3a2410;
+  --chalk:#f2ecd8;--ink:#2a1e0f;--dim:#5a432a;--rust:#8e3a14;
+  --serif:'Crimson Pro',Georgia,serif;--type:'Special Elite',monospace;--mono:'Courier Prime',monospace;
+}
+html,body{background:var(--chalk);color:var(--ink);font-family:var(--serif);min-height:100vh}
+body{background-image:
+  repeating-linear-gradient(47deg,rgba(154,122,74,.04) 0 2px,transparent 2px 6px),
+  radial-gradient(ellipse at 20% 20%,rgba(154,122,74,.1),transparent 50%);
+  padding:clamp(1rem,2.5vw,2rem)}
+
+.wrap{max-width:1100px;margin:0 auto}
+
+/* field notebook header */
+.hdr{background:var(--chalk);border:1px solid var(--rock-3);padding:1.2rem 1.4rem;margin-bottom:1.4rem;position:relative;
+  box-shadow:2px 2px 0 var(--rock-3),4px 4px 12px rgba(90,62,32,.3);
+  background-image:repeating-linear-gradient(180deg,transparent 0 22px,rgba(142,58,20,.08) 22px 23px)}
+.hdr .top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.8rem;font-family:var(--type);font-size:.72rem;color:var(--dim);letter-spacing:.12em;text-transform:uppercase}
+.hdr .top .stamp{border:2px solid var(--rust);color:var(--rust);padding:.2rem .6rem;transform:rotate(-4deg);font-weight:bold;letter-spacing:.2em}
+.hdr h1{font-family:var(--type);font-size:clamp(2rem,5vw,3.4rem);color:var(--ink);letter-spacing:.03em;line-height:1;margin-bottom:.3rem}
+.hdr .sub{font-family:var(--serif);font-style:italic;font-size:1.05rem;color:var(--dim)}
+.hdr .meta{margin-top:.8rem;display:flex;gap:1.5rem;font-family:var(--mono);font-size:.72rem;color:var(--rock-3);flex-wrap:wrap}
+.hdr .meta span b{font-family:var(--type);color:var(--ink);letter-spacing:.08em}
+
+/* strata bar */
+.strata{margin:1.4rem 0;border:1px solid var(--rock-3);overflow:hidden;border-radius:2px;box-shadow:2px 2px 0 var(--rock-3)}
+.strata-title{background:var(--rock-3);color:var(--sand-l);font-family:var(--type);padding:.4rem .8rem;font-size:.7rem;letter-spacing:.25em}
+.layer{display:grid;grid-template-columns:120px 1fr;align-items:center;padding:.7rem 1rem;gap:1rem;border-bottom:1px dashed var(--sand-d);min-height:70px;position:relative;cursor:pointer;transition:background .15s}
+.layer:last-child{border-bottom:none}
+.layer:hover{background:rgba(154,122,74,.08)}
+.layer .era{font-family:var(--type);font-size:.7rem;letter-spacing:.15em;color:var(--dim);text-transform:uppercase}
+.layer .era b{display:block;color:var(--ink);font-size:.95rem;letter-spacing:.08em;margin-top:.1rem}
+.layer .content h3{font-family:var(--type);font-size:1.1rem;letter-spacing:.04em;color:var(--ink);margin-bottom:.15rem}
+.layer .content h3 em{font-style:italic;color:var(--rust);font-family:var(--serif);font-weight:normal;font-size:.9rem;margin-left:.4rem}
+.layer .content p{font-family:var(--serif);font-size:.92rem;line-height:1.4;color:var(--dim)}
+
+/* layer strata colors */
+.layer.l1{background:linear-gradient(180deg,#e5d5a8,#d8c28e)}
+.layer.l2{background:linear-gradient(180deg,#c9a872,#b5985c)}
+.layer.l3{background:linear-gradient(180deg,#a68654,#8e6a3a)}
+.layer.l4{background:linear-gradient(180deg,#8e6a3a,#6a4a24)}
+.layer.l4,.layer.l4 .era,.layer.l4 p,.layer.l4 h3{color:var(--sand-l)}
+.layer.l4 .era b{color:var(--sand-l)}
+.layer.l5{background:linear-gradient(180deg,#5a3e20,#3a2410)}
+.layer.l5,.layer.l5 .era,.layer.l5 p,.layer.l5 h3{color:var(--sand)}
+.layer.l5 .era b{color:var(--sand-l)}
+.layer.l5 h3 em{color:#e0a672}
+
+/* specimens grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin-top:1.4rem}
+.specimen{background:var(--chalk);border:1px solid var(--rock-3);padding:.9rem 1rem 1rem;position:relative;box-shadow:2px 2px 0 var(--rock-3)}
+.specimen::before{content:'';position:absolute;top:-6px;right:12px;width:40px;height:12px;background:rgba(212,168,66,.5);border:1px solid var(--rock-3);transform:rotate(-3deg)}
+.specimen .no{font-family:var(--type);font-size:.62rem;letter-spacing:.3em;color:var(--rust);margin-bottom:.3rem}
+.specimen h4{font-family:var(--type);font-size:1rem;letter-spacing:.04em;margin-bottom:.1rem}
+.specimen .latin{font-family:var(--serif);font-style:italic;font-size:.85rem;color:var(--dim);margin-bottom:.5rem}
+.specimen svg{width:100%;height:70px;margin-bottom:.5rem;display:block}
+.specimen p{font-family:var(--serif);font-size:.9rem;line-height:1.4;color:var(--ink)}
+.specimen .tags{margin-top:.4rem;font-family:var(--mono);font-size:.7rem;color:var(--rock-3)}
+
+/* dig map */
+.dig-map{margin-top:1.4rem;background:var(--sand-l);border:1px solid var(--rock-3);padding:1rem;box-shadow:2px 2px 0 var(--rock-3)}
+.dig-map h3{font-family:var(--type);font-size:.85rem;letter-spacing:.2em;color:var(--ink);margin-bottom:.6rem;border-bottom:1px dashed var(--rock-3);padding-bottom:.3rem}
+.dig-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:2px;font-family:var(--mono);font-size:.55rem;color:var(--rock-3)}
+.dig-grid div{aspect-ratio:1;background:repeating-linear-gradient(45deg,transparent 0 3px,rgba(122,90,51,.08) 3px 4px);display:flex;align-items:center;justify-content:center;border:1px dotted rgba(122,90,51,.3);position:relative}
+.dig-grid div.find{background:var(--rust);color:var(--sand-l);font-family:var(--type);font-weight:bold}
+.dig-grid div.find::after{content:attr(data-label);position:absolute;bottom:100%;left:50%;transform:translateX(-50%);white-space:nowrap;
+  font-family:var(--serif);font-style:italic;font-size:.7rem;color:var(--rust);background:var(--sand-l);padding:0 .2rem;margin-bottom:2px;display:none;z-index:5}
+.dig-grid div.find:hover::after{display:block}
+
+/* footer */
+.sig{margin-top:1.6rem;padding:1rem;border-top:3px double var(--rock-3);text-align:center;font-family:var(--type);font-size:.72rem;letter-spacing:.2em;color:var(--dim)}
+.sig a{color:var(--rust);border-bottom:1px solid var(--rust);text-decoration:none}
+.sig em{font-family:var(--serif);font-style:italic;text-transform:none;letter-spacing:normal;display:block;margin-top:.4rem;color:var(--rock-3);font-size:.95rem}
+
+/* legend */
+.scale-bar{display:flex;align-items:center;gap:.5rem;margin-top:.6rem;font-family:var(--mono);font-size:.7rem;color:var(--rock-3)}
+.scale-bar .bar{height:6px;width:60px;background:repeating-linear-gradient(90deg,var(--ink) 0 10px,var(--sand) 10px 20px)}
+
+@media(max-width:640px){
+  .layer{grid-template-columns:1fr}
+  .hdr .top{flex-direction:column;gap:.4rem;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hdr">
+    <div class="top">
+      <span>FIELD NOTEBOOK · VOL. XII · PAGE 47</span>
+      <span class="stamp">ENTRY № 2026-04</span>
+    </div>
+    <h1>Nerdy — a Stratigraphy</h1>
+    <p class="sub">Being a survey of specimens exhumed from one developer's career, catalogued by age and stubbornness.</p>
+    <div class="meta">
+      <span><b>SITE</b> Basement Workshop, NL 52°N</span>
+      <span><b>LEAD</b> G. Bazuin</span>
+      <span><b>STATUS</b> Excavation ongoing</span>
+      <div class="scale-bar"><b>SCALE</b> <span class="bar"></span> 10 commits</div>
+    </div>
+  </header>
+
+  <section class="strata">
+    <div class="strata-title">STRATIGRAPHIC COLUMN · OLDEST BELOW</div>
+
+    <div class="layer l1">
+      <div class="era">Holocene<b>Recent</b></div>
+      <div class="content">
+        <h3>MCP Gateway <em>Pons pontium</em></h3>
+        <p>A bridge between AI agents and everything else. Slack, Jira, Grafana, databases, Tailscale — all carried across.</p>
+      </div>
+    </div>
+
+    <div class="layer l2">
+      <div class="era">Pleistocene<b>~0.01 Ma</b></div>
+      <div class="content">
+        <h3>Nerdy Terminal <em>Clavimanus velox</em></h3>
+        <p>Keyboard-first terminal manager for macOS. Sessions swap in a breath. The mouse, a vestigial organ.</p>
+      </div>
+    </div>
+
+    <div class="layer l3">
+      <div class="era">Pliocene<b>~5 Ma</b></div>
+      <div class="content">
+        <h3>Pixel Tanks <em>Amicitia destructor</em></h3>
+        <p>Top-down multiplayer tank combat. Discovered among a strata of weekend hours and low-resolution fury.</p>
+      </div>
+    </div>
+
+    <div class="layer l4">
+      <div class="era">Miocene<b>~20 Ma</b></div>
+      <div class="content">
+        <h3>Kubernetes Control Plane <em>Grex ineptus</em></h3>
+        <p>Five clusters for a household of five. Fossilised GitOps visible in the matrix. Extinct use-case, still twitching.</p>
+      </div>
+    </div>
+
+    <div class="layer l5">
+      <div class="era">Precambrian<b>basement rock</b></div>
+      <div class="content">
+        <h3>Home Assistant &amp; Workshop <em>Familia longanimis</em></h3>
+        <p>The bedrock. YAML, Zigbee, stubbornness. Sawdust compressed into slate. Carbon-dated to the first smart-bulb purchase.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- specimen drawers -->
+  <section>
+    <div class="grid">
+      <div class="specimen">
+        <div class="no">SPEC. № 2026-001</div>
+        <h4>TBD</h4><div class="latin">Productivitas embryonica</div>
+        <svg viewBox="0 0 200 70"><path d="M10,50 Q30,20 60,30 T110,40 Q140,48 180,40 L190,55 Z" fill="none" stroke="#5a3e20" stroke-width="1.5"/><circle cx="60" cy="30" r="3" fill="#8e3a14"/><circle cx="110" cy="40" r="3" fill="#8e3a14"/></svg>
+        <p>Fragmentary. Captures, projects, tasks. Still forming in the matrix. No bells recovered.</p>
+        <div class="tags">beta · productivity · private</div>
+      </div>
+      <div class="specimen">
+        <div class="no">SPEC. № 2026-002</div>
+        <h4>Mazu</h4><div class="latin">Tympanum profundus</div>
+        <svg viewBox="0 0 200 70"><path d="M10,35 C30,10 50,60 70,35 C90,10 110,60 130,35 C150,10 170,60 190,35" fill="none" stroke="#5a3e20" stroke-width="1.5"/></svg>
+        <p>Instrumental stoner band. Low-frequency drum pattern preserved in amplifier resin.</p>
+        <div class="tags">band · drums · instrumental</div>
+      </div>
+      <div class="specimen">
+        <div class="no">SPEC. № 2026-003</div>
+        <h4>Guitar (badly)</h4><div class="latin">Vicinitatis lamentum</div>
+        <svg viewBox="0 0 200 70"><path d="M10,35 L190,35 M10,30 L190,30 M10,40 L190,40" stroke="#5a3e20" stroke-width=".8"/><circle cx="50" cy="35" r="8" fill="none" stroke="#8e3a14" stroke-width="1.5"/></svg>
+        <p>Six-string specimen, enthusiastically played. Neighbours fossilised in disapproval.</p>
+        <div class="tags">instrument · enthusiast · loud</div>
+      </div>
+      <div class="specimen">
+        <div class="no">SPEC. № 2026-004</div>
+        <h4>Dad × 3</h4><div class="latin">Paterfamilias fessus</div>
+        <svg viewBox="0 0 200 70"><g stroke="#5a3e20" stroke-width="1.5" fill="none"><circle cx="50" cy="30" r="8"/><circle cx="100" cy="30" r="8"/><circle cx="150" cy="30" r="8"/><path d="M50,38 L50,55 M100,38 L100,55 M150,38 L150,55"/></g></svg>
+        <p>Three young specimens. Indifferent to clusters. Vividly interested in the smart lights.</p>
+        <div class="tags">home · caution · joy</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- dig map -->
+  <section class="dig-map">
+    <h3>EXCAVATION GRID · SQUARE B-7</h3>
+    <div class="dig-grid" id="grid"></div>
+  </section>
+
+  <div class="sig">
+    — Field work signed <a href="https://github.com/enipo">github.com/enipo</a> —
+    <em>"Every tool — investment. Every shard — evidence."</em>
+  </div>
+</div>
+
+<script>
+(function(){
+  var grid=document.getElementById('grid');if(!grid)return;
+  var cells=Array(70).fill(null);
+  var finds=[
+    {i:8,l:'🜨 Terminal'},{i:14,l:'clst'},{i:22,l:'gtwy'},
+    {i:31,l:'TBD'},{i:37,l:'drm'},{i:45,l:'k8s'},{i:58,l:'YAML'},{i:63,l:'px'}
+  ];
+  var fIdx={};finds.forEach(function(f){fIdx[f.i]=f.l});
+  for(var i=0;i<70;i++){
+    var d=document.createElement('div');
+    if(fIdx[i]!==undefined){
+      d.className='find';
+      d.textContent='✕';
+      d.setAttribute('data-label',fIdx[i]);
+    } else {
+      d.textContent=String.fromCharCode(65+Math.floor(i/10))+(i%10+1);
+    }
+    grid.appendChild(d);
+  }
+})();
+</script>
+</body>
+</html>

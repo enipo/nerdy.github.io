@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Nerdy — The Orrery</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.88em' font-size='85'%3E☉%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Cormorant+SC:wght@400;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --void:#0a1226;--night:#0d1a33;--deep:#061026;
+  --brass:#d4a842;--brass-d:#9a7420;--brass-l:#f0d68e;
+  --star:#f8e8c0;--ink:#f3ead4;--parch:#e9dcb3;--dim:#8c7a52;
+  --serif:'Cormorant Garamond',Georgia,serif;--sc:'Cormorant SC',serif;--mono:'JetBrains Mono',monospace;
+}
+html,body{background:radial-gradient(ellipse at 30% 20%,#12213f 0%,#050a1a 55%,#020412 100%);min-height:100vh;color:var(--ink);font-family:var(--serif)}
+body{padding:clamp(1rem,3vw,2.5rem);overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;background:
+  radial-gradient(1.5px 1.5px at 23% 8%,#fff,transparent 60%),
+  radial-gradient(1px 1px at 67% 13%,#fff,transparent 60%),
+  radial-gradient(1px 1px at 88% 34%,#fcf1c8,transparent 60%),
+  radial-gradient(1.5px 1.5px at 42% 27%,#fff,transparent 60%),
+  radial-gradient(1px 1px at 11% 48%,#fff,transparent 60%),
+  radial-gradient(1px 1px at 74% 62%,#fcf1c8,transparent 60%),
+  radial-gradient(1.5px 1.5px at 18% 78%,#fff,transparent 60%),
+  radial-gradient(1px 1px at 54% 88%,#fff,transparent 60%),
+  radial-gradient(1px 1px at 96% 72%,#fcf1c8,transparent 60%),
+  radial-gradient(1px 1px at 36% 95%,#fff,transparent 60%),
+  radial-gradient(1px 1px at 62% 4%,#fff,transparent 60%),
+  radial-gradient(1px 1px at 8% 32%,#fcf1c8,transparent 60%);
+  opacity:.8}
+
+.wrap{max-width:1100px;margin:0 auto;position:relative;z-index:1}
+
+/* header */
+.header{text-align:center;padding:1rem 0 2rem}
+.header .plaque{display:inline-block;font-family:var(--sc);font-size:.7rem;letter-spacing:.5em;color:var(--brass);padding:.4rem 1rem;border:1px solid var(--brass-d);border-radius:2px;margin-bottom:.8rem}
+.header h1{font-family:var(--serif);font-weight:500;font-style:italic;font-size:clamp(2.6rem,6vw,4.2rem);line-height:1;letter-spacing:.02em;color:var(--brass-l);margin-bottom:.3rem;
+  text-shadow:0 0 30px rgba(212,168,66,.4)}
+.header .latin{font-family:var(--sc);font-size:.8rem;letter-spacing:.3em;color:var(--dim)}
+
+/* orrery */
+.orrery{position:relative;width:min(90vw,780px);aspect-ratio:1;margin:0 auto 2rem}
+.orrery svg{width:100%;height:100%;overflow:visible}
+.sun{filter:drop-shadow(0 0 15px #ffb84a) drop-shadow(0 0 35px rgba(255,184,74,.5))}
+.orbit{fill:none;stroke:var(--brass-d);stroke-width:.3;stroke-dasharray:2 3}
+.body-ring{fill:none;stroke:var(--brass-d);stroke-width:.6}
+.planet{cursor:pointer;transition:transform .2s}
+.planet:hover circle{r:9;filter:drop-shadow(0 0 12px currentColor)}
+.planet circle{transition:r .2s,filter .2s}
+.planet .label{font-family:var(--sc);font-size:8px;fill:var(--parch);letter-spacing:.15em;text-anchor:middle;pointer-events:none;opacity:.85}
+.planet .meta{font-family:'JetBrains Mono',monospace;font-size:5px;fill:var(--dim);text-anchor:middle;pointer-events:none}
+
+/* animation */
+.orbit-group{transform-origin:center center;animation:spin 120s linear infinite}
+.orbit-group.fast{animation-duration:50s}
+.orbit-group.slow{animation-duration:200s}
+.orbit-group.very-slow{animation-duration:320s;animation-direction:reverse}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion){.orbit-group{animation:none}}
+
+/* sun label */
+.sun-name{font-family:var(--sc);font-size:.62rem;letter-spacing:.3em;fill:var(--brass);text-anchor:middle}
+
+/* legend cards */
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.9rem;margin-top:1rem}
+.card{background:linear-gradient(180deg,rgba(13,26,51,.9),rgba(10,18,38,.95));
+  border:1px solid var(--brass-d);border-radius:4px;padding:.9rem 1rem;position:relative;
+  box-shadow:inset 0 0 20px rgba(212,168,66,.06)}
+.card::before{content:'';position:absolute;top:.7rem;right:.7rem;width:.6rem;height:.6rem;border-radius:50%;background:currentColor;box-shadow:0 0 8px currentColor}
+.card .n{font-family:var(--sc);font-size:.65rem;letter-spacing:.25em;color:var(--brass);margin-bottom:.2rem}
+.card h3{font-family:var(--serif);font-weight:500;font-style:italic;font-size:1.25rem;color:var(--ink);margin-bottom:.15rem}
+.card .orbit-info{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--dim);margin-bottom:.5rem}
+.card p{font-family:var(--serif);font-size:.9rem;line-height:1.4;color:var(--parch)}
+
+/* constellation footer */
+.footer{margin-top:2.5rem;padding-top:1.5rem;border-top:1px solid var(--brass-d);display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.footer .col{text-align:center}
+.footer .col h4{font-family:var(--sc);font-size:.7rem;letter-spacing:.3em;color:var(--brass);margin-bottom:.4rem}
+.footer .col p{font-family:var(--serif);font-size:.85rem;line-height:1.45;color:var(--parch);font-style:italic}
+.signature{text-align:center;margin-top:1.5rem;font-family:var(--sc);font-size:.65rem;letter-spacing:.4em;color:var(--dim)}
+.signature a{color:var(--brass);text-decoration:none;border-bottom:1px solid var(--brass-d)}
+
+@media(max-width:640px){
+  .footer{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="header">
+    <span class="plaque">ARMILLARY · MMXXVI</span>
+    <h1>The Nerdy Orrery</h1>
+    <p class="latin">Systemum Solare Personalis · in which small worlds orbit a modest sun</p>
+  </header>
+
+  <div class="orrery" aria-label="Orrery">
+    <svg viewBox="-400 -400 800 800">
+      <!-- engraved circle -->
+      <circle cx="0" cy="0" r="380" fill="none" stroke="#3a2d12" stroke-width=".4"/>
+      <circle cx="0" cy="0" r="360" fill="none" stroke="#3a2d12" stroke-width=".2"/>
+      <!-- zodiac ticks -->
+      <g id="zodiac"></g>
+
+      <!-- orbits -->
+      <circle class="orbit" r="70"/>
+      <circle class="orbit" r="120"/>
+      <circle class="orbit" r="175"/>
+      <circle class="orbit" r="230"/>
+      <circle class="orbit" r="290"/>
+      <circle class="orbit" r="345"/>
+
+      <!-- sun -->
+      <g class="sun">
+        <circle r="32" fill="url(#sunGrad)"/>
+        <circle r="40" fill="none" stroke="#d4a842" stroke-width=".3" opacity=".4"/>
+      </g>
+      <defs>
+        <radialGradient id="sunGrad" cx=".4" cy=".4">
+          <stop offset="0" stop-color="#fff8d8"/>
+          <stop offset=".5" stop-color="#ffce5e"/>
+          <stop offset="1" stop-color="#b87b1c"/>
+        </radialGradient>
+      </defs>
+      <text class="sun-name" y="55">NERDY</text>
+      <text class="sun-name" y="64" font-size="4.5" letter-spacing=".2em">— sol personalis —</text>
+
+      <!-- planets (orbit groups around center) -->
+      <g class="orbit-group fast">
+        <g class="planet" style="color:#f2b27a" transform="translate(70,0)">
+          <circle r="7" fill="#f2b27a"/>
+          <text class="label" y="-14">Terminal</text>
+          <text class="meta" y="20">70 AU · keyboard-only</text>
+        </g>
+      </g>
+      <g class="orbit-group" style="animation-delay:-20s">
+        <g class="planet" style="color:#a4c8e0" transform="translate(-85,85)">
+          <circle r="8" fill="#a4c8e0"/>
+          <text class="label" y="-15">MCP Gateway</text>
+          <text class="meta" y="21">120 AU · lunar bridges</text>
+        </g>
+      </g>
+      <g class="orbit-group slow" style="animation-delay:-40s">
+        <g class="planet" style="color:#d86a6a" transform="translate(-175,0)">
+          <circle r="9" fill="#d86a6a"/>
+          <circle r="15" fill="none" stroke="#d86a6a" stroke-width=".5" opacity=".6"/>
+          <text class="label" y="-19">Kubernetes</text>
+          <text class="meta" y="25">175 AU · 5 rings</text>
+        </g>
+      </g>
+      <g class="orbit-group" style="animation-duration:140s;animation-delay:-60s">
+        <g class="planet" style="color:#6aa86a" transform="translate(163,-163)">
+          <circle r="7" fill="#6aa86a"/>
+          <text class="label" y="-14">Pixel Tanks</text>
+          <text class="meta" y="20">230 AU · binary moons</text>
+        </g>
+      </g>
+      <g class="orbit-group slow" style="animation-duration:180s;animation-delay:-100s">
+        <g class="planet" style="color:#c8a2d6" transform="translate(-290,0)">
+          <circle r="8" fill="#c8a2d6"/>
+          <text class="label" y="-15">TBD</text>
+          <text class="meta" y="21">290 AU · forming</text>
+        </g>
+      </g>
+      <g class="orbit-group very-slow">
+        <g class="planet" style="color:#e0c066" transform="translate(244,244)">
+          <circle r="10" fill="#e0c066"/>
+          <ellipse cx="0" cy="0" rx="18" ry="4" fill="none" stroke="#e0c066" stroke-width=".8" transform="rotate(-18)"/>
+          <text class="label" y="-20">Mazu</text>
+          <text class="meta" y="26">345 AU · low frequency</text>
+        </g>
+      </g>
+
+      <!-- distant comet (Home Assistant) -->
+      <g transform="rotate(-20)">
+        <ellipse cx="0" cy="0" rx="380" ry="170" fill="none" stroke="#5a7a9a" stroke-width=".3" stroke-dasharray="1 4" opacity=".6"/>
+        <g transform="translate(370,0)">
+          <circle r="3" fill="#b8d4e8"/>
+          <line x1="0" y1="0" x2="60" y2="-4" stroke="#b8d4e8" stroke-width=".6" opacity=".5"/>
+          <text class="label" y="-10" font-size="7">Home Assistant</text>
+          <text class="meta" y="12">eccentric · Zigbee</text>
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <!-- legend cards -->
+  <div class="legend">
+    <div class="card" style="color:#f2b27a"><span class="n">I · MERCURIAL</span>
+      <h3>Terminal</h3><div class="orbit-info">period 88d · keyboard-first</div>
+      <p>The inner world. Sessions switch faster than thought. No mouse has set foot on its surface.</p></div>
+    <div class="card" style="color:#a4c8e0"><span class="n">II · VENERIAN</span>
+      <h3>MCP Gateway</h3><div class="orbit-info">period 224d · bridge world</div>
+      <p>One bridge that ties Slack, Jira, databases, Grafana and Tailscale into a single voice.</p></div>
+    <div class="card" style="color:#d86a6a"><span class="n">III · MARTIAL</span>
+      <h3>Kubernetes</h3><div class="orbit-info">period 687d · five rings</div>
+      <p>Personal control plane. Overengineered for one person — reconciliation loops, eternal.</p></div>
+    <div class="card" style="color:#6aa86a"><span class="n">IV · JOVIAN</span>
+      <h3>Pixel Tanks</h3><div class="orbit-info">period 11.9y · 8-bit moons</div>
+      <p>Top-down tank combat. Friendships disintegrate in low resolution.</p></div>
+    <div class="card" style="color:#c8a2d6"><span class="n">V · SATURNINE</span>
+      <h3>TBD</h3><div class="orbit-info">period 29y · accreting</div>
+      <p>Productivity app. Captures, projects, tasks. No bells. Forming still.</p></div>
+    <div class="card" style="color:#e0c066"><span class="n">VI · URANIAN</span>
+      <h3>Mazu</h3><div class="orbit-info">period 84y · bass rings</div>
+      <p>Instrumental stoner band. Drumbeats drift through the outer dark at 40 Hz.</p></div>
+    <div class="card" style="color:#b8d4e8"><span class="n">☄ COMETARY</span>
+      <h3>Home Assistant</h3><div class="orbit-info">eccentric · YAML orbit</div>
+      <p>Returns periodically on a long, strange arc, trailing Zigbee dust and smart-light opinions.</p></div>
+    <div class="card" style="color:#b8976a"><span class="n">☿ ASTEROID BELT</span>
+      <h3>The Workshop</h3><div class="orbit-info">belt 2.5–3.3 AU · wood</div>
+      <p>Rubble of tools and sawdust, slowly aggregating into a basement planet. Each tool — investment.</p></div>
+  </div>
+
+  <div class="footer">
+    <div class="col"><h4>Observer</h4><p>One developer. Three children. One wife of ever-shrinking patience.</p></div>
+    <div class="col"><h4>Instrumentation</h4><p>Handmade mechanism. Gears of curiosity, bearings of stubbornness.</p></div>
+    <div class="col"><h4>Ephemeris</h4><p>Updated irregularly, whenever a cluster drifts or a new moon commits itself.</p></div>
+  </div>
+
+  <div class="signature">— Engraved upon brass by <a href="https://github.com/enipo">github.com/enipo</a> —</div>
+</div>
+
+<script>
+(function(){
+  var z=document.getElementById('zodiac');if(!z)return;
+  var svgNS='http://www.w3.org/2000/svg';
+  for(var i=0;i<60;i++){
+    var a=i*6,rad=(a-90)*Math.PI/180;
+    var big=i%5===0,r1=big?370:375,r2=380;
+    var ln=document.createElementNS(svgNS,'line');
+    ln.setAttribute('x1',(r1*Math.cos(rad)).toFixed(1));
+    ln.setAttribute('y1',(r1*Math.sin(rad)).toFixed(1));
+    ln.setAttribute('x2',(r2*Math.cos(rad)).toFixed(1));
+    ln.setAttribute('y2',(r2*Math.sin(rad)).toFixed(1));
+    ln.setAttribute('stroke','#3a2d12');
+    ln.setAttribute('stroke-width',big?'.8':'.3');
+    z.appendChild(ln);
+  }
+})();
+</script>
+</body>
+</html>

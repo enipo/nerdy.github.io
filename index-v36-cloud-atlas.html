@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Nerdy — International Cloud Atlas</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.88em' font-size='85'%3E☁%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Spectral+SC:wght@400;500;600&family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --sky-1:#b6ccd6;--sky-2:#dce6ec;--sky-3:#f1f4f1;--dusk:#6b8394;--deep:#2b3d4b;
+  --ink:#1a2631;--dim:#4a5c6a;--paper:#f6f1e1;--rule:#a9b6bf;--crimson:#8b2a1a;--gold:#bf973a;
+  --serif:'Spectral',Georgia,serif;--sc:'Spectral SC',serif;--mono:'IBM Plex Mono',monospace;
+}
+html,body{background:linear-gradient(180deg,#cfd9de 0%,#e8ece6 45%,#f4eedb 100%);min-height:100vh;color:var(--ink);font-family:var(--serif)}
+body{padding:clamp(1rem,3vw,2.5rem)}
+.wrap{max-width:1080px;margin:0 auto}
+
+/* frontmatter */
+.front{border:1px solid var(--ink);border-radius:2px;padding:1.6rem 1.8rem 1.4rem;background:var(--paper);position:relative;margin-bottom:1.6rem;
+  box-shadow:0 4px 14px rgba(43,61,75,.15),inset 0 0 0 1px var(--paper),inset 0 0 0 2px var(--ink)}
+.front::after{content:'';position:absolute;inset:4px;border:1px solid var(--rule);pointer-events:none}
+.front .eyebrow{font-family:var(--sc);font-size:.68rem;letter-spacing:.45em;color:var(--crimson);text-align:center;padding-bottom:.4rem;border-bottom:1px dotted var(--dim);margin-bottom:.8rem}
+.front h1{font-family:var(--sc);font-weight:500;font-size:clamp(2rem,4.5vw,3rem);line-height:1;letter-spacing:.08em;text-align:center;color:var(--ink)}
+.front .sub{font-family:var(--serif);font-style:italic;text-align:center;font-size:1.05rem;color:var(--dim);margin:.5rem 0 .8rem}
+.front .bar{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;color:var(--dusk);border-top:1px dotted var(--dim);padding-top:.5rem;flex-wrap:wrap;gap:.5rem}
+
+/* key */
+.key{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.4rem 1rem;margin:.9rem 0 0;padding:.7rem 0 .3rem;border-top:1px dotted var(--dim);border-bottom:1px dotted var(--dim)}
+.key .item{display:flex;align-items:center;gap:.5rem;font-family:var(--sc);font-size:.68rem;letter-spacing:.2em;color:var(--dim)}
+.key .swatch{width:20px;height:14px;border:1px solid var(--ink);flex-shrink:0}
+.key .swatch.cirrus{background:repeating-linear-gradient(110deg,#fff 0 2px,#dce6ec 2px 4px)}
+.key .swatch.cumulus{background:radial-gradient(circle at 40% 60%,#fff 40%,#b6ccd6)}
+.key .swatch.stratus{background:linear-gradient(180deg,#f1f4f1 0 40%,#b6ccd6 40% 60%,#f1f4f1 60%)}
+.key .swatch.nimbus{background:linear-gradient(180deg,#6b8394,#2b3d4b)}
+
+/* plates */
+.plates{display:grid;grid-template-columns:repeat(2,1fr);gap:1.2rem}
+.plate{background:var(--paper);border:1px solid var(--ink);padding:1.1rem 1.2rem 1.3rem;position:relative;
+  box-shadow:0 3px 10px rgba(43,61,75,.12)}
+.plate .no{position:absolute;top:-10px;left:14px;background:var(--paper);padding:0 .5rem;font-family:var(--sc);font-size:.6rem;letter-spacing:.3em;color:var(--crimson)}
+.plate .latin{font-family:var(--sc);font-size:.68rem;letter-spacing:.3em;color:var(--dim);text-transform:none}
+.plate h2{font-family:var(--sc);font-weight:600;font-size:1.4rem;letter-spacing:.05em;color:var(--ink);margin-top:.1rem}
+.plate .altitude{font-family:var(--mono);font-size:.68rem;color:var(--dusk);margin-top:.1rem;letter-spacing:.1em}
+.plate .illustration{aspect-ratio:16/7;margin:.8rem 0;background:linear-gradient(180deg,#cddde5 0%,#e9eeea 60%,#d7d2bf 100%);border:1px solid var(--rule);position:relative;overflow:hidden}
+.plate .illustration svg{position:absolute;inset:0;width:100%;height:100%}
+.plate .desc{font-family:var(--serif);font-size:.9rem;line-height:1.5;color:var(--ink)}
+.plate .desc em{font-style:italic;color:var(--dim)}
+.plate .props{margin-top:.8rem;display:grid;grid-template-columns:repeat(2,1fr);gap:.2rem .8rem;padding-top:.5rem;border-top:1px dotted var(--dim);font-family:var(--mono);font-size:.72rem}
+.plate .props b{font-family:var(--sc);font-weight:500;letter-spacing:.15em;color:var(--dim)}
+
+/* intermezzo: horizon */
+.horizon{margin:1.8rem 0;padding:1rem 1.2rem;background:
+  linear-gradient(180deg,#c8d7df 0%,#e7ede8 60%,#d8d3c0 100%);border:1px solid var(--ink);
+  box-shadow:0 3px 10px rgba(43,61,75,.12);position:relative;overflow:hidden}
+.horizon .label{font-family:var(--sc);font-size:.7rem;letter-spacing:.3em;color:var(--ink);padding-bottom:.4rem;border-bottom:1px dotted var(--dim);margin-bottom:.6rem}
+.horizon p{font-family:var(--serif);font-size:.95rem;line-height:1.5;font-style:italic;color:var(--dim);max-width:90%}
+.horizon .silhouette{position:absolute;bottom:0;left:0;right:0;height:28px;background:
+  linear-gradient(180deg,transparent,var(--deep) 80%);
+  clip-path:polygon(0 60%,4% 40%,9% 60%,14% 45%,20% 65%,25% 50%,32% 40%,38% 55%,44% 35%,52% 60%,58% 45%,66% 55%,72% 30%,80% 45%,86% 55%,92% 40%,100% 55%,100% 100%,0 100%)}
+
+/* log */
+.log{margin-top:1.6rem;background:var(--paper);border:1px solid var(--ink);padding:1rem 1.2rem}
+.log h3{font-family:var(--sc);font-size:.8rem;letter-spacing:.3em;color:var(--crimson);padding-bottom:.3rem;margin-bottom:.6rem;border-bottom:1px dotted var(--dim)}
+.log table{width:100%;border-collapse:collapse;font-family:var(--serif);font-size:.88rem}
+.log th{font-family:var(--sc);font-size:.62rem;letter-spacing:.2em;color:var(--dim);text-align:left;padding:.3rem .4rem;font-weight:500}
+.log td{padding:.35rem .4rem;border-top:1px dotted var(--dim);vertical-align:top}
+.log td.t{font-family:var(--mono);font-size:.72rem;color:var(--dusk);white-space:nowrap}
+.log td.k{font-family:var(--sc);font-size:.7rem;letter-spacing:.15em;color:var(--ink);white-space:nowrap}
+.log em{font-style:italic;color:var(--dim)}
+
+/* colophon */
+.colophon{margin-top:1.6rem;display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;font-family:var(--serif);font-size:.82rem;line-height:1.4;color:var(--dim);padding:1rem 1.2rem;border-top:2px solid var(--ink);border-bottom:1px solid var(--ink)}
+.colophon h4{font-family:var(--sc);font-size:.7rem;letter-spacing:.25em;color:var(--crimson);margin-bottom:.3rem}
+
+.sig{margin-top:1rem;text-align:center;font-family:var(--sc);font-size:.65rem;letter-spacing:.4em;color:var(--dim)}
+.sig a{color:var(--crimson);border-bottom:1px solid var(--crimson);text-decoration:none}
+
+@media(max-width:720px){
+  .plates{grid-template-columns:1fr}
+  .colophon{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="front">
+    <div class="eyebrow">— INTERNATIONAL CLOUD ATLAS · PERSONAL EDITION —</div>
+    <h1>Nerdy · Volume XII</h1>
+    <p class="sub">A meteorological survey of one developer's atmosphere, classified by altitude, density and caffeine content.</p>
+    <div class="bar">
+      <span>OBS. ST. 06240 · IJMUIDEN</span>
+      <span>ISSUED MMXXVI</span>
+      <span>EDIT. G. BAZUIN</span>
+    </div>
+    <div class="key">
+      <div class="item"><span class="swatch cirrus"></span> CIRRUS · HIGH</div>
+      <div class="item"><span class="swatch cumulus"></span> CUMULUS · MID</div>
+      <div class="item"><span class="swatch stratus"></span> STRATUS · LOW</div>
+      <div class="item"><span class="swatch nimbus"></span> NIMBUS · WET</div>
+    </div>
+  </section>
+
+  <!-- plate grid -->
+  <section class="plates">
+
+    <article class="plate">
+      <span class="no">PLATE I</span>
+      <div class="latin">genus · Cirrus</div>
+      <h2>Cirrus keyboardus</h2>
+      <div class="altitude">6 000 – 12 000 m · ice crystals · fibrous streaks</div>
+      <div class="illustration">
+        <svg viewBox="0 0 400 175" preserveAspectRatio="none">
+          <g stroke="#4a5c6a" stroke-width=".6" fill="none" opacity=".7">
+            <path d="M20,30 C80,20 140,35 200,28 C260,22 320,38 380,30"/>
+            <path d="M30,45 C100,35 170,55 240,40 C300,30 340,48 390,42"/>
+            <path d="M10,60 C60,55 110,70 180,58 C240,48 310,62 380,55"/>
+            <path d="M50,80 C120,70 200,90 260,78 C310,70 350,78 380,72"/>
+          </g>
+          <g stroke="#4a5c6a" stroke-width=".4" fill="none" opacity=".4"><path d="M0,95 L400,95" stroke-dasharray="2 4"/></g>
+        </svg>
+      </div>
+      <p class="desc"><em>Nerdy Terminal</em> — thin, keyboard-first filaments drifting at altitude. Sessions switch without sound. <em>Mouse precipitation: negligible.</em></p>
+      <div class="props"><span><b>SESSIONS</b></span><span>9+</span><span><b>LATENCY</b></span><span>&lt;1 ms</span></div>
+    </article>
+
+    <article class="plate">
+      <span class="no">PLATE II</span>
+      <div class="latin">genus · Cumulus</div>
+      <h2>Cumulus gatewayensis</h2>
+      <div class="altitude">2 000 – 5 000 m · fair-weather · rounded tops</div>
+      <div class="illustration">
+        <svg viewBox="0 0 400 175">
+          <g fill="#fff" stroke="#6b8394" stroke-width="1.2">
+            <path d="M70,130 C50,100 80,80 110,95 C115,70 150,65 170,90 C200,75 240,85 245,110 C280,105 290,135 260,140 L70,140 Z"/>
+            <path d="M230,125 C215,100 250,85 280,105 C295,80 335,85 345,115 C380,110 380,140 350,140 L230,140 Z"/>
+          </g>
+          <g stroke="#6b8394" fill="none" opacity=".4"><path d="M40,150 L370,150" stroke-dasharray="1 3"/></g>
+        </svg>
+      </div>
+      <p class="desc"><em>MCP Gateway</em> — well-formed cumulus connecting many sources (Slack · Jira · Grafana · Tailscale · DBs). Clear visibility across sky-lanes.</p>
+      <div class="props"><span><b>BRIDGES</b></span><span>many</span><span><b>UPTIME</b></span><span>99.82%</span></div>
+    </article>
+
+    <article class="plate">
+      <span class="no">PLATE III</span>
+      <div class="latin">genus · Cumulonimbus</div>
+      <h2>Cumulonimbus clusterii</h2>
+      <div class="altitude">surface – 14 000 m · deep convection · five cells</div>
+      <div class="illustration">
+        <svg viewBox="0 0 400 175">
+          <defs>
+            <linearGradient id="anv" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0" stop-color="#6b8394"/><stop offset="1" stop-color="#2b3d4b"/>
+            </linearGradient>
+          </defs>
+          <g>
+            <path d="M40,30 L360,30 L330,60 L70,60 Z" fill="#b6ccd6" opacity=".7"/>
+            <path d="M80,60 C60,100 80,130 110,135 C140,145 200,150 240,145 C290,140 330,120 320,80 C330,60 310,55 280,60 L80,60 Z" fill="url(#anv)"/>
+            <g stroke="#bf973a" stroke-width="1.5" fill="none">
+              <path d="M150,80 L135,110 L150,105 L130,140"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+      <p class="desc"><em>Kubernetes control-plane</em> — towering, with an anvil top. Five cells in formation. Occasional lightning (reconciliation loops). <em>Thunder rarely heard outside the basement.</em></p>
+      <div class="props"><span><b>CLUSTERS</b></span><span>5</span><span><b>BURSTS</b></span><span>weekly</span></div>
+    </article>
+
+    <article class="plate">
+      <span class="no">PLATE IV</span>
+      <div class="latin">genus · Stratus</div>
+      <h2>Stratus domesticus</h2>
+      <div class="altitude">surface – 2 000 m · uniform · YAML-laden</div>
+      <div class="illustration">
+        <svg viewBox="0 0 400 175">
+          <g>
+            <rect x="0" y="60" width="400" height="20" fill="#b6ccd6"/>
+            <rect x="0" y="80" width="400" height="12" fill="#dce6ec"/>
+            <rect x="0" y="95" width="400" height="18" fill="#a9b6bf"/>
+            <rect x="0" y="115" width="400" height="10" fill="#dce6ec"/>
+          </g>
+          <g stroke="#4a5c6a" fill="none" opacity=".4"><line x1="0" y1="150" x2="400" y2="150" stroke-dasharray="2 3"/></g>
+        </svg>
+      </div>
+      <p class="desc"><em>Home Assistant</em> — a persistent, uniform layer held up by Zigbee and stubbornness. Dims visibility domestically. Known to drizzle small-hand commands.</p>
+      <div class="props"><span><b>DEVICES</b></span><span>∞</span><span><b>WAF</b></span><span>0.12</span></div>
+    </article>
+
+    <article class="plate">
+      <span class="no">PLATE V</span>
+      <div class="latin">genus · Altocumulus</div>
+      <h2>Altocumulus pixellatus</h2>
+      <div class="altitude">2 000 – 6 000 m · mackerel sky · 8-bit patterned</div>
+      <div class="illustration">
+        <svg viewBox="0 0 400 175" shape-rendering="crispEdges">
+          <g fill="#b6ccd6" stroke="#6b8394" stroke-width="1">
+            <rect x="20" y="40" width="30" height="16"/>
+            <rect x="60" y="50" width="40" height="14"/>
+            <rect x="110" y="35" width="30" height="18"/>
+            <rect x="150" y="55" width="34" height="14"/>
+            <rect x="195" y="40" width="40" height="16"/>
+            <rect x="245" y="50" width="30" height="14"/>
+            <rect x="285" y="35" width="34" height="20"/>
+            <rect x="330" y="50" width="40" height="14"/>
+          </g>
+          <g fill="#4a5c6a"><rect x="100" y="110" width="6" height="6"/><rect x="170" y="120" width="6" height="6"/><rect x="240" y="108" width="6" height="6"/></g>
+        </svg>
+      </div>
+      <p class="desc"><em>Pixel Tanks</em> — a mackerel-sky pattern of low-resolution cells. Visibility: 8 bit. Chance of friendship: diminishing.</p>
+      <div class="props"><span><b>PLAYERS</b></span><span>2–8</span><span><b>RESOLUTION</b></span><span>pixelic</span></div>
+    </article>
+
+    <article class="plate">
+      <span class="no">PLATE VI</span>
+      <div class="latin">genus · Nimbostratus</div>
+      <h2>Nimbostratus mazu</h2>
+      <div class="altitude">surface – 3 000 m · low, persistent · 40 Hz</div>
+      <div class="illustration">
+        <svg viewBox="0 0 400 175">
+          <g>
+            <rect x="0" y="55" width="400" height="50" fill="#4a5c6a"/>
+            <rect x="0" y="105" width="400" height="20" fill="#6b8394"/>
+            <g stroke="#2b3d4b" stroke-width="1.5" opacity=".7">
+              <line x1="40" y1="120" x2="30" y2="160"/><line x1="80" y1="120" x2="70" y2="160"/>
+              <line x1="120" y1="120" x2="110" y2="160"/><line x1="160" y1="120" x2="150" y2="160"/>
+              <line x1="200" y1="120" x2="190" y2="160"/><line x1="240" y1="120" x2="230" y2="160"/>
+              <line x1="280" y1="120" x2="270" y2="160"/><line x1="320" y1="120" x2="310" y2="160"/>
+              <line x1="360" y1="120" x2="350" y2="160"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+      <p class="desc"><em>Mazu</em> — a persistent low layer of instrumental drum precipitation. Lyrics absent. <em>Amplifier fronts stationary.</em></p>
+      <div class="props"><span><b>FREQUENCY</b></span><span>40 Hz</span><span><b>DURATION</b></span><span>indef.</span></div>
+    </article>
+
+  </section>
+
+  <div class="horizon">
+    <div class="label">ON THE HORIZON · TBD</div>
+    <p>To the south-east, a forming layer — <em>TBD</em>, a productivity system of captures, projects and tasks. No bells. No whistles. Still cohering from vapour. Observers advised to wait.</p>
+    <div class="silhouette"></div>
+  </div>
+
+  <div class="log">
+    <h3>Observation Log · Week 17</h3>
+    <table>
+      <thead><tr><th>Time</th><th>Genus</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td class="t">06:12</td><td class="k">CIRRUS</td><td>Terminal fibres visible at high altitude. <em>Wind SE, keyboard-driven.</em></td></tr>
+        <tr><td class="t">09:44</td><td class="k">CUMULONIMBUS</td><td>Cluster III flared briefly; anvil observed over workshop.</td></tr>
+        <tr><td class="t">12:03</td><td class="k">STRATUS</td><td>Home Assistant layer thickened. Smart lights rearranged by juveniles.</td></tr>
+        <tr><td class="t">15:27</td><td class="k">ALTOCUMULUS</td><td>Pixel mackerel sky. Friendship low-pressure front approaching.</td></tr>
+        <tr><td class="t">19:15</td><td class="k">NIMBOSTRATUS</td><td>Rehearsal precipitation at 40 Hz. Neighbours note increased humidity.</td></tr>
+        <tr><td class="t">22:40</td><td class="k">CLEAR</td><td>Workshop lamp visible through basement grating. <em>Sawdust suspended.</em></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="colophon">
+    <div><h4>Observer</h4>G. Bazuin. One developer. Three children. Instruments homemade.</div>
+    <div><h4>Method</h4>Visual observation corroborated by <code>grep</code>, <code>journalctl</code> and a barometer made of hope.</div>
+    <div><h4>Distribution</h4>Issued annually when a new cloud is recognised, or an old one finally named.</div>
+  </div>
+
+  <div class="sig">— Atlas maintained by <a href="https://github.com/enipo">github.com/enipo</a> —</div>
+</div>
+</body>
+</html>
