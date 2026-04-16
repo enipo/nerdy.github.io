@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>nerdy.nl — Specimen Slides</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.88em' font-size='85'%3E🔬%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --lab:#e8e4d8;--paper:#f4f0e4;--ink:#1a1d1a;--dim:#6a6d68;
+  --stain-blue:#2c5f7f;--stain-red:#9c2c3a;--stain-purple:#6b3a7f;
+  --glass:rgba(200,220,230,.35);--grid:#c8c2b0;
+  --mono:'IBM Plex Mono',monospace;--serif:'IBM Plex Serif',Georgia,serif;
+}
+body{background:var(--lab);color:var(--ink);font-family:var(--mono);font-size:13px;line-height:1.55;padding:2rem 1.5rem;min-height:100vh;
+  background-image:radial-gradient(circle at 1px 1px,var(--grid) 1px,transparent 0);background-size:24px 24px}
+.lab{max-width:1240px;margin:0 auto}
+
+/* HEADER */
+.ribbon{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid var(--ink);padding-bottom:.8rem;margin-bottom:1.6rem;flex-wrap:wrap;gap:1rem}
+.ribbon__brand{font-family:var(--serif);font-size:2rem;font-weight:600;letter-spacing:-.01em;font-style:italic}
+.ribbon__brand small{font-family:var(--mono);font-style:normal;font-size:.65rem;letter-spacing:.3em;text-transform:uppercase;color:var(--dim);display:block;margin-top:.3rem}
+.ribbon__meta{font-size:.7rem;text-transform:uppercase;letter-spacing:.15em;color:var(--dim);text-align:right}
+.ribbon__meta span{display:block}
+
+/* EYEPIECE */
+.eyepiece{background:#fff;border:1px solid var(--ink);padding:1.4rem;margin-bottom:1.4rem;display:flex;gap:1.4rem;align-items:center;flex-wrap:wrap;
+  box-shadow:3px 3px 0 var(--ink)}
+.lens{width:140px;height:140px;border-radius:50%;position:relative;flex-shrink:0;
+  background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.7),var(--glass) 40%,rgba(100,130,140,.5) 100%);
+  border:6px solid #2a2a2a;box-shadow:inset 0 0 30px rgba(0,0,0,.3),0 4px 12px rgba(0,0,0,.2);overflow:hidden}
+.lens::before{content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(45deg,transparent 0,transparent 4px,rgba(0,0,0,.08) 4px,rgba(0,0,0,.08) 5px)}
+.lens::after{content:'+';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:rgba(0,0,0,.3);font-size:1.2rem}
+.eyepiece__text{flex:1;min-width:240px}
+.eyepiece__title{font-family:var(--serif);font-style:italic;font-size:1.3rem;margin-bottom:.4rem;font-weight:400}
+.eyepiece__desc{color:var(--dim);font-size:.85rem;line-height:1.6}
+.eyepiece__mag{font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;color:var(--stain-red);margin-top:.5rem;text-transform:uppercase}
+
+/* SLIDE RACK */
+.rack-label{display:flex;justify-content:space-between;align-items:center;margin:1.8rem 0 .7rem}
+.rack-label h2{font-family:var(--mono);font-size:.75rem;letter-spacing:.25em;text-transform:uppercase;color:var(--ink);font-weight:500}
+.rack-label em{font-style:normal;color:var(--dim);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase}
+
+.slides{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.1rem}
+.slide{background:#fff;border:1px solid var(--ink);position:relative;transition:transform .2s;cursor:default;
+  box-shadow:2px 2px 0 var(--ink)}
+.slide:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--ink)}
+.slide__head{background:var(--ink);color:var(--paper);padding:.35rem .7rem;display:flex;justify-content:space-between;font-size:.65rem;letter-spacing:.14em;text-transform:uppercase}
+.slide__well{padding:1rem;min-height:160px;position:relative;overflow:hidden}
+.slide__well::before{content:'';position:absolute;top:.5rem;right:.5rem;bottom:.5rem;left:.5rem;
+  border:1px dashed var(--grid);pointer-events:none}
+.specimen{width:60px;height:60px;border-radius:50%;margin:0 auto .7rem;position:relative;
+  background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.5),transparent 50%)}
+.specimen.blue{background-color:var(--stain-blue);box-shadow:inset -6px -6px 12px rgba(0,0,0,.3)}
+.specimen.red{background-color:var(--stain-red);box-shadow:inset -6px -6px 12px rgba(0,0,0,.3)}
+.specimen.purple{background-color:var(--stain-purple);box-shadow:inset -6px -6px 12px rgba(0,0,0,.3)}
+.specimen.green{background-color:#4a7a3a;box-shadow:inset -6px -6px 12px rgba(0,0,0,.3)}
+.specimen.amber{background-color:#c08a30;box-shadow:inset -6px -6px 12px rgba(0,0,0,.3)}
+.specimen::after{content:'';position:absolute;inset:-8px;border-radius:50%;border:1px solid currentColor;opacity:.2}
+.slide__title{font-family:var(--serif);font-size:1rem;font-weight:600;text-align:center;margin-bottom:.3rem}
+.slide__latin{text-align:center;font-style:italic;font-family:var(--serif);font-size:.75rem;color:var(--dim);margin-bottom:.5rem}
+.slide__notes{font-size:.78rem;line-height:1.55;color:#2a2a2a;font-family:var(--serif)}
+.slide__foot{border-top:1px solid var(--grid);padding:.4rem .7rem;display:flex;justify-content:space-between;font-size:.6rem;color:var(--dim);letter-spacing:.1em;text-transform:uppercase}
+
+/* NOTEBOOK */
+.notebook{margin-top:2rem;background:#fff;border:1px solid var(--ink);padding:1.2rem 1.4rem;box-shadow:3px 3px 0 var(--ink);
+  background-image:repeating-linear-gradient(transparent 0,transparent 23px,var(--grid) 23px,var(--grid) 24px)}
+.notebook h3{font-family:var(--serif);font-size:1rem;font-style:italic;margin-bottom:.5rem}
+.notebook__grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:.7rem}
+.notebook__entry{font-family:var(--serif);font-size:.85rem;line-height:1.7}
+.notebook__entry strong{font-style:italic;font-weight:600;display:block;color:var(--stain-blue)}
+
+.footer{margin-top:2.2rem;padding-top:1rem;border-top:2px solid var(--ink);display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--dim)}
+.footer a{color:var(--dim);text-decoration:underline}
+
+@media(max-width:600px){
+  body{padding:1rem .7rem}
+  .lens{width:100px;height:100px}
+}
+</style>
+</head>
+<body>
+<div class="lab">
+
+<header class="ribbon">
+  <div class="ribbon__brand">Nerdy<small>Specimen Slides · Cabinet N°&thinsp;04</small></div>
+  <div class="ribbon__meta">
+    <span>Mounted &amp; catalogued</span>
+    <span id="stamp"></span>
+    <span>Lab: nerdy.nl</span>
+  </div>
+</header>
+
+<section class="eyepiece">
+  <div class="lens"></div>
+  <div class="eyepiece__text">
+    <div class="eyepiece__title">&ldquo;Under the objective, everything looks suspicious.&rdquo;</div>
+    <p class="eyepiece__desc">A collection of cultures, artefacts and side projects that were swabbed, stained and pinned to a glass slide for closer inspection. Each specimen is its own weekend, its own rabbit hole, its own mild obsession. Hover to examine.</p>
+    <div class="eyepiece__mag">400× · bright field · slightly over-engineered</div>
+  </div>
+</section>
+
+<div class="rack-label"><h2>// Cabinet A — Software Cultures</h2><em>n = 5</em></div>
+<section class="slides">
+
+  <article class="slide">
+    <div class="slide__head"><span>A-01</span><span>Stain: Safranin</span></div>
+    <div class="slide__well">
+      <div class="specimen red"></div>
+      <h3 class="slide__title">Nerdy Terminal</h3>
+      <p class="slide__latin">Tmux familiaris keyboardensis</p>
+      <p class="slide__notes">Keyboard-first terminal manager. Motile. Thrives in macOS. Aggressive avoidance of pointer-driven habitats. Moves across tabs instantly when provoked.</p>
+    </div>
+    <div class="slide__foot"><span>Host: macOS</span><span>Mag ×400</span></div>
+  </article>
+
+  <article class="slide">
+    <div class="slide__head"><span>A-02</span><span>Stain: Methylene Blue</span></div>
+    <div class="slide__well">
+      <div class="specimen blue"></div>
+      <h3 class="slide__title">Kubernetes Clusters</h3>
+      <p class="slide__latin">Kubernetes excessivus domesticus</p>
+      <p class="slide__notes">Self-hosted control plane. Five clusters observed in a single household. Reproduces by declarative YAML. Mutters &ldquo;GitOps&rdquo; when cornered.</p>
+    </div>
+    <div class="slide__foot"><span>Host: homelab</span><span>Mag ×1000</span></div>
+  </article>
+
+  <article class="slide">
+    <div class="slide__head"><span>A-03</span><span>Stain: Crystal Violet</span></div>
+    <div class="slide__well">
+      <div class="specimen purple"></div>
+      <h3 class="slide__title">MCP Gateway</h3>
+      <p class="slide__latin">Bridgia multimouthalis</p>
+      <p class="slide__notes">Symbiotic bridge organism. Connects LLMs to Slack, Jira, Grafana, Tailscale and databases. One mouth, many hands. Speaks both JSON and SQL fluently.</p>
+    </div>
+    <div class="slide__foot"><span>Host: internal</span><span>Mag ×400</span></div>
+  </article>
+
+  <article class="slide">
+    <div class="slide__head"><span>A-04</span><span>Stain: Eosin</span></div>
+    <div class="slide__well">
+      <div class="specimen amber"></div>
+      <h3 class="slide__title">Pixel Tanks</h3>
+      <p class="slide__latin">Ludus amicitiaeterminans</p>
+      <p class="slide__notes">Top-down multiplayer combat. Low resolution intentional. Observed to dissolve friendships in approximately 7 minutes of play.</p>
+    </div>
+    <div class="slide__foot"><span>Host: browser</span><span>Mag ×200</span></div>
+  </article>
+
+  <article class="slide">
+    <div class="slide__head"><span>A-05</span><span>Stain: Gram Negative</span></div>
+    <div class="slide__well">
+      <div class="specimen green"></div>
+      <h3 class="slide__title">TBD</h3>
+      <p class="slide__latin">Productivitas minimalis</p>
+      <p class="slide__notes">Personal task organism. Captures, projects, tasks. Evolved to resist bells, whistles and thought leadership. Stubbornly plain.</p>
+    </div>
+    <div class="slide__foot"><span>Host: self</span><span>Mag ×400</span></div>
+  </article>
+
+</section>
+
+<div class="rack-label"><h2>// Cabinet B — Wild Cultures</h2><em>n = 4</em></div>
+<section class="slides">
+
+  <article class="slide">
+    <div class="slide__head"><span>B-01</span><span>Stain: Carbolfuchsin</span></div>
+    <div class="slide__well">
+      <div class="specimen red"></div>
+      <h3 class="slide__title">Drums — Mazu</h3>
+      <p class="slide__latin">Percussio stoneriensis</p>
+      <p class="slide__notes">Instrumental stoner band culture. Heavy, slow, loud. No lyrics to speak of. Observed in dark clubs after 22:00h.</p>
+    </div>
+    <div class="slide__foot"><span>Host: stage</span><span>Mag ×200</span></div>
+  </article>
+
+  <article class="slide">
+    <div class="slide__head"><span>B-02</span><span>Stain: Saffron</span></div>
+    <div class="slide__well">
+      <div class="specimen amber"></div>
+      <h3 class="slide__title">Guitar</h3>
+      <p class="slide__latin">Strummus vicinalis</p>
+      <p class="slide__notes">Enthusiastic amateur strain. Low proficiency, high persistence. Known to trigger opinions in nearby neighbour organisms.</p>
+    </div>
+    <div class="slide__foot"><span>Host: living room</span><span>Mag ×100</span></div>
+  </article>
+
+  <article class="slide">
+    <div class="slide__head"><span>B-03</span><span>Stain: Iodine</span></div>
+    <div class="slide__well">
+      <div class="specimen purple"></div>
+      <h3 class="slide__title">Workshop</h3>
+      <p class="slide__latin">Basementus sawdustificans</p>
+      <p class="slide__notes">Emerging woodworking habitat in basement biome. Currently 60% sawdust, 40% ambition. Each new tool justified as &ldquo;an investment.&rdquo;</p>
+    </div>
+    <div class="slide__foot"><span>Host: basement</span><span>Mag ×40</span></div>
+  </article>
+
+  <article class="slide">
+    <div class="slide__head"><span>B-04</span><span>Stain: Safranin</span></div>
+    <div class="slide__well">
+      <div class="specimen green"></div>
+      <h3 class="slide__title">Dad × 3</h3>
+      <p class="slide__latin">Paternus triplicatus</p>
+      <p class="slide__notes">Three offspring in the enclosure. Unimpressed by clusters. Mildly interested in smart lights. The only recorded use case with a WAF above zero.</p>
+    </div>
+    <div class="slide__foot"><span>Host: home</span><span>Mag ×100</span></div>
+  </article>
+
+</section>
+
+<section class="notebook">
+  <h3>— Field notebook, page 147</h3>
+  <div class="notebook__grid">
+    <div class="notebook__entry"><strong>Editorial</strong>No blog. No thought leadership. No content strategy. Everything worth saying has already been generated by an LLM somewhere. This is just a workbench.</div>
+    <div class="notebook__entry"><strong>Method</strong>Things are built first, named later, explained never. If something breaks on a Saturday, that is material for Monday.</div>
+    <div class="notebook__entry"><strong>Motto</strong>Putting the Y in Nerdy — as in: Why, dear god… Why!?</div>
+  </div>
+</section>
+
+<footer class="footer">
+  <span>&copy; nerdy.nl · cabinet curated by one person</span>
+  <a href="https://github.com/enipo">github.com/enipo</a>
+</footer>
+
+</div>
+<script>
+document.getElementById('stamp').textContent=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}).toUpperCase();
+</script>
+</body>
+</html>

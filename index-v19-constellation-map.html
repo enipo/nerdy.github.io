@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>nerdy.nl — Celestial Chart</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.88em' font-size='85'%3E✦%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Inconsolata:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --sky:#0a0e1c;--deep:#050811;--ink:#e8dfbf;--dim:#8a8165;--gold:#d4b26a;--cyan:#7fbdd1;
+  --serif:'Cormorant Garamond',Garamond,serif;--mono:'Inconsolata',monospace;
+}
+html,body{min-height:100%}
+body{background:var(--deep);color:var(--ink);font-family:var(--serif);font-size:17px;line-height:1.55;
+  background-image:
+    radial-gradient(ellipse at 30% 10%,rgba(127,189,209,.08),transparent 50%),
+    radial-gradient(ellipse at 70% 90%,rgba(212,178,106,.06),transparent 50%),
+    radial-gradient(circle at 15% 40%,rgba(255,255,255,.4) .5px,transparent .6px),
+    radial-gradient(circle at 85% 30%,rgba(255,255,255,.3) .5px,transparent .6px),
+    radial-gradient(circle at 50% 70%,rgba(255,255,255,.35) .5px,transparent .6px),
+    radial-gradient(circle at 20% 80%,rgba(255,255,255,.25) .5px,transparent .6px);
+  background-size:auto,auto,140px 140px,220px 180px,180px 200px,160px 170px}
+
+.chart{max-width:1280px;margin:0 auto;padding:2rem 1.5rem 3rem}
+
+/* HEADER — like an astronomical chart */
+.plate{border:1px solid var(--dim);padding:1.3rem 1.5rem;margin-bottom:1.6rem;position:relative;
+  background:rgba(10,14,28,.6);backdrop-filter:blur(2px)}
+.plate::before,.plate::after{content:'';position:absolute;width:8px;height:8px;border:1px solid var(--gold)}
+.plate::before{top:-1px;left:-1px;border-right:none;border-bottom:none}
+.plate::after{bottom:-1px;right:-1px;border-left:none;border-top:none}
+.plate__top{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem}
+.plate__title{font-family:var(--serif);font-style:italic;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:500;letter-spacing:.02em;line-height:1;color:var(--gold)}
+.plate__title span{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.35em;color:var(--dim);text-transform:uppercase;margin-top:.5rem}
+.plate__meta{font-family:var(--mono);font-size:.7rem;color:var(--dim);text-align:right;letter-spacing:.08em;line-height:1.8}
+.plate__meta strong{color:var(--ink);font-weight:500}
+.plate__abstract{font-style:italic;color:#c7c0a4;font-size:1rem;line-height:1.5;margin-top:1rem;max-width:62ch;border-top:1px solid rgba(138,129,101,.3);padding-top:.9rem}
+
+/* MAP */
+.map{position:relative;width:100%;aspect-ratio:16/10;background:
+    radial-gradient(ellipse at 50% 50%,#0e1428 0%,#060a16 70%,#030510 100%);
+  border:1px solid rgba(138,129,101,.35);margin-bottom:1.6rem;overflow:hidden}
+.map svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.map__ecliptic{fill:none;stroke:rgba(212,178,106,.15);stroke-dasharray:2 4}
+.line{stroke:rgba(212,178,106,.28);stroke-width:.7;fill:none;transition:stroke .3s,stroke-width .3s}
+.line.active{stroke:var(--gold);stroke-width:1.4}
+.star{cursor:pointer;transition:filter .2s}
+.star__halo{fill:rgba(255,255,255,.06);transition:fill .2s,r .2s}
+.star__body{fill:#fff;filter:drop-shadow(0 0 4px rgba(255,255,255,.8))}
+.star:hover .star__halo,.star.active .star__halo{fill:rgba(212,178,106,.28)}
+.star.active .star__body{fill:var(--gold);filter:drop-shadow(0 0 10px var(--gold))}
+.lbl{font-family:var(--mono);font-size:9px;fill:var(--dim);pointer-events:none;text-transform:uppercase;letter-spacing:.15em}
+.lbl.active{fill:var(--gold)}
+.group-lbl{font-family:var(--serif);font-style:italic;font-size:15px;fill:rgba(212,178,106,.45);pointer-events:none;letter-spacing:.08em}
+.tick{font-family:var(--mono);font-size:8px;fill:rgba(138,129,101,.5)}
+
+/* LEGEND PANEL */
+.legend-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem;margin-top:1.6rem}
+.entry{border-top:1px solid rgba(138,129,101,.3);padding-top:1rem}
+.entry__meta{font-family:var(--mono);font-size:.68rem;color:var(--dim);letter-spacing:.2em;text-transform:uppercase;margin-bottom:.3rem}
+.entry__name{font-family:var(--serif);font-size:1.35rem;font-weight:500;margin-bottom:.15rem;color:var(--gold)}
+.entry__latin{font-style:italic;color:#a69f80;font-size:.9rem;margin-bottom:.5rem}
+.entry__text{color:#c7c0a4;font-size:.98rem;line-height:1.55}
+.entry.active{background:linear-gradient(180deg,rgba(212,178,106,.06),transparent)}
+.entry.active .entry__meta{color:var(--gold)}
+
+/* ASIDE */
+.aside{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.3rem;margin-top:2rem}
+.card{border:1px solid rgba(138,129,101,.3);padding:1rem 1.1rem;background:rgba(10,14,28,.4)}
+.card h4{font-family:var(--serif);font-style:italic;color:var(--gold);font-size:1.1rem;margin-bottom:.4rem}
+.card p{color:#b8b197;font-size:.88rem;line-height:1.55}
+
+.foot{margin-top:2.5rem;padding-top:1rem;border-top:1px solid rgba(138,129,101,.25);display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem;font-family:var(--mono);font-size:.68rem;color:var(--dim);letter-spacing:.15em;text-transform:uppercase}
+.foot a{color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--dim)}
+
+@media(max-width:700px){
+  body{font-size:15px}
+  .legend-grid{grid-template-columns:1fr;gap:1rem}
+  .map{aspect-ratio:4/5}
+  .group-lbl{font-size:11px}
+  .lbl{font-size:7px}
+}
+</style>
+</head>
+<body>
+<div class="chart">
+
+<section class="plate">
+  <div class="plate__top">
+    <h1 class="plate__title">Carta Coeli Nerdiensis<span>The Nerdy celestial chart · plate I</span></h1>
+    <div class="plate__meta">
+      <strong>nerdy.nl</strong><br>
+      Obs.: homelab<br>
+      <span id="mjd"></span>
+    </div>
+  </div>
+  <p class="plate__abstract">A map of small constellations, each a cluster of tools, habits and weekend projects orbiting the same house. Click a star to follow its name; hover a constellation for its lines to light up. Magnitudes are approximate; opinions are not.</p>
+</section>
+
+<div class="map">
+  <svg viewBox="0 0 1000 625" preserveAspectRatio="xMidYMid slice" id="sky"></svg>
+</div>
+
+<div class="legend-grid" id="legend"></div>
+
+<section class="aside">
+  <div class="card">
+    <h4>Observer's note</h4>
+    <p>No blog. No thought leadership. Only measurements, sketched in pen, over coffee. If it could have been a tweet, it was never recorded here.</p>
+  </div>
+  <div class="card">
+    <h4>Instrumentation</h4>
+    <p>A laptop, a self-hosted Kubernetes cluster, a smart home held together by YAML and stubbornness, three children who remain unimpressed.</p>
+  </div>
+  <div class="card">
+    <h4>Method</h4>
+    <p>Triangulate with curiosity, confirm with failure, annotate the result. Everything worth saying has been said by an LLM — the stars remain the author.</p>
+  </div>
+  <div class="card">
+    <h4>Motto</h4>
+    <p>Putting the Y in Nerdy — as in: <em>Why, dear god… Why!?</em> Repeat nightly until the sky makes sense.</p>
+  </div>
+</section>
+
+<footer class="foot">
+  <span>&copy; nerdy.nl · charted by hand</span>
+  <span>R.A. 00h 00m / Dec. +90°</span>
+  <a href="https://github.com/enipo">github.com/enipo</a>
+</footer>
+
+</div>
+
+<script>
+const SVG_NS='http://www.w3.org/2000/svg';
+const sky=document.getElementById('sky');
+const legend=document.getElementById('legend');
+
+// Constellations: groups of stars with connecting edges
+const CONSTELLATIONS=[
+  {id:'c1',name:'The Terminal',latin:'Terminus Clavaturae',label:{x:170,y:100},
+   kicker:'α · Magnitude 1.2',
+   stars:[
+     {id:'nt',mag:1.2,x:140,y:180,name:'Nerdy Terminal'},
+     {id:'tm',mag:2.2,x:230,y:150,name:'Tmux'},
+     {id:'zs',mag:2.5,x:80,y:240,name:'Zsh'},
+     {id:'vi',mag:2.3,x:210,y:260,name:'Vim'},
+   ],
+   edges:[['nt','tm'],['nt','zs'],['nt','vi'],['vi','tm']],
+   body:'A keyboard-first terminal manager for macOS. Multiple sessions, instant switching. No mouse required — its gravity well repels pointer devices.'},
+
+  {id:'c2',name:'The Cluster',latin:'Kubernetum Domesticum',label:{x:500,y:110},
+   kicker:'β · Magnitude 1.4',
+   stars:[
+     {id:'k1',mag:1.4,x:470,y:170,name:'k81wj'},
+     {id:'k2',mag:1.8,x:540,y:140,name:'k81x6'},
+     {id:'k3',mag:2.0,x:420,y:240,name:'k810l'},
+     {id:'k4',mag:1.9,x:560,y:230,name:'k81tr'},
+     {id:'k5',mag:2.1,x:500,y:290,name:'k81xw'},
+   ],
+   edges:[['k1','k2'],['k1','k3'],['k1','k4'],['k4','k5'],['k3','k5'],['k2','k4']],
+   body:'A self-hosted control plane of five clusters, in one house, run by one person. When asked why, stares into the distance and whispers "GitOps."'},
+
+  {id:'c3',name:'The Gateway',latin:'Pons Agentium',label:{x:820,y:110},
+   kicker:'γ · Magnitude 1.6',
+   stars:[
+     {id:'mc',mag:1.6,x:820,y:170,name:'MCP Core'},
+     {id:'sl',mag:2.6,x:760,y:140,name:'Slack'},
+     {id:'ji',mag:2.6,x:900,y:140,name:'Jira'},
+     {id:'db',mag:2.6,x:730,y:240,name:'DB'},
+     {id:'gr',mag:2.6,x:900,y:240,name:'Grafana'},
+     {id:'ts',mag:2.6,x:830,y:290,name:'Tailscale'},
+   ],
+   edges:[['mc','sl'],['mc','ji'],['mc','db'],['mc','gr'],['mc','ts']],
+   body:'A gateway that bridges AI agents to everything that speaks. One mouth, many hands — the thing that makes the other things talk to each other.'},
+
+  {id:'c4',name:'The Drum Kit',latin:'Percussio Mazuensis',label:{x:180,y:420},
+   kicker:'δ · Magnitude 2.0',
+   stars:[
+     {id:'bd',mag:1.8,x:120,y:460,name:'Kick'},
+     {id:'sn',mag:2.0,x:200,y:430,name:'Snare'},
+     {id:'hh',mag:2.3,x:270,y:460,name:'Hi-hat'},
+     {id:'fl',mag:2.4,x:160,y:540,name:'Floor'},
+     {id:'rd',mag:2.5,x:250,y:530,name:'Ride'},
+   ],
+   edges:[['bd','sn'],['sn','hh'],['sn','fl'],['fl','rd'],['hh','rd']],
+   body:'Drums in Mazu, an instrumental stoner band. Heavy, slow, loud. The kind of music where nobody asks what the lyrics are about.'},
+
+  {id:'c5',name:'The Workshop',latin:'Officina Subterranea',label:{x:500,y:420},
+   kicker:'ε · Magnitude 2.4',
+   stars:[
+     {id:'ch',mag:2.4,x:460,y:470,name:'Chisel'},
+     {id:'pl',mag:2.6,x:540,y:450,name:'Plane'},
+     {id:'sw',mag:2.7,x:500,y:540,name:'Saw'},
+     {id:'cl',mag:2.9,x:600,y:520,name:'Clamp'},
+   ],
+   edges:[['ch','pl'],['pl','sw'],['sw','cl'],['ch','sw']],
+   body:'A basement woodworking shop. Mostly sawdust and ambition. Every new tool justified as an investment in a cleaner, future version of this room.'},
+
+  {id:'c6',name:'The Household',latin:'Familia Triplex',label:{x:830,y:420},
+   kicker:'ζ · Magnitude 1.1',
+   stars:[
+     {id:'p1',mag:1.1,x:790,y:440,name:'Partner'},
+     {id:'c1k',mag:1.9,x:760,y:520,name:'Kid I'},
+     {id:'c2k',mag:1.9,x:840,y:540,name:'Kid II'},
+     {id:'c3k',mag:1.9,x:910,y:500,name:'Kid III'},
+     {id:'lt',mag:3.2,x:900,y:430,name:'Hallway lights'},
+   ],
+   edges:[['p1','c1k'],['p1','c2k'],['p1','c3k'],['p1','lt'],['c1k','c2k'],['c2k','c3k']],
+   body:'Three kids. A partner. The Wife Acceptance Factor of the smart home is historically low — the only stable use case is the hallway lights turning on by themselves.'},
+];
+
+const NS=(t,a)=>{const el=document.createElementNS(SVG_NS,t);if(a)for(const k in a)el.setAttribute(k,a[k]);return el};
+
+// Star position index
+const STAR={};
+CONSTELLATIONS.forEach(c=>c.stars.forEach(s=>{s.cId=c.id;STAR[c.id+'-'+s.id]=s}));
+
+// Draw ecliptic
+const ecl=NS('path',{class:'map__ecliptic',d:'M 40 500 Q 500 240 960 500'});sky.appendChild(ecl);
+
+// Draw background micro-stars
+for(let i=0;i<160;i++){
+  const x=Math.random()*1000,y=Math.random()*625,r=Math.random()*.8+.2;
+  const s=NS('circle',{cx:x,cy:y,r,fill:'#fff','fill-opacity':Math.random()*.6+.1});
+  sky.appendChild(s);
+}
+
+// Draw constellations
+CONSTELLATIONS.forEach(c=>{
+  c.edges.forEach(([a,b])=>{
+    const sa=STAR[c.id+'-'+a],sb=STAR[c.id+'-'+b];
+    const ln=NS('line',{x1:sa.x,y1:sa.y,x2:sb.x,y2:sb.y,class:'line','data-c':c.id});
+    sky.appendChild(ln);
+  });
+  const gl=NS('text',{x:c.label.x,y:c.label.y,class:'group-lbl','text-anchor':'middle'});
+  gl.textContent=c.name;sky.appendChild(gl);
+  c.stars.forEach(s=>{
+    const g=NS('g',{class:'star','data-c':c.id,'data-s':s.id});
+    const r=Math.max(2.5,5-s.mag*.9);
+    g.appendChild(NS('circle',{class:'star__halo',cx:s.x,cy:s.y,r:r+6}));
+    g.appendChild(NS('circle',{class:'star__body',cx:s.x,cy:s.y,r}));
+    const lbl=NS('text',{class:'lbl',x:s.x+r+5,y:s.y+3});lbl.textContent=s.name;g.appendChild(lbl);
+    g.addEventListener('click',()=>activate(c.id));
+    g.addEventListener('mouseenter',()=>activate(c.id));
+    sky.appendChild(g);
+  });
+});
+
+// Ticks on frame
+['0°','90°','180°','270°'].forEach((t,i)=>{
+  const p=[[500,15],[985,315],[500,610],[15,315]][i];
+  const tx=NS('text',{class:'tick',x:p[0],y:p[1],'text-anchor':'middle'});tx.textContent=t;sky.appendChild(tx);
+});
+
+// Legend entries
+CONSTELLATIONS.forEach(c=>{
+  const e=document.createElement('div');e.className='entry';e.dataset.c=c.id;
+  const m=document.createElement('div');m.className='entry__meta';m.textContent=c.kicker;
+  const n=document.createElement('div');n.className='entry__name';n.textContent=c.name;
+  const l=document.createElement('div');l.className='entry__latin';l.textContent=c.latin;
+  const t=document.createElement('div');t.className='entry__text';t.textContent=c.body;
+  e.appendChild(m);e.appendChild(n);e.appendChild(l);e.appendChild(t);
+  e.addEventListener('mouseenter',()=>activate(c.id));
+  legend.appendChild(e);
+});
+
+function activate(cid){
+  document.querySelectorAll('.star').forEach(s=>s.classList.toggle('active',s.dataset.c===cid));
+  document.querySelectorAll('.line').forEach(s=>s.classList.toggle('active',s.dataset.c===cid));
+  document.querySelectorAll('.entry').forEach(s=>s.classList.toggle('active',s.dataset.c===cid));
+  document.querySelectorAll('.lbl').forEach((s,i)=>{});
+}
+activate('c1');
+
+// Julian-ish date
+const d=new Date();
+document.getElementById('mjd').textContent='MJD '+Math.floor((d-new Date('1858-11-17'))/864e5);
+</script>
+</body>
+</html>
