@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>nerdy · herbarium</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.88em' font-size='85'%3E🌿%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Homemade+Apple&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--sheet:#ede4c8;--sheet-dark:#d4c79e;--edge:#b89d6a;--ink:#2a2416;--faded:#5a4e34;--dim:#8a7e5e;--sage:#6a7a48;--moss:#3e5028;--rust:#7c3a18;--violet:#6a4868;--type:'Special Elite',ui-monospace,monospace;--hand:'Homemade Apple',cursive;--serif:'EB Garamond',Georgia,serif}
+html,body{background:#c4b890;color:var(--ink);font-family:var(--serif);font-size:16px;line-height:1.55;min-height:100vh}
+body{background:
+  radial-gradient(ellipse at 10% 0%,#d4c79e 0%,#b8a878 80%) fixed;
+  padding:1.5rem 1rem 3rem}
+a{color:var(--rust);text-decoration:none;border-bottom:1px dotted var(--rust)}
+a:hover{color:var(--ink)}
+.cabinet{max-width:1100px;margin:0 auto}
+
+/* --- herbarium sheet --- */
+.sheet{background:#ede4c8;background-image:
+  radial-gradient(ellipse at 18% 22%,rgba(160,130,80,.18),transparent 38%),
+  radial-gradient(ellipse at 82% 65%,rgba(140,110,60,.15),transparent 35%),
+  radial-gradient(circle at 60% 15%,rgba(100,80,40,.2) 0,transparent 3%),
+  radial-gradient(circle at 30% 80%,rgba(100,80,40,.25) 0,transparent 2%);
+  border:1px solid var(--edge);
+  padding:2.4rem 2rem 1.6rem;
+  position:relative;
+  box-shadow:0 2px 0 rgba(60,40,20,.12),0 18px 40px -20px rgba(60,40,20,.35),inset 0 0 0 10px rgba(255,250,230,.3);
+  margin-bottom:1.8rem
+}
+.sheet::before{content:'';position:absolute;inset:8px;border:.5px solid rgba(60,40,20,.2);pointer-events:none}
+.sheet::after{content:'';position:absolute;inset:18px;border:.5px solid rgba(60,40,20,.15);pointer-events:none}
+
+/* --- tape strips on corners --- */
+.tape{position:absolute;width:90px;height:22px;background:rgba(230,210,150,.55);border:1px solid rgba(140,110,60,.25);box-shadow:0 1px 3px rgba(60,40,20,.15);pointer-events:none;opacity:.7}
+.tape.tl{top:-10px;left:18%;transform:rotate(-6deg)}
+.tape.tr{top:-10px;right:18%;transform:rotate(4deg)}
+
+/* --- masthead --- */
+.head{text-align:center;padding-bottom:1rem;margin-bottom:1.2rem;border-bottom:1.5px solid var(--ink);position:relative}
+.head__top{display:flex;justify-content:space-between;font-family:var(--type);font-size:.68rem;letter-spacing:.15em;color:var(--faded);text-transform:uppercase;margin-bottom:.6rem}
+.head__title{font-family:var(--serif);font-weight:400;font-style:italic;font-size:clamp(2rem,6vw,3.8rem);letter-spacing:.02em;line-height:1;color:var(--ink)}
+.head__title b{font-style:normal;font-weight:600}
+.head__sub{font-family:var(--serif);font-style:italic;font-size:1.1rem;color:var(--faded);margin-top:.4rem;letter-spacing:.04em}
+.head__motto{font-family:var(--hand);font-size:1.1rem;color:var(--violet);margin-top:.6rem;line-height:1.2}
+
+/* --- specimen plates (grid of pressed specimens) --- */
+.hd{font-family:var(--type);font-size:.78rem;letter-spacing:.3em;text-transform:uppercase;color:var(--moss);margin:1.6rem 0 .8rem;text-align:center}
+.hd::before,.hd::after{content:'· · ·';margin:0 .8rem;color:var(--dim);letter-spacing:.2em}
+
+.plates{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1.2rem}
+.plate{background:linear-gradient(160deg,#f4ecd2 0%,#e3d7b4 100%);border:1px solid rgba(60,40,20,.25);padding:0;position:relative;box-shadow:2px 3px 0 rgba(60,40,20,.08)}
+.plate::after{content:'';position:absolute;inset:4px;border:.5px solid rgba(60,40,20,.15);pointer-events:none}
+.plate__specimen{height:150px;padding:1rem 1rem .5rem;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;border-bottom:1px solid rgba(60,40,20,.25)}
+.plate__specimen svg{width:100%;height:100%;overflow:visible}
+.plate__shade{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 55%,transparent 30%,rgba(60,40,20,.12) 100%);pointer-events:none}
+.plate__label{background:#f6efd0;padding:.9rem 1rem 1rem;border-top:1px dashed rgba(60,40,20,.3);position:relative}
+.plate__accession{position:absolute;top:-9px;right:1rem;background:#ede4c8;padding:0 .45rem;font-family:var(--type);font-size:.66rem;letter-spacing:.15em;color:var(--rust);text-transform:uppercase}
+.plate__latin{font-family:var(--serif);font-weight:600;font-style:italic;font-size:1.2rem;letter-spacing:-.005em;line-height:1.15;color:var(--ink)}
+.plate__family{font-family:var(--type);font-size:.66rem;letter-spacing:.18em;color:var(--moss);text-transform:uppercase;margin-top:.1rem}
+.plate__common{font-family:var(--serif);font-weight:400;font-size:1rem;margin-top:.4rem;color:var(--faded);font-style:italic}
+.plate__note{font-family:var(--serif);font-size:.92rem;line-height:1.5;margin-top:.5rem;color:#2a2416}
+.plate__note em{color:var(--rust)}
+.plate__meta{font-family:var(--type);font-size:.62rem;letter-spacing:.08em;color:var(--dim);text-transform:uppercase;margin-top:.6rem;padding-top:.4rem;border-top:1px dotted rgba(60,40,20,.3);display:grid;grid-template-columns:1fr 1fr;gap:.2rem .8rem}
+.plate__meta b{color:var(--ink);font-weight:400;letter-spacing:0;font-family:var(--serif);font-style:italic;font-size:.82rem;text-transform:none}
+.plate__hand{font-family:var(--hand);font-size:1rem;color:var(--violet);margin-top:.5rem;line-height:1.15;transform:rotate(-1.2deg)}
+
+/* --- collection card (footer) --- */
+.collect{background:linear-gradient(160deg,#f6efd0 0%,#e8dcb8 100%);border:1px solid rgba(60,40,20,.3);padding:1.2rem 1.3rem;margin-top:2rem;display:grid;grid-template-columns:auto 1fr;gap:1.2rem;align-items:start}
+.collect__stamp{width:90px;height:90px;border:2px solid var(--rust);border-radius:50%;display:flex;align-items:center;justify-content:center;text-align:center;font-family:var(--type);font-size:.62rem;letter-spacing:.12em;color:var(--rust);text-transform:uppercase;padding:.4rem;line-height:1.2;transform:rotate(-6deg);flex-shrink:0}
+.collect__body h3{font-family:var(--serif);font-weight:600;font-size:1.3rem;font-style:italic;margin-bottom:.4rem}
+.collect__body p{font-size:.95rem;margin-bottom:.3rem}
+.collect__body .hand{font-family:var(--hand);font-size:1.1rem;color:var(--violet);margin-top:.4rem;line-height:1.2}
+
+.field{margin-top:1.2rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.4rem .9rem;font-family:var(--type);font-size:.68rem;letter-spacing:.1em;color:var(--dim);text-transform:uppercase;padding:.8rem 1rem;border:1px dashed rgba(60,40,20,.3);background:rgba(255,250,230,.3)}
+.field b{color:var(--ink);font-weight:400;display:block;font-family:var(--serif);font-size:.88rem;font-style:italic;letter-spacing:0;text-transform:none;margin-top:.05rem}
+
+.foot{text-align:center;margin-top:1.5rem;font-family:var(--type);font-size:.68rem;letter-spacing:.15em;color:var(--faded);text-transform:uppercase}
+
+@media(max-width:640px){
+  .sheet{padding:1.8rem 1.1rem 1.2rem}
+  .collect{grid-template-columns:1fr}
+  .collect__stamp{margin:0 auto}
+}
+</style>
+</head>
+<body>
+<div class="cabinet">
+
+<section class="sheet">
+  <span class="tape tl"></span><span class="tape tr"></span>
+
+  <header class="head">
+    <div class="head__top">
+      <span>Herbarium Enipense</span>
+      <span>Fol. 52 / 232</span>
+      <span id="date">—</span>
+    </div>
+    <h1 class="head__title"><b>Nerdy</b> — <i>Herbarium</i></h1>
+    <p class="head__sub">A pressed collection of small domestic obsessions</p>
+    <p class="head__motto">gathered in the basement, labelled in haste —</p>
+  </header>
+
+  <p class="hd">Specimens &middot; sheet I</p>
+
+  <div class="plates">
+
+    <article class="plate">
+      <div class="plate__specimen">
+        <svg viewBox="-80 -80 160 160">
+          <g stroke="#3e5028" stroke-width="1.2" fill="none" stroke-linecap="round">
+            <path d="M0,60 C-2,20 -2,0 0,-60"/>
+            <path d="M0,40 C-20,30 -30,10 -35,-10"/>
+            <path d="M0,30 C20,22 32,4 38,-14"/>
+            <path d="M0,15 C-16,8 -25,-6 -30,-24"/>
+            <path d="M0,5 C18,-2 28,-18 33,-36"/>
+            <path d="M0,-10 C-14,-16 -22,-28 -26,-42"/>
+            <path d="M0,-22 C14,-28 22,-40 25,-52"/>
+          </g>
+          <g fill="#5a6a38" opacity=".85">
+            <ellipse cx="-30" cy="-10" rx="9" ry="4" transform="rotate(-60 -30 -10)"/>
+            <ellipse cx="34" cy="-16" rx="9" ry="4" transform="rotate(60 34 -16)"/>
+            <ellipse cx="-26" cy="-28" rx="8" ry="3.5" transform="rotate(-70 -26 -28)"/>
+            <ellipse cx="28" cy="-38" rx="8" ry="3.5" transform="rotate(70 28 -38)"/>
+          </g>
+          <circle cx="0" cy="-62" r="4" fill="#7c3a18" stroke="#3e5028" stroke-width=".8"/>
+          <circle cx="0" cy="-70" r="2.5" fill="#c85a2a"/>
+        </svg>
+        <div class="plate__shade"></div>
+      </div>
+      <div class="plate__label">
+        <span class="plate__accession">№ i.01</span>
+        <h3 class="plate__latin">Termius enipii</h3>
+        <div class="plate__family">fam. Commandlineaceae</div>
+        <div class="plate__common">&mdash; the Keyboard Fern</div>
+        <p class="plate__note">A perennial of the macOS understory. Grows rapidly along keyboard layers, rarely requires mouse-light. Known call: <em>&ldquo;why move a hand thirty centimetres&rdquo;</em>.</p>
+        <div class="plate__meta"><span>Loc. <b>Domus Enipi</b></span><span>Alt. <b>desk level</b></span><span>Soil <b>chiclet</b></span><span>Coll. <b>G. B.</b></span></div>
+        <div class="plate__hand">pressed between two terminals.</div>
+      </div>
+    </article>
+
+    <article class="plate">
+      <div class="plate__specimen">
+        <svg viewBox="-80 -80 160 160">
+          <g stroke="#3e5028" stroke-width="1" fill="none">
+            <path d="M0,60 L0,-20"/>
+            <g stroke-linecap="round">
+              <path d="M0,50 C-24,44 -36,26 -34,10"/><path d="M0,50 C24,44 36,26 34,10"/>
+              <path d="M0,26 C-30,18 -44,-2 -44,-20"/><path d="M0,26 C30,18 44,-2 44,-20"/>
+              <path d="M0,2 C-24,-4 -36,-20 -34,-36"/><path d="M0,2 C24,-4 36,-20 34,-36"/>
+            </g>
+          </g>
+          <g fill="#5a6a38">
+            <ellipse cx="-22" cy="38" rx="10" ry="5" transform="rotate(-55 -22 38)"/>
+            <ellipse cx="22" cy="38" rx="10" ry="5" transform="rotate(55 22 38)"/>
+            <ellipse cx="-32" cy="8" rx="12" ry="5" transform="rotate(-60 -32 8)"/>
+            <ellipse cx="32" cy="8" rx="12" ry="5" transform="rotate(60 32 8)"/>
+            <ellipse cx="-25" cy="-22" rx="10" ry="4.5" transform="rotate(-65 -25 -22)"/>
+            <ellipse cx="25" cy="-22" rx="10" ry="4.5" transform="rotate(65 25 -22)"/>
+          </g>
+          <g fill="#6a4868">
+            <circle cx="0" cy="-30" r="3.5"/><circle cx="-6" cy="-32" r="3"/><circle cx="6" cy="-32" r="3"/>
+            <circle cx="0" cy="-38" r="3"/><circle cx="-3" cy="-36" r="2.5"/><circle cx="3" cy="-36" r="2.5"/>
+          </g>
+        </svg>
+        <div class="plate__shade"></div>
+      </div>
+      <div class="plate__label">
+        <span class="plate__accession">№ i.02</span>
+        <h3 class="plate__latin">Kubernetes overbuilticus</h3>
+        <div class="plate__family">fam. Clustraceae</div>
+        <div class="plate__common">&mdash; the Cluster Thistle</div>
+        <p class="plate__note">Aggressive domestic weed. Seeds itself into unused corners of the home network. Root system disproportionate to household needs. Known to whisper &ldquo;<em>gitops</em>&rdquo; when cut.</p>
+        <div class="plate__meta"><span>Loc. <b>home lab</b></span><span>Clutch <b>5 nodes</b></span><span>Hardiness <b>zone 3</b></span><span>Status <b>invasive</b></span></div>
+      </div>
+    </article>
+
+    <article class="plate">
+      <div class="plate__specimen">
+        <svg viewBox="-80 -80 160 160">
+          <g stroke="#3e5028" stroke-width="1" fill="none" stroke-linecap="round">
+            <path d="M-60,40 C-20,20 20,20 60,40"/>
+            <path d="M-40,20 L-20,-40"/><path d="M-10,8 L0,-50"/>
+            <path d="M20,12 L26,-40"/><path d="M40,22 L50,-30"/>
+          </g>
+          <g fill="#5a6a38">
+            <path d="M-22,-42 Q-20,-52 -18,-42 Q-20,-38 -22,-42Z"/>
+            <path d="M-2,-52 Q0,-62 2,-52 Q0,-48 -2,-52Z"/>
+            <path d="M24,-42 Q26,-52 28,-42 Q26,-38 24,-42Z"/>
+            <path d="M48,-32 Q50,-42 52,-32 Q50,-28 48,-32Z"/>
+          </g>
+          <g fill="#7c3a18">
+            <circle cx="-20" cy="-50" r="2"/><circle cx="0" cy="-60" r="2"/>
+            <circle cx="26" cy="-50" r="2"/><circle cx="50" cy="-40" r="2"/>
+          </g>
+        </svg>
+        <div class="plate__shade"></div>
+      </div>
+      <div class="plate__label">
+        <span class="plate__accession">№ i.03</span>
+        <h3 class="plate__latin">Connector mediatorius</h3>
+        <div class="plate__family">fam. Bridgeaceae</div>
+        <div class="plate__common">&mdash; MCP Bridgewort</div>
+        <p class="plate__note">A climbing species. Sends out runners between otherwise isolated patches: Slack, Jira, databases, Grafana, Tailscale. Single trunk, many heads. Flowers open under agent traffic.</p>
+        <div class="plate__meta"><span>Loc. <b>gateway</b></span><span>Flowers <b>many</b></span><span>Pollinator <b>LLMs</b></span><span>Propagation <b>rapid</b></span></div>
+      </div>
+    </article>
+
+    <article class="plate">
+      <div class="plate__specimen">
+        <svg viewBox="-80 -80 160 160">
+          <g shape-rendering="crispEdges">
+            <rect x="-30" y="-30" width="60" height="60" fill="#5a6a38"/>
+            <rect x="-30" y="-30" width="15" height="15" fill="#7c3a18"/>
+            <rect x="-15" y="-15" width="15" height="15" fill="#7c3a18"/>
+            <rect x="0" y="-30" width="15" height="15" fill="#7c3a18"/>
+            <rect x="15" y="-15" width="15" height="15" fill="#7c3a18"/>
+            <rect x="-30" y="0" width="15" height="15" fill="#6a4868"/>
+            <rect x="15" y="0" width="15" height="15" fill="#6a4868"/>
+            <rect x="-15" y="15" width="15" height="15" fill="#3e5028"/>
+            <rect x="0" y="15" width="15" height="15" fill="#3e5028"/>
+          </g>
+          <g stroke="#3e5028" stroke-width="1" fill="none">
+            <path d="M0,30 L0,60"/><path d="M-20,50 Q-10,40 0,45"/><path d="M20,50 Q10,40 0,45"/>
+          </g>
+        </svg>
+        <div class="plate__shade"></div>
+      </div>
+      <div class="plate__label">
+        <span class="plate__accession">№ i.04</span>
+        <h3 class="plate__latin">Tankus minutus</h3>
+        <div class="plate__family">fam. Pixelaceae</div>
+        <div class="plate__common">&mdash; Little Pixel-Moss</div>
+        <p class="plate__note">Low-growing, highly pixelated ground cover. Found on weekend couches. Destroys neighbouring friendships in deliberate low resolution. Aesthetic: <em>retro by choice</em>.</p>
+        <div class="plate__meta"><span>Loc. <b>couch</b></span><span>Res. <b>8&times;8</b></span><span>Season <b>weekend</b></span><span>Cover <b>full</b></span></div>
+      </div>
+    </article>
+
+    <article class="plate">
+      <div class="plate__specimen">
+        <svg viewBox="-80 -80 160 160">
+          <g stroke="#3e5028" stroke-width="1" fill="none">
+            <path d="M0,60 L0,-20"/>
+          </g>
+          <g fill="#5a6a38">
+            <ellipse cx="-18" cy="40" rx="14" ry="5" transform="rotate(-30 -18 40)"/>
+            <ellipse cx="18" cy="40" rx="14" ry="5" transform="rotate(30 18 40)"/>
+            <ellipse cx="-22" cy="14" rx="14" ry="5" transform="rotate(-35 -22 14)"/>
+            <ellipse cx="22" cy="14" rx="14" ry="5" transform="rotate(35 22 14)"/>
+          </g>
+          <!-- lightbulb flowers -->
+          <g>
+            <circle cx="-10" cy="-30" r="6" fill="#eac84a" stroke="#3e5028" stroke-width=".7"/>
+            <rect x="-12" y="-25" width="4" height="3" fill="#3e5028"/>
+            <circle cx="10" cy="-30" r="6" fill="#eac84a" stroke="#3e5028" stroke-width=".7"/>
+            <rect x="8" y="-25" width="4" height="3" fill="#3e5028"/>
+            <circle cx="0" cy="-46" r="6" fill="#eac84a" stroke="#3e5028" stroke-width=".7"/>
+            <rect x="-2" y="-41" width="4" height="3" fill="#3e5028"/>
+          </g>
+          <g stroke="#3e5028" stroke-width=".7" fill="none">
+            <path d="M0,-20 Q-5,-24 -10,-28"/><path d="M0,-20 Q5,-24 10,-28"/><path d="M0,-20 Q0,-30 0,-42"/>
+          </g>
+        </svg>
+        <div class="plate__shade"></div>
+      </div>
+      <div class="plate__label">
+        <span class="plate__accession">№ i.05</span>
+        <h3 class="plate__latin">Hassistans domesticus</h3>
+        <div class="plate__family">fam. Automataceae</div>
+        <div class="plate__common">&mdash; the Zigbee Nettle</div>
+        <p class="plate__note">A domestic perennial, YAML-rooted, zigbee-twined. Flowers as smart lights &mdash; the only blooms the household will accept. WAF reading near zero, yet specimen holds together through stubbornness alone.</p>
+        <div class="plate__meta"><span>Loc. <b>living room</b></span><span>Flowers <b>lamps</b></span><span>WAF <b>&lt; 1</b></span><span>Persist. <b>stubbornness</b></span></div>
+        <div class="plate__hand">&ldquo;only the lights, love.&rdquo;</div>
+      </div>
+    </article>
+
+    <article class="plate">
+      <div class="plate__specimen">
+        <svg viewBox="-80 -80 160 160">
+          <g stroke="#3e5028" stroke-width="1" fill="none">
+            <path d="M0,60 L0,-30"/>
+          </g>
+          <g fill="#5a6a38">
+            <path d="M0,40 Q-30,28 -30,10 Q-10,22 0,40Z"/><path d="M0,40 Q30,28 30,10 Q10,22 0,40Z"/>
+            <path d="M0,18 Q-34,6 -34,-14 Q-12,-2 0,18Z"/><path d="M0,18 Q34,6 34,-14 Q12,-2 0,18Z"/>
+            <path d="M0,-4 Q-28,-16 -28,-36 Q-8,-20 0,-4Z"/><path d="M0,-4 Q28,-16 28,-36 Q8,-20 0,-4Z"/>
+          </g>
+          <!-- musical flower -->
+          <g fill="#6a4868" stroke="#3e5028" stroke-width=".6">
+            <circle cx="-3" cy="-40" r="5"/>
+            <circle cx="6" cy="-48" r="5"/>
+            <path d="M2,-40 L2,-58" stroke-width="1" fill="none"/>
+            <path d="M11,-48 L11,-56" stroke-width="1" fill="none"/>
+          </g>
+        </svg>
+        <div class="plate__shade"></div>
+      </div>
+      <div class="plate__label">
+        <span class="plate__accession">№ i.06</span>
+        <h3 class="plate__latin">Fuzzus instrumentalis</h3>
+        <div class="plate__family">fam. Mazuaceae</div>
+        <div class="plate__common">&mdash; the Stoner Fern</div>
+        <p class="plate__note">Basement-dwelling. Tall, drifting, no visible lyrics. Produces long low tones at dusk; neighbours have opinions. Can be identified by the accompaniment of drums and the blunt refusal of vocals.</p>
+        <div class="plate__meta"><span>Loc. <b>basement</b></span><span>Tempo <b>slow</b></span><span>Key <b>D</b></span><span>Band <b>Mazu</b></span></div>
+      </div>
+    </article>
+
+    <article class="plate">
+      <div class="plate__specimen">
+        <svg viewBox="-80 -80 160 160">
+          <g stroke="#3e5028" stroke-width="1" fill="none" stroke-linecap="round">
+            <path d="M0,60 C-4,10 4,-20 0,-60"/>
+          </g>
+          <g fill="#5a6a38">
+            <path d="M0,40 C-30,32 -40,8 -30,-10 C-12,10 -2,28 0,40Z"/>
+            <path d="M0,25 C30,18 40,-6 30,-24 C12,-4 2,14 0,25Z"/>
+            <path d="M0,6 C-28,0 -38,-22 -28,-42 C-10,-22 -2,-4 0,6Z"/>
+            <path d="M0,-14 C26,-18 36,-40 26,-58 C8,-38 2,-22 0,-14Z"/>
+          </g>
+          <!-- sawdust particles -->
+          <g fill="#7c5a28" opacity=".7">
+            <circle cx="-40" cy="50" r="1.5"/><circle cx="-20" cy="52" r="1"/>
+            <circle cx="30" cy="48" r="1.5"/><circle cx="48" cy="52" r="1"/>
+            <circle cx="-30" cy="44" r="1"/><circle cx="10" cy="50" r="1"/>
+          </g>
+        </svg>
+        <div class="plate__shade"></div>
+      </div>
+      <div class="plate__label">
+        <span class="plate__accession">№ i.07</span>
+        <h3 class="plate__latin">Dolo domesticus</h3>
+        <div class="plate__family">fam. Workshopaceae</div>
+        <div class="plate__common">&mdash; the Sawdust Oak</div>
+        <p class="plate__note">A slow-growing hardwood of the basement. Propagates by shavings; every new chisel or plane is classified by the cultivator as <em>investment</em>. Expected flowering: shelves, eventually.</p>
+        <div class="plate__meta"><span>Loc. <b>basement</b></span><span>Age <b>new</b></span><span>Ambition <b>high</b></span><span>Output <b>sawdust</b></span></div>
+      </div>
+    </article>
+
+    <article class="plate">
+      <div class="plate__specimen">
+        <svg viewBox="-80 -80 160 160">
+          <g stroke="#3e5028" stroke-width="1" fill="none" stroke-linecap="round">
+            <path d="M-40,60 Q-20,0 -12,-50"/>
+            <path d="M0,60 Q0,0 0,-60"/>
+            <path d="M40,60 Q20,0 12,-50"/>
+          </g>
+          <g fill="#5a6a38">
+            <ellipse cx="-16" cy="-30" rx="6" ry="10" transform="rotate(-15 -16 -30)"/>
+            <ellipse cx="0" cy="-40" rx="6" ry="10"/>
+            <ellipse cx="16" cy="-30" rx="6" ry="10" transform="rotate(15 16 -30)"/>
+          </g>
+          <g fill="#7c3a18">
+            <circle cx="-16" cy="-50" r="3"/><circle cx="0" cy="-58" r="3"/><circle cx="16" cy="-50" r="3"/>
+          </g>
+        </svg>
+        <div class="plate__shade"></div>
+      </div>
+      <div class="plate__label">
+        <span class="plate__accession">№ i.08</span>
+        <h3 class="plate__latin">Captura minima</h3>
+        <div class="plate__family">fam. Productivityaceae</div>
+        <div class="plate__common">&mdash; Plain Pennywort (TBD)</div>
+        <p class="plate__note">Modest, unfinished. Three stems: captures, projects, tasks. No bells, no whistles, no crest. Scheduled to bloom in the next season; until then, specimen remains in press.</p>
+        <div class="plate__meta"><span>Loc. <b>notebook</b></span><span>Stage <b>seedling</b></span><span>Bells <b>none</b></span><span>Whistles <b>none</b></span></div>
+      </div>
+    </article>
+  </div>
+
+  <section class="collect">
+    <div class="collect__stamp">Hb. Enip.<br>Ex Coll.<br>G. Bazuin<br>52°N</div>
+    <div class="collect__body">
+      <h3>Collector's memorandum</h3>
+      <p>All specimens pressed between a laptop lid and a basement workbench during ordinary household conditions. Three small co-collectors (kids) occasionally rearrange the labels. Pressed, dated, filed.</p>
+      <p class="hand">nothing here was asked for. it was just noticed.</p>
+    </div>
+  </section>
+
+  <div class="field">
+    <div>Collector <b>G. Bazuin</b></div>
+    <div>Determined by <b>self</b></div>
+    <div>Region <b>NL · 52°N</b></div>
+    <div>Conditions <b>indoor, indirect</b></div>
+    <div>Notes at <b>nerdy.nl</b></div>
+    <div>Correspondence <b><a href="https://github.com/enipo">github.com/enipo</a></b></div>
+  </div>
+
+  <p class="foot">&mdash; folio 52 &middot; nerdy.nl &middot; <span id="year"></span> &mdash;</p>
+</section>
+
+</div>
+
+<script>
+document.getElementById('date').textContent=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}).toUpperCase();
+document.getElementById('year').textContent=new Date().getFullYear();
+</script>
+</body>
+</html>

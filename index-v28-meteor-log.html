@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>nerdy · observer's log</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.88em' font-size='85'%3E☄%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600&family=Spectral:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--sky:#050814;--sky2:#0a1228;--ink:#e8e4d8;--dim:#6a7090;--trace:#8ab0ff;--flash:#fff4c8;--fire:#ffb870;--log:#c8e0ff;--mono:'JetBrains Mono',ui-monospace,monospace;--serif:'Spectral',Georgia,serif}
+html,body{background:var(--sky);color:var(--ink);font-family:var(--mono);font-size:14px;line-height:1.6;min-height:100vh;overflow-x:hidden}
+body{background:radial-gradient(ellipse at 20% 0%,#15204a 0%,#080d1e 40%,#02030a 100%) fixed;position:relative}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(1px 1px at 23% 14%,#fff 50%,transparent 100%),radial-gradient(1px 1px at 67% 28%,#e8e4ff 50%,transparent 100%),radial-gradient(1px 1px at 82% 61%,#fff 50%,transparent 100%),radial-gradient(2px 2px at 44% 82%,#fff 50%,transparent 100%),radial-gradient(1px 1px at 12% 48%,#cbd6ff 50%,transparent 100%),radial-gradient(1px 1px at 91% 9%,#fff 50%,transparent 100%),radial-gradient(1px 1px at 34% 67%,#fff 50%,transparent 100%),radial-gradient(2px 2px at 56% 33%,#fff 50%,transparent 100%),radial-gradient(1px 1px at 77% 89%,#e8e4ff 50%,transparent 100%),radial-gradient(1px 1px at 5% 72%,#fff 50%,transparent 100%),radial-gradient(1px 1px at 49% 5%,#fff 50%,transparent 100%);background-size:100% 100%;pointer-events:none;opacity:.7}
+a{color:var(--trace);text-decoration:none;border-bottom:1px dotted var(--trace)}
+a:hover{color:var(--flash)}
+.wrap{max-width:1040px;margin:0 auto;padding:2rem 1.25rem 4rem;position:relative;z-index:1}
+
+/* --- header --- */
+.hdr{border-bottom:1px solid rgba(200,210,255,.15);padding-bottom:1.2rem;margin-bottom:1.6rem;display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:end}
+.hdr__title{font-family:var(--serif);font-size:clamp(2rem,5vw,3.4rem);font-weight:400;letter-spacing:.01em;line-height:1;color:var(--ink)}
+.hdr__title em{font-style:italic;color:var(--trace);font-weight:400}
+.hdr__sub{color:var(--dim);font-size:.8rem;letter-spacing:.15em;text-transform:uppercase;margin-top:.4rem}
+.hdr__meta{text-align:right;font-size:.7rem;line-height:1.5;color:var(--dim);letter-spacing:.08em}
+.hdr__meta b{color:var(--log);font-weight:400}
+
+/* --- sky strip with meteor trails --- */
+.sky-strip{position:relative;height:140px;margin-bottom:1.6rem;border:1px solid rgba(200,210,255,.15);overflow:hidden;background:linear-gradient(180deg,#030512 0%,#0a122c 100%)}
+.sky-strip .grid{position:absolute;inset:0;background:linear-gradient(90deg,rgba(200,210,255,.06) 1px,transparent 1px) 0 0/8.33% 100%,linear-gradient(180deg,rgba(200,210,255,.06) 1px,transparent 1px) 0 0/100% 25%}
+.sky-strip .coord{position:absolute;font-size:.6rem;color:var(--dim);letter-spacing:.1em;padding:4px 6px;pointer-events:none}
+.sky-strip .coord.tl{top:0;left:0}
+.sky-strip .coord.tr{top:0;right:0}
+.sky-strip .coord.bl{bottom:0;left:0}
+.sky-strip .coord.br{bottom:0;right:0}
+.meteor{position:absolute;width:120px;height:1.5px;background:linear-gradient(90deg,transparent,var(--trace),var(--flash));border-radius:50%;filter:drop-shadow(0 0 3px var(--flash));opacity:0}
+.m1{top:22%;left:-120px;transform:rotate(18deg);animation:streak 7s linear infinite;animation-delay:.5s}
+.m2{top:64%;left:-120px;transform:rotate(12deg);animation:streak 11s linear infinite;animation-delay:3s;width:160px}
+.m3{top:38%;left:-120px;transform:rotate(24deg);animation:streak 9s linear infinite;animation-delay:6s;width:90px}
+@keyframes streak{
+  0%{opacity:0;transform:translate(0,0) rotate(18deg)}
+  5%{opacity:1}
+  85%{opacity:.8}
+  100%{opacity:0;transform:translate(140vw,40vh) rotate(18deg)}
+}
+.star{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;box-shadow:0 0 4px #fff}
+
+/* --- log entries --- */
+.log-wrap{display:grid;grid-template-columns:180px 1fr;gap:1rem 1.5rem}
+.log-side{font-size:.72rem;letter-spacing:.1em;color:var(--dim);line-height:1.8;border-right:1px dashed rgba(200,210,255,.15);padding-right:1rem;text-transform:uppercase;position:sticky;top:1rem;align-self:start}
+.log-side b{color:var(--log);font-weight:400;display:block}
+.log-side .sep{height:1px;background:rgba(200,210,255,.15);margin:.6rem 0}
+
+.entry{border-left:2px solid rgba(200,210,255,.15);padding:0 0 1.8rem 1.2rem;position:relative}
+.entry::before{content:'●';position:absolute;left:-7px;top:.2rem;color:var(--flash);font-size:.7rem;text-shadow:0 0 6px var(--flash)}
+.entry--fire::before{color:var(--fire);text-shadow:0 0 6px var(--fire)}
+.entry--faint::before{color:var(--dim);text-shadow:none}
+.entry__ts{font-size:.7rem;color:var(--dim);letter-spacing:.12em;margin-bottom:.1rem}
+.entry__ts .mag{color:var(--flash);margin-left:.6rem}
+.entry__ts .mag--fire{color:var(--fire)}
+.entry__ts .mag--faint{color:var(--dim)}
+.entry__hd{font-family:var(--serif);font-size:1.35rem;font-weight:400;color:var(--ink);margin:.1rem 0 .25rem;letter-spacing:.005em}
+.entry__hd em{color:var(--trace);font-style:italic}
+.entry__body{color:#c8ceda;font-family:var(--serif);font-size:1rem;line-height:1.55}
+.entry__body p{margin-bottom:.55rem}
+.entry__coord{font-size:.66rem;color:var(--dim);letter-spacing:.08em;margin-top:.35rem}
+.entry__coord span{color:var(--log)}
+
+/* --- watchlist --- */
+.watch{margin-top:2rem;border:1px solid rgba(200,210,255,.15);padding:1.1rem 1.2rem}
+.watch h3{font-family:var(--serif);font-weight:400;font-size:1.15rem;margin-bottom:.6rem;letter-spacing:.02em;color:var(--log)}
+.watch h3::before{content:'▲ ';color:var(--fire);font-size:.7em}
+.watch ul{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.5rem .8rem;font-size:.85rem;font-family:var(--serif)}
+.watch li{padding-left:1rem;position:relative;color:#c8ceda}
+.watch li::before{content:'·';position:absolute;left:.2rem;color:var(--trace)}
+.watch li b{color:var(--ink);font-weight:600}
+
+.foot{margin-top:2rem;font-size:.7rem;letter-spacing:.1em;color:var(--dim);text-transform:uppercase;text-align:center;padding-top:1rem;border-top:1px solid rgba(200,210,255,.15)}
+.foot b{color:var(--log);font-weight:400}
+
+@media(max-width:720px){
+  .log-wrap{grid-template-columns:1fr}
+  .log-side{border-right:none;border-bottom:1px dashed rgba(200,210,255,.15);padding:0 0 .8rem;position:static}
+  .hdr{grid-template-columns:1fr}
+  .hdr__meta{text-align:left}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hdr">
+  <div>
+    <div class="hdr__title">observer's <em>log</em></div>
+    <div class="hdr__sub">nerdy.nl · a record of transits &middot; anomalies &middot; small fires</div>
+  </div>
+  <div class="hdr__meta">
+    STATION <b>domus-enipi</b><br>
+    COORDS <b>52.23°N · 6.89°E</b><br>
+    SEEING <b>good · Bortle 4</b><br>
+    DATE <b id="date">—</b>
+  </div>
+</header>
+
+<div class="sky-strip">
+  <div class="grid"></div>
+  <span class="coord tl">RA 00<sup>h</sup></span>
+  <span class="coord tr">RA 12<sup>h</sup></span>
+  <span class="coord bl">DEC −30°</span>
+  <span class="coord br">DEC +60°</span>
+  <div class="star" style="top:18%;left:12%"></div>
+  <div class="star" style="top:44%;left:38%;width:1px;height:1px"></div>
+  <div class="star" style="top:72%;left:62%;width:3px;height:3px"></div>
+  <div class="star" style="top:30%;left:84%"></div>
+  <div class="star" style="top:88%;left:22%;width:1px;height:1px"></div>
+  <div class="meteor m1"></div>
+  <div class="meteor m2"></div>
+  <div class="meteor m3"></div>
+</div>
+
+<section class="log-wrap">
+  <aside class="log-side">
+    <b>MAG. KEY</b>
+    &bull; bright<br>
+    <span style="color:var(--fire)">&bull;</span> fireball<br>
+    <span style="color:var(--dim)">&bull;</span> faint
+    <div class="sep"></div>
+    <b>FILTERS</b>
+    none<br>
+    zero lorem<br>
+    zero coming&nbsp;soon
+    <div class="sep"></div>
+    <b>INSTRUMENT</b>
+    10" tabby<br>
+    keyboard<br>
+    stubbornness
+  </aside>
+
+  <div>
+    <article class="entry entry--fire">
+      <div class="entry__ts">23:41:07 UTC <span class="mag mag--fire">MAG −4.2 · fireball</span></div>
+      <h2 class="entry__hd"><em>Nerdy Terminal</em> ignites over macOS</h2>
+      <div class="entry__body">
+        <p>A keyboard-first terminal manager crosses the field at high velocity. Multiple sessions visible simultaneously; observer reports no mouse activity at any point in transit.</p>
+        <p>Quote recorded in margin of log: <em>&ldquo;why move a hand thirty centimetres when I could press two keys.&rdquo;</em></p>
+      </div>
+      <div class="entry__coord">RA <span>09<sup>h</sup> 12<sup>m</sup></span> · DEC <span>+34° 18′</span> · trail 2.1s</div>
+    </article>
+
+    <article class="entry">
+      <div class="entry__ts">22:58:31 UTC <span class="mag">MAG −2.0 · bright</span></div>
+      <h2 class="entry__hd"><em>MCP Gateway</em> enters stable orbit</h2>
+      <div class="entry__body">
+        <p>A bridge object between AI agents and legacy constellations (Slack, Jira, databases, Grafana, Tailscale). Previously suspected of being a moon; now confirmed as its own body.</p>
+      </div>
+      <div class="entry__coord">RA <span>14<sup>h</sup> 03<sup>m</sup></span> · DEC <span>+12° 44′</span> · apparent diameter: large</div>
+    </article>
+
+    <article class="entry entry--fire">
+      <div class="entry__ts">21:12:44 UTC <span class="mag mag--fire">MAG −5.8 · persistent train</span></div>
+      <h2 class="entry__hd">Kubernetes firmament expands, again</h2>
+      <div class="entry__body">
+        <p>Observer adds another cluster to a control plane widely considered already excessive. When questioned, stares into middle distance, whispers <em>GitOps</em>, resumes typing.</p>
+      </div>
+      <div class="entry__coord">RA <span>03<sup>h</sup> 47<sup>m</sup></span> · DEC <span>−08° 22′</span> · smoke train 11s</div>
+    </article>
+
+    <article class="entry">
+      <div class="entry__ts">20:30:12 UTC <span class="mag">MAG +1.4</span></div>
+      <h2 class="entry__hd"><em>Pixel Tanks</em> — streaks confirmed</h2>
+      <div class="entry__body">
+        <p>Top-down tank combat observed in low resolution. Visible only to those willing to squint. Friends reported lost during transit.</p>
+      </div>
+      <div class="entry__coord">RA <span>18<sup>h</sup> 55<sup>m</sup></span> · DEC <span>+41° 02′</span></div>
+    </article>
+
+    <article class="entry entry--faint">
+      <div class="entry__ts">19:04:55 UTC <span class="mag mag--faint">MAG +4.9 · faint</span></div>
+      <h2 class="entry__hd">Home Assistant · WAF reading near detection limit</h2>
+      <div class="entry__body">
+        <p>Long-term monitoring of the <em>Wife Acceptance Factor</em> continues to show low output. System holds together by zigbee and stubbornness. Smart lights remain the only feature with a WAF above zero.</p>
+      </div>
+      <div class="entry__coord">RA <span>22<sup>h</sup> 10<sup>m</sup></span> · DEC <span>+01° 33′</span> · variable</div>
+    </article>
+
+    <article class="entry">
+      <div class="entry__ts">18:22:09 UTC <span class="mag">MAG 0.0 · steady</span></div>
+      <h2 class="entry__hd">Mazu · drones detected in the basement band</h2>
+      <div class="entry__body">
+        <p>Instrumental stoner emissions recorded from domestic rehearsal space. The kind of wavelength where nobody asks about the lyrics. Neighbours have opinions.</p>
+      </div>
+      <div class="entry__coord">RA <span>06<sup>h</sup> 19<sup>m</sup></span> · DEC <span>−22° 08′</span></div>
+    </article>
+
+    <article class="entry entry--faint">
+      <div class="entry__ts">17:00:00 UTC <span class="mag mag--faint">—</span></div>
+      <h2 class="entry__hd">Workshop · sawdust clouds, continuing</h2>
+      <div class="entry__body">
+        <p>Basement observatory converted gradually into woodworking facility. Tool purchases logged, each justified as &ldquo;investment.&rdquo; Three small co-observers (kids) report intense interest in the smart lights, polite indifference to the clusters.</p>
+      </div>
+      <div class="entry__coord">RA <span>—</span> · DEC <span>—</span></div>
+    </article>
+  </div>
+</section>
+
+<section class="watch">
+  <h3>Watchlist · predicted transits</h3>
+  <ul>
+    <li><b>TBD</b> — captures, projects, tasks. No bells. No whistles.</li>
+    <li><b>More GitOps</b> — expected within 7 days.</li>
+    <li><b>Another tool</b> — expected, always.</li>
+    <li><b>Perseid season</b> — basement rehearsal peaks mid-August.</li>
+  </ul>
+</section>
+
+<footer class="foot">
+  <b>nerdy.nl</b> · log ends · next watch in <b>~8h</b> · <a href="https://github.com/enipo">github.com/enipo</a>
+</footer>
+
+</div>
+
+<script>
+document.getElementById('date').textContent=new Date().toISOString().slice(0,10).replace(/-/g,'·');
+// extra stars
+var strip=document.querySelector('.sky-strip');
+for(var i=0;i<22;i++){
+  var s=document.createElement('div');s.className='star';
+  s.style.top=(Math.random()*95)+'%';
+  s.style.left=(Math.random()*100)+'%';
+  s.style.opacity=(.3+Math.random()*.7);
+  var sz=Math.random()<.2?2:1;s.style.width=sz+'px';s.style.height=sz+'px';
+  strip.appendChild(s);
+}
+</script>
+</body>
+</html>

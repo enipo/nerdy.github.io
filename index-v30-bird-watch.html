@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>nerdy · field guide</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.88em' font-size='85'%3E🐦%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Overpass+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--paper:#f2ecd8;--paper2:#e3d9ba;--ink:#2a2a22;--rust:#8a3820;--moss:#3a5a2a;--sage:#788a5a;--lake:#3a6a7a;--dim:#70685a;--mono:'Overpass Mono',monospace;--serif:'Libre Caslon Text',Georgia,serif;--hand:'Caveat',cursive}
+html,body{background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:15px;line-height:1.55;min-height:100vh}
+body{background:radial-gradient(ellipse at 10% 0%,#f6efd8 0%,#e3d9ba 80%) fixed;padding:1.5rem 1rem 3rem}
+a{color:var(--rust);text-decoration:underline dotted;text-underline-offset:2px}
+.guide{max-width:1100px;margin:0 auto}
+
+/* --- cover --- */
+.cover{background:linear-gradient(165deg,#f6efd8 0%,#e3d9ba 70%,#cfc192 100%);border:1px solid rgba(42,42,34,.25);padding:1.8rem 1.6rem 1.4rem;position:relative;box-shadow:0 2px 0 rgba(42,42,34,.06),0 12px 30px -16px rgba(42,42,34,.3);margin-bottom:1.4rem}
+.cover::before{content:'';position:absolute;inset:8px;border:1px dashed rgba(42,42,34,.25);pointer-events:none}
+.cover__top{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;color:var(--dim);text-transform:uppercase;margin-bottom:.4rem}
+.cover__title{font-family:var(--serif);font-size:clamp(2rem,5.5vw,3.8rem);font-weight:700;letter-spacing:-.005em;line-height:1;color:var(--ink)}
+.cover__title i{font-weight:400;color:var(--moss)}
+.cover__sub{font-family:var(--serif);font-style:italic;font-size:1.05rem;color:var(--rust);margin-top:.3rem}
+.cover__note{font-family:var(--hand);font-size:1.4rem;color:var(--lake);transform:rotate(-3deg);position:absolute;right:2.5rem;bottom:1rem;line-height:1.1;text-align:center}
+
+.cover__bar{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.8rem;margin-top:1.2rem;padding-top:.9rem;border-top:1px solid rgba(42,42,34,.2);font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.cover__bar b{color:var(--ink);font-weight:600;display:block;font-size:.78rem}
+
+/* --- how to use --- */
+.howto{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1.4rem}
+.howto__card{background:linear-gradient(165deg,#f6efd8 0%,#e8dfc0 100%);border:1px solid rgba(42,42,34,.25);padding:1rem 1.2rem;position:relative}
+.howto__card h3{font-family:var(--serif);font-weight:700;font-size:1rem;letter-spacing:.15em;text-transform:uppercase;color:var(--rust);margin-bottom:.5rem;padding-bottom:.3rem;border-bottom:1px dotted rgba(42,42,34,.3)}
+.howto__card p{font-size:.9rem;margin-bottom:.4rem}
+.howto__card ul{list-style:none;font-family:var(--mono);font-size:.78rem;line-height:1.8;color:var(--dim)}
+.howto__card ul b{color:var(--ink);font-weight:600}
+.howto__key{display:inline-block;background:var(--ink);color:var(--paper);padding:1px 6px;border-radius:3px;font-size:.7rem;margin-right:.4rem;font-family:var(--mono)}
+.howto__key--rust{background:var(--rust)}
+.howto__key--moss{background:var(--moss)}
+.howto__key--lake{background:var(--lake)}
+
+/* --- species plate --- */
+.section-hd{font-family:var(--serif);font-weight:700;font-size:.85rem;letter-spacing:.35em;text-transform:uppercase;color:var(--moss);margin:2rem 0 .6rem;padding-bottom:.2rem;display:flex;align-items:center;gap:.8rem}
+.section-hd::before,.section-hd::after{content:'';flex:1;height:1px;background:rgba(42,42,34,.35)}
+
+.species{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:1.2rem}
+.card{background:#f6f0d8;border:1px solid rgba(42,42,34,.25);padding:0;position:relative;box-shadow:2px 3px 0 rgba(42,42,34,.06)}
+.card__plate{background:linear-gradient(165deg,#eae2bf 0%,#d4c89a 100%);padding:1rem 1.1rem;border-bottom:1px solid rgba(42,42,34,.3);position:relative;min-height:130px;overflow:hidden}
+.card__plate::after{content:'';position:absolute;bottom:0;left:0;right:0;height:14px;background:linear-gradient(180deg,transparent,rgba(42,42,34,.08));pointer-events:none}
+.card__silhouette{position:absolute;right:.6rem;top:.4rem;font-size:3.8rem;line-height:1;filter:grayscale(1) opacity(.65)}
+.card__nr{position:absolute;top:.55rem;left:.8rem;font-family:var(--mono);font-size:.62rem;letter-spacing:.2em;color:var(--dim);text-transform:uppercase}
+.card__common{font-family:var(--serif);font-weight:700;font-size:1.35rem;letter-spacing:-.005em;margin-top:1.8rem;line-height:1.1}
+.card__latin{font-family:var(--serif);font-style:italic;color:var(--moss);font-size:.9rem;margin-top:.1rem}
+.card__tag{display:inline-block;font-family:var(--mono);font-size:.58rem;letter-spacing:.14em;padding:2px 6px;border:1px solid currentColor;border-radius:2px;margin-top:.5rem;text-transform:uppercase}
+.card__tag--c{color:var(--rust)}.card__tag--u{color:var(--lake)}.card__tag--r{color:var(--moss)}
+.card__body{padding:.85rem 1.1rem 1rem;font-size:.92rem}
+.card__body p{margin-bottom:.4rem}
+.card__body p:last-child{margin-bottom:0}
+.card__body em{color:var(--rust);font-style:italic}
+.card__meta{display:grid;grid-template-columns:repeat(3,1fr);gap:.4rem;margin:.6rem 0 .1rem;padding-top:.6rem;border-top:1px dotted rgba(42,42,34,.3);font-family:var(--mono);font-size:.64rem;letter-spacing:.06em;color:var(--dim);text-transform:uppercase}
+.card__meta b{color:var(--ink);font-weight:600;display:block;font-size:.7rem}
+.card__hand{font-family:var(--hand);font-size:1.15rem;color:var(--lake);transform:rotate(-2deg);margin-top:.4rem;padding-left:.2rem;line-height:1.15}
+
+/* --- life list --- */
+.list-box{background:linear-gradient(165deg,#f6efd8 0%,#e3d9ba 100%);border:1px solid rgba(42,42,34,.25);padding:1.1rem 1.3rem;margin-top:2rem}
+.list-box h3{font-family:var(--serif);font-weight:700;font-size:.85rem;letter-spacing:.3em;text-transform:uppercase;color:var(--rust);margin-bottom:.7rem}
+.list-box table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:.78rem}
+.list-box th,.list-box td{padding:.45rem .5rem;text-align:left;border-bottom:1px dotted rgba(42,42,34,.3)}
+.list-box th{font-size:.65rem;letter-spacing:.15em;color:var(--dim);text-transform:uppercase;font-weight:600}
+.list-box tr:last-child td{border-bottom:none}
+.list-box td.hand{font-family:var(--hand);font-size:1rem;color:var(--lake)}
+.list-box td.tick{color:var(--moss);font-weight:600}
+
+.foot{margin-top:2rem;display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;color:var(--dim);text-transform:uppercase;padding-top:1rem;border-top:1px solid rgba(42,42,34,.3);flex-wrap:wrap;gap:.6rem}
+.foot b{color:var(--ink);font-weight:500}
+
+@media(max-width:720px){
+  .howto{grid-template-columns:1fr}
+  .cover__note{position:static;transform:rotate(-2deg);margin-top:.8rem}
+  .cover__title{font-size:2.3rem}
+}
+</style>
+</head>
+<body>
+<div class="guide">
+
+<section class="cover">
+  <div class="cover__top"><span>Vol. I</span><span>nerdy.nl</span><span id="date">—</span></div>
+  <h1 class="cover__title">a <i>field&nbsp;guide</i> to<br>the Nerdy observer</h1>
+  <p class="cover__sub">Habits · Habitats · Call Notes</p>
+  <div class="cover__note">seen best<br>at dusk</div>
+  <div class="cover__bar">
+    <div><b>Range</b> Netherlands · 52°N</div>
+    <div><b>Habitat</b> basements, terminals</div>
+    <div><b>Diet</b> coffee, YAML, solder</div>
+    <div><b>Status</b> least concern</div>
+  </div>
+</section>
+
+<section class="howto">
+  <div class="howto__card">
+    <h3>How to use this guide</h3>
+    <p>Each plate below describes a species of <em>nerdy activity</em> observed in the wild at domus-enipi. Note the call, the plumage, and the likely habitat.</p>
+    <ul>
+      <li><span class="howto__key howto__key--rust">C</span> common &mdash; daily sightings</li>
+      <li><span class="howto__key howto__key--lake">U</span> uncommon &mdash; weekly</li>
+      <li><span class="howto__key howto__key--moss">R</span> rare &mdash; seasonal</li>
+    </ul>
+  </div>
+  <div class="howto__card">
+    <h3>Observer's notes</h3>
+    <p>Most specimens are found in the keyboard layer of a Mac laptop. The rest are audible from the basement, usually as drum fills or as the whirring of small cooling fans.</p>
+    <p style="font-family:var(--hand);font-size:1.25rem;color:var(--lake);margin-top:.4rem;transform:rotate(-1deg);line-height:1.15">
+      tip &mdash; do not move the mouse. the subject will vanish.
+    </p>
+  </div>
+</section>
+
+<h2 class="section-hd">Plate I · Workbench species</h2>
+
+<div class="species">
+
+  <article class="card">
+    <div class="card__plate">
+      <span class="card__nr">№ 001</span>
+      <span class="card__silhouette">⌨</span>
+      <h3 class="card__common">Keyboard Warbler</h3>
+      <p class="card__latin">Termius enipii</p>
+      <span class="card__tag card__tag--c">common &middot; year-round</span>
+    </div>
+    <div class="card__body">
+      <p>A small but determined species. Known for its rapid, clattering call (&ldquo;hjkl hjkl&rdquo;) and its aversion to the mouse. Plumage: chiclet, dark grey.</p>
+      <p><em>&ldquo;why move a hand thirty centimetres when i could press two keys,&rdquo;</em> the typical call, recorded at dawn.</p>
+      <div class="card__meta"><div><b>Habitat</b>macOS</div><div><b>Migration</b>none</div><div><b>Flock size</b>9 tabs</div></div>
+      <div class="card__hand">builds: nerdy terminal</div>
+    </div>
+  </article>
+
+  <article class="card">
+    <div class="card__plate">
+      <span class="card__nr">№ 002</span>
+      <span class="card__silhouette">☁</span>
+      <h3 class="card__common">Cluster Kestrel</h3>
+      <p class="card__latin">Kubernetes overbuilticus</p>
+      <span class="card__tag card__tag--u">uncommon &middot; nocturnal</span>
+    </div>
+    <div class="card__body">
+      <p>Hovers above a self-made control plane of several clusters too many. Best identified by the hunting cry <em>&ldquo;gitops!&rdquo;</em> and a sudden stillness as the observer stares into middle distance.</p>
+      <div class="card__meta"><div><b>Habitat</b>home-lab</div><div><b>Clutch</b>5 nodes</div><div><b>Status</b>wildly overbuilt</div></div>
+      <div class="card__hand">&ldquo;yes, more clusters.&rdquo;</div>
+    </div>
+  </article>
+
+  <article class="card">
+    <div class="card__plate">
+      <span class="card__nr">№ 003</span>
+      <span class="card__silhouette">⌘</span>
+      <h3 class="card__common">Gateway Flycatcher</h3>
+      <p class="card__latin">Connector mediatorius</p>
+      <span class="card__tag card__tag--c">common &middot; diurnal</span>
+    </div>
+    <div class="card__body">
+      <p>A perching species that connects flocks across otherwise hostile territory. Feeds on messages from Slack, Jira, databases, Grafana, Tailscale. Rarely seen alone.</p>
+      <div class="card__meta"><div><b>Habitat</b>mcp gateway</div><div><b>Prey</b>tool calls</div><div><b>Call</b>http/2</div></div>
+      <div class="card__hand">one bridge, many birds.</div>
+    </div>
+  </article>
+
+  <article class="card">
+    <div class="card__plate">
+      <span class="card__nr">№ 004</span>
+      <span class="card__silhouette">⊠</span>
+      <h3 class="card__common">Pixel Sandpiper</h3>
+      <p class="card__latin">Tankus minutus</p>
+      <span class="card__tag card__tag--u">uncommon &middot; weekend</span>
+    </div>
+    <div class="card__body">
+      <p>Top-down, short-legged. Patrols the shore of a multiplayer tank game built for the joy of destroying friends in deliberate low resolution.</p>
+      <div class="card__meta"><div><b>Habitat</b>pixel tanks</div><div><b>Res.</b>retro</div><div><b>Friends</b>fewer now</div></div>
+    </div>
+  </article>
+
+  <article class="card">
+    <div class="card__plate">
+      <span class="card__nr">№ 005</span>
+      <span class="card__silhouette">✎</span>
+      <h3 class="card__common">TBD Grebe</h3>
+      <p class="card__latin">Captura minima</p>
+      <span class="card__tag card__tag--r">rare &middot; planned sighting</span>
+    </div>
+    <div class="card__body">
+      <p>A small, plain-plumaged diver. Quietly collects captures, projects, and tasks. No bells, no whistles, no crest.</p>
+      <div class="card__meta"><div><b>Habitat</b>notebook</div><div><b>Status</b>tbd</div><div><b>Colour</b>matte</div></div>
+    </div>
+  </article>
+
+  <article class="card">
+    <div class="card__plate">
+      <span class="card__nr">№ 006</span>
+      <span class="card__silhouette">☼</span>
+      <h3 class="card__common">YAML Jay</h3>
+      <p class="card__latin">Hassistans domesticus</p>
+      <span class="card__tag card__tag--c">common &middot; indoor</span>
+    </div>
+    <div class="card__body">
+      <p>A bright domestic species. Nests in Home Assistant. Held together by zigbee and stubbornness. WAF reading near zero, but holding. Only the smart lights are trusted by the rest of the household.</p>
+      <div class="card__meta"><div><b>Habitat</b>living room</div><div><b>WAF</b>&lt; 1</div><div><b>Lights</b>adored</div></div>
+      <div class="card__hand">only lights survive.</div>
+    </div>
+  </article>
+
+  <article class="card">
+    <div class="card__plate">
+      <span class="card__nr">№ 007</span>
+      <span class="card__silhouette">♫</span>
+      <h3 class="card__common">Mazu Nightjar</h3>
+      <p class="card__latin">Fuzzus instrumentalis</p>
+      <span class="card__tag card__tag--u">uncommon &middot; crepuscular</span>
+    </div>
+    <div class="card__body">
+      <p>Instrumental stoner. Large wingspan, low frequencies. The kind of song where nobody asks about the lyrics. Neighbours have opinions.</p>
+      <div class="card__meta"><div><b>Habitat</b>basement</div><div><b>Tempo</b>slow</div><div><b>Volume</b>dense</div></div>
+    </div>
+  </article>
+
+  <article class="card">
+    <div class="card__plate">
+      <span class="card__nr">№ 008</span>
+      <span class="card__silhouette">⚒</span>
+      <h3 class="card__common">Sawdust Sparrow</h3>
+      <p class="card__latin">Dolo domesticus</p>
+      <span class="card__tag card__tag--r">rare &middot; weekends</span>
+    </div>
+    <div class="card__body">
+      <p>Small brown-grey specimen. Observed among shavings and clamps in a basement workshop under construction. Each new tool classified by the subject as <em>investment</em>.</p>
+      <div class="card__meta"><div><b>Habitat</b>basement</div><div><b>Nesting</b>WIP</div><div><b>Diet</b>mdf</div></div>
+    </div>
+  </article>
+</div>
+
+<section class="list-box">
+  <h3>Life list · recent sightings</h3>
+  <table>
+    <thead><tr><th style="width:1.4em">✓</th><th>Species</th><th>Date</th><th>Location</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td class="tick">✓</td><td>Keyboard Warbler</td><td>today</td><td>office</td><td class="hand">loud; many tabs</td></tr>
+      <tr><td class="tick">✓</td><td>Cluster Kestrel</td><td>today</td><td>prod</td><td class="hand">added a node, again</td></tr>
+      <tr><td class="tick">✓</td><td>Gateway Flycatcher</td><td>today</td><td>mcp</td><td class="hand">feeding from slack</td></tr>
+      <tr><td class="tick">✓</td><td>YAML Jay</td><td>today</td><td>living room</td><td class="hand">lights turned pink</td></tr>
+      <tr><td></td><td>Pixel Sandpiper</td><td>last sat</td><td>couch</td><td class="hand">lost to kid #2</td></tr>
+      <tr><td></td><td>Mazu Nightjar</td><td>wed</td><td>basement</td><td class="hand">neighbours home</td></tr>
+      <tr><td></td><td>TBD Grebe</td><td>—</td><td>—</td><td class="hand">planned, not seen</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<footer class="foot">
+  <span><b>nerdy.nl</b> &middot; a field guide &middot; no birds harmed</span>
+  <span><a href="https://github.com/enipo">github.com/enipo</a></span>
+</footer>
+
+</div>
+
+<script>
+document.getElementById('date').textContent=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}).toUpperCase();
+</script>
+</body>
+</html>

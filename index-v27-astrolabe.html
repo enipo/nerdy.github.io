@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nerdy · Astrolabium</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.88em' font-size='85'%3E🜨%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=IM+Fell+English+SC&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--vellum:#e8dcc0;--vellum2:#d9c89f;--ink:#2a1a0a;--rust:#7a3a1a;--brass:#b08838;--patina:#4a6a5a;--shadow:rgba(40,20,0,.25)}
+html,body{background:radial-gradient(ellipse at center,#e8dcc0 0%,#c8b080 75%,#9a7a48 100%);min-height:100vh;color:var(--ink);font-family:'Cormorant Garamond',Georgia,serif;font-size:16px;line-height:1.5}
+body{padding:2rem 1rem 4rem;background-attachment:fixed}
+a{color:var(--rust);text-decoration:none;border-bottom:1px dotted var(--rust)}
+a:hover{color:var(--ink)}
+.frame{max-width:960px;margin:0 auto}
+h1,h2,h3{font-family:'IM Fell English SC',serif;font-weight:400;letter-spacing:.02em}
+
+/* --- Masthead --- */
+.hdr{text-align:center;padding:1.5rem 0 0}
+.hdr__orn{font-family:'IM Fell English',serif;color:var(--brass);font-size:1.4rem;letter-spacing:.6em;padding-left:.6em}
+.hdr__title{font-family:'IM Fell English SC',serif;font-size:clamp(2.5rem,6vw,4.2rem);line-height:1;margin:.4rem 0 .2rem;color:var(--ink);text-shadow:0 1px 0 rgba(255,255,255,.4)}
+.hdr__sub{font-family:'IM Fell English',serif;font-style:italic;font-size:1.1rem;color:var(--rust)}
+.hdr__lat{font-family:'IM Fell English',serif;font-style:italic;color:var(--patina);font-size:.95rem;margin-top:.4rem}
+
+/* --- Astrolabe dial --- */
+.dial-wrap{position:relative;width:min(520px,92vw);aspect-ratio:1;margin:1.5rem auto 2rem;filter:drop-shadow(4px 6px 10px var(--shadow))}
+.dial{position:absolute;inset:0}
+.dial svg{width:100%;height:100%;overflow:visible}
+.dial circle,.dial line,.dial path{vector-effect:non-scaling-stroke}
+.spin{animation:spin 180s linear infinite;transform-origin:50% 50%}
+.spin-rev{animation:spin 240s linear infinite reverse;transform-origin:50% 50%}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.dial-core{position:absolute;inset:22%;border-radius:50%;background:radial-gradient(circle at 30% 25%,#f0e4c6,#c8a858 60%,#8a6024);box-shadow:inset 0 0 30px rgba(40,20,0,.3),inset 0 4px 10px rgba(255,240,200,.5)}
+.dial-core-inner{position:absolute;inset:14%;border-radius:50%;border:2px solid var(--ink);background:radial-gradient(circle at 50% 40%,var(--vellum) 0%,var(--vellum2) 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1rem;text-align:center}
+.dial-core-inner .sigil{font-family:'IM Fell English SC',serif;font-size:1.4rem;letter-spacing:.3em;padding-left:.3em;color:var(--ink)}
+.dial-core-inner .motto{font-family:'IM Fell English',serif;font-style:italic;font-size:.9rem;color:var(--rust);margin-top:.3rem;line-height:1.25}
+
+/* --- Sections = rings --- */
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:1rem;margin-top:1rem}
+.panel{grid-column:span 6;background:linear-gradient(165deg,rgba(255,248,220,.65),rgba(232,210,160,.4));border:1px solid rgba(60,30,0,.2);padding:1.1rem 1.3rem;position:relative;border-radius:2px;box-shadow:0 1px 0 rgba(255,255,255,.4) inset,0 2px 4px rgba(60,30,0,.12)}
+.panel::before{content:'';position:absolute;inset:4px;border:1px solid rgba(60,30,0,.15);pointer-events:none}
+.panel--wide{grid-column:span 12}
+.panel--third{grid-column:span 4}
+.panel__no{position:absolute;top:-10px;left:14px;background:var(--vellum);padding:0 .5rem;font-family:'IM Fell English SC',serif;font-size:.7rem;letter-spacing:.2em;color:var(--patina)}
+.panel__head{font-family:'IM Fell English SC',serif;font-size:1.25rem;letter-spacing:.06em;margin-bottom:.5rem;padding-bottom:.4rem;border-bottom:1px solid rgba(60,30,0,.3);display:flex;justify-content:space-between;align-items:baseline;gap:1rem}
+.panel__head .gloss{font-family:'IM Fell English',serif;font-style:italic;font-size:.8rem;color:var(--rust);font-weight:400;letter-spacing:0}
+.panel p{margin-bottom:.6rem}
+.panel p:last-child{margin-bottom:0}
+.panel em{color:var(--rust)}
+
+/* --- Tool index (ephemeris table) --- */
+.ephem{grid-column:span 12;background:linear-gradient(165deg,rgba(255,248,220,.75),rgba(232,210,160,.5));border:1px solid rgba(60,30,0,.3);padding:1.2rem}
+.ephem h3{text-align:center;font-size:1.3rem;letter-spacing:.2em;margin-bottom:.6rem}
+.ephem table{width:100%;border-collapse:collapse;font-family:'IM Fell English',serif;font-size:1rem}
+.ephem th{text-align:left;padding:.3rem .6rem;border-bottom:2px solid var(--ink);font-family:'IM Fell English SC',serif;font-weight:400;letter-spacing:.1em;font-size:.75rem;text-transform:uppercase;color:var(--patina)}
+.ephem td{padding:.5rem .6rem;border-bottom:1px dotted rgba(60,30,0,.3)}
+.ephem tr:last-child td{border-bottom:none}
+.ephem .sym{font-family:'IM Fell English SC',serif;color:var(--rust);font-size:1.1rem;width:2em;text-align:center}
+.ephem .name{font-weight:600}
+.ephem .coord{font-family:'IM Fell English',serif;font-style:italic;color:var(--patina);font-size:.85rem}
+
+.ftr{text-align:center;font-family:'IM Fell English',serif;font-style:italic;color:var(--patina);font-size:.9rem;margin-top:2.2rem;padding-top:1rem;border-top:1px solid rgba(60,30,0,.25)}
+.ftr span{color:var(--rust)}
+
+@media(max-width:700px){
+  .panel,.panel--third{grid-column:span 12}
+  .dial-wrap{width:min(400px,86vw)}
+}
+</style>
+</head>
+<body>
+<div class="frame">
+<header class="hdr">
+  <div class="hdr__orn">✦ ☉ ☽ ☿ ♀ ♂ ♃ ♄ ✦</div>
+  <h1 class="hdr__title">Nerdy — Astrolabium</h1>
+  <div class="hdr__sub">An Instrument for the Measuring of Small Obsessions</div>
+  <div class="hdr__lat">Domus Enipi &middot; Anno <span id="yr"></span> &middot; Lat. 52°N</div>
+</header>
+
+<div class="dial-wrap">
+  <!-- outer degree ring -->
+  <div class="dial">
+    <svg viewBox="-100 -100 200 200">
+      <defs>
+        <radialGradient id="rim" cx="50%" cy="40%"><stop offset="0%" stop-color="#d8b060"/><stop offset="100%" stop-color="#8a6024"/></radialGradient>
+      </defs>
+      <circle r="98" fill="none" stroke="#2a1a0a" stroke-width="1.2"/>
+      <circle r="92" fill="none" stroke="url(#rim)" stroke-width="7"/>
+      <circle r="86" fill="none" stroke="#2a1a0a" stroke-width=".8"/>
+      <g class="spin">
+        <g id="ticks"></g>
+      </g>
+      <circle r="72" fill="none" stroke="#2a1a0a" stroke-width=".6" stroke-dasharray="1 3"/>
+      <g class="spin-rev">
+        <g id="zodiac"></g>
+      </g>
+      <circle r="52" fill="none" stroke="#2a1a0a" stroke-width=".6"/>
+      <!-- rete arms -->
+      <g stroke="#2a1a0a" stroke-width=".7" fill="none" opacity=".85">
+        <line x1="-86" y1="0" x2="86" y2="0"/>
+        <line x1="0" y1="-86" x2="0" y2="86"/>
+        <line x1="-61" y1="-61" x2="61" y2="61"/>
+        <line x1="-61" y1="61" x2="61" y2="-61"/>
+      </g>
+    </svg>
+  </div>
+  <div class="dial-core">
+    <div class="dial-core-inner">
+      <div class="sigil">N · E · R · D · Y</div>
+      <div class="motto">Qui sine mure vivit,<br>manibus suis regnat.</div>
+    </div>
+  </div>
+</div>
+
+<section class="grid">
+
+  <div class="panel panel--wide">
+    <span class="panel__no">·I·</span>
+    <div class="panel__head"><span>De Artifice</span><span class="gloss">&mdash; concerning the maker</span></div>
+    <p>A maker of things nobody asked for. Automates the domestic with <em>Home Assistant</em>, provisions three Kubernetes firmaments for a household of five, and maintains a codex of terminals arranged in the shape of cascading tabs. The <em>Wife Acceptance Factor</em> is said to orbit near zero, but holds.</p>
+    <p>Three children, one basement workshop, one drumkit. Of these, only the smart lights are granted full citizenship.</p>
+  </div>
+
+  <div class="panel">
+    <span class="panel__no">·II·</span>
+    <div class="panel__head"><span>Nerdy Terminal</span><span class="gloss">&mdash; &#x263E;</span></div>
+    <p>A keyboard-first terminal manager for the Macintosh. Many sessions, one hand. The mouse remains in its drawer.</p>
+    <p><em>&ldquo;Why move a hand thirty centimetres,&rdquo;</em> writes the maker, <em>&ldquo;when I might press two keys?&rdquo;</em></p>
+  </div>
+
+  <div class="panel">
+    <span class="panel__no">·III·</span>
+    <div class="panel__head"><span>MCP Gateway</span><span class="gloss">&mdash; &#x263F;</span></div>
+    <p>A bridge between the court of the Agents and the older kingdoms: Slack, Jira, the Databases, Grafana, Tailscale. One gate. Many callers.</p>
+    <p>The thing that maketh the other things speak unto each other.</p>
+  </div>
+
+  <div class="panel">
+    <span class="panel__no">·IV·</span>
+    <div class="panel__head"><span>Kubernetes</span><span class="gloss">&mdash; &#x2644;</span></div>
+    <p>A private control plane of a few clusters too many. When asked why, the maker stared into middle distance and whispered <em>GitOps</em>. Wildly over-engineered for a household of one operator.</p>
+  </div>
+
+  <div class="panel">
+    <span class="panel__no">·V·</span>
+    <div class="panel__head"><span>Pixel Tanks</span><span class="gloss">&mdash; &#x2642;</span></div>
+    <p>Top-down tank combat rendered in deliberate low resolution. A game built for the destroying of friends, economically, with pixels. The art is retro by choice, not by limit.</p>
+  </div>
+
+  <div class="panel panel--third">
+    <span class="panel__no">·VI·</span>
+    <div class="panel__head"><span>Mazu</span></div>
+    <p>Instrumental stoner. The kind of music where nobody asketh after the lyrics.</p>
+  </div>
+  <div class="panel panel--third">
+    <span class="panel__no">·VII·</span>
+    <div class="panel__head"><span>Basement</span></div>
+    <p>Workshop in progress: sawdust, ambition, and a steady trickle of tool purchases each classified as <em>investment</em>.</p>
+  </div>
+  <div class="panel panel--third">
+    <span class="panel__no">·VIII·</span>
+    <div class="panel__head"><span>Dad &times; 3</span></div>
+    <p>Three small citizens, entirely unconvinced by the clusters, wholly won by the lights.</p>
+  </div>
+
+  <div class="ephem">
+    <h3>Ephemeris &middot; Works in Orbit</h3>
+    <table>
+      <thead><tr><th></th><th>Opus</th><th>Gloss</th><th>Declinatio</th></tr></thead>
+      <tbody>
+        <tr><td class="sym">☽</td><td class="name">Nerdy Terminal</td><td>keyboard-first sessions</td><td class="coord">asc. &middot; macOS</td></tr>
+        <tr><td class="sym">☿</td><td class="name">MCP Gateway</td><td>ai &harr; everything else</td><td class="coord">asc. &middot; prod</td></tr>
+        <tr><td class="sym">♃</td><td class="name">Kubernetes</td><td>overbuilt firmament</td><td class="coord">retrograde</td></tr>
+        <tr><td class="sym">♂</td><td class="name">Pixel Tanks</td><td>low-res warfare</td><td class="coord">weekend orbit</td></tr>
+        <tr><td class="sym">♀</td><td class="name">TBD</td><td>captures &middot; projects &middot; tasks</td><td class="coord">in conjunction</td></tr>
+        <tr><td class="sym">☉</td><td class="name">Home Assistant</td><td>YAML &middot; zigbee &middot; stubbornness</td><td class="coord">perihelion</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="ftr">
+  &mdash; <span>nerdy.nl</span> &middot; measured, charted, slightly over&#8209;engineered &middot; <a href="https://github.com/enipo">github.com/enipo</a> &mdash;
+</div>
+</div>
+
+<script>
+(function(){
+  document.getElementById('yr').textContent='MMXXVI';
+  var t=document.getElementById('ticks');
+  for(var i=0;i<360;i+=6){
+    var long=i%30===0, med=i%10===0;
+    var len=long?8:med?5:3;
+    var x1=Math.sin(i*Math.PI/180)*92, y1=-Math.cos(i*Math.PI/180)*92;
+    var x2=Math.sin(i*Math.PI/180)*(92-len), y2=-Math.cos(i*Math.PI/180)*(92-len);
+    t.innerHTML+='<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="#2a1a0a" stroke-width="'+(long?1.2:.6)+'"/>';
+    if(long){
+      var xl=Math.sin(i*Math.PI/180)*78, yl=-Math.cos(i*Math.PI/180)*78;
+      t.innerHTML+='<text x="'+xl+'" y="'+yl+'" text-anchor="middle" dominant-baseline="central" font-family="IM Fell English SC,serif" font-size="5" fill="#2a1a0a">'+i+'°</text>';
+    }
+  }
+  var z=document.getElementById('zodiac');
+  var signs=['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'];
+  signs.forEach(function(s,i){
+    var a=i*30+15; var r=64;
+    var x=Math.sin(a*Math.PI/180)*r, y=-Math.cos(a*Math.PI/180)*r;
+    z.innerHTML+='<text x="'+x+'" y="'+y+'" text-anchor="middle" dominant-baseline="central" font-size="9" fill="#7a3a1a" font-family="serif">'+s+'</text>';
+  });
+})();
+</script>
+</body>
+</html>
