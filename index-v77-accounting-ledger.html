@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nerdy — General Ledger</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.88em' font-size='85' font-family='serif'%3E₤%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=IM+Fell+English:ital@0;1&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --paper:#f4ecd8;
+  --ink:#1c1a14;
+  --rule-green:#7a9a6b;
+  --rule-red:#a33a2a;
+  --faded:#6b6455;
+  --header:#2a3a2a;
+  --typewriter:'Courier Prime',monospace;
+  --hand:'IM Fell English',Georgia,serif;
+  --stamp:'Special Elite',cursive;
+}
+body{
+  background:#d8cdb0;
+  color:var(--ink);
+  font-family:var(--typewriter);
+  font-size:14px;
+  line-height:1.4;
+  padding:1.5rem;
+  min-height:100vh;
+}
+a{color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--faded)}
+a:hover{border-bottom-style:solid;color:var(--rule-red)}
+
+.ledger{
+  max-width:1100px;
+  margin:0 auto;
+  background:
+    repeating-linear-gradient(transparent 0,transparent 23px,rgba(122,154,107,.22) 23px,rgba(122,154,107,.22) 24px),
+    linear-gradient(90deg,transparent 0,transparent 60px,rgba(163,58,42,.35) 60px,rgba(163,58,42,.35) 61px,transparent 61px),
+    var(--paper);
+  padding:2rem 2.2rem 3rem 2.2rem;
+  box-shadow:0 2px 4px rgba(0,0,0,.15),0 12px 40px rgba(0,0,0,.25);
+  position:relative;
+  border:1px solid #c4b898;
+}
+
+.ledger::before{
+  content:'';
+  position:absolute;
+  left:60px;top:0;bottom:0;
+  width:1px;
+  background:rgba(163,58,42,.4);
+}
+
+/* ═══ HEADER ═══ */
+.head{
+  text-align:center;
+  padding-bottom:1rem;
+  border-bottom:3px double var(--ink);
+  margin-bottom:1.5rem;
+  position:relative;
+  z-index:2;
+}
+.head__company{
+  font-family:var(--hand);
+  font-size:2.4rem;
+  font-weight:400;
+  letter-spacing:.02em;
+  font-style:italic;
+}
+.head__line{
+  font-size:.75rem;
+  letter-spacing:.3em;
+  color:var(--faded);
+  margin:.3rem 0;
+  text-transform:uppercase;
+}
+.head__meta{
+  display:flex;
+  justify-content:space-between;
+  font-size:.7rem;
+  color:var(--faded);
+  margin-top:.8rem;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+}
+
+.stamp{
+  position:absolute;
+  top:-8px;right:0;
+  font-family:var(--stamp);
+  color:var(--rule-red);
+  border:2px solid var(--rule-red);
+  padding:.3rem .7rem;
+  transform:rotate(8deg);
+  font-size:.8rem;
+  letter-spacing:.15em;
+  opacity:.85;
+}
+
+/* ═══ LEDGER TABLE ═══ */
+.section-title{
+  font-family:var(--hand);
+  font-size:1.3rem;
+  font-style:italic;
+  margin:1.5rem 0 .3rem;
+  color:var(--header);
+  border-bottom:1px solid var(--faded);
+  padding-bottom:.2rem;
+}
+.sub{font-size:.7rem;color:var(--faded);margin-bottom:.6rem;letter-spacing:.08em}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-bottom:1rem;
+  font-size:.82rem;
+}
+th{
+  text-align:left;
+  font-weight:700;
+  padding:.4rem .5rem;
+  border-bottom:2px solid var(--ink);
+  border-top:1px solid var(--ink);
+  font-size:.7rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  background:rgba(122,154,107,.08);
+}
+td{
+  padding:.35rem .5rem;
+  vertical-align:top;
+  border-bottom:1px dashed rgba(0,0,0,.12);
+}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.debit{color:var(--rule-red)}
+.credit{color:var(--header)}
+.date{font-size:.75rem;color:var(--faded);white-space:nowrap}
+.entry{font-family:var(--hand);font-size:.95rem}
+.memo{font-size:.72rem;color:var(--faded);display:block;margin-top:.15rem;font-style:italic}
+
+tr.total td{
+  border-top:2px solid var(--ink);
+  border-bottom:3px double var(--ink);
+  font-weight:700;
+  padding-top:.5rem;
+}
+
+/* ═══ NOTES ═══ */
+.two-col{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:2rem;
+  margin-top:2rem;
+}
+.note{
+  border:1px solid var(--faded);
+  padding:.9rem 1rem;
+  background:rgba(255,253,240,.4);
+  position:relative;
+}
+.note h3{
+  font-family:var(--hand);
+  font-style:italic;
+  font-size:1.1rem;
+  margin-bottom:.4rem;
+}
+.note p{font-size:.8rem;margin-bottom:.4rem;line-height:1.55}
+
+.ink-blot{
+  position:absolute;
+  width:40px;height:30px;
+  background:radial-gradient(ellipse,var(--rule-red) 0%,transparent 60%);
+  opacity:.4;
+}
+
+/* ═══ FOOTER ═══ */
+.foot{
+  margin-top:2.5rem;
+  padding-top:1rem;
+  border-top:3px double var(--ink);
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  font-size:.7rem;
+  color:var(--faded);
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.signature{
+  font-family:var(--hand);
+  font-style:italic;
+  font-size:1.4rem;
+  color:var(--rule-red);
+  transform:rotate(-4deg);
+  border-bottom:1px solid var(--ink);
+  padding:0 .5rem .2rem;
+  margin-bottom:.3rem;
+}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:700px){
+  .ledger{padding:1.2rem 1rem 2rem}
+  .ledger::before{left:30px}
+  .head__company{font-size:1.8rem}
+  .head__meta{flex-direction:column;gap:.2rem}
+  .two-col{grid-template-columns:1fr;gap:1rem}
+  table{font-size:.72rem}
+  th,td{padding:.3rem .25rem}
+  .stamp{position:static;display:inline-block;margin-top:.5rem}
+}
+</style>
+</head>
+<body>
+<main class="ledger">
+  <header class="head">
+    <div class="stamp">Ledger · Vol. 37</div>
+    <div class="head__line">Double-Entry Bookkeeping · Est. 1494</div>
+    <div class="head__company">Nerdy &amp; Co.</div>
+    <div class="head__line">General Ledger of Side Projects &amp; Modest Ambitions</div>
+    <div class="head__meta">
+      <span>Account № N-001</span>
+      <span>Proprietor: G. Bazuin</span>
+      <span id="period">Period: —</span>
+    </div>
+  </header>
+
+  <h2 class="section-title">I. Assets &mdash; Projects in Inventory</h2>
+  <p class="sub">Things built. Value recorded at cost of evenings.</p>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:7rem">Date</th>
+        <th>Entry</th>
+        <th class="num" style="width:7rem">Dr. (hrs)</th>
+        <th class="num" style="width:7rem">Cr. (use)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="date">2024 · Jan</td>
+        <td class="entry">Nerdy Terminal
+          <span class="memo">Keyboard-first session manager. Mouse banished. Surprisingly useful.</span>
+        </td>
+        <td class="num debit">∞</td>
+        <td class="num credit">daily</td>
+      </tr>
+      <tr>
+        <td class="date">2023 · Jul</td>
+        <td class="entry">Kubernetes Estate (5 clusters)
+          <span class="memo">Control plane. Wildly over-engineered for a one-person operation. Whispered "GitOps" and kept going.</span>
+        </td>
+        <td class="num debit">many</td>
+        <td class="num credit">k8s for me</td>
+      </tr>
+      <tr>
+        <td class="date">2024 · Apr</td>
+        <td class="entry">MCP Gateway
+          <span class="memo">Bridge: AI agents ↔ Slack, Jira, DBs, Grafana, Tailscale. The thing that makes the other things talk.</span>
+        </td>
+        <td class="num debit">48</td>
+        <td class="num credit">high</td>
+      </tr>
+      <tr>
+        <td class="date">2022 · Sep</td>
+        <td class="entry">Pixel Tanks
+          <span class="memo">Top-down multiplayer. Pixel art intentionally retro (not a lack of skill).</span>
+        </td>
+        <td class="num debit">weekends</td>
+        <td class="num credit">friendships−</td>
+      </tr>
+      <tr>
+        <td class="date">TBD</td>
+        <td class="entry">TBD — personal productivity
+          <span class="memo">Captures. Projects. Tasks. No bells. No whistles.</span>
+        </td>
+        <td class="num debit">pending</td>
+        <td class="num credit">pending</td>
+      </tr>
+      <tr class="total">
+        <td colspan="2">Subtotal — Tangible Output</td>
+        <td class="num debit">∑ lots</td>
+        <td class="num credit">∑ some</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="section-title">II. Liabilities &mdash; The Smart Home Account</h2>
+  <p class="sub">Outstanding balance with co-proprietor (domestic).</p>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:7rem">Date</th>
+        <th>Entry</th>
+        <th class="num" style="width:7rem">WAF</th>
+        <th class="num" style="width:7rem">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="date">ongoing</td>
+        <td class="entry">Home Assistant · YAML automations
+          <span class="memo">"The future of living." Held together with Zigbee and stubbornness.</span>
+        </td>
+        <td class="num debit">0.1</td>
+        <td class="num">at risk</td>
+      </tr>
+      <tr>
+        <td class="date">ongoing</td>
+        <td class="entry">Smart lighting
+          <span class="memo">Only line item with a WAF above zero. The kids approve.</span>
+        </td>
+        <td class="num credit">7.5</td>
+        <td class="num">asset</td>
+      </tr>
+      <tr>
+        <td class="date">weekends</td>
+        <td class="entry">Basement Workshop (woodworking)
+          <span class="memo">Mostly sawdust and ambition. Every tool purchase logged as "investment."</span>
+        </td>
+        <td class="num debit">TBD</td>
+        <td class="num">accruing</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="two-col">
+    <div class="note">
+      <div class="ink-blot" style="top:-10px;right:10px"></div>
+      <h3>Note I. — Noise Division</h3>
+      <p><strong>Drums</strong> — Mazu. Instrumental stoner. The kind of music where nobody asks about the lyrics.</p>
+      <p><strong>Guitar</strong> — Badly, but enthusiastically. The neighbors have opinions. Filed under miscellaneous.</p>
+    </div>
+    <div class="note">
+      <h3>Note II. — Dependents</h3>
+      <p>Two small proprietors in residence. They do not care about the clusters. They do care about the lights.</p>
+      <p>Declared value: incalculable. Depreciation: none. Audit ongoing.</p>
+    </div>
+  </div>
+
+  <h2 class="section-title">III. Editorial Remarks</h2>
+  <p class="sub">Footnotes to the balance sheet.</p>
+  <table>
+    <tbody>
+      <tr>
+        <td style="width:8rem"><strong>Policy</strong></td>
+        <td>No blog. No thought-leadership. No content strategy. Everything worth saying has already been generated by an LLM somewhere.</td>
+      </tr>
+      <tr>
+        <td><strong>Method</strong></td>
+        <td>All entries recorded in double-entry form. Every project has an equal and opposite evening logged against it.</td>
+      </tr>
+      <tr>
+        <td><strong>Motto</strong></td>
+        <td><em>Putting the Y in Nerdy — as in: Why, dear god… Why?</em></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <footer class="foot">
+    <div>
+      <div>Certified &amp; true to the best<br>of the proprietor's memory</div>
+    </div>
+    <div style="text-align:center">
+      <div class="signature">G. Bazuin</div>
+      <div>Proprietor · <a href="https://github.com/enipo">github.com/enipo</a></div>
+    </div>
+    <div style="text-align:right">
+      <div>nerdy.nl</div>
+      <div>Folio — this page</div>
+    </div>
+  </footer>
+</main>
+<script>
+  var now=new Date();
+  var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('period').textContent='Period ending: '+months[now.getMonth()]+' '+now.getFullYear();
+</script>
+</body>
+</html>

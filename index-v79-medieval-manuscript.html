@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Codex Nerdius</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f0e3c0'/%3E%3Ctext y='.88em' x='10' font-size='85' fill='%23a01020' font-family='serif'%3EN%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=IM+Fell+English+SC&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --vellum:#eee0b8;
+  --vellum-dark:#d6c48a;
+  --ink:#2a1810;
+  --rubric:#a01020;
+  --lapis:#1d3a7a;
+  --gold:#b8912a;
+  --faded:#6a5238;
+  --gothic:'UnifrakturMaguntia',serif;
+  --caps:'IM Fell English SC',serif;
+  --body:'IM Fell English',Georgia,serif;
+}
+body{
+  background:
+    radial-gradient(ellipse at 30% 20%,rgba(0,0,0,.25),transparent 70%),
+    linear-gradient(135deg,#3a2618,#1f1208);
+  color:var(--ink);
+  font-family:var(--body);
+  font-size:16px;
+  line-height:1.65;
+  padding:2rem 1rem;
+  min-height:100vh;
+}
+a{color:var(--rubric);text-decoration:none;font-weight:600}
+a:hover{text-decoration:underline wavy}
+
+.codex{
+  max-width:1100px;
+  margin:0 auto;
+  background:var(--vellum);
+  background-image:
+    radial-gradient(ellipse at top left,rgba(184,145,42,.18),transparent 50%),
+    radial-gradient(ellipse at bottom right,rgba(160,16,32,.08),transparent 50%),
+    repeating-radial-gradient(circle at 12% 24%,rgba(106,82,56,.08) 0,transparent 2px),
+    repeating-radial-gradient(circle at 78% 70%,rgba(106,82,56,.1) 0,transparent 3px);
+  padding:2.5rem 2rem;
+  box-shadow:0 2px 4px rgba(0,0,0,.2),0 20px 60px rgba(0,0,0,.6);
+  border:1px solid var(--vellum-dark);
+  position:relative;
+}
+
+/* ═══ DECORATIVE BORDER ═══ */
+.codex::before,.codex::after{
+  content:'';
+  position:absolute;
+  inset:10px;
+  pointer-events:none;
+  border:1px solid var(--gold);
+}
+.codex::after{
+  inset:14px;
+  border:1px dashed var(--rubric);
+  opacity:.6;
+}
+
+/* ═══ HEADER ═══ */
+.incipit{
+  text-align:center;
+  padding:1.2rem 0 1.5rem;
+  border-bottom:3px double var(--rubric);
+  margin-bottom:1.5rem;
+}
+.incipit__mark{
+  color:var(--rubric);
+  font-family:var(--caps);
+  font-size:1rem;
+  letter-spacing:.3em;
+}
+.incipit__title{
+  font-family:var(--gothic);
+  font-size:clamp(3rem,7vw,5.5rem);
+  color:var(--ink);
+  line-height:1;
+  margin:.3rem 0;
+  letter-spacing:.02em;
+}
+.incipit__sub{
+  font-family:var(--caps);
+  color:var(--faded);
+  font-size:.95rem;
+  letter-spacing:.2em;
+  margin-top:.4rem;
+}
+
+/* ═══ ILLUMINATED INITIAL ═══ */
+.capitulum{
+  margin-bottom:2rem;
+  position:relative;
+}
+.capitulum::first-letter{display:none}
+
+.initial-grid{
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:1rem;
+  align-items:flex-start;
+}
+.initial{
+  font-family:var(--gothic);
+  font-size:7rem;
+  line-height:.9;
+  color:var(--vellum);
+  background:var(--rubric);
+  background-image:
+    radial-gradient(ellipse at 30% 30%,rgba(255,220,160,.3),transparent 70%),
+    repeating-linear-gradient(45deg,rgba(184,145,42,.3),rgba(184,145,42,.3) 2px,transparent 2px,transparent 6px);
+  padding:.3rem .6rem .2rem;
+  border:4px solid var(--gold);
+  box-shadow:inset 0 0 20px rgba(0,0,0,.4);
+  text-align:center;
+  min-width:6rem;
+}
+
+.capitulum__body p{margin-bottom:.7rem}
+.capitulum__body p:first-child{font-family:var(--caps);letter-spacing:.08em;font-size:.95rem}
+
+/* ═══ CHAPTERS ═══ */
+.chapter{
+  margin-top:2rem;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:2rem;
+  padding-top:1.2rem;
+  border-top:1px solid var(--faded);
+}
+.chapter__head{
+  grid-column:1 / -1;
+  text-align:center;
+  margin-bottom:.4rem;
+}
+.chapter__no{
+  display:inline-block;
+  font-family:var(--caps);
+  letter-spacing:.25em;
+  color:var(--rubric);
+  font-size:.85rem;
+}
+.chapter__title{
+  font-family:var(--gothic);
+  font-size:2rem;
+  color:var(--ink);
+  margin-top:.2rem;
+}
+
+.entry{
+  margin-bottom:1rem;
+  padding-left:.4rem;
+}
+.entry__name{
+  font-family:var(--gothic);
+  font-size:1.4rem;
+  color:var(--rubric);
+  line-height:1.1;
+  display:flex;
+  align-items:baseline;
+  gap:.5rem;
+}
+.entry__name::before{
+  content:'¶';
+  color:var(--lapis);
+  font-family:var(--body);
+  font-size:1.4rem;
+  font-weight:700;
+}
+.entry__lat{
+  font-family:var(--body);
+  font-style:italic;
+  color:var(--lapis);
+  font-size:.85rem;
+  margin-bottom:.3rem;
+  margin-left:1.2rem;
+}
+.entry__desc{
+  font-size:.95rem;
+  margin-left:1.2rem;
+  line-height:1.55;
+}
+
+/* ═══ MARGIN NOTES ═══ */
+.marginalia{
+  grid-column:1 / -1;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:1rem;
+  margin-top:1.5rem;
+  border-top:1px dashed var(--faded);
+  padding-top:1rem;
+}
+.marginalia__note{
+  background:rgba(184,145,42,.08);
+  border-left:3px solid var(--gold);
+  padding:.7rem .9rem;
+  font-size:.85rem;
+  line-height:1.5;
+  font-style:italic;
+  position:relative;
+}
+.marginalia__note strong{
+  font-style:normal;
+  font-family:var(--caps);
+  letter-spacing:.08em;
+  color:var(--rubric);
+  display:block;
+  margin-bottom:.3rem;
+}
+
+/* ═══ EXPLICIT (FOOTER) ═══ */
+.explicit{
+  text-align:center;
+  margin-top:2.5rem;
+  padding-top:1.5rem;
+  border-top:3px double var(--rubric);
+  font-family:var(--caps);
+  font-size:.9rem;
+  letter-spacing:.15em;
+  color:var(--faded);
+}
+.explicit__line{
+  color:var(--rubric);
+  font-family:var(--gothic);
+  font-size:1.6rem;
+  margin-bottom:.4rem;
+  letter-spacing:.02em;
+}
+.explicit a{color:var(--lapis)}
+
+/* flourishes in corners */
+.flourish{
+  position:absolute;
+  width:50px;height:50px;
+  color:var(--gold);
+  font-size:2rem;
+  opacity:.6;
+  pointer-events:none;
+  font-family:var(--body);
+}
+.flourish.tl{top:22px;left:22px}
+.flourish.tr{top:22px;right:22px;transform:scaleX(-1)}
+.flourish.bl{bottom:22px;left:22px;transform:scaleY(-1)}
+.flourish.br{bottom:22px;right:22px;transform:scale(-1,-1)}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:720px){
+  .codex{padding:1.5rem 1rem}
+  .initial{font-size:4.5rem;min-width:4rem}
+  .chapter{grid-template-columns:1fr;gap:.5rem}
+  .flourish{display:none}
+  .incipit__title{font-size:2.6rem}
+}
+</style>
+</head>
+<body>
+<article class="codex">
+  <span class="flourish tl">❦</span>
+  <span class="flourish tr">❦</span>
+  <span class="flourish bl">❦</span>
+  <span class="flourish br">❦</span>
+
+  <header class="incipit">
+    <div class="incipit__mark">✠ &nbsp; Incipit &nbsp; ✠</div>
+    <h1 class="incipit__title">Codex Nerdius</h1>
+    <div class="incipit__sub">Beinge a true accounte of ye workes of one Bazuin, of Nederlande</div>
+  </header>
+
+  <section class="capitulum">
+    <div class="initial-grid">
+      <div class="initial">N</div>
+      <div class="capitulum__body">
+        <p>OW hearken, gentle reader, &amp; lend thine eye unto this codex, wherein are enumerated the small labours of a solitary maker &mdash; set down neither for glory, nor for commerce, nor for the teaching of thought-leadership.</p>
+        <p>Here are listed his engines, his noises, and his domestic follies; his kingdom of YAML; his half-finished benches; and the two small heirs who care for none of it, save the smart lamps.</p>
+        <p style="font-style:italic;color:var(--faded)">— Writ this very day, upon the workbench at <a href="https://nerdy.nl">nerdy.nl</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CAPUT I — WORKS -->
+  <section class="chapter">
+    <header class="chapter__head">
+      <div class="chapter__no">Caput Primum</div>
+      <h2 class="chapter__title">Of His Engines &amp; Contrivances</h2>
+    </header>
+    <div>
+      <div class="entry">
+        <div class="entry__name">Nerdy Terminal</div>
+        <div class="entry__lat"><em>Cathedra Clavium</em> &mdash; the chair of keys</div>
+        <p class="entry__desc">A terminal-manager most obstinate, forged for macOS. Its maker refuseth to move his hand thirty centimetres unto the mouse, and thus liveth by the keyboard alone.</p>
+      </div>
+      <div class="entry">
+        <div class="entry__name">Regnum Kubernetum</div>
+        <div class="entry__lat"><em>The kingdom of clusters</em></div>
+        <p class="entry__desc">He hath raised up his own control-plane, with five clusters &mdash; a few too many, sayeth the chronicler. When asked wherefore, he whispereth only <em>&ldquo;GitOps&rdquo;</em> &amp; returneth to his terminal.</p>
+      </div>
+      <div class="entry">
+        <div class="entry__name">MCP Gateway</div>
+        <div class="entry__lat"><em>Pons inter-machinarum</em></div>
+        <p class="entry__desc">A bridge between the AI-familiars and the greater world: Slack, Jira, databases, Grafana, Tailscale. The thing that maketh the other things to speak one with another.</p>
+      </div>
+    </div>
+    <div>
+      <div class="entry">
+        <div class="entry__name">Pixel Tanks</div>
+        <div class="entry__lat"><em>Bellum pixellorum</em></div>
+        <p class="entry__desc">A game of war in pixels most base, wherein friends destroy one another at low resolution. The art is <em>intentionally retro</em> &mdash; not, sayeth he, from any want of skill.</p>
+      </div>
+      <div class="entry">
+        <div class="entry__name">TBD</div>
+        <div class="entry__lat"><em>Opus in progressu</em></div>
+        <p class="entry__desc">A productivity-engine: captures, projects, tasks. <em>Neither bells nor whistles.</em> Only that which must be done. Shipping date: shortly.</p>
+      </div>
+      <div class="entry">
+        <div class="entry__name">Domus Sapiens</div>
+        <div class="entry__lat"><em>Of the smart home</em></div>
+        <p class="entry__desc">A Home Assistant held together by Zigbee &amp; stubbornness. The co-proprietor calleth it a waste of weekends. He calleth it &ldquo;the future of living.&rdquo; The lamps alone findeth favour with the household.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CAPUT II — NOISES & WORKSHOPS -->
+  <section class="chapter">
+    <header class="chapter__head">
+      <div class="chapter__no">Caput Secundum</div>
+      <h2 class="chapter__title">Of Noise, Sawdust &amp; Heirs</h2>
+    </header>
+    <div>
+      <div class="entry">
+        <div class="entry__name">Tympanum &amp; Chorda</div>
+        <div class="entry__lat"><em>Drums &amp; guitar</em></div>
+        <p class="entry__desc">He beateth the drums in an ensemble called MAZU &mdash; a band instrumental and stoned, wherein no man enquireth concerning the lyrics.</p>
+        <p class="entry__desc">The guitar he playeth badly, yet with zeal. The neighbours &mdash; it is recorded &mdash; have opinions.</p>
+      </div>
+    </div>
+    <div>
+      <div class="entry">
+        <div class="entry__name">Officina Subterranea</div>
+        <div class="entry__lat"><em>The basement workshop</em></div>
+        <p class="entry__desc">A workshop of wood in his cellar: at present, mostly sawdust and ambition. Every tool purchased is filed as <em>&ldquo;investment.&rdquo;</em></p>
+      </div>
+      <div class="entry">
+        <div class="entry__name">Filii Duo</div>
+        <div class="entry__lat"><em>Of his heirs</em></div>
+        <p class="entry__desc">Two small souls in residence. They careth nothing for Kubernetes, yet they careth mightily for the smart lamps &mdash; the sole chamber of the house wherein his works have found glad reception.</p>
+      </div>
+    </div>
+
+    <aside class="marginalia">
+      <div class="marginalia__note"><strong>Nota Bene ¹</strong>No weblog. No thought-leadership. Everything worth saying hath already been generated by some LLM, somewhere.</div>
+      <div class="marginalia__note"><strong>Nota Bene ²</strong>The WAF — the domestic acceptance factor — holdeth at a historic low. He remaineth unbowed.</div>
+      <div class="marginalia__note"><strong>Nota Bene ³</strong>&ldquo;Putting the Y in Nerdy &mdash; as in: Why, dear god… Why?&rdquo; &mdash; from the margin, hand of the author.</div>
+    </aside>
+  </section>
+
+  <footer class="explicit">
+    <div class="explicit__line">✠ &nbsp; Explicit Codex Nerdius &nbsp; ✠</div>
+    <div>Writ by G. Bazuin · <a href="https://github.com/enipo">github.com/enipo</a> · Anno Domini <span id="yr">—</span></div>
+  </footer>
+</article>
+<script>document.getElementById('yr').textContent=new Date().getFullYear()</script>
+</body>
+</html>

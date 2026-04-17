@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Proclamation — nerdy.nl</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e4d2a4'/%3E%3Ctext y='.88em' font-size='85' fill='%23882a1a' font-family='serif'%3E§%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=IM+Fell+English+SC&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --parchment:#e4d2a4;
+  --parchment-dark:#c9b580;
+  --parchment-edge:#9e8856;
+  --ink:#241810;
+  --seal-red:#882a1a;
+  --seal-red-light:#ba4230;
+  --faded:#6b563a;
+  --wax:#6e0e0e;
+  --decree:'Pirata One',cursive;
+  --caps:'IM Fell English SC',serif;
+  --body:'EB Garamond',Georgia,serif;
+}
+body{
+  background:
+    radial-gradient(ellipse at 30% 10%,rgba(120,80,40,.5),transparent 70%),
+    linear-gradient(180deg,#3a2612,#1a0f05);
+  color:var(--ink);
+  font-family:var(--body);
+  font-size:17px;
+  line-height:1.7;
+  min-height:100vh;
+  padding:2rem 1rem 4rem;
+}
+
+/* ═══ SCROLL ═══ */
+.scroll-wrap{
+  max-width:780px;
+  margin:0 auto;
+  position:relative;
+}
+
+/* Top roller */
+.roller{
+  height:38px;
+  background:
+    linear-gradient(180deg,#6b4a24,#4a3018 60%,#2a1a0a);
+  border-radius:38px / 12px;
+  box-shadow:
+    inset 0 3px 0 rgba(255,210,140,.2),
+    inset 0 -3px 0 rgba(0,0,0,.5),
+    0 4px 8px rgba(0,0,0,.5);
+  margin:0 -18px;
+  position:relative;
+  z-index:3;
+}
+.roller::before,.roller::after{
+  content:'';
+  position:absolute;
+  width:56px;height:56px;
+  top:-9px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 35% 35%,#b07a3a,#4a2e10 70%);
+  box-shadow:0 3px 6px rgba(0,0,0,.5),inset -3px -3px 6px rgba(0,0,0,.4),inset 3px 3px 4px rgba(255,210,140,.25);
+}
+.roller::before{left:-10px}
+.roller::after{right:-10px}
+.roller--bottom{margin-top:-8px}
+
+/* Parchment body */
+.parchment{
+  background:var(--parchment);
+  background-image:
+    radial-gradient(ellipse at 15% 20%,rgba(158,136,86,.3),transparent 55%),
+    radial-gradient(ellipse at 80% 75%,rgba(136,42,26,.08),transparent 50%),
+    radial-gradient(circle at 40% 30%,rgba(107,86,58,.15) 1px,transparent 2px),
+    radial-gradient(circle at 70% 60%,rgba(107,86,58,.2) 1px,transparent 2px),
+    radial-gradient(circle at 25% 80%,rgba(107,86,58,.18) 1px,transparent 2px);
+  padding:3.5rem 3rem 3.5rem;
+  position:relative;
+  box-shadow:
+    inset 0 10px 30px rgba(107,86,58,.4),
+    inset 0 -10px 30px rgba(107,86,58,.4),
+    inset 8px 0 12px rgba(158,136,86,.3),
+    inset -8px 0 12px rgba(158,136,86,.3);
+  border-left:2px solid var(--parchment-edge);
+  border-right:2px solid var(--parchment-edge);
+}
+/* deckle edges */
+.parchment::before,.parchment::after{
+  content:'';
+  position:absolute;
+  left:0;right:0;
+  height:10px;
+  background:
+    radial-gradient(ellipse at 8% 50%,var(--parchment) 50%,transparent 60%),
+    radial-gradient(ellipse at 24% 50%,var(--parchment) 45%,transparent 55%),
+    radial-gradient(ellipse at 40% 50%,var(--parchment) 48%,transparent 58%),
+    radial-gradient(ellipse at 56% 50%,var(--parchment) 45%,transparent 55%),
+    radial-gradient(ellipse at 72% 50%,var(--parchment) 50%,transparent 60%),
+    radial-gradient(ellipse at 88% 50%,var(--parchment) 45%,transparent 55%);
+  background-size:12% 100%;
+  background-repeat:repeat-x;
+}
+.parchment::before{top:-9px}
+.parchment::after{bottom:-9px;transform:scaleY(-1)}
+
+/* decorative inner frame */
+.frame{
+  border:2px solid var(--seal-red);
+  border-style:double;
+  padding:2rem 2rem 2.2rem;
+  position:relative;
+}
+
+/* ═══ HEADING ═══ */
+.preamble{
+  text-align:center;
+  font-family:var(--caps);
+  color:var(--seal-red);
+  letter-spacing:.35em;
+  font-size:.9rem;
+  margin-bottom:.3rem;
+}
+.decree-title{
+  text-align:center;
+  font-family:var(--decree);
+  font-size:clamp(2.5rem,6vw,4.2rem);
+  color:var(--seal-red);
+  line-height:1;
+  letter-spacing:.04em;
+  text-shadow:2px 2px 0 rgba(136,42,26,.2);
+}
+.subdecree{
+  text-align:center;
+  font-family:var(--caps);
+  color:var(--faded);
+  font-size:.9rem;
+  letter-spacing:.15em;
+  margin-top:.5rem;
+  margin-bottom:1rem;
+}
+.flourish-line{
+  text-align:center;
+  color:var(--seal-red);
+  margin:.6rem 0 1.5rem;
+  font-size:1.4rem;
+  letter-spacing:.4em;
+  opacity:.7;
+}
+
+/* ═══ BODY TEXT ═══ */
+.body{font-size:1.05rem;margin-bottom:1rem}
+.body p{margin-bottom:.9rem}
+.body p .drop::first-letter{
+  font-family:var(--decree);
+  color:var(--seal-red);
+  font-size:3.6rem;
+  line-height:.8;
+  float:left;
+  padding:.3rem .6rem 0 0;
+}
+
+.smallcap{
+  font-family:var(--caps);
+  letter-spacing:.08em;
+  font-size:.9em;
+}
+
+/* ═══ ARTICLES (NUMBERED DECREES) ═══ */
+.decree-list{
+  margin:1.5rem 0;
+  border-top:1px solid var(--parchment-edge);
+  border-bottom:1px solid var(--parchment-edge);
+  padding:1rem 0;
+}
+.article{
+  padding:.7rem 0;
+  border-bottom:1px dashed rgba(107,86,58,.4);
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:1rem;
+  align-items:baseline;
+}
+.article:last-child{border-bottom:none}
+.article__no{
+  font-family:var(--decree);
+  color:var(--seal-red);
+  font-size:1.6rem;
+  line-height:1;
+  min-width:2.5rem;
+  text-align:center;
+}
+.article__body{font-size:1rem}
+.article__body strong{
+  font-family:var(--caps);
+  letter-spacing:.05em;
+  color:var(--ink);
+  font-weight:600;
+  font-size:.92rem;
+}
+.article__body em{color:var(--seal-red)}
+
+/* ═══ SIGNATURE BLOCK ═══ */
+.signatories{
+  margin-top:1.5rem;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:2rem;
+  flex-wrap:wrap;
+}
+.sig{
+  font-family:var(--caps);
+  font-size:.85rem;
+  letter-spacing:.1em;
+  color:var(--faded);
+}
+.sig__name{
+  font-family:var(--decree);
+  color:var(--ink);
+  font-size:1.8rem;
+  border-bottom:1px solid var(--ink);
+  padding:0 .4rem .15rem;
+  margin-bottom:.2rem;
+  transform:rotate(-3deg);
+  display:inline-block;
+}
+
+/* ═══ WAX SEAL ═══ */
+.seal{
+  width:110px;height:110px;
+  position:relative;
+  margin:0 auto;
+}
+.seal__disc{
+  position:absolute;inset:0;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 35% 30%,#d64a3a,#882a1a 55%,#4a1008 100%);
+  box-shadow:
+    inset -4px -4px 12px rgba(0,0,0,.5),
+    inset 4px 4px 10px rgba(255,180,160,.2),
+    0 4px 10px rgba(0,0,0,.3);
+  /* rough edges */
+  clip-path:polygon(
+    50% 0%, 60% 4%, 70% 2%, 78% 8%, 90% 12%, 94% 22%, 100% 32%, 96% 44%,
+    98% 54%, 95% 64%, 100% 74%, 90% 82%, 82% 90%, 72% 94%, 64% 100%,
+    52% 97%, 42% 99%, 32% 94%, 22% 90%, 12% 84%, 4% 74%, 0% 62%,
+    3% 52%, 0% 42%, 6% 32%, 12% 22%, 20% 12%, 30% 6%, 40% 3%
+  );
+}
+.seal__text{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  color:#f4d4b0;
+  font-family:var(--decree);
+  font-size:2.6rem;
+  text-shadow:1px 1px 0 rgba(0,0,0,.4);
+}
+.seal__ring{
+  position:absolute;inset:14px;
+  border-radius:50%;
+  border:2px dashed rgba(244,212,176,.5);
+  pointer-events:none;
+}
+
+/* ═══ FOOTER ═══ */
+.finis{
+  text-align:center;
+  margin-top:1.2rem;
+  font-family:var(--caps);
+  font-size:.75rem;
+  letter-spacing:.25em;
+  color:var(--faded);
+}
+.finis a{color:var(--seal-red)}
+
+a{color:var(--seal-red);font-weight:600;text-decoration:none;border-bottom:1px dotted}
+a:hover{border-bottom-style:solid}
+
+@media(max-width:640px){
+  .parchment{padding:2rem 1rem}
+  .frame{padding:1.5rem 1rem}
+  .article{grid-template-columns:1fr;gap:.1rem}
+  .article__no{text-align:left;font-size:1.3rem}
+  .signatories{flex-direction:column;align-items:center;text-align:center;gap:1.5rem}
+}
+</style>
+</head>
+<body>
+<div class="scroll-wrap">
+  <div class="roller"></div>
+  <article class="parchment">
+    <div class="frame">
+      <div class="preamble">✠ By the hand of the Proprietor of Nerdy.nl ✠</div>
+      <h1 class="decree-title">A Proclamation</h1>
+      <div class="subdecree">concerning the small labours, noises &amp; follies of one G. Bazuin</div>
+      <div class="flourish-line">❖ &nbsp; ❦ &nbsp; ❖</div>
+
+      <div class="body">
+        <p class="drop"><span class="smallcap">Oyez, oyez! Oyez!</span> Let it be known, unto all who encounter this parchment through whatever channel &mdash; RSS, search-engine, or mere happenstance &mdash; that the following tools, projects, noises and domestic follies are hereby set down, for the record.</p>
+        <p>This document doth not constitute a brand. It establisheth no funnel. No thought-leadership is herein offered, for it is the firm conviction of the undersigned that everything worth saying hath already been generated, elsewhere, by some larger language model.</p>
+      </div>
+
+      <div class="decree-list">
+        <div class="article">
+          <div class="article__no">I.</div>
+          <div class="article__body"><strong>On Nerdy Terminal.</strong> Hereby established: a terminal-manager, keyboard-first, for macOS. Its proprietor <em>refuseth to move his hand thirty centimetres unto the mouse</em>. Mouse: banished. Sessions: instant. Keyboard: supreme.</div>
+        </div>
+        <div class="article">
+          <div class="article__no">II.</div>
+          <div class="article__body"><strong>On the Kubernetes Estate.</strong> Let it be noted that the proprietor hath raised up his own control-plane of <em>several clusters</em> &mdash; wildly excessive for a one-person operation. When questioned, he whispereth only &ldquo;GitOps&rdquo; &amp; turneth away.</div>
+        </div>
+        <div class="article">
+          <div class="article__no">III.</div>
+          <div class="article__body"><strong>On the MCP Gateway.</strong> Be it known: a bridge hath been built between the AI-familiars and the greater world &mdash; Slack, Jira, databases, Grafana, Tailscale. It is <em>the thing that maketh the other things to talk</em>.</div>
+        </div>
+        <div class="article">
+          <div class="article__no">IV.</div>
+          <div class="article__body"><strong>On Pixel Tanks.</strong> A multiplayer combat-game, in deliberate low resolution. Built for the joy of <em>destroying one's friends</em>. The pixels are intentionally retro. Friendships: tested.</div>
+        </div>
+        <div class="article">
+          <div class="article__no">V.</div>
+          <div class="article__body"><strong>On TBD.</strong> A forthcoming productivity-engine. Captures. Projects. Tasks. <em>No bells. No whistles.</em> Release date: when it is done.</div>
+        </div>
+        <div class="article">
+          <div class="article__no">VI.</div>
+          <div class="article__body"><strong>On the Home.</strong> A Home Assistant installation, held together by Zigbee and stubbornness. The <em>WAF</em> (domestic acceptance factor) sitteth at historic lows. Only the smart lamps have pleased the household. Two small heirs are in residence &mdash; they care for the lamps, not the clusters.</div>
+        </div>
+        <div class="article">
+          <div class="article__no">VII.</div>
+          <div class="article__body"><strong>Of Noise &amp; Sawdust.</strong> The proprietor beateth the drums in MAZU &mdash; an instrumental stoner ensemble, in which no one enquireth of lyrics. He playeth guitar <em>badly, yet with zeal</em>. A basement workshop accumulateth sawdust &amp; ambition in roughly equal measure.</div>
+        </div>
+      </div>
+
+      <div class="signatories">
+        <div style="flex:1;min-width:180px">
+          <div class="sig__name">G. Bazuin</div>
+          <div class="sig">Proprietor · <a href="https://github.com/enipo">enipo</a></div>
+        </div>
+        <div class="seal">
+          <div class="seal__disc"></div>
+          <div class="seal__ring"></div>
+          <div class="seal__text">N</div>
+        </div>
+        <div style="flex:1;min-width:180px;text-align:right">
+          <div class="sig" style="margin-bottom:.2rem">SEALED &amp; PROCLAIMED</div>
+          <div class="sig" style="color:var(--seal-red)" id="date">—</div>
+        </div>
+      </div>
+
+      <div class="finis">&mdash; &nbsp; Finis &nbsp; &mdash; &nbsp; Putting the Y in Nerdy &nbsp; &mdash;</div>
+    </div>
+  </article>
+  <div class="roller roller--bottom"></div>
+</div>
+<script>
+  var d=new Date();
+  var months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('date').textContent=
+    'This '+d.getDate()+'th day of '+months[d.getMonth()]+', '+d.getFullYear();
+</script>
+</body>
+</html>

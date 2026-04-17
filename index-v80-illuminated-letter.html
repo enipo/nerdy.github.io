@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>N — An Illuminated Letter</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231d3a7a'/%3E%3Ctext y='.88em' x='18' font-size='82' fill='%23d9ab2a' font-family='serif' font-weight='900'%3EN%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Cinzel:wght@500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --cream:#f3e9ce;
+  --cream-deep:#e0d3ac;
+  --ink:#221a10;
+  --lapis:#1d3a7a;
+  --lapis-deep:#122456;
+  --gold:#d9ab2a;
+  --gold-deep:#a17f18;
+  --rubric:#9e1a22;
+  --green:#2e5d3a;
+  --faded:#6b5a42;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --caps:'Cinzel',serif;
+}
+body{
+  background:
+    radial-gradient(ellipse at 50% 0%,rgba(0,0,0,.4),transparent 70%),
+    linear-gradient(180deg,#1a0f08,#0c0704);
+  color:var(--ink);
+  font-family:var(--serif);
+  font-size:17px;
+  line-height:1.75;
+  padding:2rem 1rem;
+  min-height:100vh;
+}
+a{color:var(--lapis);font-weight:600;text-decoration:none;border-bottom:1px dotted var(--lapis)}
+a:hover{color:var(--rubric);border-bottom-color:var(--rubric)}
+
+.page{
+  max-width:860px;
+  margin:0 auto;
+  background:var(--cream);
+  background-image:
+    radial-gradient(ellipse at 20% 10%,rgba(217,171,42,.15),transparent 60%),
+    radial-gradient(ellipse at 80% 80%,rgba(158,26,34,.08),transparent 60%),
+    repeating-linear-gradient(175deg,transparent 0,transparent 3px,rgba(107,90,66,.04) 3px,rgba(107,90,66,.04) 4px);
+  padding:3.5rem 3rem 3rem;
+  box-shadow:0 2px 4px rgba(0,0,0,.2),0 20px 60px rgba(0,0,0,.6);
+  border:1px solid var(--cream-deep);
+  position:relative;
+}
+
+/* outer gold frame */
+.page::before{
+  content:'';
+  position:absolute;
+  inset:14px;
+  border:2px solid var(--gold);
+  pointer-events:none;
+}
+.page::after{
+  content:'';
+  position:absolute;
+  inset:20px;
+  border:1px solid var(--rubric);
+  pointer-events:none;
+  opacity:.5;
+}
+
+/* ═══ SMALL HEADING ABOVE LETTER ═══ */
+.rubric {
+  text-align:center;
+  color:var(--rubric);
+  font-family:var(--caps);
+  font-size:.85rem;
+  letter-spacing:.35em;
+  margin-bottom:.3rem;
+  position:relative;
+  z-index:2;
+}
+.chapter-mark{
+  text-align:center;
+  font-family:var(--caps);
+  color:var(--gold-deep);
+  letter-spacing:.2em;
+  font-size:.75rem;
+  margin-bottom:1.5rem;
+  position:relative;
+  z-index:2;
+}
+
+/* ═══ THE ILLUMINATED N ═══ */
+.opener{
+  position:relative;
+  margin-bottom:1.5rem;
+  min-height:280px;
+}
+
+.illumination{
+  float:left;
+  width:240px;height:240px;
+  margin:6px 22px 0 0;
+  position:relative;
+  background:
+    radial-gradient(ellipse at 30% 30%,rgba(217,171,42,.45),transparent 70%),
+    linear-gradient(135deg,var(--lapis),var(--lapis-deep));
+  border:4px solid var(--gold);
+  box-shadow:
+    inset 0 0 0 2px var(--cream),
+    inset 0 0 0 4px var(--gold-deep),
+    inset 0 0 35px rgba(0,0,0,.45),
+    0 3px 6px rgba(0,0,0,.2);
+}
+.illumination::before{
+  /* Vine work pattern */
+  content:'';
+  position:absolute;
+  inset:10px;
+  background:
+    radial-gradient(circle at 20% 20%,rgba(217,171,42,.25) 2px,transparent 3px),
+    radial-gradient(circle at 80% 20%,rgba(217,171,42,.25) 2px,transparent 3px),
+    radial-gradient(circle at 20% 80%,rgba(217,171,42,.25) 2px,transparent 3px),
+    radial-gradient(circle at 80% 80%,rgba(217,171,42,.25) 2px,transparent 3px),
+    radial-gradient(circle at 50% 15%,rgba(158,26,34,.6) 3px,transparent 4px),
+    radial-gradient(circle at 50% 85%,rgba(158,26,34,.6) 3px,transparent 4px),
+    radial-gradient(circle at 15% 50%,rgba(46,93,58,.6) 3px,transparent 4px),
+    radial-gradient(circle at 85% 50%,rgba(46,93,58,.6) 3px,transparent 4px);
+  pointer-events:none;
+}
+.illumination__N{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:var(--caps);
+  font-size:11.5rem;
+  font-weight:700;
+  color:var(--gold);
+  text-shadow:
+    0 0 0 var(--gold),
+    1px 1px 0 var(--gold-deep),
+    2px 2px 2px rgba(0,0,0,.6),
+    0 0 18px rgba(217,171,42,.4);
+  line-height:1;
+  letter-spacing:-.04em;
+}
+/* tiny decorative corners */
+.illumination__corner{
+  position:absolute;
+  width:20px;height:20px;
+  border:2px solid var(--gold);
+}
+.illumination__corner.tl{top:4px;left:4px;border-right:none;border-bottom:none}
+.illumination__corner.tr{top:4px;right:4px;border-left:none;border-bottom:none}
+.illumination__corner.bl{bottom:4px;left:4px;border-right:none;border-top:none}
+.illumination__corner.br{bottom:4px;right:4px;border-left:none;border-top:none}
+
+/* ═══ OPENING TEXT ═══ */
+.opener__text{
+  font-size:1.1rem;
+  line-height:1.65;
+}
+.opener__text .smallcaps{
+  font-family:var(--caps);
+  font-size:.85em;
+  letter-spacing:.08em;
+  color:var(--lapis-deep);
+}
+.opener__text .drop{
+  color:var(--rubric);
+  font-weight:700;
+}
+
+/* ═══ SECTIONS ═══ */
+.section{
+  clear:both;
+  margin-top:1.8rem;
+  padding-top:1.2rem;
+  border-top:1px solid var(--cream-deep);
+}
+.section__head{
+  font-family:var(--caps);
+  font-size:.8rem;
+  letter-spacing:.3em;
+  color:var(--rubric);
+  text-align:center;
+  margin-bottom:.3rem;
+}
+.section__orn{
+  text-align:center;
+  color:var(--gold-deep);
+  font-size:1.2rem;
+  margin-bottom:1rem;
+  letter-spacing:.3em;
+}
+.section__title{
+  text-align:center;
+  font-style:italic;
+  color:var(--faded);
+  font-size:1rem;
+  margin-bottom:1rem;
+}
+
+.list{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1.2rem 2rem;
+}
+.item{
+  padding-left:1.2rem;
+  position:relative;
+  font-size:.98rem;
+  line-height:1.6;
+}
+.item::before{
+  content:'❧';
+  position:absolute;
+  left:0;
+  color:var(--gold-deep);
+  font-size:1rem;
+  top:.15rem;
+}
+.item strong{
+  font-family:var(--caps);
+  font-weight:700;
+  color:var(--lapis-deep);
+  font-size:.92rem;
+  letter-spacing:.06em;
+  display:block;
+  margin-bottom:.1rem;
+}
+.item em{color:var(--rubric);font-style:italic}
+
+/* ═══ COLOPHON ═══ */
+.colophon{
+  clear:both;
+  margin-top:2rem;
+  padding:1.2rem 0 0;
+  text-align:center;
+  border-top:2px solid var(--gold);
+  font-family:var(--caps);
+  font-size:.78rem;
+  letter-spacing:.25em;
+  color:var(--faded);
+}
+.colophon__ornament{
+  color:var(--rubric);
+  font-size:1.4rem;
+  letter-spacing:.8em;
+  margin-bottom:.5rem;
+}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:700px){
+  .page{padding:2rem 1.2rem}
+  .illumination{float:none;margin:0 auto 1rem;width:200px;height:200px}
+  .illumination__N{font-size:9rem}
+  .opener{text-align:center}
+  .opener__text{text-align:left}
+  .list{grid-template-columns:1fr;gap:1rem}
+}
+</style>
+</head>
+<body>
+<main class="page">
+  <div class="rubric">✠ &nbsp; An Illuminated Letter &nbsp; ✠</div>
+  <div class="chapter-mark">— Epistle from the workbench at nerdy.nl —</div>
+
+  <section class="opener">
+    <div class="illumination">
+      <span class="illumination__corner tl"></span>
+      <span class="illumination__corner tr"></span>
+      <span class="illumination__corner bl"></span>
+      <span class="illumination__corner br"></span>
+      <span class="illumination__N">N</span>
+    </div>
+    <div class="opener__text">
+      <p><span class="smallcaps">othing much to see here,</span> save for a workbench at which one maker &mdash; <span class="drop">G. Bazuin</span> by name &mdash; buildeth small engines, strikes drums, accumulateth sawdust, and putteth, against his better judgement, the <em>Y</em> in Nerdy.</p>
+      <p>He automateth with YAML, whispereth <em>GitOps</em> at night, and keepeth a Home Assistant that is held together by Zigbee and obstinacy. His <span class="smallcaps">WAF</span> &mdash; that domestic acceptance factor &mdash; resteth at historic lows. He remaineth, nevertheless, cheerful.</p>
+      <p>This letter is not a brand. It is not a funnel. It is neither a blog nor a thought-leadership platform. Everything worth saying hath already been generated by some LLM elsewhere. This is, modestly, a workbench.</p>
+    </div>
+  </section>
+
+  <!-- Engines -->
+  <section class="section">
+    <div class="section__head">Caput I</div>
+    <div class="section__orn">❦ &nbsp; · &nbsp; ❦ &nbsp; · &nbsp; ❦</div>
+    <div class="section__title">Of engines, bridges, and battles</div>
+    <div class="list">
+      <div class="item">
+        <strong>Nerdy Terminal</strong>
+        A keyboard-first terminal-manager for macOS. The maker <em>will not</em> move his hand thirty centimetres unto the mouse. Instant sessions. No clicking. The way terminals should always have worked.
+      </div>
+      <div class="item">
+        <strong>Kubernetes Estate</strong>
+        A private control-plane, several clusters over-engineered for one lone operator. When asked wherefore, he stareth into the distance &amp; whispereth <em>GitOps</em>.
+      </div>
+      <div class="item">
+        <strong>MCP Gateway</strong>
+        A bridge between the AI-familiars &amp; all the other things: Slack, Jira, Grafana, databases, Tailscale. The thing that maketh the other things to speak one with another.
+      </div>
+      <div class="item">
+        <strong>Pixel Tanks</strong>
+        Top-down combat in blessed low resolution. Built for the joy of destroying friends. The pixels, saith he, are <em>intentionally retro</em>.
+      </div>
+      <div class="item">
+        <strong>TBD</strong>
+        A modest productivity-engine. Captures. Projects. Tasks. <em>No bells. No whistles.</em> Only that which must be done.
+      </div>
+      <div class="item">
+        <strong>Home Assistant</strong>
+        A smart house stitched from YAML. The smart lights are the sole chamber in which his labours findeth approval.
+      </div>
+    </div>
+  </section>
+
+  <!-- Side occupations -->
+  <section class="section">
+    <div class="section__head">Caput II</div>
+    <div class="section__orn">❦ &nbsp; · &nbsp; ❦ &nbsp; · &nbsp; ❦</div>
+    <div class="section__title">Of noise, wood, and offspring</div>
+    <div class="list">
+      <div class="item">
+        <strong>Drums — Mazu</strong>
+        He beateth the drum-kit in an instrumental stoner band. In this music, no one enquireth concerning the lyrics.
+      </div>
+      <div class="item">
+        <strong>Guitar</strong>
+        Played <em>badly, but with zeal</em>. The neighbours have, it is recorded, opinions.
+      </div>
+      <div class="item">
+        <strong>Basement Workshop</strong>
+        A woodworking endeavour. Current state: mostly sawdust and ambition. Every tool acquired is filed as &ldquo;investment.&rdquo;
+      </div>
+      <div class="item">
+        <strong>Two Small Heirs</strong>
+        They care not at all for the clusters. They care mightily for the smart lamps. Audit ongoing.
+      </div>
+    </div>
+  </section>
+
+  <footer class="colophon">
+    <div class="colophon__ornament">✦ ✧ ✦</div>
+    <div>WRIT BY G. BAZUIN · <a href="https://github.com/enipo" style="color:var(--lapis-deep)">GITHUB.COM/ENIPO</a> · ANNO <span id="yr">—</span></div>
+  </footer>
+</main>
+<script>document.getElementById('yr').textContent=new Date().getFullYear()</script>
+</body>
+</html>
