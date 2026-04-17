@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Nerdy Broadsheet · Late Edition</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.88em' font-size='85' font-family='serif' font-weight='900'%3EN%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--paper:#ece4d4;--ink:#161310;--dim:#6d665b;--rule:#b6ab97;--red:#8b1d1a}
+body{background:#2a241c;color:var(--ink);font-family:'Old Standard TT',Georgia,serif;font-size:16px;line-height:1.55;padding:2rem 1rem}
+.sheet{max-width:1280px;margin:0 auto;background:var(--paper);padding:2.2rem 2.6rem 2.6rem;box-shadow:0 20px 60px rgba(0,0,0,.55);
+  background-image:
+    radial-gradient(ellipse at 30% 5%,rgba(120,90,40,.1),transparent 60%),
+    radial-gradient(ellipse at 80% 95%,rgba(90,60,20,.12),transparent 55%);position:relative}
+.sheet::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence baseFrequency='.9' numOctaves='2'/><feColorMatrix values='0 0 0 0 .1  0 0 0 0 .08  0 0 0 0 .06  0 0 0 .08 0'/></filter><rect width='120' height='120' filter='url(%23n)'/></svg>");opacity:.35;pointer-events:none;mix-blend-mode:multiply}
+.sheet > *{position:relative;z-index:1}
+
+.top-strap{display:flex;justify-content:space-between;align-items:center;font-family:'Oswald',sans-serif;font-size:.7rem;letter-spacing:.25em;color:var(--dim);text-transform:uppercase;padding-bottom:.7rem;border-bottom:1px solid var(--rule)}
+.top-strap .weather{font-family:'Old Standard TT',serif;font-style:italic;letter-spacing:.02em;text-transform:none;color:var(--ink);font-size:.85rem}
+
+.masthead{text-align:center;padding:1.4rem 0 .8rem}
+.masthead__title{font-family:'UnifrakturCook','Old Standard TT',serif;font-weight:700;font-size:clamp(3.5rem,10vw,8.2rem);line-height:.88;letter-spacing:.01em;margin-bottom:.3rem}
+.masthead__motto{font-style:italic;color:var(--dim);font-size:1rem;letter-spacing:.06em}
+.masthead__bar{display:flex;justify-content:space-between;align-items:baseline;padding:.6rem 0;border-top:3px solid var(--ink);border-bottom:3px solid var(--ink);margin-top:1rem;font-family:'Oswald',sans-serif;font-size:.78rem;letter-spacing:.2em;text-transform:uppercase}
+.masthead__bar .center{font-family:'Old Standard TT',serif;text-transform:none;letter-spacing:.02em;font-style:italic;font-size:.9rem}
+
+/* ── 6-column grid ── */
+.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:1.4rem;margin-top:1.4rem;padding-top:.5rem}
+
+.col{position:relative}
+.col + .col::before{content:'';position:absolute;left:-.7rem;top:0;bottom:0;width:1px;background:var(--rule)}
+
+/* headlines */
+.h-splash{grid-column:span 4}
+.h-side{grid-column:span 2}
+.kicker{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.25em;font-size:.65rem;color:var(--red);margin-bottom:.35rem;font-weight:700}
+.headline{font-family:'Old Standard TT',serif;font-weight:700;line-height:1.03}
+.h1{font-size:clamp(2rem,4.2vw,4.1rem);letter-spacing:-.01em;margin-bottom:.35rem}
+.h2{font-size:clamp(1.5rem,2.6vw,2.4rem);letter-spacing:-.005em;margin-bottom:.3rem}
+.h3{font-size:clamp(1.1rem,1.7vw,1.45rem);line-height:1.15;margin-bottom:.25rem}
+.deck{font-family:'Old Standard TT',serif;font-style:italic;font-size:1.05rem;color:var(--dim);margin-bottom:.7rem;line-height:1.4}
+.byline{font-family:'Oswald',sans-serif;font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);padding:.35rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin-bottom:.7rem}
+
+.body{font-size:.92rem;line-height:1.6;text-align:justify;hyphens:auto;column-gap:1.2rem}
+.body.twoc{columns:2}
+.body p{margin-bottom:.6rem;text-indent:1.2rem}
+.body p:first-child{text-indent:0}
+.body p:first-child::first-letter{font-family:'UnifrakturCook',serif;float:left;font-size:4.2rem;line-height:.9;padding:.25rem .45rem 0 0;color:var(--red);font-weight:700}
+.body.nodrop p:first-child::first-letter{float:none;font-size:inherit;padding:0;color:inherit;font-family:inherit;font-weight:inherit}
+
+.ascii-art{font-family:'Courier New',monospace;font-size:.55rem;line-height:1;white-space:pre;background:#d6cbb3;padding:.8rem;border:1px solid var(--rule);margin:.7rem 0;color:#3a2d1d;overflow:hidden}
+.photo-cap{font-family:'Oswald',sans-serif;font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);margin-top:.3rem}
+
+.sidebar-box{border:1px solid var(--ink);padding:.8rem;margin-bottom:1rem}
+.sidebar-box__title{font-family:'Oswald',sans-serif;font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;padding-bottom:.35rem;border-bottom:1px solid var(--ink);margin-bottom:.5rem;font-weight:700}
+.sidebar-box ul{list-style:none;font-size:.82rem;line-height:1.6}
+.sidebar-box li{padding:.2rem 0;border-bottom:1px dotted var(--rule);display:flex;justify-content:space-between;gap:.5rem}
+.sidebar-box li:last-child{border:none}
+.sidebar-box li .dim{color:var(--dim);font-style:italic;font-size:.7rem}
+
+.obit{background:rgba(139,29,26,.07);border-top:3px double var(--red);border-bottom:3px double var(--red);padding:.7rem 0;margin-top:.5rem}
+.obit__title{font-family:'Oswald',sans-serif;text-align:center;letter-spacing:.3em;font-size:.72rem;color:var(--red);text-transform:uppercase;margin-bottom:.4rem;font-weight:700}
+.obit__body{font-style:italic;font-size:.82rem;text-align:center;line-height:1.55}
+
+.ad{border:4px double var(--ink);padding:.9rem;text-align:center;margin:.8rem 0}
+.ad__top{font-family:'Oswald',sans-serif;font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:var(--dim);margin-bottom:.4rem}
+.ad__title{font-family:'Old Standard TT',serif;font-weight:700;font-size:1.4rem;margin-bottom:.4rem;line-height:1.05}
+.ad__body{font-size:.78rem;font-style:italic;color:var(--dim);line-height:1.45}
+
+.quote-pull{border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);padding:.8rem .3rem;margin:1rem 0;font-family:'Old Standard TT',serif;font-style:italic;font-size:1.35rem;line-height:1.28;text-align:center;color:var(--ink)}
+.quote-pull::before,.quote-pull::after{content:'”';font-family:'UnifrakturCook',serif;font-size:2rem;color:var(--red);line-height:0;vertical-align:-.3em;margin:0 .15em}
+.quote-pull::before{content:'“'}
+
+.stock{grid-column:span 6;margin-top:2rem;padding:.8rem 0;border-top:3px solid var(--ink);border-bottom:1px solid var(--rule);display:flex;gap:2.5rem;overflow:hidden;font-family:'Oswald',sans-serif;font-size:.72rem;letter-spacing:.1em;color:var(--ink);white-space:nowrap}
+.stock .lbl{color:var(--red);font-weight:700;letter-spacing:.2em;padding-right:.4rem}
+.stock .up{color:#1e5a1e}.stock .dn{color:var(--red)}
+
+.foot{grid-column:span 6;margin-top:1rem;padding-top:.8rem;border-top:1px solid var(--rule);display:flex;justify-content:space-between;font-family:'Oswald',sans-serif;font-size:.65rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dim)}
+.foot a{color:var(--dim)}
+
+@media(max-width:900px){
+  .grid{grid-template-columns:1fr;gap:1.2rem}
+  .h-splash,.h-side{grid-column:span 1}
+  .col + .col::before{display:none}
+  .col + .col{padding-top:1rem;border-top:1px solid var(--rule)}
+  .body.twoc{columns:1}
+  .stock{flex-wrap:wrap;gap:.8rem 1.5rem;white-space:normal}
+}
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="top-strap">
+    <span>Vol. MMXXVI · Issue 001</span>
+    <span class="weather">Today: partly overcast with a chance of yak-shaving</span>
+    <span>Price · Free of charge</span>
+  </div>
+
+  <header class="masthead">
+    <h1 class="masthead__title">The Nerdy Broadsheet</h1>
+    <p class="masthead__motto">“Engineering for an audience of one, since whenever”</p>
+    <div class="masthead__bar">
+      <span>Late Edition</span>
+      <span class="center">Rotterdam · The Basement Workshop · <span id="today"></span></span>
+      <span>nerdy.nl</span>
+    </div>
+  </header>
+
+  <div class="grid">
+    <!-- SPLASH -->
+    <div class="col h-splash">
+      <div class="kicker">Lead Story · Front Page</div>
+      <h2 class="headline h1">Local Engineer Mistakes Weekend for Sprint, Ships Anyway</h2>
+      <p class="deck">An ambitious homepage, a Kubernetes cluster too many, and a household grown suspicious of the YAML files multiplying in the hallway closet.</p>
+      <div class="byline">By our Workbench Correspondent · Filed at some hour past midnight</div>
+      <div class="body twoc">
+        <p>In an unassuming basement beneath the Rotterdam suburbs, a developer has spent the weekend producing roughly nothing anyone asked for, and yet somehow too much of it. Sources describe the output as “surprisingly functional” and the developer as “still talking about GitOps at dinner.”</p>
+        <p>At the centre of the operation is <b>Nerdy Terminal</b>, a keyboard-first tab-agent manager that allows the user to switch between sessions without — critically — ever moving a single centimetre of the right hand. “Why would I,” the developer was quoted as saying, while allegedly toggling between nine sessions with a shortcut he’d forgotten he’d bound.</p>
+        <p>Officials at the household level have raised concerns over what they describe as the “creeping YAML problem,” noting that Home Assistant entities have now outnumbered light switches in the home by a factor of roughly four. The developer maintains that this is, in fact, the point.</p>
+        <p>The lights, for the record, do work. Everything else is a matter of ongoing negotiation.</p>
+      </div>
+
+      <div class="quote-pull">Why move the mouse thirty centimetres when you could press two keys?</div>
+
+      <div class="ascii-art">      ┌─────────────────────────────┐
+      │  [ nerdy@basement:~ ] $     │
+      │                             │
+      │   $ tm sessions             │
+      │   ●  supervisor             │
+      │   ●  worker-14  (you)       │
+      │   ●  k8s-watcher            │
+      │   ●  mcp-gateway            │
+      │   ○  bg-shell (babysit)     │
+      │                             │
+      │   _                         │
+      └─────────────────────────────┘</div>
+      <p class="photo-cap">Fig. 1 — The developer’s natural habitat, photographed from across the room.</p>
+    </div>
+
+    <!-- SIDE A -->
+    <div class="col h-side">
+      <div class="kicker">Infrastructure</div>
+      <h3 class="headline h2">Cluster Count Rises<br>to Five, Which Is<br>Four Too Many</h3>
+      <div class="byline">Tech Desk</div>
+      <div class="body nodrop">
+        <p>A one-person operation has, through what experts are calling “a series of very patient decisions,” constructed five Kubernetes clusters: production, legacy-production, test, monitoring, and — somewhat ominously — AI.</p>
+        <p>When pressed on the justification, the developer stared into the middle distance, whispered the word <i>GitOps</i>, and returned to his terminal.</p>
+      </div>
+
+      <div class="sidebar-box">
+        <div class="sidebar-box__title">Today in the Workshop</div>
+        <ul>
+          <li><span>Nerdy Terminal</span><span class="dim">shipping</span></li>
+          <li><span>MCP Gateway</span><span class="dim">load-bearing</span></li>
+          <li><span>Pixel Tanks</span><span class="dim">8-bit</span></li>
+          <li><span>TBD — productivity</span><span class="dim">WIP</span></li>
+          <li><span>Home Assistant</span><span class="dim">157 ent.</span></li>
+          <li><span>Basement woodworking</span><span class="dim">sawdust</span></li>
+          <li><span>Mazu — drums</span><span class="dim">loud</span></li>
+          <li><span>Guitar, badly</span><span class="dim">daily</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SECOND ROW -->
+    <div class="col" style="grid-column:span 2">
+      <div class="kicker">Integration</div>
+      <h3 class="headline h2">One Gateway to Rule<br>Slack, Jira, and<br>the Entire Inbox</h3>
+      <div class="byline">Integration Desk · Correspondent</div>
+      <div class="body nodrop">
+        <p>The <b>MCP Gateway</b> — described by its author as “the thing that makes the other things talk to each other” — has quietly become the load-bearing beam of a homegrown AI stack. It connects LLM agents to Slack, Jira, databases, Grafana, and Tailscale.</p>
+        <p>Analysts expect the tool to remain in production until such time as the author runs out of services to connect to, which is not projected to occur.</p>
+      </div>
+      <div class="ad">
+        <div class="ad__top">— Classifieds —</div>
+        <div class="ad__title">TBD</div>
+        <div class="ad__body">Personal productivity app in progress.<br>Captures. Projects. Tasks. No bells. No whistles. No release date. Inquire within at github.com/enipo.</div>
+      </div>
+    </div>
+
+    <div class="col" style="grid-column:span 2">
+      <div class="kicker">Domestic Life · Page A3</div>
+      <h3 class="headline h2">Home Assistant’s WAF Reaches Historic Low</h3>
+      <div class="byline">Our Home Correspondent</div>
+      <div class="body nodrop">
+        <p>The Wife Acceptance Factor of a locally-operated Home Assistant installation has, according to independent observers, reached what analysts describe as <i>dangerously low</i> levels, despite the homeowner’s repeated insistence that YAML-based automations are “the future of living.”</p>
+        <p>The system, held together primarily by Zigbee and stubbornness, continues to operate on a budget of spare evenings and a steady supply of replacement batteries for motion sensors that nobody asked to install.</p>
+      </div>
+      <div class="quote-pull" style="font-size:1.15rem;text-align:left;padding:.6rem 0">The lights work. Everything else is negotiable.</div>
+    </div>
+
+    <div class="col" style="grid-column:span 2">
+      <div class="kicker">Arts &amp; Culture</div>
+      <h3 class="headline h2">Mazu — Loud,<br>Instrumental,<br>Unrepentant</h3>
+      <div class="byline">Arts Desk · Second Floor</div>
+      <div class="body nodrop">
+        <p>Drummer in <b>Mazu</b>, an instrumental stoner band. The kind of music where nobody asks what the lyrics are about, because mercifully there are none.</p>
+        <p>Also plays <b>guitar</b>. Badly, but enthusiastically — a combination the neighbours have described, in writing, as “impressive stamina.”</p>
+      </div>
+      <div class="obit">
+        <div class="obit__title">— Classified Notice —</div>
+        <div class="obit__body">No blog. No thought leadership. No content strategy.<br>Everything worth saying has already been generated by an LLM. This is just a workbench.</div>
+      </div>
+    </div>
+
+    <!-- STOCK TICKER -->
+    <div class="stock">
+      <span><span class="lbl">NERDY</span> 3 clusters <span class="dn">▾</span></span>
+      <span><span class="lbl">COFFEE</span> 4 cups <span class="up">▴</span></span>
+      <span><span class="lbl">YAML</span> loc 12,840 <span class="up">▴</span></span>
+      <span><span class="lbl">WAF</span> 0.2 <span class="dn">▾</span></span>
+      <span><span class="lbl">SAWDUST</span> 3kg <span class="up">▴</span></span>
+      <span><span class="lbl">TODO</span> 87 <span class="dn">▾</span></span>
+      <span><span class="lbl">SLEEP</span> 6h <span class="dn">▾</span></span>
+      <span><span class="lbl">JOY</span> steady <span class="up">▴</span></span>
+    </div>
+
+    <div class="foot">
+      <span>© nerdy.nl · The Nerdy Broadsheet · Late Edition</span>
+      <span>Page A1 of ∞</span>
+      <a href="https://github.com/enipo">github.com/enipo</a>
+    </div>
+  </div>
+</div>
+<script>
+document.getElementById('today').textContent=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+</script>
+</body>
+</html>

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nerdy & Co. — Invoice No. 001</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.88em' font-size='85'%3E📑%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=IM+Fell+English:ital@0;1&family=IM+Fell+DW+Pica+SC&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--paper:#f1e8d2;--paper-dark:#e5d9b9;--ink:#2b2116;--faded:#6e5a3a;--red:#972324;--rule:#a08860}
+body{background:#3a2e1e;min-height:100vh;padding:2.5rem 1rem;font-family:'Special Elite',monospace;color:var(--ink)}
+.paper{max-width:820px;margin:0 auto;background:var(--paper);padding:2.5rem 3rem;position:relative;
+  background-image:
+    radial-gradient(ellipse at 20% 10%,rgba(138,96,40,.15) 0%,transparent 50%),
+    radial-gradient(ellipse at 80% 85%,rgba(120,80,30,.18) 0%,transparent 45%),
+    radial-gradient(circle at 65% 35%,rgba(151,35,36,.06) 0%,transparent 8%);
+  box-shadow:0 10px 40px rgba(0,0,0,.5),inset 0 0 60px rgba(139,94,30,.1);
+  border:1px solid #8a7043}
+.paper::before{content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:repeating-linear-gradient(0deg,transparent,transparent 28px,rgba(160,136,96,.18) 28px,rgba(160,136,96,.18) 29px);opacity:.55}
+.paper::after{content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:
+    radial-gradient(circle at 10% 70%,rgba(70,40,10,.1) 1px,transparent 2px),
+    radial-gradient(circle at 90% 20%,rgba(70,40,10,.15) 1px,transparent 2px),
+    radial-gradient(circle at 40% 90%,rgba(70,40,10,.08) 1px,transparent 2px);background-size:180px 220px,200px 140px,170px 200px}
+
+/* torn right edge */
+.paper{clip-path:polygon(0 0,100% 0,99.3% 6%,100% 10%,99.5% 20%,100% 30%,99% 42%,100% 55%,99.4% 65%,100% 78%,99.2% 90%,100% 100%,0 100%)}
+
+.hdr{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:1.3rem;border-bottom:3px double var(--ink);position:relative;z-index:2}
+.co{font-family:'IM Fell DW Pica SC',serif}
+.co__name{font-size:2.2rem;letter-spacing:.04em;line-height:1}
+.co__tag{font-family:'IM Fell English',serif;font-style:italic;font-size:.85rem;color:var(--faded);margin-top:.35rem}
+.co__addr{font-size:.68rem;color:var(--faded);margin-top:.7rem;line-height:1.5;letter-spacing:.03em}
+.invoice-meta{text-align:right;font-size:.75rem;line-height:1.8}
+.invoice-meta .big{font-family:'IM Fell DW Pica SC',serif;font-size:1.5rem;letter-spacing:.06em;display:block;margin-bottom:.2rem}
+.meta-row{display:flex;justify-content:flex-end;gap:.7rem}
+.meta-row .lbl{color:var(--faded);text-transform:uppercase;letter-spacing:.1em;font-size:.6rem}
+.meta-row .val{font-weight:700}
+
+.billto{margin:1.4rem 0 1.1rem;display:flex;justify-content:space-between;gap:2rem;position:relative;z-index:2}
+.billto__box{flex:1}
+.billto__lbl{font-size:.6rem;letter-spacing:.18em;color:var(--faded);text-transform:uppercase;margin-bottom:.35rem}
+.billto__val{font-family:'IM Fell English',serif;font-size:1rem;line-height:1.4}
+
+table{width:100%;border-collapse:collapse;margin:1rem 0;position:relative;z-index:2;font-size:.8rem}
+thead th{font-family:'IM Fell DW Pica SC',serif;text-align:left;padding:.55rem .35rem;letter-spacing:.08em;border-bottom:2px solid var(--ink);font-size:.72rem}
+thead th.right{text-align:right}
+tbody td{padding:.65rem .35rem;border-bottom:1px dashed var(--rule);vertical-align:top}
+tbody tr:last-child td{border-bottom:none}
+td.right{text-align:right;white-space:nowrap}
+td .desc{color:var(--faded);font-size:.7rem;display:block;margin-top:.25rem;font-family:'IM Fell English',serif;font-style:italic;line-height:1.35}
+.item-no{color:var(--faded);width:30px}
+.item-name{font-weight:700}
+
+.totals{margin-top:.3rem;display:flex;justify-content:flex-end;position:relative;z-index:2}
+.totals table{width:auto;min-width:280px;margin:0}
+.totals td{padding:.3rem 1rem .3rem 0;border:none;font-size:.85rem}
+.totals td:last-child{text-align:right;padding-right:.2rem;font-family:'IM Fell DW Pica SC',serif}
+.totals .sep td{border-top:1px solid var(--ink);padding-top:.5rem}
+.totals .grand td{font-size:1.15rem;padding-top:.6rem;font-weight:700;border-top:3px double var(--ink)}
+
+.stamp{position:absolute;top:8.5rem;right:3rem;width:170px;height:170px;border:5px double var(--red);border-radius:50%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--red);
+  font-family:'IM Fell DW Pica SC',serif;text-align:center;transform:rotate(-14deg);opacity:.78;
+  box-shadow:inset 0 0 0 12px transparent;letter-spacing:.15em;z-index:3;pointer-events:none}
+.stamp::before,.stamp::after{content:'';position:absolute;inset:12px;border:1px solid var(--red);border-radius:50%}
+.stamp::after{inset:18px;border-style:dashed}
+.stamp__big{font-size:1.6rem;line-height:1}
+.stamp__sm{font-size:.6rem;margin-top:.4rem;letter-spacing:.2em}
+
+.terms{margin-top:1.5rem;padding:1rem;border:1px solid var(--rule);background:rgba(255,255,255,.25);font-size:.72rem;line-height:1.65;position:relative;z-index:2}
+.terms h4{font-family:'IM Fell DW Pica SC',serif;font-size:.75rem;letter-spacing:.12em;margin-bottom:.4rem}
+.terms p{margin-bottom:.5rem}
+.terms p:last-child{margin-bottom:0}
+
+.signoff{margin-top:1.8rem;display:flex;justify-content:space-between;align-items:flex-end;position:relative;z-index:2}
+.sig{flex:0 0 240px;text-align:center}
+.sig__line{border-bottom:1px solid var(--ink);height:2.2rem;font-family:'Dancing Script','Segoe Script',cursive;font-size:1.6rem;color:var(--ink);transform:rotate(-2deg);padding-bottom:.1rem}
+.sig__lbl{font-size:.6rem;letter-spacing:.16em;color:var(--faded);margin-top:.35rem;text-transform:uppercase}
+.footer{font-size:.6rem;letter-spacing:.12em;color:var(--faded);text-align:center;margin-top:1.8rem;position:relative;z-index:2}
+.footer a{color:var(--faded)}
+
+@media(max-width:640px){
+  .paper{padding:1.5rem 1.2rem}
+  .hdr{flex-direction:column;gap:1rem}
+  .invoice-meta{text-align:left}
+  .meta-row{justify-content:flex-start}
+  .billto{flex-direction:column;gap:1rem}
+  .stamp{top:auto;bottom:8rem;right:1rem;width:120px;height:120px;transform:rotate(-10deg)}
+  .stamp__big{font-size:1.1rem}
+  .signoff{flex-direction:column;gap:1.5rem;align-items:stretch}
+  table{font-size:.72rem}
+}
+</style>
+</head>
+<body>
+<div class="paper">
+  <header class="hdr">
+    <div class="co">
+      <div class="co__name">Nerdy &amp; Co.</div>
+      <div class="co__tag">Purveyors of Finely Yak-Shaved Software</div>
+      <div class="co__addr">The Basement Workshop · Rotterdam, NL<br>Est. somewhere between two kids · VAT/BTW: putting the Y in</div>
+    </div>
+    <div class="invoice-meta">
+      <span class="big">INVOICE</span>
+      <div class="meta-row"><span class="lbl">No.</span><span class="val">00000001</span></div>
+      <div class="meta-row"><span class="lbl">Date</span><span class="val" id="d"></span></div>
+      <div class="meta-row"><span class="lbl">Due</span><span class="val">Net never</span></div>
+    </div>
+  </header>
+
+  <div class="stamp">
+    <span class="stamp__big">PAID<br>IN FULL</span>
+    <span class="stamp__sm">with sawdust</span>
+  </div>
+
+  <div class="billto">
+    <div class="billto__box">
+      <div class="billto__lbl">Billed to</div>
+      <div class="billto__val">The Internet<br>c/o Whoever is reading this</div>
+    </div>
+    <div class="billto__box">
+      <div class="billto__lbl">Project</div>
+      <div class="billto__val">Homepage for One (1) Nerd<br>Scope: unreasonable</div>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr><th>#</th><th>Goods &amp; Services Rendered</th><th class="right">Qty</th><th class="right">Hours</th><th class="right">Value</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="item-no">001</td>
+        <td>
+          <span class="item-name">Nerdy Terminal — the keyboard-first tab-agent manager</span>
+          <span class="desc">Multiple sessions. Instant switching. Nobody has touched a mouse since August.</span>
+        </td>
+        <td class="right">1 ea.</td>
+        <td class="right">∞</td>
+        <td class="right">priceless</td>
+      </tr>
+      <tr>
+        <td class="item-no">002</td>
+        <td>
+          <span class="item-name">Kubernetes — a few clusters too many</span>
+          <span class="desc">Production, legacy-production, test, monitoring, AI. For one person. Don't ask.</span>
+        </td>
+        <td class="right">5 nodes</td>
+        <td class="right">weekends</td>
+        <td class="right">€ see: GitOps</td>
+      </tr>
+      <tr>
+        <td class="item-no">003</td>
+        <td>
+          <span class="item-name">MCP Gateway — the bridge that bridges the bridges</span>
+          <span class="desc">Slack · Jira · Databases · Grafana · Tailscale. The thing that makes the things talk.</span>
+        </td>
+        <td class="right">1 bridge</td>
+        <td class="right">many</td>
+        <td class="right">€ load-bearing</td>
+      </tr>
+      <tr>
+        <td class="item-no">004</td>
+        <td>
+          <span class="item-name">Pixel Tanks — low-resolution friendship-testing device</span>
+          <span class="desc">Top-down multiplayer tank combat. Destroying friends pixel by pixel.</span>
+        </td>
+        <td class="right">8 bits</td>
+        <td class="right">~40</td>
+        <td class="right">€ worth it</td>
+      </tr>
+      <tr>
+        <td class="item-no">005</td>
+        <td>
+          <span class="item-name">TBD — the productivity app with no name</span>
+          <span class="desc">Captures, projects, tasks. No bells. No whistles. Actually, no launch date either.</span>
+        </td>
+        <td class="right">1 wip</td>
+        <td class="right">ongoing</td>
+        <td class="right">€ t.b.d.</td>
+      </tr>
+      <tr>
+        <td class="item-no">006</td>
+        <td>
+          <span class="item-name">Drums — Mazu (instrumental stoner rock)</span>
+          <span class="desc">No lyrics. The way the universe intended music.</span>
+        </td>
+        <td class="right">4/4</td>
+        <td class="right">loud</td>
+        <td class="right">€ decibels</td>
+      </tr>
+      <tr>
+        <td class="item-no">007</td>
+        <td>
+          <span class="item-name">Guitar — badly, but enthusiastically</span>
+          <span class="desc">The neighbors have filed a complaint. Noted. Continuing.</span>
+        </td>
+        <td class="right">6 str.</td>
+        <td class="right">spare</td>
+        <td class="right">€ 0,-</td>
+      </tr>
+      <tr>
+        <td class="item-no">008</td>
+        <td>
+          <span class="item-name">Home Assistant — the smart home with a low WAF</span>
+          <span class="desc">Zigbee, YAML, stubbornness. Lights work. Everything else: negotiated.</span>
+        </td>
+        <td class="right">157 ent.</td>
+        <td class="right">all</td>
+        <td class="right">€ marriage tax</td>
+      </tr>
+      <tr>
+        <td class="item-no">009</td>
+        <td>
+          <span class="item-name">Basement Workshop — woodworking in progress</span>
+          <span class="desc">Current state: mostly sawdust and ambition. Every tool = "investment."</span>
+        </td>
+        <td class="right">n tools</td>
+        <td class="right">Sat.</td>
+        <td class="right">€ a lot</td>
+      </tr>
+      <tr>
+        <td class="item-no">010</td>
+        <td>
+          <span class="item-name">Dad × 3 — the only use case with a WAF &gt; 0</span>
+          <span class="desc">Three kids. They don't care about my clusters. They care about the lights.</span>
+        </td>
+        <td class="right">3 kids</td>
+        <td class="right">24/7</td>
+        <td class="right">€ everything</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="totals">
+    <table>
+      <tr><td>Subtotal</td><td>€ a whole lot</td></tr>
+      <tr><td>Yak-shaving surcharge</td><td>+ 48,00%</td></tr>
+      <tr class="sep"><td>VAT (the Y)</td><td>21,00%</td></tr>
+      <tr class="grand"><td>TOTAL DUE</td><td>€ 0,00</td></tr>
+    </table>
+  </div>
+
+  <div class="terms">
+    <h4>Terms &amp; Conditions</h4>
+    <p>No blog. No thought leadership. No content strategy. Everything worth saying has already been generated by an LLM somewhere. This is just a workbench.</p>
+    <p>Payment accepted in: curiosity, good bug reports, functional Zigbee channels. Late payment? Don't worry about it.</p>
+  </div>
+
+  <div class="signoff">
+    <div class="sig">
+      <div class="sig__line">Nerdy</div>
+      <div class="sig__lbl">Signed, on the house</div>
+    </div>
+    <div style="text-align:right;font-size:.72rem;color:var(--faded);line-height:1.6">
+      Questions? <a href="https://github.com/enipo" style="color:var(--ink)">github.com/enipo</a><br>
+      Filed under: Misc. / Workbench / Why
+    </div>
+  </div>
+
+  <div class="footer">— nerdy.nl · bookkeeping department of one —</div>
+</div>
+<script>
+document.getElementById('d').textContent=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}).toUpperCase();
+</script>
+</body>
+</html>

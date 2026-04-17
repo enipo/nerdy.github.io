@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>nerdy.nl — Card Catalog</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.88em' font-size='85'%3E🗂️%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Homemade+Apple&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--wood:#6b3e1f;--wood-dark:#4c2a15;--card:#f4efe0;--card-age:#ddd4bd;--rule:#86b4cb;--red:#a43a2e;--ink:#2a2520;--dim:#7a7165;--cursive:'Homemade Apple',cursive;--type:'Special Elite',monospace;--prime:'Courier Prime',monospace}
+body{background:
+  radial-gradient(ellipse at top,#5a3318 0%,#3d2410 80%),
+  #3d2410;min-height:100vh;font-family:var(--type);color:var(--ink);padding:2rem 1rem;position:relative}
+body::before{content:'';position:fixed;inset:0;background:
+  repeating-linear-gradient(90deg,rgba(0,0,0,.12) 0 2px,transparent 2px 9px),
+  repeating-linear-gradient(0deg,rgba(255,240,200,.03) 0 1px,transparent 1px 4px);pointer-events:none;z-index:0}
+.wrap{max-width:1100px;margin:0 auto;position:relative;z-index:1}
+
+/* drawer header */
+.drawer{background:linear-gradient(180deg,#8a5530,#6b3e1f);padding:1.2rem 1.6rem;border-radius:6px 6px 0 0;box-shadow:0 6px 18px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,230,180,.15);display:flex;align-items:center;gap:1.4rem;position:relative}
+.drawer::before{content:'';position:absolute;inset:.4rem;border:2px solid rgba(60,30,10,.3);border-radius:3px;pointer-events:none}
+.pull{width:62px;height:22px;background:linear-gradient(180deg,#d9b988,#a87c4a);border-radius:11px;box-shadow:inset 0 1px 0 rgba(255,240,200,.6),inset 0 -2px 4px rgba(60,30,10,.5),0 2px 4px rgba(0,0,0,.3);border:1px solid #6b4422;position:relative}
+.pull::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:10px;height:10px;background:#5a3318;border-radius:50%;box-shadow:inset 0 1px 1px rgba(0,0,0,.5)}
+.drawer-label{background:var(--card);border:1px solid #8a7043;padding:.45rem 1.4rem;font-family:var(--type);font-size:1.05rem;letter-spacing:.18em;color:var(--ink);box-shadow:inset 0 0 0 1px rgba(0,0,0,.1)}
+.drawer-label b{font-weight:700}
+.drawer-brand{margin-left:auto;font-family:var(--type);color:#f4e5c8;font-size:.75rem;letter-spacing:.28em;opacity:.7}
+
+/* card stack container */
+.catalog{background:linear-gradient(180deg,#4c2a15,#3a2010);padding:2rem 1.2rem 3rem;border-radius:0 0 6px 6px;box-shadow:inset 0 8px 14px rgba(0,0,0,.5),0 8px 24px rgba(0,0,0,.5);position:relative}
+.catalog::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:3px;background:rgba(0,0,0,.4);transform:translateX(-50%);box-shadow:0 0 6px rgba(0,0,0,.6)}
+.rod{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f0d890,#8a6020 70%);box-shadow:0 0 8px rgba(0,0,0,.5);z-index:5}
+
+/* cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.4rem 1.2rem;position:relative;z-index:2}
+.card{--rot:0deg;--stain:0;background:var(--card);border-radius:2px;padding:.9rem 1rem 1rem;box-shadow:0 4px 10px rgba(0,0,0,.4),0 1px 2px rgba(0,0,0,.3);position:relative;font-size:.78rem;line-height:1.5;transform:rotate(var(--rot));transition:transform .25s ease,box-shadow .25s ease;
+  background-image:
+    linear-gradient(var(--card) 0 0),
+    repeating-linear-gradient(0deg,transparent 0 26px,var(--rule) 26px 27px);
+  background-size:100% 100%,100% 100%;
+  background-blend-mode:multiply;overflow:hidden}
+.card::before{content:'';position:absolute;left:28px;top:0;bottom:0;width:1px;background:#d88a78;opacity:.8}
+.card::after{content:'';position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(circle at 80% 15%,rgba(139,94,40,calc(.08 * var(--stain))) 0,transparent 22%),
+    radial-gradient(circle at 10% 85%,rgba(139,94,40,calc(.1 * var(--stain))) 0,transparent 18%)}
+.card:hover{transform:rotate(0) translateY(-4px);box-shadow:0 12px 22px rgba(0,0,0,.5),0 2px 4px rgba(0,0,0,.3);z-index:10}
+
+.hole{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);width:14px;height:14px;border-radius:50%;background:radial-gradient(circle,#3a2010 0 55%,#a87c4a 60%,#6b3e1f 100%);box-shadow:inset 0 1px 2px rgba(0,0,0,.6)}
+
+.callno{font-family:var(--prime);font-size:.62rem;color:var(--red);letter-spacing:.12em;padding-bottom:.3rem;border-bottom:1px dashed var(--rule);margin-bottom:.45rem;display:flex;justify-content:space-between}
+.callno b{color:var(--ink);letter-spacing:.06em}
+.title{font-family:var(--type);font-size:1rem;font-weight:700;letter-spacing:.01em;line-height:1.15;margin-bottom:.25rem;color:var(--ink)}
+.author{font-family:var(--prime);font-style:italic;font-size:.72rem;color:var(--dim);margin-bottom:.55rem}
+.abstract{font-size:.76rem;line-height:1.5;color:var(--ink)}
+.abstract p{margin-bottom:.35rem}
+.meta{margin-top:.65rem;padding-top:.4rem;border-top:1px dashed var(--rule);display:flex;justify-content:space-between;gap:.4rem;font-family:var(--prime);font-size:.62rem;color:var(--dim);letter-spacing:.05em;text-transform:uppercase}
+.stamp-sm{position:absolute;top:.3rem;right:.3rem;font-family:var(--type);font-size:.55rem;color:var(--red);border:1.5px solid var(--red);padding:2px 6px;transform:rotate(8deg);letter-spacing:.12em;opacity:.7;border-radius:1px;line-height:1}
+
+.card.wide{grid-column:span 2;background-image:
+  linear-gradient(#fffbe8 0 0),
+  repeating-linear-gradient(0deg,transparent 0 26px,var(--rule) 26px 27px)}
+@media(max-width:620px){.card.wide{grid-column:span 1}}
+
+.card.hand{background:#fffbe8;background-image:
+  linear-gradient(#fffbe8 0 0),
+  repeating-linear-gradient(0deg,transparent 0 26px,var(--rule) 26px 27px)}
+.card.hand .title{font-family:var(--cursive);font-weight:400;font-size:1.1rem;line-height:1.2}
+.card.hand .abstract{font-family:var(--cursive);font-size:.9rem;line-height:1.4;color:#1f2a5a}
+
+.checkout{margin-top:.7rem;padding-top:.4rem;border-top:1px solid var(--ink)}
+.checkout__title{font-family:var(--prime);font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin-bottom:.2rem}
+.checkout table{width:100%;font-family:var(--prime);font-size:.62rem;border-collapse:collapse}
+.checkout th,.checkout td{text-align:left;padding:.12rem 0;border-bottom:1px dotted var(--rule);color:var(--ink)}
+.checkout th{font-weight:700;font-size:.55rem;letter-spacing:.1em;color:var(--dim)}
+.checkout td.d{font-family:var(--cursive);font-size:.78rem;color:#1f2a5a;padding-top:.2rem}
+
+.footer-note{text-align:center;margin-top:1.4rem;color:#c7b58d;font-family:var(--prime);font-size:.72rem;letter-spacing:.1em}
+.footer-note a{color:#f4e5c8;text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="drawer">
+    <div class="pull"></div>
+    <div class="drawer-label"><b>NER — NUT</b></div>
+    <div class="drawer-brand">· DEWEY 000 · nerdy.nl ·</div>
+  </div>
+
+  <div class="catalog">
+    <div class="rod"></div>
+    <div class="cards">
+
+      <!-- 1 intro -->
+      <article class="card wide hand" style="--rot:-1.1deg">
+        <div class="callno"><span>004.678</span><b>N / about</b></div>
+        <h2 class="title">Nerdy — a miscellany, collected</h2>
+        <div class="author">Gertjan · Rotterdam · Basement Workshop</div>
+        <div class="abstract">
+          <p>A working index of things built, broken, fixed, and occasionally shipped by one person. Softly card-cataloged, filed without apology, cross-referenced under <i>curiosity</i>, <i>stubbornness</i>, and <i>WAF &lt; 0</i>.</p>
+          <p>Putting the Y in Nerdy.</p>
+        </div>
+        <div class="meta"><span>Non-circulating</span><span>Browse freely</span></div>
+        <div class="hole"></div>
+      </article>
+
+      <!-- 2 Nerdy Terminal -->
+      <article class="card" style="--rot:.7deg;--stain:1">
+        <div class="stamp-sm">IN USE</div>
+        <div class="callno"><span>005.43 NER</span><b>tools / 01</b></div>
+        <h2 class="title">Nerdy Terminal</h2>
+        <div class="author">a keyboard-first tab-agent manager · macOS</div>
+        <div class="abstract">
+          <p>Multiple sessions. Instant switching. The way terminals should have always worked. Right hand stays on home row; mouse gathers dust; cat approves.</p>
+        </div>
+        <div class="meta"><span>Status: shipping</span><span>Ed. 1</span></div>
+        <div class="hole"></div>
+      </article>
+
+      <!-- 3 Kubernetes -->
+      <article class="card" style="--rot:-.6deg;--stain:.5">
+        <div class="callno"><span>004.65 KUB</span><b>infra / 02</b></div>
+        <h2 class="title">Five Clusters, One Operator</h2>
+        <div class="author">A case study in GitOps-induced optimism</div>
+        <div class="abstract">
+          <p>Prod · legacy-prod · test · monitoring · AI. Wildly over-engineered for a one-person operation, which is either a bug or the entire feature set.</p>
+        </div>
+        <div class="meta"><span>See also: YAML</span><span>Vol. I–V</span></div>
+        <div class="hole"></div>
+      </article>
+
+      <!-- 4 MCP Gateway -->
+      <article class="card" style="--rot:.4deg">
+        <div class="callno"><span>004.7 MCP</span><b>bridges / 03</b></div>
+        <h2 class="title">MCP Gateway</h2>
+        <div class="author">one bridge, many shores</div>
+        <div class="abstract">
+          <p>Connects AI agents to Slack, Jira, databases, Grafana, and Tailscale. The thing that makes the other things talk. Load-bearing.</p>
+        </div>
+        <div class="meta"><span>Cross-ref: Agents</span><span>Prod</span></div>
+        <div class="hole"></div>
+      </article>
+
+      <!-- 5 Pixel Tanks -->
+      <article class="card" style="--rot:-.9deg;--stain:.3">
+        <div class="stamp-sm">LOW-RES</div>
+        <div class="callno"><span>794.8 PXL</span><b>games / 04</b></div>
+        <h2 class="title">Pixel Tanks</h2>
+        <div class="author">multiplayer · top-down · 8-bit</div>
+        <div class="abstract">
+          <p>Tank combat built for the joy of destroying your friends in low resolution. Intentionally retro; not a consequence of limited artistic range.</p>
+        </div>
+        <div class="meta"><span>Friendship: tested</span><span>4p</span></div>
+        <div class="hole"></div>
+      </article>
+
+      <!-- 6 TBD -->
+      <article class="card hand" style="--rot:.8deg">
+        <div class="callno"><span>650.1 TBD</span><b>wip / 05</b></div>
+        <h2 class="title">TBD — the one without a name</h2>
+        <div class="author">personal productivity · in slow progress</div>
+        <div class="abstract">
+          <p>Captures, projects, tasks. No bells. No whistles. No release date. Ask again in a season or two.</p>
+        </div>
+        <div class="meta"><span>Checked in</span><span>Draft</span></div>
+        <div class="hole"></div>
+      </article>
+
+      <!-- 7 Mazu drums -->
+      <article class="card" style="--rot:-.3deg">
+        <div class="callno"><span>786.9 MZU</span><b>music / 06</b></div>
+        <h2 class="title">Mazu — instrumental stoner</h2>
+        <div class="author">drums · amplified · no lyrics</div>
+        <div class="abstract">
+          <p>The kind of music where nobody asks what the lyrics are about. Loud, slow, repetitive in the good way. Neighbours informed but not consulted.</p>
+        </div>
+        <div class="meta"><span>Genre: doom-adjacent</span><span>4/4</span></div>
+        <div class="hole"></div>
+      </article>
+
+      <!-- 8 Guitar -->
+      <article class="card hand" style="--rot:.6deg">
+        <div class="callno"><span>787.87 GTR</span><b>music / 07</b></div>
+        <h2 class="title">Guitar, badly but enthusiastically</h2>
+        <div class="author">six strings · spare evenings</div>
+        <div class="abstract">
+          <p>Badly, but enthusiastically. The neighbours have opinions; the cat has long since stopped commenting. Continuing anyway.</p>
+        </div>
+        <div class="meta"><span>Tuning: drop D</span><span>Daily</span></div>
+        <div class="hole"></div>
+      </article>
+
+      <!-- 9 Home assistant -->
+      <article class="card" style="--rot:-.7deg;--stain:.8">
+        <div class="stamp-sm">WAF LOW</div>
+        <div class="callno"><span>643.6 HOM</span><b>home / 08</b></div>
+        <h2 class="title">Home Assistant · 157 entities and climbing</h2>
+        <div class="author">Zigbee · YAML · stubbornness</div>
+        <div class="abstract">
+          <p>The smart home with a historically low Wife Acceptance Factor. Lights work. Everything else is a matter of ongoing domestic negotiation.</p>
+        </div>
+        <div class="meta"><span>Uptime: ok-ish</span><span>v2026.4</span></div>
+        <div class="hole"></div>
+      </article>
+
+      <!-- 10 workshop -->
+      <article class="card" style="--rot:.3deg">
+        <div class="callno"><span>684.08 WRK</span><b>shop / 09</b></div>
+        <h2 class="title">The Basement Workshop</h2>
+        <div class="author">woodworking · mostly aspirational</div>
+        <div class="abstract">
+          <p>Current state: mostly sawdust and ambition. Every tool purchase logged as “investment in the hobby.” One day: furniture.</p>
+        </div>
+        <div class="meta"><span>Sawdust: high</span><span>WIP</span></div>
+        <div class="hole"></div>
+      </article>
+
+      <!-- 11 Dad x 3 -->
+      <article class="card hand wide" style="--rot:-.4deg">
+        <div class="callno"><span>306.874 DAD</span><b>life / 10</b></div>
+        <h2 class="title">Dad × 3</h2>
+        <div class="author">three humans, under new management</div>
+        <div class="abstract">
+          <p>They don’t care about the Kubernetes clusters. They do care about the smart lights, and for now that is the only use case in this household with a Wife — sorry, <i>Family</i> — Acceptance Factor greater than zero.</p>
+        </div>
+        <div class="checkout">
+          <div class="checkout__title">Date due / Borrower</div>
+          <table>
+            <tr><th>Date</th><th>Signature</th></tr>
+            <tr><td class="d">forever</td><td class="d">—</td></tr>
+            <tr><td class="d">and a bit</td><td class="d">—</td></tr>
+          </table>
+        </div>
+        <div class="hole"></div>
+      </article>
+
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Card Catalog · nerdy.nl · returns accepted in sawdust or pull requests · <a href="https://github.com/enipo">github.com/enipo</a>
+  </div>
+</div>
+</body>
+</html>

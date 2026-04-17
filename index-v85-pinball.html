@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NERDY · Multiball Mode</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.88em' font-size='85'%3E🎱%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Bungee&family=Share+Tech+Mono&family=VT323&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--night:#0a0515;--plum:#1a0a2e;--neon:#ff2d95;--ice:#2dd4ff;--gold:#ffd23f;--lime:#b4ff3a;--purple:#9b4dff;--red:#ff3b3b;--dim:#7a6ab0;--chrome:linear-gradient(180deg,#e8e8ec,#8a8a90 50%,#e8e8ec)}
+html,body{background:radial-gradient(ellipse at 50% 20%,#3a1a55 0%,#1a0a2e 50%,#04020a 100%);min-height:100vh;color:#fff;font-family:'Share Tech Mono',monospace;overflow-x:hidden}
+body{padding:1.5rem 1rem 3rem;display:flex;flex-direction:column;align-items:center}
+body::before{content:'';position:fixed;inset:0;background:
+  radial-gradient(2px 2px at 20% 30%,#fff,transparent),
+  radial-gradient(1px 1px at 60% 15%,#fff,transparent),
+  radial-gradient(1px 1px at 80% 80%,#fff,transparent),
+  radial-gradient(2px 2px at 30% 70%,#fff,transparent),
+  radial-gradient(1px 1px at 90% 40%,#fff,transparent);opacity:.35;pointer-events:none;animation:twinkle 4s infinite}
+@keyframes twinkle{0%,100%{opacity:.35}50%{opacity:.1}}
+
+.machine{width:min(96vw,720px);position:relative}
+
+/* BACKGLASS */
+.backglass{background:linear-gradient(180deg,#2a1250,#1a0a2e);border:6px solid #0a0515;border-radius:14px 14px 6px 6px;padding:1.4rem 1.2rem 1.8rem;box-shadow:
+  0 0 0 3px #3b1d6b,
+  0 0 0 6px #0a0515,
+  0 0 60px rgba(255,45,149,.3),
+  inset 0 0 40px rgba(155,77,255,.2);position:relative;overflow:hidden}
+.backglass::before{content:'';position:absolute;inset:-40% -20%;background:conic-gradient(from 0deg,transparent,rgba(255,45,149,.08),transparent,rgba(45,212,255,.08),transparent);animation:spin 18s linear infinite;pointer-events:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.title{font-family:'Bungee Shade',cursive;text-align:center;font-size:clamp(2.6rem,7vw,4.2rem);letter-spacing:.04em;line-height:.95;color:#fff;
+  text-shadow:0 0 8px #ff2d95,0 0 20px #ff2d95,0 0 40px rgba(255,45,149,.4);position:relative;z-index:2}
+.subtitle{font-family:'Bungee',sans-serif;text-align:center;font-size:clamp(.75rem,1.6vw,1rem);letter-spacing:.3em;color:var(--ice);margin-top:.3rem;text-shadow:0 0 6px var(--ice);position:relative;z-index:2}
+
+/* score row */
+.scores{display:grid;grid-template-columns:1.6fr 1fr;gap:.8rem;margin-top:1rem;position:relative;z-index:2}
+.dmd{background:#0b0b0b;border:3px solid #2a2a2a;border-radius:3px;padding:.8rem .9rem;box-shadow:inset 0 0 14px rgba(255,45,149,.15),0 0 0 1px #000}
+.dmd__lbl{font-family:'Bungee',sans-serif;font-size:.55rem;letter-spacing:.25em;color:var(--neon);margin-bottom:.25rem}
+.dmd__val{font-family:'VT323',monospace;font-size:clamp(2.2rem,5.2vw,3.2rem);line-height:1;color:#ff9b2d;text-shadow:0 0 10px #ff5b00,0 0 22px rgba(255,91,0,.4);letter-spacing:.05em}
+.dmd__sub{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--dim);letter-spacing:.2em;margin-top:.3rem;text-transform:uppercase}
+.dmd.small .dmd__val{font-size:clamp(1.4rem,3.4vw,2rem);color:var(--lime);text-shadow:0 0 8px var(--lime)}
+
+.indicators{display:flex;gap:.35rem;margin-top:.9rem;flex-wrap:wrap;justify-content:center;position:relative;z-index:2}
+.bulb{width:28px;height:28px;border-radius:50%;background:radial-gradient(circle at 30% 30%,var(--c,#fff),#1a1a1a 70%);box-shadow:0 0 8px var(--c,#fff),0 0 14px var(--c,#fff),inset 0 -2px 4px rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;font-family:'Bungee',sans-serif;font-size:.6rem;color:#000;animation:pulse 1.4s infinite;animation-delay:var(--d,0s)}
+.bulb.off{animation:none;opacity:.3}
+@keyframes pulse{0%,100%{filter:brightness(1.2) saturate(1.4)}50%{filter:brightness(.7) saturate(.8)}}
+
+/* PLAYFIELD */
+.playfield{background:linear-gradient(180deg,#120630 0%,#0a0515 100%);border:6px solid #0a0515;border-top:none;border-radius:0 0 10px 10px;padding:1.2rem 1rem 1.4rem;position:relative;box-shadow:0 0 0 3px #3b1d6b,0 0 0 6px #0a0515,inset 0 0 60px rgba(0,0,0,.6)}
+
+.flash{position:absolute;top:.5rem;right:.5rem;font-family:'Bungee',sans-serif;font-size:.7rem;letter-spacing:.2em;color:var(--gold);animation:flashblink .8s infinite;text-shadow:0 0 8px var(--gold)}
+@keyframes flashblink{0%,49%{opacity:1}50%,100%{opacity:.15}}
+
+.targets{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.9rem;margin-top:.4rem}
+.target{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01));border:2px solid var(--c,#ff2d95);border-radius:8px;padding:.8rem .85rem;position:relative;overflow:hidden;
+  box-shadow:0 0 12px color-mix(in srgb,var(--c,#ff2d95) 40%,transparent),inset 0 0 14px rgba(0,0,0,.4);cursor:pointer;transition:transform .2s}
+.target:hover{transform:translateY(-2px) scale(1.01);box-shadow:0 0 22px color-mix(in srgb,var(--c,#ff2d95) 70%,transparent),inset 0 0 14px rgba(0,0,0,.4)}
+.target::before{content:'';position:absolute;inset:2px;border-radius:6px;background:linear-gradient(180deg,rgba(255,255,255,.05),transparent 40%);pointer-events:none}
+.target__bumper{position:absolute;top:-10px;right:-10px;width:46px;height:46px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#fff,var(--c,#ff2d95) 55%,#000 120%);box-shadow:0 0 14px var(--c,#ff2d95);display:flex;align-items:center;justify-content:center;font-family:'Bungee',sans-serif;font-size:.62rem;color:#000;text-shadow:0 0 4px rgba(255,255,255,.8);font-weight:900;transform:rotate(-8deg)}
+.target__pts{font-family:'VT323',monospace;font-size:1.4rem;color:var(--c,#ff2d95);text-shadow:0 0 6px var(--c,#ff2d95);letter-spacing:.05em;line-height:1}
+.target__lbl{font-family:'Bungee',sans-serif;font-size:.58rem;letter-spacing:.22em;color:#fff;margin:.35rem 0 .3rem;text-transform:uppercase;opacity:.85}
+.target__name{font-family:'Share Tech Mono',monospace;font-size:.95rem;font-weight:700;color:#fff;line-height:1.2;margin-bottom:.35rem;padding-right:2.2rem}
+.target__desc{font-size:.72rem;line-height:1.45;color:#c8bde5}
+
+/* flippers row */
+.flippers{display:flex;justify-content:space-between;align-items:flex-end;margin-top:1.2rem;padding:0 .4rem;position:relative;z-index:2}
+.flip{width:90px;height:18px;background:linear-gradient(180deg,#ff5b1a,#c72c00);border-radius:9px;box-shadow:0 0 10px rgba(255,100,30,.5),inset 0 1px 0 rgba(255,255,255,.4);position:relative}
+.flip.L{transform:rotate(-18deg)}
+.flip.R{transform:rotate(18deg)}
+.ball{width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#fff 0%,#c0c0c8 45%,#5a5a65 100%);box-shadow:0 0 10px rgba(255,255,255,.5),inset -2px -3px 4px rgba(0,0,0,.4);position:absolute;bottom:30px;left:50%;transform:translateX(-50%) translateY(0);animation:bounce 2s ease-in-out infinite}
+@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-24px)}}
+
+/* bottom apron */
+.apron{display:flex;justify-content:space-between;align-items:center;margin-top:1.2rem;padding:.7rem 1rem;background:linear-gradient(180deg,#2a1250,#1a0a2e);border:2px solid #3b1d6b;border-radius:8px;font-family:'Bungee',sans-serif;font-size:.62rem;letter-spacing:.22em;color:var(--dim)}
+.credits{color:var(--gold);text-shadow:0 0 6px var(--gold)}
+
+/* cabinet base */
+.legs{display:flex;justify-content:space-between;margin-top:.6rem;padding:0 .8rem}
+.leg{width:14px;height:30px;background:linear-gradient(180deg,#888,#444);border-radius:2px;box-shadow:inset -1px 0 0 rgba(0,0,0,.3)}
+
+.footer{margin-top:2rem;font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--dim);text-align:center;letter-spacing:.15em;text-transform:uppercase}
+.footer a{color:var(--ice);text-shadow:0 0 4px var(--ice);text-decoration:none}
+
+@media(max-width:520px){
+  .scores{grid-template-columns:1fr}
+  .flip{width:70px}
+}
+</style>
+</head>
+<body>
+<div class="machine">
+
+  <div class="backglass">
+    <h1 class="title">NERDY</h1>
+    <p class="subtitle">★ Multiball Mode ★ Put the Y in Nerdy ★</p>
+
+    <div class="scores">
+      <div class="dmd">
+        <div class="dmd__lbl">Player 1 · Score</div>
+        <div class="dmd__val" id="score">00,135,820</div>
+        <div class="dmd__sub">Ball 3 of 3 · Bonus × 5</div>
+      </div>
+      <div class="dmd small">
+        <div class="dmd__lbl">High Score</div>
+        <div class="dmd__val">999,999,999</div>
+        <div class="dmd__sub">Held by: you, one day</div>
+      </div>
+    </div>
+
+    <div class="indicators">
+      <div class="bulb" style="--c:#ff2d95;--d:0s">N</div>
+      <div class="bulb" style="--c:#ffd23f;--d:.2s">E</div>
+      <div class="bulb" style="--c:#2dd4ff;--d:.4s">R</div>
+      <div class="bulb" style="--c:#b4ff3a;--d:.6s">D</div>
+      <div class="bulb" style="--c:#9b4dff;--d:.8s">Y</div>
+      <div class="bulb off">·</div>
+      <div class="bulb" style="--c:#ff5b1a;--d:1s">!</div>
+    </div>
+  </div>
+
+  <div class="playfield">
+    <div class="flash">◆ JACKPOT LIT ◆</div>
+
+    <div class="targets">
+      <article class="target" style="--c:#ff2d95">
+        <div class="target__bumper">500K</div>
+        <div class="target__lbl">Drop Target · 1</div>
+        <div class="target__name">Nerdy Terminal</div>
+        <div class="target__desc">Keyboard-first tab-agent manager. Hit this target to switch nine sessions without touching a mouse.</div>
+        <div class="target__pts">500,000</div>
+      </article>
+
+      <article class="target" style="--c:#9b4dff">
+        <div class="target__bumper">1M</div>
+        <div class="target__lbl">Multiball · 5 clusters</div>
+        <div class="target__name">Kubernetes</div>
+        <div class="target__desc">Prod, legacy-prod, test, monitoring, AI. Lights up the ramp when GitOps is whispered.</div>
+        <div class="target__pts">1,000,000</div>
+      </article>
+
+      <article class="target" style="--c:#2dd4ff">
+        <div class="target__bumper">750K</div>
+        <div class="target__lbl">Ramp · Loop</div>
+        <div class="target__name">MCP Gateway</div>
+        <div class="target__desc">Connect AI agents to Slack, Jira, DBs, Grafana, Tailscale. Hit the ramp, light the tools.</div>
+        <div class="target__pts">750,000</div>
+      </article>
+
+      <article class="target" style="--c:#b4ff3a">
+        <div class="target__bumper">8-BIT</div>
+        <div class="target__lbl">Spinner · Pixel</div>
+        <div class="target__name">Pixel Tanks</div>
+        <div class="target__desc">Top-down multiplayer tank combat. Destroying friends in low resolution, one quarter at a time.</div>
+        <div class="target__pts">250,000</div>
+      </article>
+
+      <article class="target" style="--c:#ffd23f">
+        <div class="target__bumper">WIP</div>
+        <div class="target__lbl">Drop Target · 5</div>
+        <div class="target__name">TBD</div>
+        <div class="target__desc">Personal productivity app. Captures, projects, tasks. No bells. No whistles. No launch date.</div>
+        <div class="target__pts">??? pts</div>
+      </article>
+
+      <article class="target" style="--c:#ff5b1a">
+        <div class="target__bumper">4/4</div>
+        <div class="target__lbl">Bumper · Loud</div>
+        <div class="target__name">Mazu — Drums</div>
+        <div class="target__desc">Instrumental stoner. The kind of music where nobody asks about the lyrics. Because there aren’t any.</div>
+        <div class="target__pts">100,000</div>
+      </article>
+
+      <article class="target" style="--c:#ff3b3b">
+        <div class="target__bumper">6 STR</div>
+        <div class="target__lbl">Target · Enthusiasm</div>
+        <div class="target__name">Guitar</div>
+        <div class="target__desc">Badly, but enthusiastically. The neighbours have opinions. Bonus points for volume over accuracy.</div>
+        <div class="target__pts">50,000</div>
+      </article>
+
+      <article class="target" style="--c:#ff2dff">
+        <div class="target__bumper">WAF 0</div>
+        <div class="target__lbl">Skill Shot · Home</div>
+        <div class="target__name">Home Assistant</div>
+        <div class="target__desc">157 entities. Zigbee and YAML. Lights work; the rest is household negotiation.</div>
+        <div class="target__pts">300,000</div>
+      </article>
+
+      <article class="target" style="--c:#e8c88a">
+        <div class="target__bumper">WOOD</div>
+        <div class="target__lbl">Captive Ball · Basement</div>
+        <div class="target__name">Workshop</div>
+        <div class="target__desc">Sawdust and ambition. Every tool purchase logged as “investment.” Combo with Dad × 3 for bonus.</div>
+        <div class="target__pts">200,000</div>
+      </article>
+
+      <article class="target" style="--c:#2dffb4">
+        <div class="target__bumper">3×</div>
+        <div class="target__lbl">Jackpot · Life</div>
+        <div class="target__name">Dad × 3</div>
+        <div class="target__desc">Three kids. They don’t care about the clusters. They do care about the smart lights. Only WAF &gt; 0 use case.</div>
+        <div class="target__pts">9,999,999</div>
+      </article>
+    </div>
+
+    <div class="flippers">
+      <div class="flip L"></div>
+      <div class="ball"></div>
+      <div class="flip R"></div>
+    </div>
+
+    <div class="apron">
+      <span>TILT ↯ NO TILT</span>
+      <span class="credits">CREDITS · 3</span>
+      <span>GAME OVER · INSERT COIN</span>
+    </div>
+  </div>
+
+  <div class="legs"><div class="leg"></div><div class="leg"></div></div>
+
+  <div class="footer">
+    © nerdy.nl · made in the basement · <a href="https://github.com/enipo">github.com/enipo</a>
+  </div>
+</div>
+
+<script>
+(function(){
+  var el=document.getElementById('score');
+  var val=135820;
+  setInterval(function(){
+    val += Math.floor(Math.random()*500)*50;
+    el.textContent=val.toString().padStart(9,'0').replace(/\B(?=(\d{3})+(?!\d))/g,',');
+  },1100);
+})();
+</script>
+</body>
+</html>
