@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nerdy Workbench 1.3</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230055aa'/%3E%3Ctext x='50' y='72' font-size='70' font-family='monospace' fill='%23ff8800' text-anchor='middle'%3EN%3C/text%3E%3C/svg%3E">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--wb-blue:#0055aa;--wb-orange:#ff8800;--wb-white:#ffffff;--wb-black:#000000;--wb-gray:#aaaaaa}
+html,body{height:100%}
+body{background:var(--wb-blue);font-family:'Courier New',monospace;color:var(--wb-black);overflow-x:hidden;min-height:100vh;padding-bottom:32px;image-rendering:pixelated}
+/* MENU BAR */
+.menubar{background:var(--wb-white);border-bottom:2px solid var(--wb-black);display:flex;padding:2px 8px;font-size:12px;font-weight:bold;gap:14px;position:sticky;top:0;z-index:50}
+.menubar .title{margin-right:auto;color:var(--wb-black)}
+.menubar .mem{color:#666}
+.menubar .mi{cursor:default;padding:0 4px}
+.menubar .mi:hover{background:var(--wb-black);color:var(--wb-white)}
+/* DESKTOP */
+.desktop{padding:32px 16px 16px;display:flex;flex-wrap:wrap;gap:16px;justify-content:center;align-items:flex-start}
+.window{background:var(--wb-white);border:2px solid var(--wb-black);min-width:280px;max-width:560px;flex:1 1 320px;box-shadow:4px 4px 0 rgba(0,0,0,.3)}
+.window__bar{background:repeating-linear-gradient(to bottom,var(--wb-orange) 0 2px,#ffffff 2px 4px);border-bottom:2px solid var(--wb-black);display:flex;align-items:stretch;height:22px;position:relative}
+.window__close,.window__zoom,.window__depth{background:var(--wb-white);border-right:2px solid var(--wb-black);width:22px;display:grid;place-items:center;font-size:11px;font-weight:bold}
+.window__depth{border-right:none;border-left:2px solid var(--wb-black);margin-left:auto}
+.window__title{background:var(--wb-white);padding:2px 10px;font-size:12px;font-weight:bold;display:grid;place-items:center}
+.window__title::before{content:'';position:absolute;left:24px;right:50px;top:4px;bottom:4px;background:repeating-linear-gradient(to bottom,var(--wb-orange) 0 2px,#fff 2px 4px);z-index:-1}
+.window__body{padding:14px;font-size:13px;line-height:1.5;background:var(--wb-white)}
+/* ICON GRID */
+.icons{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:14px 8px;padding:8px 4px}
+.icon{display:flex;flex-direction:column;align-items:center;cursor:default;user-select:none}
+.icon__pic{width:52px;height:42px;background:var(--wb-orange);border:2px solid var(--wb-black);box-shadow:2px 2px 0 rgba(0,0,0,.3);display:grid;place-items:center;font-size:20px;color:var(--wb-black);font-weight:bold;font-family:monospace;image-rendering:pixelated}
+.icon__pic.disk{background:var(--wb-white)}
+.icon__pic.drawer{background:var(--wb-orange);border-top-left-radius:0}
+.icon__pic.drawer::after{content:'';position:absolute;width:14px;height:4px;background:var(--wb-orange);border:2px solid var(--wb-black);margin-top:-44px;margin-left:-26px}
+.icon__pic{position:relative}
+.icon__label{margin-top:4px;font-size:11px;background:transparent;padding:1px 4px;text-align:center;font-weight:bold}
+.icon.selected .icon__label{background:var(--wb-black);color:var(--wb-white)}
+.icon.selected .icon__pic{filter:invert(1) hue-rotate(180deg)}
+/* README LIST */
+.readme h2{font-size:13px;background:var(--wb-black);color:var(--wb-white);padding:2px 6px;margin:8px 0 6px;font-weight:bold;letter-spacing:1px}
+.readme ul{list-style:none;margin-left:0}
+.readme li{padding:3px 0;border-bottom:1px dotted #999;display:flex;gap:8px}
+.readme li::before{content:'→';color:var(--wb-orange);font-weight:bold}
+.readme .meta{font-size:11px;color:#666;margin-top:6px;padding:4px;background:#eee;border:1px dashed #aaa}
+/* PREFS WINDOW */
+.prefs{font-size:12px}
+.prefs .row{display:flex;border-bottom:1px solid #ccc;padding:3px 0}
+.prefs .row span:first-child{width:110px;font-weight:bold}
+.prefs .ascii{font-family:'Courier New',monospace;white-space:pre;font-size:10px;line-height:1.1;background:var(--wb-black);color:var(--wb-orange);padding:6px;margin-top:8px;overflow:auto}
+/* STATUS BAR */
+.statusbar{position:fixed;bottom:0;left:0;right:0;background:var(--wb-white);border-top:2px solid var(--wb-black);display:flex;justify-content:space-between;font-size:11px;padding:3px 10px;font-weight:bold}
+.blink{animation:bl 1s steps(2) infinite}
+@keyframes bl{50%{opacity:0}}
+@media(max-width:700px){
+.window{max-width:100%}
+.menubar{font-size:11px;gap:8px;overflow-x:auto;white-space:nowrap}
+.icons{grid-template-columns:repeat(auto-fill,minmax(80px,1fr))}
+}
+</style>
+</head>
+<body>
+<div class="menubar">
+<span class="title">Workbench screen</span>
+<span class="mi">Workbench</span>
+<span class="mi">Window</span>
+<span class="mi">Icons</span>
+<span class="mi">Tools</span>
+<span class="mem">CHIP: 512K  FAST: 2048K</span>
+</div>
+
+<div class="desktop">
+  <div class="window" style="flex-basis:340px">
+    <div class="window__bar">
+      <div class="window__close">×</div>
+      <div class="window__title">Nerdy:/</div>
+      <div class="window__depth">≡</div>
+    </div>
+    <div class="window__body">
+      <div class="icons">
+        <div class="icon selected"><div class="icon__pic disk">DH0</div><div class="icon__label">Nerdy</div></div>
+        <div class="icon"><div class="icon__pic drawer">PRJ</div><div class="icon__label">Projects</div></div>
+        <div class="icon"><div class="icon__pic drawer">MUS</div><div class="icon__label">Music</div></div>
+        <div class="icon"><div class="icon__pic drawer">WRK</div><div class="icon__label">Workshop</div></div>
+        <div class="icon"><div class="icon__pic">🗑</div><div class="icon__label">Trashcan</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="window" style="flex-basis:420px">
+    <div class="window__bar">
+      <div class="window__close">×</div>
+      <div class="window__title">ReadMe.doc</div>
+      <div class="window__depth">≡</div>
+    </div>
+    <div class="window__body readme">
+      <h2>PROJECTS</h2>
+      <ul>
+        <li><b>Nerdy Terminal</b> — keyboard-first terminal manager. Keys beat mouse by 30&nbsp;cm.</li>
+        <li><b>Kubernetes</b> — own control plane. A few clusters too many.</li>
+        <li><b>MCP Gateway</b> — one bridge: Slack, Jira, DBs, Grafana, Tailscale.</li>
+        <li><b>Pixel Tanks</b> — multiplayer friendship&nbsp;destroyer, low&nbsp;res.</li>
+        <li><b>TBD</b> — captures, projects, tasks. No bells.</li>
+      </ul>
+      <h2>NOISE</h2>
+      <ul>
+        <li><b>Mazu</b> — drums, instrumental stoner.</li>
+        <li><b>Guitar</b> — badly, enthusiastically. Neighbors object.</li>
+      </ul>
+      <h2>WORKSHOP</h2>
+      <ul>
+        <li>Basement. Sawdust + ambition. Every tool an &ldquo;investment.&rdquo;</li>
+      </ul>
+      <div class="meta">Putting the Y in Nerdy. Kids × 3. Smart lights only WAF&nbsp;&gt;&nbsp;0.</div>
+    </div>
+  </div>
+
+  <div class="window" style="flex-basis:280px">
+    <div class="window__bar">
+      <div class="window__close">×</div>
+      <div class="window__title">Preferences</div>
+      <div class="window__depth">≡</div>
+    </div>
+    <div class="window__body prefs">
+      <div class="row"><span>Host</span><span>nerdy.nl</span></div>
+      <div class="row"><span>Owner</span><span>enipo</span></div>
+      <div class="row"><span>Kernel</span><span>ExecBase v1.3</span></div>
+      <div class="row"><span>Coffee</span><span>[X] Required</span></div>
+      <div class="row"><span>Mouse</span><span>[ ] Optional</span></div>
+      <div class="row"><span>Mode</span><span>HAM6 — nerdy</span></div>
+      <div class="ascii">
+    /\\_/\\
+   ( o.o )   <span class="blink">_</span>
+    > ^ <   nerdy
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="statusbar">
+  <span>Volume Nerdy: 67% full — 142 files</span>
+  <span>github.com/enipo</span>
+  <span id="clock"></span>
+</div>
+
+<script>
+(function(){
+  var clk=document.getElementById('clock');
+  function tick(){var d=new Date();clk.textContent=d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})+' • '+d.toLocaleDateString('en-GB');}
+  tick();setInterval(tick,30000);
+  document.querySelectorAll('.icon').forEach(function(i){
+    i.addEventListener('click',function(){
+      document.querySelectorAll('.icon').forEach(function(x){x.classList.remove('selected')});
+      i.classList.add('selected');
+    });
+  });
+})();
+</script>
+</body>
+</html>

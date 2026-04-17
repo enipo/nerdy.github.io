@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>nerdy.nl — 56k Dial-Up</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23001f26'/%3E%3Ctext y='.88em' font-size='80' fill='%2349d7b8' font-family='monospace'%3E@%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#001f26;--bg2:#00343f;--fg:#8affd8;--dim:#3f8d82;--warn:#e6b54a;--acc:#49d7b8;--mag:#d86aff}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:'Share Tech Mono',monospace;min-height:100vh;overflow-x:hidden;padding:16px;font-size:15px;line-height:1.45}
+.wrap{max-width:880px;margin:0 auto}
+h1{font-size:1.15rem;letter-spacing:.2em;color:var(--acc);margin-bottom:4px}
+.sub{color:var(--dim);letter-spacing:.15em;font-size:.75rem;margin-bottom:14px;text-transform:uppercase}
+.modem{background:var(--bg2);border:1px solid var(--dim);border-radius:4px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px}
+.leds{display:flex;gap:14px}
+.led{display:flex;flex-direction:column;align-items:center;font-size:.6rem;color:var(--dim);letter-spacing:.1em;text-transform:uppercase}
+.led .dot{width:10px;height:10px;border-radius:50%;background:#333;margin-bottom:3px;box-shadow:inset 0 0 2px #000}
+.led.on .dot{background:var(--acc);box-shadow:0 0 8px var(--acc)}
+.led.tx .dot{background:var(--warn);animation:flick .4s steps(2) infinite}
+.led.rx .dot{background:var(--mag);animation:flick .5s steps(2) infinite}
+@keyframes flick{50%{opacity:.2}}
+.linkinfo{font-size:.8rem;color:var(--dim)}
+.linkinfo b{color:var(--acc)}
+.log{background:#000810;border:1px solid var(--dim);border-radius:3px;padding:12px 14px;margin-bottom:18px;font-size:13px;min-height:220px;white-space:pre-wrap;overflow:hidden;font-family:'Share Tech Mono',monospace}
+.log .dim{color:var(--dim)}
+.log .ok{color:var(--acc)}
+.log .warn{color:var(--warn)}
+.bar{height:10px;background:#001319;border:1px solid var(--dim);position:relative;margin:10px 0;overflow:hidden}
+.bar > span{display:block;height:100%;background:repeating-linear-gradient(90deg,var(--acc) 0 6px,#2aa184 6px 10px);width:0%;transition:width .3s}
+.packets{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin-bottom:18px}
+.packet{background:var(--bg2);border:1px dashed var(--dim);padding:10px;border-radius:3px;font-size:13px}
+.packet .hdr{display:flex;justify-content:space-between;color:var(--acc);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;border-bottom:1px dotted var(--dim);padding-bottom:4px}
+.packet .hdr .seq{color:var(--warn)}
+.packet h3{font-size:1rem;color:var(--fg);margin-bottom:4px}
+.packet p{color:#bfe5d8;font-size:.86rem;line-height:1.5}
+.packet .tag{display:inline-block;border:1px solid var(--dim);color:var(--dim);padding:0 5px;margin-top:6px;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase}
+.bbs{border:1px solid var(--dim);padding:12px 14px;margin-bottom:16px;font-size:13px;background:rgba(73,215,184,.03)}
+.bbs h2{font-size:.75rem;letter-spacing:.2em;color:var(--acc);text-transform:uppercase;margin-bottom:6px}
+.bbs ul{list-style:none;padding:0}
+.bbs li{padding:2px 0;display:flex;gap:12px}
+.bbs li::before{content:'>';color:var(--warn)}
+.foot{font-size:.7rem;color:var(--dim);text-align:center;padding:10px 0;letter-spacing:.1em;text-transform:uppercase}
+.foot a{color:var(--acc)}
+.cursor{display:inline-block;width:.5em;height:1em;background:var(--fg);vertical-align:-2px;animation:bl 1s steps(2) infinite}
+@keyframes bl{50%{opacity:0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>nerdy.nl &mdash; DIAL-UP SESSION</h1>
+<div class="sub">carrier established · 56.000 bps · no new mail but a lot of noise</div>
+
+<div class="modem">
+  <div class="leds">
+    <div class="led on"><div class="dot"></div>PWR</div>
+    <div class="led on"><div class="dot"></div>CD</div>
+    <div class="led tx"><div class="dot"></div>TX</div>
+    <div class="led rx"><div class="dot"></div>RX</div>
+    <div class="led on"><div class="dot"></div>DTR</div>
+  </div>
+  <div class="linkinfo">LINK: <b>56k V.90</b> &middot; PEER: <b>nerdy.nl</b> &middot; UPTIME: <b id="ut">00:00:00</b></div>
+</div>
+
+<div class="log" id="log" aria-live="polite"></div>
+
+<div class="bar"><span id="progress"></span></div>
+
+<div class="packets">
+  <div class="packet">
+    <div class="hdr"><span>PKT /PROJECT</span><span class="seq">#001</span></div>
+    <h3>Nerdy Terminal</h3>
+    <p>Keyboard-first terminal manager for macOS. Multiple sessions, instant switching. Why move your hand 30cm to the right?</p>
+    <span class="tag">macOS · CLI</span>
+  </div>
+  <div class="packet">
+    <div class="hdr"><span>PKT /PROJECT</span><span class="seq">#002</span></div>
+    <h3>Kubernetes, personally</h3>
+    <p>Own control plane. A few clusters too many. Over-engineered for a one-person operation. Whispered: "GitOps."</p>
+    <span class="tag">k8s · gitops</span>
+  </div>
+  <div class="packet">
+    <div class="hdr"><span>PKT /PROJECT</span><span class="seq">#003</span></div>
+    <h3>MCP Gateway</h3>
+    <p>One bridge between AI agents and everything else: Slack, Jira, databases, Grafana, Tailscale. The thing that makes the other things talk.</p>
+    <span class="tag">ai · integration</span>
+  </div>
+  <div class="packet">
+    <div class="hdr"><span>PKT /GAME</span><span class="seq">#004</span></div>
+    <h3>Pixel Tanks</h3>
+    <p>Top-down multiplayer tank combat. Built for the joy of destroying friends in low resolution. The pixel art is intentional.</p>
+    <span class="tag">game · multiplayer</span>
+  </div>
+  <div class="packet">
+    <div class="hdr"><span>PKT /PROJECT</span><span class="seq">#005</span></div>
+    <h3>TBD</h3>
+    <p>Personal productivity. Captures, projects, tasks. No bells. No whistles. Just the things that need doing.</p>
+    <span class="tag">personal</span>
+  </div>
+  <div class="packet">
+    <div class="hdr"><span>PKT /NOISE</span><span class="seq">#006</span></div>
+    <h3>Mazu &middot; drums</h3>
+    <p>Instrumental stoner band. The kind of music where nobody asks "what are the lyrics about?" Also guitar. Badly. Neighbors have opinions.</p>
+    <span class="tag">music</span>
+  </div>
+</div>
+
+<div class="bbs">
+  <h2>// BULLETIN_BOARD</h2>
+  <ul>
+    <li>Workshop: sawdust rising in the basement. Every tool filed as "investment."</li>
+    <li>Smart home WAF: dangerously low. YAML held together with Zigbee and stubbornness.</li>
+    <li>Kids × 3. They don't care about clusters. They do care about the lights.</li>
+    <li>Putting the Y in Nerdy &mdash; as in: Why, dear god... Why!?</li>
+  </ul>
+</div>
+
+<div class="foot">
+  NO WARRANTY &middot; NO ANALYTICS &middot; <a href="https://github.com/enipo">github.com/enipo</a> &middot; type <b>ATH0</b> to hang up<span class="cursor"></span>
+</div>
+</div>
+
+<script>
+(function(){
+  var log=document.getElementById('log');
+  var lines=[
+    {t:'ATZ',c:'dim'},
+    {t:'OK',c:'ok'},
+    {t:'ATDT*1-900-NERDY',c:'dim'},
+    {t:'DIALING...',c:'warn'},
+    {t:'CONNECT 56000/V.90/LAPM/V.42bis',c:'ok'},
+    {t:'negotiating TCP/IP...',c:'dim'},
+    {t:'authenticating user "enipo"... OK',c:'ok'},
+    {t:'MOTD: no new mail, but lots of noise',c:'warn'},
+    {t:'GET / HTTP/1.0 -> 200 OK · 12.4 KB',c:'ok'},
+    {t:'streaming content...',c:'dim'}
+  ];
+  var li=0,ci=0,currentSpan=null;
+  function tick(){
+    if(li>=lines.length){
+      var done=document.createElement('span');
+      done.className='ok';
+      done.textContent='\n[ session idle — press any key ]';
+      log.appendChild(done);
+      return;
+    }
+    var line=lines[li];
+    if(ci===0){
+      if(li>0){log.appendChild(document.createTextNode('\n'));}
+      currentSpan=document.createElement('span');
+      currentSpan.className=line.c;
+      log.appendChild(currentSpan);
+    }
+    if(ci<line.t.length){
+      currentSpan.appendChild(document.createTextNode(line.t.charAt(ci)));
+      ci++;
+      setTimeout(tick, line.c==='warn'?40:22);
+    } else {
+      li++; ci=0;
+      setTimeout(tick, 220);
+    }
+  }
+  tick();
+
+  var start=Date.now();
+  function pad(n){return (n<10?'0':'')+n}
+  function up(){
+    var s=Math.floor((Date.now()-start)/1000);
+    document.getElementById('ut').textContent=pad(Math.floor(s/3600))+':'+pad(Math.floor(s/60)%60)+':'+pad(s%60);
+  }
+  setInterval(up,1000);
+
+  var bar=document.getElementById('progress');
+  var pct=0;
+  setInterval(function(){
+    pct=(pct+7+Math.random()*8)%100;
+    bar.style.width=pct+'%';
+  },600);
+})();
+</script>
+</body>
+</html>

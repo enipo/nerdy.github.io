@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>C:\NERDY&gt;</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23000'/%3E%3Ctext x='8' y='70' font-size='60' font-family='monospace' fill='%23cfcfcf'%3EC:%5C%3E%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{background:#000;color:#cfcfcf;font-family:'VT323',monospace;font-size:20px;line-height:1.2;min-height:100vh;overflow-x:hidden}
+.crt{min-height:100vh;padding:12px 16px 40px;position:relative}
+/* CRT glow + scanlines */
+.crt::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at center,rgba(255,255,255,.02),rgba(0,0,0,.25) 80%);pointer-events:none;z-index:2}
+.crt::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(to bottom,transparent 0 2px,rgba(0,0,0,.18) 2px 3px);pointer-events:none;z-index:3;mix-blend-mode:multiply}
+.wrap{max-width:960px;margin:0 auto;position:relative;z-index:1}
+/* Boot banner */
+.banner{color:#cfcfcf;border:1px solid #cfcfcf;padding:4px 10px;display:inline-block;margin-bottom:8px}
+.muted{color:#8a8a8a}
+.yellow{color:#e6d35a}
+.cyan{color:#5ad3e6}
+.green{color:#64d664}
+.red{color:#e06060}
+.white{color:#f4f4f4}
+.pink{color:#e66ad3}
+.prompt{color:#cfcfcf}
+.cursor{display:inline-block;width:.55ch;height:1em;background:#cfcfcf;vertical-align:-2px;animation:blink 1.05s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+pre{font-family:inherit;white-space:pre-wrap;word-break:break-word}
+.block{margin:4px 0 10px}
+.cmd{font-weight:normal}
+.dir-line{display:flex;gap:18px;flex-wrap:wrap}
+.dir-line span:first-child{min-width:14ch}
+table.mem{border-collapse:collapse;margin:4px 0}
+table.mem td{padding:0 10px 0 0}
+.box{border:1px solid #cfcfcf;padding:4px 10px;display:inline-block;margin:2px 0}
+.key{border:1px solid #cfcfcf;padding:0 6px;font-size:16px;display:inline-block}
+a{color:#5ad3e6;text-decoration:underline}
+/* Selection */
+::selection{background:#cfcfcf;color:#000}
+@media(max-width:600px){body{font-size:17px}}
+</style>
+</head>
+<body>
+<div class="crt">
+<div class="wrap">
+<pre class="block"><span class="muted">Nerdy BIOS v4.2 — (C) 1998 enipo Industries
+Memory Test : 640K OK ... no, <span class="yellow">640K is not enough anymore</span>
+Boot sector : C:  HDD : ok  Keyboard : ok  Coffee : ok</span></pre>
+
+<pre class="block"><span class="cyan">NERDY.COM</span>  <span class="muted">loader v1.0</span>
+Starting NERDY.NL...
+<span class="green">[OK]</span> Brewing coffee
+<span class="green">[OK]</span> Launching terminal
+<span class="green">[OK]</span> Loading YAML (a lot of it)
+<span class="yellow">[..]</span> Convincing wife of WAF improvements
+<span class="red">[!!]</span> Failed. Continuing anyway.</pre>
+
+<div class="banner"><pre> NERDY.NL — single user system — no mouse required </pre></div>
+
+<pre class="block prompt">C:\NERDY&gt; <span class="cmd">type ABOUT.TXT</span></pre>
+<pre class="block">Hi, I'm enipo. I build small, sharp things.
+I automate the house until it breaks. I deploy
+Kubernetes for a party of one. I play drums,
+raise three kids, and put the <span class="yellow">Y in Nerdy</span>.</pre>
+
+<pre class="block prompt">C:\NERDY&gt; <span class="cmd">dir /projects</span></pre>
+<pre class="block">
+ Volume in drive C is NERDY
+ Directory of C:\NERDY\PROJECTS
+
+<span class="cyan">TERMINAL</span> &lt;DIR&gt;   Keyboard-first sessions. Mouse: optional.
+<span class="cyan">KUBERNTS</span> &lt;DIR&gt;   Own control plane. &quot;A few clusters too many.&quot;
+<span class="cyan">MCPGATE </span> &lt;DIR&gt;   One bridge: Slack · Jira · Grafana · Tailscale
+<span class="cyan">PIXTANKS</span> &lt;DIR&gt;   Multiplayer tank combat. Friendship: destroyed.
+<span class="cyan">TBD     </span> &lt;DIR&gt;   Captures / projects / tasks. No bells.
+         5 dir(s)    infinite bytes free</pre>
+
+<pre class="block prompt">C:\NERDY&gt; <span class="cmd">run MUSIC.BAT</span></pre>
+<pre class="block"><span class="pink">&gt; MAZU</span>   drums, instrumental stoner
+<span class="pink">&gt; GUITAR</span> badly, but enthusiastically. Neighbors have opinions.</pre>
+
+<pre class="block prompt">C:\NERDY&gt; <span class="cmd">chkdsk WORKSHOP</span></pre>
+<pre class="block">Analysing basement...
+  Sawdust        : <span class="yellow">rising</span>
+  Tools          : 42 items, all &quot;investments&quot;
+  Progress       : mostly ambition
+  Status         : <span class="green">operational</span></pre>
+
+<pre class="block prompt">C:\NERDY&gt; <span class="cmd">mem</span></pre>
+<pre class="block">
+<table class="mem">
+<tr><td>&nbsp;Conventional</td><td>   640K</td><td>YAML loaded</td></tr>
+<tr><td>&nbsp;XMS / HA</td><td> 1,024K</td><td>Home Assistant, Zigbee</td></tr>
+<tr><td>&nbsp;Cluster pool</td><td> 4,096K</td><td>K8s, overkill</td></tr>
+<tr><td>&nbsp;Dad.sys</td><td>resident</td><td>3 kids, smart lights</td></tr>
+<tr><td>&nbsp;Free</td><td>    0K</td><td>see: coffee</td></tr>
+</table></pre>
+
+<pre class="block prompt">C:\NERDY&gt; <span class="cmd">help</span></pre>
+<pre class="block">
+  <span class="box">ABOUT</span>  <span class="box">PROJECTS</span>  <span class="box">MUSIC</span>  <span class="box">WORKSHOP</span>  <span class="box">DAD</span>
+  type GITHUB to visit <a href="https://github.com/enipo">github.com/enipo</a></pre>
+
+<pre class="block prompt">C:\NERDY&gt; <span id="typed"></span><span class="cursor"></span></pre>
+
+<pre class="block muted" style="margin-top:18px">Press <span class="key">ALT</span>+<span class="key">F4</span> to quit. You won't.
+nerdy.nl — no warranty, no analytics, no cookies, no shame</pre>
+</div>
+</div>
+<script>
+(function(){
+  var el=document.getElementById('typed');
+  var q=['dir','cls','type ABOUT.TXT','run NOISE.EXE','ship it','format C:','abort, retry, fail?'];
+  var i=0,j=0,phase=0;
+  function tick(){
+    var cmd=q[i];
+    if(phase===0){el.textContent=cmd.slice(0,j);j++;if(j>cmd.length){phase=1;j=0;setTimeout(tick,1400);return}}
+    else{el.textContent=cmd.slice(0,cmd.length-j);j++;if(j>cmd.length){phase=0;j=0;i=(i+1)%q.length;setTimeout(tick,400);return}}
+    setTimeout(tick,phase?28:75);
+  }
+  tick();
+})();
+</script>
+</body>
+</html>

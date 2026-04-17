@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nerdy Mixtape · Side A</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='8' fill='%23f0e6c8'/%3E%3Ccircle cx='32' cy='50' r='12' fill='%23222'/%3E%3Ccircle cx='68' cy='50' r='12' fill='%23222'/%3E%3Ccircle cx='32' cy='50' r='3' fill='%23f0e6c8'/%3E%3Ccircle cx='68' cy='50' r='3' fill='%23f0e6c8'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Special+Elite&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--paper:#f0e6c8;--paper-dk:#d9cba3;--ink:#2a1a14;--red:#c2403c;--blue:#3a4e7a;--yellow:#e6c84c;--tape:#2a1c10;--shell:#1a1208}
+html,body{min-height:100%}
+body{background:#3a3a3a;background-image:radial-gradient(circle at 50% 30%,#555 0%,#2a2a2a 100%);min-height:100vh;color:var(--ink);font-family:'Special Elite','Courier New',monospace;padding:30px 16px 40px;overflow-x:hidden}
+.page{max-width:840px;margin:0 auto}
+
+/* Cassette */
+.cassette{background:var(--paper);border-radius:6px;padding:0;box-shadow:0 18px 40px rgba(0,0,0,.45),0 0 0 8px var(--shell),inset 0 0 0 1px #b9a97a;position:relative;margin-bottom:28px;overflow:hidden}
+.shell-top{background:var(--shell);height:22px;display:flex;justify-content:space-between;align-items:center;padding:0 16px;color:#aaa;font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:.2em}
+.shell-bot{background:var(--shell);height:18px;display:flex;justify-content:space-between;align-items:center;padding:0 16px;color:#888;font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:.2em}
+
+/* Label */
+.label{padding:14px 18px 10px;background:linear-gradient(180deg,var(--paper) 0%,var(--paper-dk) 100%);position:relative;border-top:2px solid var(--red);border-bottom:2px solid var(--blue)}
+.label::before,.label::after{content:'';position:absolute;top:50%;width:18px;height:18px;border-radius:50%;border:2px dashed #8a7a50;transform:translateY(-50%)}
+.label::before{left:-8px}.label::after{right:-8px}
+.brand{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:10px;border-bottom:1px dashed #a89868;padding-bottom:6px;margin-bottom:8px}
+.brand h1{font-family:'Permanent Marker',cursive;font-size:2rem;color:var(--ink);letter-spacing:.01em;line-height:1}
+.brand .side{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--red);background:var(--yellow);padding:2px 14px;border:2px solid var(--ink);box-shadow:2px 2px 0 var(--ink);transform:rotate(-3deg)}
+.meta{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:12px;color:#4a3020}
+.meta b{color:var(--red);font-family:'Bebas Neue',sans-serif;letter-spacing:.08em}
+.scrawl{font-family:'Permanent Marker',cursive;color:var(--blue);margin-top:6px;font-size:.95rem}
+
+/* Window with reels */
+.window{background:#e8d9b4;margin:0 24px;border-top:1px solid #9a8856;border-bottom:1px solid #9a8856;padding:20px 0;display:flex;justify-content:space-around;align-items:center;position:relative}
+.window::before{content:'';position:absolute;left:0;right:0;top:50%;height:10px;background:var(--tape);box-shadow:0 0 4px rgba(0,0,0,.3);transform:translateY(-50%)}
+.reel{width:88px;height:88px;border-radius:50%;background:radial-gradient(circle at center,#222 0 24%,var(--tape) 24% 72%,#3a2818 72% 100%);border:3px solid #0a0806;position:relative;animation:spin 3.2s linear infinite;box-shadow:inset 0 0 0 2px #443224,0 2px 4px rgba(0,0,0,.4);z-index:1}
+.reel::before{content:'';position:absolute;inset:30%;background:var(--paper);border-radius:50%;border:2px solid #0a0806}
+.reel::after{content:'';position:absolute;top:50%;left:50%;width:28px;height:28px;background:#0a0806;border-radius:50%;transform:translate(-50%,-50%);box-shadow:inset 0 0 0 3px #f0e6c8,inset 0 0 0 5px #0a0806}
+@keyframes spin{to{transform:rotate(360deg)}}
+.reel--r{animation-duration:4.6s}
+
+/* Tracklist */
+.tracks{padding:18px 22px 20px;background:var(--paper);font-family:'Special Elite',monospace}
+.tracks h2{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--blue);border-bottom:2px solid var(--blue);padding-bottom:4px;margin-bottom:10px;letter-spacing:.12em;display:flex;justify-content:space-between}
+.tracks h2 span{font-family:'Special Elite',monospace;font-size:.75rem;color:#6a5040;letter-spacing:.1em}
+.tracks ol{list-style:none;counter-reset:tr}
+.tracks li{counter-increment:tr;display:grid;grid-template-columns:28px 1fr auto;gap:10px;padding:6px 0;border-bottom:1px dotted #b8a878;align-items:baseline;cursor:pointer;transition:transform .15s}
+.tracks li:hover{transform:translateX(4px)}
+.tracks li::before{content:counter(tr,decimal-leading-zero);color:var(--red);font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.05em}
+.tracks .title{font-size:1rem;color:var(--ink)}
+.tracks .title small{display:block;color:#6a5040;font-size:.8rem;line-height:1.3;margin-top:2px;font-family:'Special Elite',monospace}
+.tracks .dur{color:#6a5040;font-size:.85rem;font-variant-numeric:tabular-nums}
+
+/* Sticker & Polaroid */
+.row{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:24px}
+@media(max-width:640px){.row{grid-template-columns:1fr}}
+.sticker{background:var(--yellow);padding:18px 20px;transform:rotate(-1.6deg);box-shadow:6px 6px 16px rgba(0,0,0,.3);border:1px dashed #8a6a20}
+.sticker h3{font-family:'Permanent Marker',cursive;font-size:1.5rem;color:var(--red);margin-bottom:6px}
+.sticker p{font-size:.95rem;line-height:1.45;color:#3a2810}
+.sticker ul{list-style:none;margin-top:8px}
+.sticker li{padding:3px 0;border-bottom:1px dotted #a88828;font-size:.9rem;display:flex;gap:6px}
+.sticker li::before{content:'♪';color:var(--blue)}
+.polaroid{background:#fff;padding:10px 10px 36px;transform:rotate(2deg);box-shadow:6px 6px 16px rgba(0,0,0,.35);font-family:'Permanent Marker',cursive;color:var(--ink);text-align:center}
+.polaroid .pic{background:repeating-linear-gradient(45deg,#b84040 0 10px,#2a1a14 10px 20px,#e6c84c 20px 30px,#2a1a14 30px 40px,#3a4e7a 40px 50px,#2a1a14 50px 60px);height:160px;margin-bottom:10px;position:relative;overflow:hidden}
+.polaroid .pic::after{content:'NERDY.NL';position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:2.6rem;letter-spacing:.2em;text-shadow:2px 2px 0 rgba(0,0,0,.7)}
+.polaroid p{font-size:1rem}
+
+/* Controls */
+.controls{margin-top:26px;background:#1a1a1a;border-radius:6px;padding:12px;display:flex;gap:8px;justify-content:center;box-shadow:0 6px 16px rgba(0,0,0,.4)}
+.ctl{background:linear-gradient(180deg,#4a4a4a,#2a2a2a);border:none;color:#ddd;width:54px;height:32px;border-radius:3px;font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:.15em;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 2px 0 #000}
+.ctl:active{transform:translateY(1px);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 1px 0 #000}
+.ctl.rec{color:var(--red)}
+.ctl.play{color:var(--yellow)}
+.foot{text-align:center;color:#aaa;font-size:.75rem;letter-spacing:.15em;margin-top:18px;font-family:'Bebas Neue',sans-serif}
+.foot a{color:var(--yellow)}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="cassette">
+  <div class="shell-top"><span>NERDY · CHROME 90</span><span>NO NOISE REDUCTION</span></div>
+
+  <div class="label">
+    <div class="brand">
+      <h1>Nerdy Mixtape</h1>
+      <div class="side">SIDE A</div>
+    </div>
+    <div class="meta">
+      <b>ARTIST</b><span>enipo (github.com/enipo)</span>
+      <b>RECORDED</b><span>basement workshop · sawdust included</span>
+      <b>FOR</b><span>anyone with a tape deck and patience</span>
+    </div>
+    <div class="scrawl">for the nights you actually want to read the liner notes →</div>
+  </div>
+
+  <div class="window">
+    <div class="reel"></div>
+    <div class="reel reel--r"></div>
+  </div>
+
+  <div class="tracks">
+    <h2>Side A — Tracklist <span>45&nbsp;min · no skips</span></h2>
+    <ol>
+      <li>
+        <div class="title">Nerdy Terminal <small>Keyboard-first tab manager for macOS. Mouse: optional. Distance saved: 30&nbsp;cm per keystroke.</small></div>
+        <div class="dur">5:12</div>
+      </li>
+      <li>
+        <div class="title">Kubernetes, Personally <small>Own control plane. A few clusters too many. Whispered "GitOps" with a thousand-yard stare.</small></div>
+        <div class="dur">9:07</div>
+      </li>
+      <li>
+        <div class="title">MCP Gateway <small>One bridge between AI agents and Slack / Jira / databases / Grafana / Tailscale. The glue.</small></div>
+        <div class="dur">6:33</div>
+      </li>
+      <li>
+        <div class="title">Pixel Tanks (demo) <small>Top-down multiplayer combat. Low resolution on purpose. Friendships sold separately.</small></div>
+        <div class="dur">3:44</div>
+      </li>
+      <li>
+        <div class="title">TBD — quiet version <small>Captures, projects, tasks. No bells. No whistles. Just things that need doing.</small></div>
+        <div class="dur">4:18</div>
+      </li>
+      <li>
+        <div class="title">Home Assistant Blues <small>YAML held together by Zigbee and stubbornness. WAF at historic low. Kids prefer the lights.</small></div>
+        <div class="dur">7:01</div>
+      </li>
+      <li>
+        <div class="title">Workshop Interlude <small>Basement. Sawdust rising. Every tool filed as "investment in the hobby."</small></div>
+        <div class="dur">2:55</div>
+      </li>
+      <li>
+        <div class="title">Hidden track — <em>Putting the Y in Nerdy</em> <small>As in: Why, dear god… Why!?</small></div>
+        <div class="dur">1:10</div>
+      </li>
+    </ol>
+  </div>
+  <div class="shell-bot"><span>◀ A</span><span>nerdy.nl · mixtape · vol. 1</span><span>B ▶</span></div>
+</div>
+
+<div class="row">
+  <div class="sticker">
+    <h3>B-side: Noise</h3>
+    <p>Drummer in <b>Mazu</b> — instrumental stoner band. The kind of music where nobody asks what the lyrics are about. Plays guitar too. Badly. Enthusiastically. Neighbors have opinions.</p>
+    <ul>
+      <li>Mazu — drums · loud</li>
+      <li>Guitar — enthusiastic · less loud</li>
+      <li>Amps — louder than strictly necessary</li>
+    </ul>
+  </div>
+  <div class="polaroid">
+    <div class="pic"></div>
+    <p>Dad × 3 &mdash; only WAF&nbsp;&gt;&nbsp;0 use case: smart lights.</p>
+  </div>
+</div>
+
+<div class="controls">
+  <button class="ctl">◀◀</button>
+  <button class="ctl play">▶ PLAY</button>
+  <button class="ctl">■</button>
+  <button class="ctl">▶▶</button>
+  <button class="ctl rec">● REC</button>
+</div>
+
+<div class="foot">nerdy.nl · do not rewind with a pencil · <a href="https://github.com/enipo">github.com/enipo</a></div>
+
+</div>
+
+<script>
+(function(){
+  // click track to pulse the reels faster briefly
+  var reels=document.querySelectorAll('.reel');
+  document.querySelectorAll('.tracks li').forEach(function(li){
+    li.addEventListener('click',function(){
+      reels.forEach(function(r){r.style.animationDuration='0.7s';});
+      setTimeout(function(){
+        reels[0].style.animationDuration='3.2s';
+        reels[1].style.animationDuration='4.6s';
+      },900);
+    });
+  });
+})();
+</script>
+</body>
+</html>
