@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>nerdy.nl — e4 opens</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.88em' font-size='85'%3E♞%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--light:#ead6b4;--dark:#7d4f2d;--ink:#1a1410;--cream:#f3ead5;--accent:#a52a2a;--mono:'JetBrains Mono',monospace;--serif:'Cormorant Garamond',serif}
+body{background:#2a1e14;color:var(--ink);font-family:var(--serif);min-height:100vh;padding:2rem 1rem;background-image:radial-gradient(circle at 20% 10%,#3a2a1e 0%,#1a120a 60%)}
+.wrap{max-width:960px;margin:0 auto}
+.head{text-align:center;margin-bottom:2rem;color:var(--cream)}
+.head h1{font-size:clamp(2.4rem,5vw,4rem);font-weight:700;letter-spacing:.04em;line-height:1}
+.head h1 .knight{color:#d4b585}
+.head p{font-family:var(--mono);font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:#a8957a;margin-top:.4rem}
+.head .eco{font-family:var(--mono);font-size:.65rem;color:#8a7a60;margin-top:.3rem}
+
+.board{display:grid;grid-template-columns:30px repeat(8,1fr);grid-template-rows:repeat(8,1fr) 30px;aspect-ratio:9/9;border:12px solid #3a2818;box-shadow:0 0 40px rgba(0,0,0,.6),inset 0 0 0 2px #8a6040;background:#3a2818}
+.rank{font-family:var(--mono);font-size:.7rem;color:#8a7a60;display:flex;align-items:center;justify-content:center;font-weight:600}
+.file{font-family:var(--mono);font-size:.7rem;color:#8a7a60;display:flex;align-items:center;justify-content:center;font-weight:600}
+.file.spacer{grid-column:1}
+.sq{position:relative;padding:.4rem;overflow:hidden;cursor:pointer;transition:filter .2s}
+.sq:hover{filter:brightness(1.15)}
+.sq.l{background:var(--light)}
+.sq.d{background:var(--dark);color:var(--cream)}
+.sq.d .title{color:var(--cream)}
+.sq.d .meta{color:#d4b585}
+.sq .piece{font-size:clamp(1.4rem,3vw,2.4rem);line-height:1;position:absolute;top:.2rem;right:.3rem;opacity:.85}
+.sq .title{font-family:var(--serif);font-weight:700;font-size:.78rem;line-height:1.1;margin-top:1.6rem}
+.sq .meta{font-family:var(--mono);font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;margin-top:.2rem;opacity:.7}
+.sq.empty{cursor:default}
+.sq.empty:hover{filter:none}
+
+.modal{position:fixed;inset:0;background:rgba(10,6,2,.85);display:none;align-items:center;justify-content:center;z-index:99;padding:1rem}
+.modal.on{display:flex}
+.card{background:var(--cream);max-width:520px;width:100%;padding:2rem;border:2px solid var(--ink);box-shadow:10px 10px 0 var(--accent);position:relative}
+.card .close{position:absolute;top:.6rem;right:.9rem;font-family:var(--mono);font-size:1.2rem;cursor:pointer;background:none;border:none}
+.card .notation{font-family:var(--mono);font-size:.7rem;letter-spacing:.15em;color:var(--accent);text-transform:uppercase}
+.card h2{font-size:2rem;font-weight:700;line-height:1;margin:.3rem 0 .6rem}
+.card .glyph{font-size:2.6rem;float:right;line-height:1;margin-top:-.4rem}
+.card p{font-size:1.05rem;line-height:1.5;margin-bottom:.7rem}
+.card .move{font-family:var(--mono);font-size:.7rem;color:#6a4020;margin-top:1rem;border-top:1px solid #b89870;padding-top:.6rem;letter-spacing:.1em}
+
+.moves{margin-top:2rem;background:var(--cream);padding:1.2rem 1.4rem;border:2px solid var(--ink);box-shadow:6px 6px 0 #3a2818;font-family:var(--mono);font-size:.8rem;line-height:1.9}
+.moves h3{font-family:var(--serif);font-size:1.1rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.6rem;font-weight:700}
+.moves ol{list-style:none;counter-reset:m;columns:2;column-gap:2rem}
+.moves li{counter-increment:m;font-size:.75rem}
+.moves li::before{content:counter(m)'. ';color:#8a6040;font-weight:600}
+.moves em{color:#6a4020;font-style:italic}
+.foot{text-align:center;color:#8a7a60;font-family:var(--mono);font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;margin-top:1.6rem}
+.foot a{color:#c8a878}
+
+@media(max-width:600px){
+.board{grid-template-columns:20px repeat(8,1fr)}
+.sq .title{font-size:.6rem;margin-top:1.2rem}
+.sq .meta{display:none}
+.moves ol{columns:1}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="head">
+<h1><span class="knight">♞</span> Nerdy <span class="knight">♞</span></h1>
+<p>Opening Repertoire · Ruy López · Variations</p>
+<div class="eco">ECO C60–C99 · by Gertjan · ELO N/A</div>
+</header>
+
+<div class="board" id="board"></div>
+
+<div class="moves">
+<h3>Annotated Game · nerdy.nl vs. Status Quo</h3>
+<ol>
+<li>e4 — <em>Terminal opens strong, keyboard-first.</em></li>
+<li>c5 — <em>Kubernetes defends the flanks.</em></li>
+<li>Nf3 — <em>Knight to MCP Gateway.</em></li>
+<li>d6 — <em>Pixel Tanks holds the center.</em></li>
+<li>Bb5+ — <em>TBD check: captures, projects, tasks.</em></li>
+<li>Bd7 — <em>Home Assistant blocks. WAF: 2.</em></li>
+<li>O-O — <em>Castles into the basement workshop.</em></li>
+<li>Nc6 — <em>Drums develop. Mazu tunes up.</em></li>
+<li>Re1 — <em>Rook lifts. Dad × 3 activated.</em></li>
+<li>Nf6 — <em>Guitar. Badly, but enthusiastically.</em></li>
+<li>c3 — <em>Pawn structure: YAML.</em></li>
+<li>... — <em>Draw by repetition. Build continues.</em></li>
+</ol>
+</div>
+
+<div class="foot">
+&copy; nerdy.nl · <a href="https://github.com/enipo">github.com/enipo</a> · Putting the Y in Nerdy
+</div>
+</div>
+
+<div class="modal" id="modal">
+<div class="card">
+<button class="close" id="close">×</button>
+<div class="notation" id="mNot"></div>
+<span class="glyph" id="mGly"></span>
+<h2 id="mTit"></h2>
+<p id="mDesc"></p>
+<div class="move" id="mMove"></div>
+</div>
+</div>
+
+<script>
+const SQ={
+'a8':{p:'♜',t:'Pixel Tanks',m:'Gaming · Rook',d:'Top-down multiplayer tank combat. Destroying friends in low resolution. Pixel art intentionally retro, artistic ability incidental.',move:'a8→a1 straight line to glory'},
+'b8':{p:'♞',t:'MCP Gateway',m:'AI · Knight',d:'The bridge that makes the other things talk to each other. Slack, Jira, databases, Grafana, Tailscale — one gateway, unlimited L-shaped jumps.',move:'Nb8 leaps over three protocols'},
+'c8':{p:'♝',t:'Kubernetes',m:'Infra · Bishop',d:'A personal control plane of a few clusters too many. Wildly over-engineered for a one-person operation. Diagonals of GitOps, forever.',move:'Bc8→h3 diagonal takes the API'},
+'d8':{p:'♛',t:'Nerdy Terminal',m:'Workhorse · Queen',d:'Keyboard-first terminal manager for macOS. Multiple sessions, instant switching, no mouse required. The strongest piece on the board.',move:'Qd8 controls every file'},
+'e8':{p:'♚',t:'Gertjan',m:'Author · King',d:'Builds things nobody asked for. Automates things nobody notices. Moves one square at a time. Checkmate is personal.',move:'Ke8→e1 long walk home'},
+'f8':{p:'♝',t:'Home Assistant',m:'Smart home · Bishop',d:'YAML and Zigbee, held together by stubbornness. WAF dangerously low. Smart lights are the only use case above zero.',move:'Bf8 pinned by kids'},
+'g8':{p:'♞',t:'TBD',m:'Productivity · Knight',d:'Personal productivity app. Captures, projects, tasks. No bells. No whistles. Just the things that need doing.',move:'Ng8→f6 captures unread'},
+'h8':{p:'♜',t:'The Workshop',m:'Basement · Rook',d:'Woodworking shop under construction. Currently mostly sawdust and ambition. Every tool an "investment in the hobby."',move:'Rh8→a8 slides across the bench'},
+'a7':{p:'♟',t:'Drums',m:'Mazu · Pawn',d:'Instrumental stoner band. The kind of music where nobody asks what the lyrics are about.',move:'a7→a5 double-push opening riff'},
+'h7':{p:'♟',t:'Guitar',m:'Hobby · Pawn',d:'Badly, but enthusiastically. The neighbors have opinions.',move:'h7→h6 quiet, modest'},
+'d7':{p:'♟',t:'Dad × 3',m:'Home · Pawn',d:'Three kids. They don\'t care about the clusters. They do care about the smart lights.',move:'d7→d5 advance, slowly'},
+'e2':{p:'♙',t:'Every weekend',m:'Time · Pawn',d:'Spent on weekends that the project manager has called "a waste of perfectly good weekends."',move:'e2→e4 bold opening'},
+'e1':{p:'♔',t:'nerdy.nl',m:'The home square',d:'The domain. The blog that isn\'t a blog. The workbench. Where everything lives.',move:'Stays on e1. Castled short.'}
+};
+const board=document.getElementById('board');
+const files=['a','b','c','d','e','f','g','h'];
+function el(tag,cls,txt){const n=document.createElement(tag);if(cls)n.className=cls;if(txt!=null)n.textContent=txt;return n}
+for(let r=8;r>=1;r--){
+  board.appendChild(el('div','rank',r));
+  for(let f=0;f<8;f++){
+    const id=files[f]+r;
+    const light=(r+f)%2===1;
+    const data=SQ[id];
+    const sq=el('div','sq '+(light?'l':'d')+(data?'':' empty'));
+    sq.dataset.id=id;
+    if(data){
+      sq.appendChild(el('span','piece',data.p));
+      sq.appendChild(el('div','title',data.t));
+      sq.appendChild(el('div','meta',id+' · '+data.m.split('·')[0].trim()));
+    }
+    board.appendChild(sq);
+  }
+}
+board.appendChild(el('div','file spacer'));
+files.forEach(f=>board.appendChild(el('div','file',f)));
+
+const modal=document.getElementById('modal');
+board.addEventListener('click',e=>{
+  const sq=e.target.closest('.sq');if(!sq)return;
+  const d=SQ[sq.dataset.id];if(!d)return;
+  document.getElementById('mNot').textContent=sq.dataset.id+' · '+d.m;
+  document.getElementById('mGly').textContent=d.p;
+  document.getElementById('mTit').textContent=d.t;
+  document.getElementById('mDesc').textContent=d.d;
+  document.getElementById('mMove').textContent='Move: '+d.move;
+  modal.classList.add('on');
+});
+document.getElementById('close').onclick=()=>modal.classList.remove('on');
+modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.remove('on')});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')modal.classList.remove('on')});
+</script>
+</body>
+</html>

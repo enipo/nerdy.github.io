@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>nerdy.nl — triple word score</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e8d3a0'/%3E%3Ctext x='50' y='75' font-size='70' font-family='Georgia' text-anchor='middle' font-weight='bold' fill='%23222'%3EN%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Source+Serif+4:wght@400;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--felt:#0a5340;--tile:#e8d3a0;--tile-shadow:#b89a62;--ink:#2a1e10;--tw:#c43a3a;--dw:#e8a0a0;--tl:#2a70c0;--dl:#9cc6e8;--star:#c43a3a;--cream:#f5e9c8;--mono:'IBM Plex Mono',monospace;--serif:'Source Serif 4',Georgia,serif}
+body{background:var(--felt);font-family:var(--serif);color:#e8ddb8;min-height:100vh;padding:1.5rem 1rem;background-image:radial-gradient(circle at 30% 20%,#0d6247 0%,#062e23 80%)}
+.wrap{max-width:1000px;margin:0 auto}
+.head{text-align:center;margin-bottom:1.4rem}
+.head h1{font-family:'Bungee',sans-serif;font-size:clamp(2.2rem,4.5vw,3.2rem);color:var(--tile);letter-spacing:.02em;text-shadow:0 2px 0 #000,0 4px 10px rgba(0,0,0,.5)}
+.head p{font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:#8aaa98;margin-top:.4rem}
+
+.scoreboard{display:flex;justify-content:space-between;gap:1rem;background:#1a1008;border:3px solid var(--tile);padding:.8rem 1.2rem;margin-bottom:1.2rem;font-family:var(--mono)}
+.player{flex:1}
+.player .name{font-size:.7rem;letter-spacing:.15em;color:#b89a62;text-transform:uppercase}
+.player .score{font-family:'Bungee',sans-serif;font-size:1.8rem;color:var(--tile)}
+.turn{font-size:.65rem;color:#8aaa98;text-align:center;align-self:center}
+
+.board{background:#0d4535;padding:6px;border:3px solid #052820;display:grid;grid-template-columns:repeat(15,1fr);gap:2px;aspect-ratio:1/1;box-shadow:0 8px 30px rgba(0,0,0,.6),inset 0 0 0 1px #1a6a50}
+.cell{background:#1f6a52;display:flex;align-items:center;justify-content:center;font-size:.45rem;font-weight:700;color:#0a4030;letter-spacing:.05em;text-transform:uppercase;line-height:1;text-align:center;padding:2px;position:relative}
+.cell.tw{background:var(--tw);color:#fff;font-size:.5rem}
+.cell.dw{background:var(--dw);color:#8a2020}
+.cell.tl{background:var(--tl);color:#fff}
+.cell.dl{background:var(--dl);color:#204a8a}
+.cell.star{background:var(--tw);color:#fff;font-size:1rem}
+
+.tile{background:var(--tile);color:var(--ink);border-radius:3px;font-family:var(--serif);font-weight:700;font-size:clamp(.7rem,1.4vw,1rem);box-shadow:0 2px 0 var(--tile-shadow),0 3px 4px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;position:relative;width:100%;height:100%;cursor:pointer;transition:transform .15s}
+.tile:hover{transform:translateY(-2px);box-shadow:0 4px 0 var(--tile-shadow),0 5px 8px rgba(0,0,0,.4);z-index:5}
+.tile .val{position:absolute;bottom:1px;right:2px;font-size:.5em;font-weight:400}
+.tile.new{animation:drop .4s ease}
+@keyframes drop{from{transform:translateY(-20px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+.rack{display:flex;gap:.4rem;justify-content:center;margin:1.2rem auto 0;padding:.6rem;background:#6b3818;border-radius:6px 6px 10px 10px;box-shadow:0 4px 8px rgba(0,0,0,.4),inset 0 2px 4px rgba(0,0,0,.3);max-width:520px;border:2px solid #4a2810}
+.rack .tile{width:44px;height:52px;font-size:1.2rem}
+.rack .tile .val{font-size:.55rem}
+
+.plays{margin-top:1.4rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:.8rem}
+.play{background:var(--cream);color:var(--ink);padding:.9rem 1rem;border-radius:4px;box-shadow:0 3px 0 #8a6a30,0 5px 10px rgba(0,0,0,.3);font-family:var(--serif)}
+.play .word{font-family:'Bungee',sans-serif;font-size:1.4rem;letter-spacing:.02em}
+.play .word span{color:var(--tw)}
+.play .def{font-size:.8rem;margin-top:.3rem;line-height:1.4}
+.play .pts{font-family:var(--mono);font-size:.65rem;letter-spacing:.1em;color:#8a6a30;margin-top:.5rem;text-transform:uppercase;border-top:1px solid #d4b870;padding-top:.4rem}
+
+.foot{text-align:center;margin-top:1.6rem;font-family:var(--mono);font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:#8aaa98}
+.foot a{color:var(--tile)}
+
+@media(max-width:700px){
+.cell{font-size:.3rem}
+.cell.star{font-size:.7rem}
+.tile{font-size:.7rem}
+.rack .tile{width:32px;height:40px;font-size:.9rem}
+.scoreboard{flex-direction:column;gap:.3rem}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="head">
+<h1>N·E·R·D·Y</h1>
+<p>Friendly Match · Board 1 · Dutch Dictionary Optional</p>
+</header>
+
+<div class="scoreboard">
+<div class="player"><div class="name">Gertjan</div><div class="score">347</div></div>
+<div class="turn">TURN 14 · 86 TILES REMAIN</div>
+<div class="player" style="text-align:right"><div class="name">Status Quo</div><div class="score">082</div></div>
+</div>
+
+<div class="board" id="board"></div>
+
+<div class="rack" id="rack"></div>
+
+<div class="plays">
+<div class="play"><div class="word">NERDY<span>★</span></div><div class="def">adj. Putting the Y in Nerdy — as in: Why, dear god… Why!?</div><div class="pts">5·1·1·2·4 + TW = 39 pts</div></div>
+<div class="play"><div class="word">TERMINAL</div><div class="def">n. Keyboard-first session manager for macOS. No mouse, no patience for mice.</div><div class="pts">1·1·1·3·1·1·1·1 = 10 + bingo = 60 pts</div></div>
+<div class="play"><div class="word">YAML</div><div class="def">n. A structured text format. Held together by indentation and stubbornness.</div><div class="pts">4·1·3·1 = 9 pts (DL on Y)</div></div>
+<div class="play"><div class="word">KUBERNETES</div><div class="def">n. A few clusters too many. Self-healing, self-inflicted.</div><div class="pts">5·1·3·1·1·1·1·1·1·1 = 16 pts</div></div>
+<div class="play"><div class="word">MAZU</div><div class="def">n. Instrumental stoner band. Drums: loud. Lyrics: none.</div><div class="pts">3·1·1·1 × TW = 18 pts</div></div>
+<div class="play"><div class="word">SAWDUST</div><div class="def">n. The primary output of the basement workshop. Ambition sold separately.</div><div class="pts">1·1·4·1·1·1·1 + DW = 20 pts</div></div>
+<div class="play"><div class="word">WAF</div><div class="def">abbr. Wife Acceptance Factor. Current reading: dangerously low. Smart lights trending up.</div><div class="pts">4·1·4 = 9 pts (3-letter, high yield)</div></div>
+<div class="play"><div class="word">GITOPS</div><div class="def">interj. The word whispered at 1am while reconciling a cluster nobody asked for.</div><div class="pts">2·1·1·1·1·1 = 7 pts</div></div>
+</div>
+
+<div class="foot">
+&copy; nerdy.nl · <a href="https://github.com/enipo">github.com/enipo</a> · BLANK = anything
+</div>
+</div>
+
+<script>
+const SCORE={a:1,b:3,c:3,d:2,e:1,f:4,g:2,h:4,i:1,j:8,k:5,l:1,m:3,n:1,o:1,p:3,q:10,r:1,s:1,t:1,u:1,v:4,w:4,x:8,y:4,z:10};
+const PLACED={
+'7,7':'N','7,8':'E','7,9':'R','7,10':'D','7,11':'Y',
+'3,7':'T','4,7':'E','5,7':'R','6,7':'M','8,7':'I','9,7':'N','10,7':'A','11,7':'L',
+'11,3':'M','11,4':'A','11,5':'Z','11,6':'U',
+'5,9':'D','6,9':'R','8,9':'U','9,9':'M','10,9':'S',
+'7,3':'Y','7,4':'A','7,5':'M','7,6':'L',
+'3,10':'W','3,11':'A','3,12':'F',
+'11,11':'G','12,11':'I','13,11':'T','14,11':'O',
+'9,11':'T','10,11':'B','8,11':'B','11,12':'K','11,13':'8','11,14':'S'
+};
+const SPECIALS={
+'0,0':'tw','0,7':'tw','0,14':'tw','7,0':'tw','7,14':'tw','14,0':'tw','14,7':'tw','14,14':'tw',
+'1,1':'dw','2,2':'dw','3,3':'dw','4,4':'dw','10,10':'dw','11,11':'dw','12,12':'dw','13,13':'dw',
+'1,13':'dw','2,12':'dw','3,11':'dw','4,10':'dw','10,4':'dw','11,3':'dw','12,2':'dw','13,1':'dw',
+'1,5':'tl','1,9':'tl','5,1':'tl','5,5':'tl','5,9':'tl','5,13':'tl','9,1':'tl','9,5':'tl','9,9':'tl','9,13':'tl','13,5':'tl','13,9':'tl',
+'0,3':'dl','0,11':'dl','2,6':'dl','2,8':'dl','3,0':'dl','3,7':'dl','3,14':'dl','6,2':'dl','6,6':'dl','6,8':'dl','6,12':'dl','7,3':'dl','7,11':'dl','8,2':'dl','8,6':'dl','8,8':'dl','8,12':'dl','11,0':'dl','11,7':'dl','11,14':'dl','12,6':'dl','12,8':'dl','14,3':'dl','14,11':'dl',
+'7,7':'star'
+};
+const LABELS={tw:'TRIPLE WORD',dw:'DOUBLE WORD',tl:'TRIPLE LETTER',dl:'DOUBLE LETTER',star:'★'};
+const board=document.getElementById('board');
+function el(tag,cls,txt){const n=document.createElement(tag);if(cls)n.className=cls;if(txt!=null)n.textContent=txt;return n}
+for(let r=0;r<15;r++)for(let c=0;c<15;c++){
+  const k=r+','+c;
+  const sp=SPECIALS[k];
+  const cell=el('div','cell'+(sp?' '+sp:''));
+  const tile=PLACED[k];
+  if(tile && /[A-Z]/.test(tile)){
+    const t=el('div','tile new',tile);
+    t.appendChild(el('span','val',SCORE[tile.toLowerCase()]||0));
+    cell.appendChild(t);
+  } else if(sp){
+    cell.textContent=LABELS[sp];
+  }
+  board.appendChild(cell);
+}
+const RACK=['N','E','R','D','Y','_','?'];
+const rack=document.getElementById('rack');
+RACK.forEach(letter=>{
+  const t=el('div','tile',letter==='_'?'':letter);
+  if(letter!=='_'&&letter!=='?')t.appendChild(el('span','val',SCORE[letter.toLowerCase()]||0));
+  else if(letter==='?')t.textContent='',t.appendChild(el('span','val','0'));
+  rack.appendChild(t);
+});
+</script>
+</body>
+</html>

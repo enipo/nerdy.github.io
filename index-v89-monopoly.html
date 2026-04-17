@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>nerdy.nl — advance to GitOps</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23c8e6d0'/%3E%3Ctext y='.88em' font-size='80' x='15'%3E🎩%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Special+Elite&family=Bitter:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--board:#c8e6d0;--ink:#111;--cream:#f7f1dc;--red:#ed2924;--blue:#1976d2;--yellow:#f5c518;--orange:#f47920;--green:#1fa84c;--purple:#8a4a9c;--pink:#d94c8a;--cyan:#4ab8d9;--brown:#7a4a28;--oswald:'Oswald',sans-serif;--type:'Special Elite',monospace;--body:'Bitter',Georgia,serif}
+body{background:#5a3c28;color:var(--ink);font-family:var(--body);min-height:100vh;padding:1.5rem .8rem;background-image:repeating-linear-gradient(45deg,#5a3c28 0 10px,#4a3220 10px 20px)}
+.wrap{max-width:1000px;margin:0 auto}
+
+.head{text-align:center;margin-bottom:1rem;color:var(--cream)}
+.head h1{font-family:var(--oswald);font-weight:700;font-size:clamp(2rem,5vw,3.4rem);letter-spacing:.08em;color:var(--red);text-shadow:2px 2px 0 var(--ink);text-transform:uppercase}
+.head p{font-family:var(--type);font-size:.85rem;color:#e0d6b0;margin-top:.3rem}
+
+.board{background:var(--board);aspect-ratio:1/1;display:grid;grid-template-columns:repeat(11,1fr);grid-template-rows:repeat(11,1fr);border:6px solid var(--ink);box-shadow:0 10px 30px rgba(0,0,0,.6)}
+.prop{background:#f7f1dc;border:1.5px solid var(--ink);display:flex;flex-direction:column;padding:3px;overflow:hidden;cursor:pointer;transition:background .15s;font-size:.55rem;line-height:1.1;position:relative}
+.prop:hover{background:#fff4b0}
+.prop .strip{height:30%;margin:-3px -3px 3px -3px;border-bottom:1.5px solid var(--ink)}
+.prop .name{font-family:var(--oswald);font-weight:600;text-transform:uppercase;font-size:.52rem;letter-spacing:.02em;line-height:1}
+.prop .price{font-family:var(--oswald);font-size:.5rem;margin-top:auto;font-weight:400;text-align:center;color:#444}
+
+.side-right .prop,.side-left .prop{flex-direction:row}
+.side-right .prop .strip{height:auto;width:30%;margin:-3px 3px -3px -3px;border-bottom:none;border-right:1.5px solid var(--ink)}
+.side-left .prop .strip{height:auto;width:30%;margin:-3px -3px -3px 3px;border-bottom:none;border-left:1.5px solid var(--ink);order:2}
+
+.corner{background:#f7f1dc;border:1.5px solid var(--ink);display:flex;align-items:center;justify-content:center;text-align:center;padding:4px;font-family:var(--oswald);font-weight:700;font-size:.7rem;text-transform:uppercase;line-height:1.1;flex-direction:column}
+.corner .big{font-size:1.6rem;line-height:1}
+.corner .sub{font-family:var(--type);font-size:.5rem;font-weight:400;margin-top:2px;text-transform:none;white-space:pre-line}
+
+.center{grid-column:2/11;grid-row:2/11;background:var(--board);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1rem;gap:.6rem}
+.center-inner{display:flex;flex-direction:column;gap:.8rem;align-items:center;max-width:440px;transform:rotate(-8deg)}
+.logo{font-family:var(--oswald);font-weight:700;color:var(--red);font-size:clamp(2rem,4.5vw,3.5rem);letter-spacing:.05em;text-transform:uppercase;text-shadow:3px 3px 0 var(--ink);line-height:.9;text-align:center}
+.tagline{font-family:var(--type);font-size:.85rem;text-align:center;color:#333}
+.cards{display:flex;gap:1rem;margin-top:.4rem}
+.c-card{width:160px;padding:.6rem;font-family:var(--oswald);font-size:.7rem;border:2px solid var(--ink);text-align:center;display:flex;flex-direction:column;gap:.3rem;box-shadow:3px 3px 0 rgba(0,0,0,.3)}
+.c-card.chance{background:#ffa8a8;transform:rotate(6deg)}
+.c-card.chest{background:#ffe58a;transform:rotate(-4deg)}
+.c-card .ctitle{font-weight:700;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;border-bottom:1px solid var(--ink);padding-bottom:.2rem}
+.c-card .glyph{font-size:1.8rem}
+.c-card .body{font-family:var(--body);font-size:.68rem;font-weight:400;line-height:1.3}
+
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;padding:1rem;z-index:99}
+.modal.on{display:flex}
+.deed{background:#f7f1dc;max-width:380px;width:100%;border:3px solid var(--ink);box-shadow:8px 8px 0 rgba(0,0,0,.5);font-family:var(--body);position:relative}
+.deed .close{position:absolute;top:.4rem;right:.7rem;background:none;border:none;font-size:1.4rem;cursor:pointer;z-index:2}
+.deed .top{padding:.4rem;text-align:center;border-bottom:2px solid var(--ink);font-family:var(--oswald);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase}
+.deed .banner{padding:1rem;text-align:center;border-bottom:2px solid var(--ink)}
+.deed .banner .t{font-family:var(--oswald);font-weight:700;font-size:1.4rem;text-transform:uppercase;letter-spacing:.04em}
+.deed .content{padding:1rem 1.4rem;font-size:.85rem;line-height:1.5}
+.deed .rent{padding:.6rem 1.4rem 1rem;font-family:var(--oswald);font-size:.8rem}
+.deed .rent .row{display:flex;justify-content:space-between;border-bottom:1px dashed #999;padding:.2rem 0}
+.deed .price{padding:.8rem 1.4rem;border-top:2px solid var(--ink);text-align:center;font-family:var(--type);font-size:.95rem}
+
+.foot{text-align:center;margin-top:1.6rem;font-family:var(--type);font-size:.8rem;color:#e0d6b0}
+.foot a{color:var(--yellow)}
+
+@media(max-width:700px){
+.prop{font-size:.4rem;padding:2px}
+.prop .name{font-size:.4rem}
+.prop .price{font-size:.38rem}
+.corner{font-size:.5rem}
+.corner .big{font-size:1rem}
+.corner .sub{font-size:.35rem}
+.logo{font-size:1.4rem}
+.cards{display:none}
+.tagline{font-size:.7rem}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="head">
+<h1>Nerdyopoly</h1>
+<p>The real-estate trading game — projects edition · 1–6 players · ages 9+</p>
+</header>
+
+<div class="board" id="board"></div>
+
+<div class="foot">
+&copy; nerdy.nl · <a href="https://github.com/enipo">github.com/enipo</a> · Do not pass Go if your YAML fails to parse
+</div>
+</div>
+
+<div class="modal" id="modal"><div class="deed">
+<button class="close" id="close">×</button>
+<div class="top">TITLE DEED</div>
+<div class="banner" id="dbanner"><div class="t" id="dtitle"></div></div>
+<div class="content" id="dcontent"></div>
+<div class="rent" id="drent"></div>
+<div class="price" id="dprice"></div>
+</div></div>
+
+<script>
+const C={red:'#ed2924',blue:'#1976d2',yellow:'#f5c518',orange:'#f47920',green:'#1fa84c',pink:'#d94c8a',cyan:'#4ab8d9',brown:'#7a4a28'};
+const SQUARES=[
+{type:'corner',big:'→',t:'GO',sub:'Collect\n200 commits'},
+{type:'prop',color:C.brown,name:'Nerdy Terminal',price:'60',desc:'Keyboard-first terminal manager for macOS. Multiple sessions, instant switching, no mouse required.',rent:[['Rent','$2'],['Hotel','$250']]},
+{type:'card',t:'COMMUNITY CHEST',bg:'#fff3b0'},
+{type:'prop',color:C.brown,name:'MCP Gateway',price:'60',desc:'Bridge between AI agents and everything else. Slack, Jira, DBs, Grafana, Tailscale — one gateway.',rent:[['Rent','$4'],['Hotel','$450']]},
+{type:'corner-sm',t:'INCOME TAX',sub:'Pay $200\nor 10%'},
+{type:'railroad',name:'Tailnet Railroad',price:'200',desc:'Tailscale mesh VPN. Connects every cluster to every laptop, instantly.'},
+{type:'prop',color:C.cyan,name:'Home Assistant',price:'100',desc:'YAML-based smart home. Held together by Zigbee and stubbornness. WAF: dangerously low.',rent:[['Rent','$6'],['Hotel','$450']]},
+{type:'card',t:'CHANCE',bg:'#ffd6d6'},
+{type:'prop',color:C.cyan,name:'Smart Lights',price:'100',desc:'The only use case with a WAF above zero. Hue. Gradient. Proven technology.',rent:[['Rent','$6']]},
+{type:'prop',color:C.cyan,name:'Zigbee Network',price:'120',desc:'Mesh network. Mostly reliable. The dev has strong opinions about 2.4GHz.',rent:[['Rent','$8']]},
+{type:'corner',big:'•',t:'JAIL',sub:'Just visiting\n/ Incident'},
+{type:'prop',color:C.pink,name:'Kubernetes',price:'140',desc:'A few clusters too many. Wildly over-engineered for a one-person operation.',rent:[['Rent','$10']]},
+{type:'utility',name:'GitOps Electric',price:'150',desc:'If one utility owned, rent is 4 × dice. If both, rent is 10 ×. Reconciles every 3 minutes.'},
+{type:'prop',color:C.pink,name:'Grafana Plaza',price:'140',desc:'Dashboards for everything. Most never opened. Two are loved.',rent:[['Rent','$10']]},
+{type:'prop',color:C.pink,name:'Argo Gardens',price:'160',desc:'Declarative deployments. The YAML must flow.',rent:[['Rent','$12']]},
+{type:'railroad',name:'Ansible Rail',price:'200',desc:'Idempotent infrastructure. Runs on weekends only.'},
+{type:'prop',color:C.orange,name:'Pixel Tanks',price:'180',desc:'Top-down multiplayer tank combat. Destroying friends in low resolution.',rent:[['Rent','$14']]},
+{type:'card',t:'COMMUNITY CHEST',bg:'#fff3b0'},
+{type:'prop',color:C.orange,name:'TBD',price:'180',desc:'Personal productivity app. Captures, projects, tasks. No bells. No whistles.',rent:[['Rent','$14']]},
+{type:'prop',color:C.orange,name:'The Workbench',price:'200',desc:'Where everything is built. Where most of it stays. No blog here.',rent:[['Rent','$16']]},
+{type:'corner',big:'🚗',t:'FREE PARKING',sub:'Take a break'},
+{type:'prop',color:C.red,name:'Basement Workshop',price:'220',desc:'Woodworking. Mostly sawdust and ambition. Every tool is "investment in the hobby."',rent:[['Rent','$18']]},
+{type:'card',t:'CHANCE',bg:'#ffd6d6'},
+{type:'prop',color:C.red,name:'Table Saw',price:'220',desc:'Centerpiece of the shop. Dust collection optional. Fingers: still ten.',rent:[['Rent','$18']]},
+{type:'prop',color:C.red,name:'Hand Tools',price:'240',desc:'Japanese saws, sharpening stones, chisels. Shavings on the floor.',rent:[['Rent','$20']]},
+{type:'railroad',name:'CI/CD Express',price:'200',desc:'Pipelines. Green badges. Red badges. Green again.'},
+{type:'prop',color:C.yellow,name:'Drums · Mazu',price:'260',desc:'Instrumental stoner. The kind of music where nobody asks about the lyrics.',rent:[['Rent','$22']]},
+{type:'prop',color:C.yellow,name:'Guitar',price:'260',desc:'Badly, but enthusiastically. The neighbors have opinions.',rent:[['Rent','$22']]},
+{type:'utility',name:'Coffee Works',price:'150',desc:'Fuel for everything. Rent is 4 × or 10 × dice. V60, if you must know.'},
+{type:'prop',color:C.yellow,name:'Rehearsal Hall',price:'280',desc:'Once a week. Stoner riffs. Ear protection mandatory.',rent:[['Rent','$24']]},
+{type:'corner',big:'⚙',t:'GO TO JAIL',sub:'kubectl\ndescribe'},
+{type:'prop',color:C.green,name:'Dad × 3',price:'300',desc:'Three kids. They don\'t care about clusters. They do care about the smart lights.',rent:[['Rent','$26']]},
+{type:'prop',color:C.green,name:'Weekends',price:'300',desc:'Spent on this website. Called "a waste of perfectly good weekends" by management.',rent:[['Rent','$26']]},
+{type:'card',t:'COMMUNITY CHEST',bg:'#fff3b0'},
+{type:'prop',color:C.green,name:'nerdy.nl',price:'320',desc:'The domain. The blog that isn\'t a blog. The workbench. Where everything lives.',rent:[['Rent','$28']]},
+{type:'railroad',name:'Domain Railroad',price:'200',desc:'.nl TLD. Registrar of nerdy things. Certbot renews on time.'},
+{type:'card',t:'CHANCE',bg:'#ffd6d6'},
+{type:'prop',color:C.blue,name:'Putting the Y',price:'350',desc:'In Nerdy. As in: Why, dear god… Why?',rent:[['Rent','$35']]},
+{type:'corner-sm',t:'LUXURY TAX',sub:'Pay $100\n(new framework)'},
+{type:'prop',color:C.blue,name:'GitHub Boardwalk',price:'400',desc:'github.com/enipo — the portfolio square. Rent doubles when someone stars a repo.',rent:[['Rent','$50']]}
+];
+const POS={
+'0':'10,10','1':'9,10','2':'8,10','3':'7,10','4':'6,10','5':'5,10','6':'4,10','7':'3,10','8':'2,10','9':'1,10','10':'0,10',
+'11':'0,9','12':'0,8','13':'0,7','14':'0,6','15':'0,5','16':'0,4','17':'0,3','18':'0,2','19':'0,1','20':'0,0',
+'21':'1,0','22':'2,0','23':'3,0','24':'4,0','25':'5,0','26':'6,0','27':'7,0','28':'8,0','29':'9,0','30':'10,0',
+'31':'10,1','32':'10,2','33':'10,3','34':'10,4','35':'10,5','36':'10,6','37':'10,7','38':'10,8','39':'10,9'
+};
+const board=document.getElementById('board');
+function el(tag,cls,txt){const n=document.createElement(tag);if(cls)n.className=cls;if(txt!=null)n.textContent=txt;return n}
+
+SQUARES.forEach((sq,i)=>{
+  const [r,c]=POS[i].split(',').map(Number);
+  const side=r===0?'top':r===10?'bottom':c===0?'left':c===10?'right':'';
+  let node;
+  if(sq.type==='corner'||sq.type==='corner-sm'){
+    node=el('div','corner');
+    if(sq.big)node.appendChild(el('div','big',sq.big));
+    node.appendChild(el('div','',sq.t));
+    if(sq.sub)node.appendChild(el('div','sub',sq.sub));
+  } else if(sq.type==='card'){
+    node=el('div','corner');
+    node.style.background=sq.bg;
+    node.appendChild(el('div','big','?'));
+    node.appendChild(el('div','',sq.t));
+  } else {
+    node=el('div','prop');
+    node.dataset.idx=i;
+    const strip=el('div','strip');
+    strip.style.background=sq.color||(sq.type==='railroad'?'#222':'#e8e8e8');
+    node.appendChild(strip);
+    node.appendChild(el('div','name',sq.type==='railroad'?'🚂 '+sq.name:sq.type==='utility'?'💡 '+sq.name:sq.name));
+    node.appendChild(el('div','price','$'+sq.price));
+  }
+  node.style.gridRow=(r+1)+'/'+(r+2);
+  node.style.gridColumn=(c+1)+'/'+(c+2);
+  if(side==='left')node.classList.add('side-left');
+  else if(side==='right')node.classList.add('side-right');
+  board.appendChild(node);
+});
+
+const center=el('div','center');
+const inner=el('div','center-inner');
+inner.appendChild(el('div','logo','NERDYOPOLY'));
+inner.appendChild(el('div','tagline','The real-estate trading game where every property is a side project that got out of hand.'));
+const cards=el('div','cards');
+const ch=el('div','c-card chance');
+ch.appendChild(el('div','ctitle','CHANCE'));
+ch.appendChild(el('div','glyph','?'));
+ch.appendChild(el('div','body','Advance to GitOps. If you pass Go, collect 200 commits.'));
+cards.appendChild(ch);
+const cc=el('div','c-card chest');
+cc.appendChild(el('div','ctitle','COMMUNITY CHEST'));
+cc.appendChild(el('div','glyph','★'));
+cc.appendChild(el('div','body','Your YAML compiles on the first try. Collect $50.'));
+cards.appendChild(cc);
+inner.appendChild(cards);
+center.appendChild(inner);
+center.style.gridColumn='2/11';
+center.style.gridRow='2/11';
+board.appendChild(center);
+
+const modal=document.getElementById('modal');
+board.addEventListener('click',e=>{
+  const p=e.target.closest('.prop');if(!p)return;
+  const sq=SQUARES[+p.dataset.idx];if(!sq||!sq.desc)return;
+  document.getElementById('dtitle').textContent=sq.name;
+  const banner=document.getElementById('dbanner');
+  banner.style.background=sq.color||'#eaeaea';
+  banner.style.color=['#f5c518','#4ab8d9','#d94c8a','#ed2924','#f47920','#1fa84c','#1976d2','#7a4a28'].includes(sq.color)?'#fff':'#000';
+  if(sq.color==='#f5c518'||sq.color==='#4ab8d9')banner.style.color='#000';
+  document.getElementById('dcontent').textContent=sq.desc;
+  const rent=document.getElementById('drent');
+  while(rent.firstChild)rent.removeChild(rent.firstChild);
+  if(sq.rent)sq.rent.forEach(r=>{const row=el('div','row');row.appendChild(el('span','',r[0]));row.appendChild(el('span','',r[1]));rent.appendChild(row)});
+  document.getElementById('dprice').textContent='Price: $'+sq.price+'  ·  Mortgage: $'+Math.floor(+sq.price/2);
+  modal.classList.add('on');
+});
+document.getElementById('close').onclick=()=>modal.classList.remove('on');
+modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.remove('on')});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')modal.classList.remove('on')});
+</script>
+</body>
+</html>

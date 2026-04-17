@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>nerdy.nl — Level 38 Builder</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.88em' font-size='85'%3E🎲%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital,wght@0,400;1,400&family=Cinzel:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--parchment:#f2e6c8;--parchment-dark:#d9c898;--ink:#2a1810;--red:#7a2018;--gold:#a6822a;--mono:'JetBrains Mono',monospace;--serif:'IM Fell English',Georgia,serif;--display:'Cinzel',serif}
+body{background:#2a1810;font-family:var(--serif);color:var(--ink);min-height:100vh;padding:1.2rem .8rem;background-image:radial-gradient(ellipse at center,#3a2418 0%,#1a0a04 80%)}
+.sheet{max-width:980px;margin:0 auto;background:var(--parchment);background-image:radial-gradient(circle at 20% 30%,#e8d8a8 0%,transparent 40%),radial-gradient(circle at 80% 70%,#e8d8a8 0%,transparent 40%),radial-gradient(ellipse,#f2e6c8 0%,#d9c898 100%);border:3px double var(--ink);box-shadow:0 10px 40px rgba(0,0,0,.7);padding:1.4rem;position:relative}
+.sheet::before{content:'';position:absolute;inset:10px;border:1px solid rgba(42,24,16,.2);pointer-events:none}
+
+.head{display:grid;grid-template-columns:1fr auto 1fr;gap:1rem;align-items:end;border-bottom:2px solid var(--ink);padding-bottom:.8rem;margin-bottom:1rem}
+.head-left .name{font-family:var(--display);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;line-height:.95;letter-spacing:.02em}
+.head-left .sub{font-family:var(--mono);font-size:.7rem;color:#5a3a28;letter-spacing:.1em;text-transform:uppercase;margin-top:.3rem}
+.logo{font-family:var(--display);font-size:1.2rem;font-weight:700;letter-spacing:.3em;text-align:center;color:var(--red);border:2px solid var(--red);padding:.3rem .8rem}
+.head-right{text-align:right}
+.head-right .label{font-family:var(--mono);font-size:.6rem;letter-spacing:.15em;color:#5a3a28;text-transform:uppercase}
+.head-right .val{font-family:var(--display);font-size:1rem;font-weight:600;margin-bottom:.2rem}
+
+.grid{display:grid;grid-template-columns:150px 1fr 200px;gap:1.2rem}
+@media(max-width:800px){.grid{grid-template-columns:1fr}.head{grid-template-columns:1fr}}
+
+.stats{display:flex;flex-direction:column;gap:.5rem}
+.stat{border:2px solid var(--ink);background:rgba(255,255,255,.15);padding:.3rem .5rem;text-align:center;position:relative;border-radius:4px}
+.stat .label{font-family:var(--display);font-size:.6rem;letter-spacing:.15em;font-weight:700}
+.stat .num{font-family:var(--display);font-size:2rem;font-weight:700;line-height:1;margin:.1rem 0}
+.stat .mod{font-family:var(--mono);font-size:.75rem;display:inline-block;border:1.5px solid var(--ink);border-radius:50%;width:32px;height:32px;line-height:29px;background:var(--parchment);margin-top:-.2rem}
+.stat .save{font-family:var(--mono);font-size:.55rem;color:#5a3a28;margin-top:.3rem;letter-spacing:.05em}
+
+.center{display:flex;flex-direction:column;gap:.8rem}
+.panel{border:2px solid var(--ink);padding:.8rem;background:rgba(255,255,255,.1);border-radius:4px}
+.panel h3{font-family:var(--display);font-size:.9rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;border-bottom:1px solid var(--ink);padding-bottom:.3rem;margin-bottom:.5rem;display:flex;justify-content:space-between;align-items:center}
+.panel h3 .lvl{font-family:var(--mono);font-size:.65rem;letter-spacing:.08em;color:#5a3a28}
+
+.hp{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.4rem;text-align:center}
+.hp .box{border:1.5px solid var(--ink);padding:.3rem;border-radius:3px;background:rgba(255,255,255,.3)}
+.hp .box .l{font-family:var(--mono);font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:#5a3a28}
+.hp .box .v{font-family:var(--display);font-size:1.3rem;font-weight:700;line-height:1}
+
+.skills{font-family:var(--serif);font-size:.85rem}
+.skills .row{display:flex;align-items:center;gap:.5rem;padding:.15rem 0;border-bottom:1px dotted #8a6a48}
+.skills .prof{width:10px;height:10px;border:1.5px solid var(--ink);border-radius:50%;flex-shrink:0}
+.skills .prof.y{background:var(--ink)}
+.skills .bonus{font-family:var(--mono);font-weight:500;width:36px;text-align:center;background:rgba(0,0,0,.06);padding:.1rem .2rem;border-radius:2px}
+.skills .name{flex:1}
+.skills .name em{font-style:italic;color:#5a3a28;font-size:.75rem}
+
+.features{font-family:var(--serif);font-size:.88rem;line-height:1.5}
+.features .f{margin-bottom:.5rem;padding-left:.5rem;border-left:2px solid var(--red)}
+.features .f .t{font-family:var(--display);font-weight:600;font-size:.9rem}
+.features .f .d{color:#3a2418}
+
+.right{display:flex;flex-direction:column;gap:.8rem}
+.portrait{border:2px solid var(--ink);border-radius:4px;background:rgba(255,255,255,.1);aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;font-size:5rem;position:relative;overflow:hidden}
+.portrait::after{content:'Level 38 Automator';position:absolute;bottom:8px;left:0;right:0;text-align:center;font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;color:#5a3a28;background:rgba(242,230,200,.8);padding:.2rem}
+
+.inventory .i{font-family:var(--serif);font-size:.82rem;padding:.2rem 0;display:flex;justify-content:space-between;border-bottom:1px dotted #8a6a48}
+.inventory .i .q{font-family:var(--mono);color:#5a3a28;font-size:.7rem}
+
+.spellbook{grid-column:1/-1;margin-top:1rem;border-top:2px solid var(--ink);padding-top:1rem}
+.spellbook h2{font-family:var(--display);font-size:1.3rem;letter-spacing:.2em;font-weight:700;text-align:center;margin-bottom:.8rem;text-transform:uppercase}
+.spell-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem}
+.spell{border:2px solid var(--ink);padding:.7rem .9rem;background:rgba(255,255,255,.2);border-radius:4px;position:relative}
+.spell .lvl{position:absolute;top:.4rem;right:.5rem;font-family:var(--mono);font-size:.6rem;background:var(--red);color:var(--parchment);padding:.1rem .3rem;border-radius:2px;letter-spacing:.08em}
+.spell .sname{font-family:var(--display);font-weight:600;font-size:1rem}
+.spell .school{font-family:var(--serif);font-style:italic;font-size:.72rem;color:#5a3a28;margin-bottom:.3rem}
+.spell .eff{font-size:.82rem;line-height:1.4}
+.spell .cast{font-family:var(--mono);font-size:.6rem;color:#5a3a28;margin-top:.4rem;letter-spacing:.08em;border-top:1px solid #b89870;padding-top:.3rem}
+
+.foot{text-align:center;margin-top:1rem;font-family:var(--mono);font-size:.65rem;letter-spacing:.15em;color:#5a3a28;border-top:1px solid var(--ink);padding-top:.6rem}
+.foot a{color:var(--red)}
+
+.roll-btn{display:inline-block;margin-left:.5rem;background:var(--red);color:var(--parchment);font-family:var(--mono);font-size:.55rem;padding:.1rem .3rem;border-radius:2px;cursor:pointer;border:none;letter-spacing:.1em}
+.roll-btn:hover{background:#5a1810}
+#rollResult{font-family:var(--mono);font-size:.7rem;color:var(--red);margin-top:.3rem;min-height:1rem;text-align:center}
+</style>
+</head>
+<body>
+<div class="sheet">
+<header class="head">
+<div class="head-left">
+<div class="name">Gertjan of Nerdy</div>
+<div class="sub">Human · Automator · Chaotic Good · Age 38</div>
+</div>
+<div class="logo">NERDY</div>
+<div class="head-right">
+<div><span class="label">Background</span><div class="val">Tinkerer</div></div>
+<div><span class="label">Alignment</span><div class="val">Lawful Weekend</div></div>
+<div><span class="label">XP</span><div class="val">134,750</div></div>
+</div>
+</header>
+
+<div class="grid">
+
+<div class="stats">
+<div class="stat"><div class="label">STR</div><div class="num">10</div><div class="mod">+0</div><div class="save">Save +0</div></div>
+<div class="stat"><div class="label">DEX</div><div class="num">14</div><div class="mod">+2</div><div class="save">Save +2</div></div>
+<div class="stat"><div class="label">CON</div><div class="num">13</div><div class="mod">+1</div><div class="save">Save +1</div></div>
+<div class="stat"><div class="label">INT</div><div class="num">18</div><div class="mod">+4</div><div class="save">Save +7 ◉</div></div>
+<div class="stat"><div class="label">WIS</div><div class="num">12</div><div class="mod">+1</div><div class="save">Save +4 ◉</div></div>
+<div class="stat"><div class="label">CHA</div><div class="num">8</div><div class="mod">−1</div><div class="save">Save −1</div></div>
+</div>
+
+<div class="center">
+<div class="panel">
+<h3>Combat <span class="lvl">Prof. Bonus +3</span></h3>
+<div class="hp">
+<div class="box"><div class="l">AC</div><div class="v">16</div></div>
+<div class="box"><div class="l">Initiative</div><div class="v">+2</div></div>
+<div class="box"><div class="l">Speed</div><div class="v">30 ft</div></div>
+<div class="box" style="grid-column:1/4;background:rgba(122,32,24,.1)"><div class="l">Hit Points · 42 / 42</div><div class="v">██████████</div></div>
+</div>
+</div>
+
+<div class="panel skills">
+<h3>Skills <span class="lvl">◉ = Proficient</span></h3>
+<div class="row"><span class="prof y"></span><span class="bonus">+7</span><span class="name">Arcana (Int)  <em>— YAML, regex, incantations</em></span></div>
+<div class="row"><span class="prof y"></span><span class="bonus">+7</span><span class="name">Investigation (Int)  <em>— kubectl describe</em></span></div>
+<div class="row"><span class="prof y"></span><span class="bonus">+7</span><span class="name">Insight (Wis)  <em>— reading logs at 1am</em></span></div>
+<div class="row"><span class="prof"></span><span class="bonus">+2</span><span class="name">Stealth (Dex)  <em>— mouse untouched</em></span></div>
+<div class="row"><span class="prof y"></span><span class="bonus">+5</span><span class="name">Tinker's Tools (Int+)  <em>— soldering, sawdust</em></span></div>
+<div class="row"><span class="prof"></span><span class="bonus">−1</span><span class="name">Persuasion (Cha)  <em>— the WAF check fails</em></span></div>
+<div class="row"><span class="prof y"></span><span class="bonus">+4</span><span class="name">Perception (Wis)  <em>— disk at 98%</em></span></div>
+<div class="row"><span class="prof y"></span><span class="bonus">+4</span><span class="name">Survival (Wis)  <em>— stoner riffs, long sets</em></span></div>
+</div>
+
+<div class="panel features">
+<h3>Features & Traits</h3>
+<div class="f"><div class="t">Keyboard Mastery</div><div class="d">Advantage on all session switches. Cannot be disarmed of vim motions.</div></div>
+<div class="f"><div class="t">Over-Engineering</div><div class="d">Doubles INT when the task is "slightly excessive for a one-person operation."</div></div>
+<div class="f"><div class="t">YAML Fluency</div><div class="d">Can cast spells in plain text. Indentation is a saving throw.</div></div>
+<div class="f"><div class="t">Dad × 3</div><div class="d">Proficiency with nighttime stealth checks and Lego damage resistance.</div></div>
+</div>
+</div>
+
+<div class="right">
+<div class="portrait">🛠️</div>
+<div class="panel inventory">
+<h3>Inventory</h3>
+<div class="i"><span>MacBook Pro +2</span><span class="q">×1</span></div>
+<div class="i"><span>Kubernetes Tome</span><span class="q">×3 vol.</span></div>
+<div class="i"><span>Terraform Staff</span><span class="q">attuned</span></div>
+<div class="i"><span>Zigbee Crystals</span><span class="q">×47</span></div>
+<div class="i"><span>Home Assistant Orb</span><span class="q">sentient</span></div>
+<div class="i"><span>Drumsticks</span><span class="q">×2 pair</span></div>
+<div class="i"><span>Guitar of Amateurism</span><span class="q">×1</span></div>
+<div class="i"><span>Japanese Hand Saw</span><span class="q">sharp</span></div>
+<div class="i"><span>Coffee (V60)</span><span class="q">∞</span></div>
+<div class="i"><span>Rubber Duck</span><span class="q">×1</span></div>
+</div>
+<div class="panel" style="text-align:center">
+<button class="roll-btn" id="rollBtn" style="width:100%;padding:.6rem;font-size:.75rem">🎲 ROLL d20</button>
+<div id="rollResult">Waiting for initiative…</div>
+</div>
+</div>
+
+<div class="spellbook">
+<h2>⚔ Spellbook & Known Incantations ⚔</h2>
+<div class="spell-grid">
+<div class="spell"><span class="lvl">CANTRIP</span><div class="sname">Nerdy Terminal</div><div class="school">Evocation · concentration</div><div class="eff">Summon a keyboard-first terminal manager for macOS. Multiple sessions switch instantly, no mouse required.</div><div class="cast">Action · V, S · range: self</div></div>
+
+<div class="spell"><span class="lvl">LV 6</span><div class="sname">Kubernetes</div><div class="school">Conjuration · ritual</div><div class="eff">Summon a few clusters too many. Wildly over-engineered. Reconciles every round until dispelled.</div><div class="cast">Bonus action · S · range: any data center</div></div>
+
+<div class="spell"><span class="lvl">LV 4</span><div class="sname">MCP Gateway</div><div class="school">Divination</div><div class="eff">The bridge that makes the other things talk to each other. Slack, Jira, DBs, Grafana, Tailscale — one gateway.</div><div class="cast">Action · V, M (one bridge) · range: 300 ft</div></div>
+
+<div class="spell"><span class="lvl">LV 2</span><div class="sname">Pixel Tanks</div><div class="school">Transmutation</div><div class="eff">Top-down multiplayer tank combat. Destroying friends in low resolution. Damage: 2d6 friendship.</div><div class="cast">Reaction · V · range: LAN</div></div>
+
+<div class="spell"><span class="lvl">LV 3</span><div class="sname">TBD</div><div class="school">Abjuration</div><div class="eff">Personal productivity shield. Captures, projects, tasks. No bells. No whistles. Just the things that need doing.</div><div class="cast">Bonus action · V · concentration, 8 hours</div></div>
+
+<div class="spell"><span class="lvl">LV 1</span><div class="sname">Home Assistant</div><div class="school">Enchantment · ritual</div><div class="eff">YAML and Zigbee animate the dwelling. WAF save DC 15 or take 1d6 psychic damage from the household.</div><div class="cast">Action · V, S, M (Zigbee crystal) · 1 home</div></div>
+
+<div class="spell"><span class="lvl">CANTRIP</span><div class="sname">Drums (Mazu)</div><div class="school">Evocation · instrumental</div><div class="eff">Thunderous stoner rock. Instrumental — no lyrics save required. Area: 40 ft radius, deafens on critical.</div><div class="cast">Action · V, S · one stage</div></div>
+
+<div class="spell"><span class="lvl">LV 1</span><div class="sname">Guitar</div><div class="school">Illusion</div><div class="eff">Badly, but enthusiastically. Neighbors make CHA save DC 10 or gain opinions. Lasts 1 hour.</div><div class="cast">Action · S · range: through the walls</div></div>
+
+<div class="spell"><span class="lvl">LV 2</span><div class="sname">The Workshop</div><div class="school">Creation · ritual</div><div class="eff">Summon a woodworking workshop in the basement. Mostly sawdust and ambition. Every tool is an "investment."</div><div class="cast">1 day · V, S, M (every tool) · permanent</div></div>
+</div>
+</div>
+
+</div>
+
+<div class="foot">
+© nerdy.nl · <a href="https://github.com/enipo">github.com/enipo</a> · Putting the Y in Nerdy — as in Why, dear god, Why?
+</div>
+</div>
+
+<script>
+const btn=document.getElementById('rollBtn');
+const res=document.getElementById('rollResult');
+const FLAVORS=[
+  r=>r===20?'CRITICAL! YAML parses on first try.':r===1?'Natural 1. Prod is down.':r>=15?'Hit. CI passes.':r>=10?'Hit. Flaky test — retry.':'Miss. kubectl describe pod.',
+];
+btn.addEventListener('click',()=>{
+  const r=1+Math.floor(Math.random()*20);
+  res.textContent='🎲 d20 → '+r+' · '+FLAVORS[0](r);
+});
+</script>
+</body>
+</html>
