@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NERDY — Side A / Side B</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='85'%3E📼%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Space+Mono:wght@400;700&family=Shadows+Into+Light&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#1a1814;--cassette:#e8dfc8;--label:#fff4d6;--ink:#1a1a1a;--tape:#3a2818;--neon:#ff3a8a;--neon2:#3afcff;--dim:#6a6255}
+body{background:var(--bg);font-family:'Space Mono',monospace;color:#e8dfc8;min-height:100vh;padding:30px 16px 80px;
+  background-image:
+    radial-gradient(ellipse at top,#2a1a2a,transparent 60%),
+    radial-gradient(ellipse at bottom,#1a2a2a,transparent 60%),
+    repeating-linear-gradient(45deg,transparent,transparent 12px,rgba(255,255,255,.01) 12px,rgba(255,255,255,.01) 13px)}
+.wrap{max-width:1000px;margin:0 auto}
+.intro{text-align:center;margin-bottom:30px}
+.intro h1{font-family:'Permanent Marker',cursive;font-size:clamp(2.4rem,6vw,4rem);color:var(--neon);
+  text-shadow:3px 3px 0 var(--neon2),6px 6px 0 var(--ink);letter-spacing:.02em;line-height:.95;transform:rotate(-2deg)}
+.intro p{font-family:'Shadows Into Light',cursive;color:#c8beaa;font-size:1.3rem;margin-top:14px}
+
+.cassette{background:linear-gradient(180deg,var(--cassette) 0%,#d0c5a8 100%);
+  border-radius:14px;padding:26px 22px;box-shadow:0 12px 40px rgba(0,0,0,.6),inset 0 2px 0 rgba(255,255,255,.4),inset 0 -3px 0 rgba(0,0,0,.2);
+  position:relative;max-width:720px;margin:0 auto 30px;color:var(--ink)}
+.cassette::before,.cassette::after{content:'';position:absolute;width:10px;height:10px;background:#333;border-radius:50%;top:12px;box-shadow:inset 0 1px 2px rgba(0,0,0,.6)}
+.cassette::before{left:14px}
+.cassette::after{right:14px}
+.screw{position:absolute;width:8px;height:8px;background:#888;border-radius:50%;box-shadow:inset 0 0 2px rgba(0,0,0,.5)}
+.screw.tl{top:10px;left:50%;transform:translateX(-60px)}
+.screw.tr{top:10px;right:50%;transform:translateX(60px)}
+.screw.bl{bottom:10px;left:12px}
+.screw.br{bottom:10px;right:12px}
+
+.label{background:var(--label);border:1px solid #c8b890;padding:18px 22px 22px;box-shadow:inset 0 0 15px rgba(180,140,80,.15)}
+.label__head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:10px;margin-bottom:12px;flex-wrap:wrap;gap:10px}
+.label__brand{font-family:'Permanent Marker',cursive;font-size:1.8rem;letter-spacing:.05em}
+.label__brand small{display:block;font-family:'Space Mono',monospace;font-size:.65rem;letter-spacing:.3em;color:var(--dim);font-weight:400}
+.label__type{font-family:'Space Mono',monospace;font-size:.7rem;letter-spacing:.12em;background:var(--ink);color:var(--label);padding:4px 10px}
+
+.side{font-family:'Shadows Into Light',cursive;font-size:2.2rem;margin:8px 0 2px;line-height:1}
+.side small{font-family:'Space Mono',monospace;font-size:.65rem;letter-spacing:.2em;color:var(--dim);margin-left:.6em;font-weight:400}
+.title{font-family:'Permanent Marker',cursive;font-size:1.4rem;margin-bottom:12px}
+
+.tracks{list-style:none}
+.track{display:grid;grid-template-columns:26px 1fr auto;gap:10px;align-items:baseline;padding:6px 2px;border-bottom:1px dashed rgba(58,40,24,.25);font-size:.92rem}
+.track__num{font-weight:700;color:var(--dim)}
+.track__title{font-weight:700}
+.track__title small{display:block;font-weight:400;font-size:.75rem;color:#6a5840;margin-top:1px;font-family:'Space Mono',monospace}
+.track__dur{font-family:'Space Mono',monospace;font-size:.78rem;color:var(--dim)}
+
+.window{display:flex;gap:22px;justify-content:center;margin:20px 0;align-items:center}
+.reel{width:80px;height:80px;border-radius:50%;background:
+  radial-gradient(circle,#4a3828 0%,#2a1a0e 40%,#3a281a 41%,#3a281a 100%);
+  position:relative;box-shadow:inset 0 0 12px rgba(0,0,0,.6)}
+.reel::before{content:'';position:absolute;inset:10px;border-radius:50%;border:2px dashed rgba(232,223,200,.4);animation:spin 8s linear infinite}
+.reel::after{content:'';position:absolute;inset:32px;background:#1a1008;border-radius:50%;box-shadow:0 0 0 2px #3a2818}
+@keyframes spin{to{transform:rotate(360deg)}}
+.tape-window{flex:1;height:14px;background:linear-gradient(90deg,#2a1810,#1a0a06);max-width:160px;position:relative;overflow:hidden;border:1px solid #5a4028}
+.tape-window::before{content:'';position:absolute;top:50%;left:0;right:0;height:2px;background:#8a6a40;transform:translateY(-50%)}
+
+.liner{margin-top:30px;background:rgba(232,223,200,.06);border:1px dashed rgba(232,223,200,.25);padding:22px;max-width:720px;margin-left:auto;margin-right:auto;font-family:'Shadows Into Light',cursive;font-size:1.15rem;line-height:1.5}
+.liner h3{font-family:'Permanent Marker',cursive;color:var(--neon2);font-size:1.4rem;margin-bottom:10px}
+.liner p{margin-bottom:10px;color:#e8dfc8}
+.liner strong{color:var(--neon);font-weight:700}
+
+.foot{text-align:center;margin-top:40px;font-family:'Space Mono',monospace;font-size:.75rem;color:var(--dim);letter-spacing:.15em}
+.foot a{color:var(--neon);text-decoration:none;border-bottom:1px dashed var(--neon)}
+
+@media(max-width:600px){
+.window{flex-wrap:wrap}
+.label__head{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="intro">
+    <h1>BANGERS<br>ONLY, VOL.1</h1>
+    <p>a mixtape for one, recorded in a basement</p>
+  </div>
+
+  <div class="cassette">
+    <span class="screw tl"></span><span class="screw tr"></span>
+    <span class="screw bl"></span><span class="screw br"></span>
+
+    <div class="window">
+      <div class="reel"></div>
+      <div class="tape-window"></div>
+      <div class="reel"></div>
+    </div>
+
+    <div class="label">
+      <div class="label__head">
+        <div class="label__brand">NERDY<small>C-90 · type II chrome</small></div>
+        <div class="label__type">HOMEBREW</div>
+      </div>
+
+      <div class="side">Side A <small>// systems</small></div>
+      <div class="title">"Things I Built This Year"</div>
+      <ol class="tracks">
+        <li class="track"><span class="track__num">A1</span>
+          <span class="track__title">Nerdy Terminal<small>keyboard-first session manager · zero mouse</small></span>
+          <span class="track__dur">3:42</span></li>
+        <li class="track"><span class="track__num">A2</span>
+          <span class="track__title">Kubernetes (five cluster remix)<small>wildly over-engineered for a one-person op</small></span>
+          <span class="track__dur">5:18</span></li>
+        <li class="track"><span class="track__num">A3</span>
+          <span class="track__title">MCP Gateway<small>bridge: Slack, Jira, Grafana, Tailscale</small></span>
+          <span class="track__dur">4:07</span></li>
+        <li class="track"><span class="track__num">A4</span>
+          <span class="track__title">Pixel Tanks<small>top-down tank combat · low resolution</small></span>
+          <span class="track__dur">2:55</span></li>
+        <li class="track"><span class="track__num">A5</span>
+          <span class="track__title">TBD (demo)<small>productivity. captures / projects / tasks.</small></span>
+          <span class="track__dur">3:11</span></li>
+      </ol>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="label">
+      <div class="label__head">
+        <div class="label__brand">NERDY<small>flip over — side B</small></div>
+        <div class="label__type">DOLBY B</div>
+      </div>
+      <div class="side">Side B <small>// life</small></div>
+      <div class="title">"Stuff I Do When I Log Off"</div>
+      <ol class="tracks">
+        <li class="track"><span class="track__num">B1</span>
+          <span class="track__title">Mazu (instrumental)<small>drums · stoner · no lyrics to discuss</small></span>
+          <span class="track__dur">8:12</span></li>
+        <li class="track"><span class="track__num">B2</span>
+          <span class="track__title">Neighbors Have Opinions<small>guitar, badly but enthusiastically</small></span>
+          <span class="track__dur">3:28</span></li>
+        <li class="track"><span class="track__num">B3</span>
+          <span class="track__title">Basement Workshop Blues<small>mostly sawdust and ambition</small></span>
+          <span class="track__dur">4:44</span></li>
+        <li class="track"><span class="track__num">B4</span>
+          <span class="track__title">Home Assistant (YAML jam)<small>WAF: dangerously low · zigbee solo</small></span>
+          <span class="track__dur">6:66</span></li>
+        <li class="track"><span class="track__num">B5</span>
+          <span class="track__title">Dad × 3<small>kids don't care about clusters. smart lights, yes.</small></span>
+          <span class="track__dur">∞</span></li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="liner">
+    <h3>Liner Notes</h3>
+    <p>Recorded live in a basement workshop, somewhere in the Netherlands. <strong>No producer.</strong> No A&amp;R. No content strategy.</p>
+    <p>Putting the <strong>Y</strong> in Nerdy — as in: <em>Why, dear god, why?</em></p>
+    <p>If you flip this tape too many times it unspools. Wind it back with a pencil.</p>
+  </div>
+
+  <div class="foot">© nerdy.nl &middot; home taping is killing nothing &middot; <a href="https://github.com/enipo">github.com/enipo</a></div>
+</div>
+</body>
+</html>

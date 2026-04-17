@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Greetings from Nerdy</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='85'%3E✉️%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Antic+Didone&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--felt:#1e4a3a;--card:#f4e8cf;--card-edge:#d8c898;--ink:#1a1208;--postmark:#4a2818;--stamp-red:#b4321a;--stamp-blue:#2a5a8a;--stamp-green:#2a6a3a;--rule:#b89868;--hand:'Caveat',cursive;--type:'Courier Prime',monospace;--display:'Antic Didone',serif}
+body{background:var(--felt);color:var(--ink);min-height:100vh;padding:26px 16px 80px;
+  background-image:
+    radial-gradient(ellipse at 10% 10%,rgba(0,0,0,.35),transparent 40%),
+    radial-gradient(ellipse at 90% 90%,rgba(0,0,0,.35),transparent 40%),
+    repeating-linear-gradient(30deg,transparent,transparent 3px,rgba(255,255,255,.02) 3px,rgba(255,255,255,.02) 4px),
+    repeating-linear-gradient(-30deg,transparent,transparent 3px,rgba(0,0,0,.02) 3px,rgba(0,0,0,.02) 4px);
+  font-family:var(--type)}
+.stack{max-width:1000px;margin:0 auto;display:flex;flex-direction:column;gap:36px;align-items:center}
+
+.postcard{width:100%;max-width:880px;aspect-ratio:7/4.5;background:var(--card);
+  box-shadow:6px 8px 30px rgba(0,0,0,.5),inset 0 0 0 1px var(--card-edge);
+  position:relative;background-image:
+    radial-gradient(circle at 20% 30%,rgba(120,80,30,.06) 0,transparent 40%),
+    radial-gradient(circle at 85% 70%,rgba(120,80,30,.08) 0,transparent 40%);
+  overflow:hidden}
+.postcard.front{display:grid;grid-template-columns:1.2fr 1.1fr;grid-template-rows:1fr auto;gap:0}
+.pc-hero{grid-column:1/-1;grid-row:1;padding:28px 32px 10px;position:relative;display:flex;flex-direction:column;justify-content:flex-end;
+  background:
+    linear-gradient(180deg,rgba(244,232,207,0),rgba(244,232,207,1) 90%),
+    radial-gradient(ellipse at 30% 40%,#f0b870 0,#d87a3a 35%,#6a3818 75%,#2a1408 100%)}
+.pc-hero h1{font-family:var(--display);font-size:clamp(2.8rem,7vw,5rem);color:var(--card);line-height:.9;
+  letter-spacing:.02em;text-shadow:3px 3px 0 rgba(0,0,0,.4);transform:rotate(-1.5deg)}
+.pc-hero h1 span{font-family:var(--hand);font-size:.7em;display:block;color:#f5d898;font-style:italic;transform:rotate(-1deg);margin-top:-.1em}
+.pc-hero::before{content:'';position:absolute;top:18px;right:22px;width:70px;height:28px;
+  border:2px solid rgba(244,232,207,.35);border-radius:0;transform:rotate(6deg);
+  display:flex;align-items:center;justify-content:center}
+.pc-hero::after{content:'AIR MAIL';position:absolute;top:22px;right:28px;color:rgba(244,232,207,.85);font-family:var(--type);font-weight:700;font-size:.7rem;letter-spacing:.2em;transform:rotate(6deg)}
+
+.pc-back{grid-column:1/-1;grid-row:1/-1;padding:24px 26px;display:grid;grid-template-columns:1.1fr 1fr;gap:20px;position:relative}
+.pc-back::before{content:'';position:absolute;top:16%;bottom:16%;left:50%;width:1px;background:var(--rule);transform:translateX(-.5px)}
+
+.msg-area{display:flex;flex-direction:column;gap:6px;padding-right:10px}
+.msg-area .date-line{font-family:var(--hand);color:#6a4a1a;font-size:1.1rem;font-style:italic;border-bottom:1px solid var(--rule);padding-bottom:4px;margin-bottom:6px}
+.msg-area p{font-family:var(--hand);font-size:1.2rem;line-height:1.25;color:#1a1208;position:relative;padding:2px 0 6px;border-bottom:1px dashed rgba(90,60,20,.25)}
+.msg-area p::first-letter{margin-left:10px}
+.msg-area .signoff{font-family:var(--hand);font-size:1.4rem;color:var(--stamp-red);margin-top:auto;text-align:right;border:none}
+
+.addr-area{display:flex;flex-direction:column;gap:14px;padding-left:14px;position:relative}
+.stamps{display:flex;gap:8px;justify-content:flex-end;margin-bottom:8px}
+.stamp{width:64px;height:78px;background:var(--card);border:1px dashed var(--rule);padding:3px;position:relative;
+  box-shadow:1px 2px 4px rgba(0,0,0,.12);
+  background-image:radial-gradient(circle,var(--card) 2px,transparent 2.5px);
+  background-size:8px 8px;background-position:0 0,0 0;}
+.stamp::before{content:'';position:absolute;inset:3px;background:var(--card)}
+.stamp-inner{position:relative;width:100%;height:100%;padding:4px 5px;font-family:var(--type);font-size:.5rem;font-weight:700;color:#fff;line-height:1;display:flex;flex-direction:column;justify-content:space-between;letter-spacing:.05em}
+.stamp.red .stamp-inner{background:linear-gradient(165deg,var(--stamp-red),#7a1a08)}
+.stamp.blue .stamp-inner{background:linear-gradient(165deg,var(--stamp-blue),#1a3458)}
+.stamp.green .stamp-inner{background:linear-gradient(165deg,var(--stamp-green),#1a3818)}
+.stamp .icon{font-size:1.6rem;text-align:center;margin:auto;line-height:1}
+.stamp .val{align-self:flex-end;font-size:.55rem;font-family:var(--display);text-shadow:1px 1px 0 rgba(0,0,0,.4)}
+.stamp .land{font-size:.45rem;letter-spacing:.1em}
+
+.postmark{position:absolute;top:10px;right:14px;width:90px;height:90px;border:2px solid var(--postmark);border-radius:50%;
+  color:var(--postmark);font-family:var(--type);font-weight:700;font-size:.55rem;line-height:1.2;text-align:center;padding:14px 0;opacity:.7;
+  transform:rotate(-12deg);letter-spacing:.1em}
+.postmark::before,.postmark::after{content:'';position:absolute;left:4px;right:4px;height:1px;background:var(--postmark)}
+.postmark::before{top:20px}
+.postmark::after{bottom:22px}
+
+.addr{font-family:var(--type);font-size:.9rem;line-height:1.5;color:var(--ink);margin-top:auto}
+.addr strong{font-family:var(--hand);font-size:1.4rem;font-weight:700;color:var(--ink);display:block;margin-bottom:2px}
+.addr .to{font-family:var(--type);font-size:.65rem;letter-spacing:.2em;color:#6a4a1a;text-transform:uppercase;margin-bottom:4px}
+
+/* multiple cards */
+.postcard.projects .pc-back{padding-top:60px}
+.postcard h2.sec{font-family:var(--display);font-size:1.6rem;text-align:center;grid-column:1/-1;margin-bottom:4px;color:var(--postmark);
+  border-bottom:2px solid var(--postmark);padding-bottom:6px}
+
+.projects-grid{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:14px 20px}
+.project-card{background:var(--card);border:1px solid var(--rule);padding:14px;font-family:var(--type);font-size:.78rem;line-height:1.45;position:relative;
+  box-shadow:2px 3px 0 var(--rule)}
+.project-card h3{font-family:var(--hand);font-size:1.4rem;color:var(--stamp-red);margin-bottom:4px;line-height:1}
+.project-card p{color:#2a1c08}
+.project-card::before{content:'';position:absolute;top:-6px;left:-6px;width:20px;height:20px;background:var(--stamp-red);border-radius:50%;font-size:.6rem;opacity:.8}
+
+.hand-note{grid-column:1/-1;font-family:var(--hand);font-size:1.1rem;color:var(--postmark);text-align:center;padding:10px 20px 20px;font-style:italic;line-height:1.25}
+
+.stamp-strip{display:flex;gap:4px;padding:14px 20px;border-top:2px dashed var(--rule);grid-column:1/-1}
+
+.foot-strip{width:100%;max-width:880px;text-align:center;color:#c8d8b8;font-family:var(--type);font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;padding-top:10px}
+.foot-strip a{color:#f5d898;text-decoration:none;border-bottom:1px dashed #f5d898}
+
+@media(max-width:720px){
+.postcard{aspect-ratio:unset}
+.pc-back,.postcard.front{grid-template-columns:1fr}
+.pc-back::before{display:none}
+.projects-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="stack">
+
+  <div class="postcard front" style="transform:rotate(-.5deg)">
+    <div class="pc-hero">
+      <h1>Greetings from<br>NERDY<span>the workbench where nobody asked</span></h1>
+    </div>
+  </div>
+
+  <div class="postcard" style="transform:rotate(.5deg)">
+    <div class="pc-back">
+      <div class="msg-area">
+        <span class="date-line">Tuesday, somewhere in NL —</span>
+        <p>Weather's fine. Kubernetes cluster no. 5 is humming along for no particular reason.</p>
+        <p>Built a terminal manager this weekend. Don't need to move my hand 30cm to the right anymore.</p>
+        <p>The wife is unimpressed with the YAML automations. Kids only care about the smart lights.</p>
+        <p>Miss you. Wish you were here, or at least willing to peer-review my Helm charts.</p>
+        <span class="signoff">— enipo ×</span>
+      </div>
+      <div class="addr-area">
+        <div class="stamps">
+          <div class="stamp red"><div class="stamp-inner"><div class="land">NEDERLAND</div><div class="icon">☸</div><div class="val">€0.95</div></div></div>
+          <div class="stamp blue"><div class="stamp-inner"><div class="land">AIR MAIL</div><div class="icon">⌨</div><div class="val">€1.20</div></div></div>
+        </div>
+        <div class="postmark">NERDY<br>NL<br>— MMXXVI —<br>★ VOL 7 ★</div>
+        <div class="addr">
+          <div class="to">— To —</div>
+          <strong>The Visitor</strong>
+          Wherever You Are<br>
+          Internet, 00000<br>
+          (this side of the screen)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="postcard projects" style="transform:rotate(-.5deg)">
+    <div class="pc-back" style="grid-template-columns:1fr;padding:24px 20px 16px">
+      <h2 class="sec">— Postcards from the Projects —</h2>
+      <div class="projects-grid">
+        <div class="project-card">
+          <h3>Nerdy Terminal</h3>
+          <p>Greetings from macOS. Multiple sessions. Switching instantly. Mouse: retired.</p>
+        </div>
+        <div class="project-card">
+          <h3>K8s Control Plane</h3>
+          <p>Postcard from a few clusters too many. GitOps. Humming.</p>
+        </div>
+        <div class="project-card">
+          <h3>MCP Gateway</h3>
+          <p>Hello from the bridge. Slack, Jira, Grafana, DBs — all chatting.</p>
+        </div>
+        <div class="project-card">
+          <h3>Pixel Tanks</h3>
+          <p>Wish you were here — I'd blow you up in low-res.</p>
+        </div>
+        <div class="project-card">
+          <h3>Home Assistant</h3>
+          <p>YAML sunsets. Zigbee breezes. WAF: dangerously low.</p>
+        </div>
+        <div class="project-card">
+          <h3>TBD</h3>
+          <p>Captures. Projects. Tasks. No bells. No whistles. Soon™.</p>
+        </div>
+      </div>
+      <div class="hand-note">
+        Drums in Mazu (instrumental stoner). Guitar, badly. Workshop in the basement — mostly sawdust and ambition. More on the next postcard.
+      </div>
+    </div>
+  </div>
+
+  <div class="foot-strip">
+    Return address: <a href="https://github.com/enipo">github.com/enipo</a> &middot; nerdy.nl
+  </div>
+</div>
+</body>
+</html>
