@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>nerdy.asm &mdash; listing</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f8f4ec'/%3E%3Ctext y='.9em' font-size='72' font-family='monospace' fill='%23101010'%3E;N%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#f5f1e8;--line:#c8c0ae;--ink:#101010;--dim:#7a7264;--addr:#6a6252;--bytes:#4a6b3e;--mnem:#8a1e1e;--op:#1e4a8a;--cmt:#5a5040;--hl:#f0e4b8;--accent:#c4671a}
+html,body{min-height:100%}
+body{background:var(--bg);
+  background-image:
+    radial-gradient(circle at 20% 0,rgba(196,103,26,.05),transparent 50%),
+    radial-gradient(circle at 80% 100%,rgba(30,74,138,.05),transparent 50%);
+  font-family:'JetBrains Mono',ui-monospace,monospace;color:var(--ink);padding:28px 16px;font-size:14px;line-height:1.55}
+
+.page{max-width:980px;margin:0 auto}
+
+/* ═══ HEADER (assembler output banner) ═══ */
+.banner{border:2px solid var(--ink);padding:16px 20px;margin-bottom:22px;position:relative;background:#fffcf3}
+.banner::before{content:'';position:absolute;top:6px;left:6px;right:6px;bottom:6px;border:1px solid var(--ink);pointer-events:none}
+.banner h1{font-size:28px;font-weight:700;letter-spacing:.1em;margin-bottom:4px;position:relative}
+.banner h1 em{font-style:normal;color:var(--accent)}
+.banner .meta{font-size:12px;color:var(--dim);letter-spacing:.06em;position:relative}
+.banner .meta span{margin-right:16px}
+.banner .meta b{color:var(--ink);font-weight:600}
+
+/* ═══ SECTION HEADERS (like segment markers) ═══ */
+.seg{margin:26px 0 8px;display:flex;align-items:baseline;gap:10px;color:var(--accent);font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;border-bottom:1px solid var(--ink);padding-bottom:2px}
+.seg span{color:var(--dim);font-weight:400;margin-left:auto;font-size:11px;letter-spacing:.06em;text-transform:none}
+
+/* ═══ LISTING TABLE ═══ */
+.listing{font-size:13px;line-height:1.7;margin-bottom:4px}
+.row{display:grid;grid-template-columns:76px 130px 60px 110px 1fr;gap:0 12px;padding:1px 0;align-items:baseline}
+.row:hover{background:var(--hl)}
+.row .addr{color:var(--addr);font-weight:400}
+.row .bytes{color:var(--bytes);font-weight:400}
+.row .label{color:var(--ink);font-weight:700}
+.row .mnem{color:var(--mnem);font-weight:600}
+.row .op{color:var(--op)}
+.row .cmt{color:var(--cmt);font-style:italic;grid-column:5/6}
+
+/* overflow long comments onto next line */
+.row.long .cmt{grid-column:1/6;padding-left:0;font-style:italic;color:var(--cmt);line-height:1.7;margin-bottom:2px}
+
+.label-row{display:grid;grid-template-columns:76px 1fr;gap:12px;margin-top:8px;font-weight:700}
+.label-row .addr{color:var(--addr);font-weight:400}
+.label-row .lbl::after{content:':'}
+
+/* ═══ INLINE COMMENT BLOCKS ═══ */
+.comment-block{color:var(--cmt);font-style:italic;border-left:3px solid var(--accent);padding:6px 14px;margin:10px 0 10px 88px;background:rgba(196,103,26,.05);font-size:13px;line-height:1.7;max-width:640px}
+.comment-block::before{content:'; '}
+
+/* ═══ SYMBOL TABLE ═══ */
+.symtab{border:1px solid var(--ink);margin-top:20px;background:#fffcf3}
+.symtab h3{padding:6px 12px;background:var(--ink);color:var(--bg);font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:400}
+.symtab table{width:100%;border-collapse:collapse;font-size:12px}
+.symtab td,.symtab th{padding:4px 12px;border-bottom:1px dotted var(--line);text-align:left}
+.symtab th{color:var(--dim);font-weight:400;letter-spacing:.08em;text-transform:uppercase;font-size:10px}
+.symtab td:nth-child(1){color:var(--addr);width:90px}
+.symtab td:nth-child(2){color:var(--ink);font-weight:700;width:170px}
+.symtab td:nth-child(3){color:var(--dim);width:90px}
+.symtab td:nth-child(4){color:var(--cmt);font-style:italic}
+
+/* ═══ FOOTER ═══ */
+.footer{margin-top:24px;padding-top:14px;border-top:2px solid var(--ink);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:12px;color:var(--dim);letter-spacing:.04em}
+.footer a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--ink)}
+.footer b{color:var(--ink);font-weight:600}
+
+@media(max-width:760px){
+  body{padding:14px 8px;font-size:12px}
+  .row{grid-template-columns:60px 90px 50px 90px 1fr;font-size:11px}
+  .row .cmt{grid-column:1/6;padding-left:62px;margin-top:0}
+  .row{padding:2px 0}
+  .comment-block{margin-left:20px;font-size:12px}
+  .banner h1{font-size:22px}
+  .symtab table{font-size:10px}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="banner">
+    <h1>NERDY<em>.ASM</em> &mdash; LISTING</h1>
+    <div class="meta">
+      <span>FILE: <b>nerdy.asm</b></span>
+      <span>TARGET: <b>gertjan@home</b></span>
+      <span>ASM: <b>nasm 2.16.01</b></span>
+      <span>ERRORS: <b>0</b></span>
+      <span>WARNINGS: <b>WAF_LOW</b></span>
+    </div>
+  </div>
+
+  <div class="seg">.data <span>section: read-only facts</span></div>
+  <div class="listing">
+    <div class="row">
+      <span class="addr">0000</span><span class="bytes">4E 65 72 64 79</span><span class="label">name</span><span class="mnem">db</span><span class="cmt"><span class="op">"Nerdy",0</span> &nbsp;&nbsp; ; putting the Y in Nerdy</span>
+    </div>
+    <div class="row">
+      <span class="addr">0006</span><span class="bytes">03 00</span><span class="label">kids</span><span class="mnem">dw</span><span class="cmt"><span class="op">3</span> &nbsp;&nbsp; ; +1 YAML automation does not count</span>
+    </div>
+    <div class="row">
+      <span class="addr">0008</span><span class="bytes">05 00</span><span class="label">clusters</span><span class="mnem">dw</span><span class="cmt"><span class="op">5</span> &nbsp;&nbsp; ; k81tr,k81wj,k81x6,k81xw,k810l</span>
+    </div>
+    <div class="row">
+      <span class="addr">000A</span><span class="bytes">00 00</span><span class="label">waf</span><span class="mnem">dw</span><span class="cmt"><span class="op">0</span> &nbsp;&nbsp; ; dangerously low. known bug. wontfix.</span>
+    </div>
+    <div class="row">
+      <span class="addr">000C</span><span class="bytes">01 00</span><span class="label">bands</span><span class="mnem">dw</span><span class="cmt"><span class="op">1</span> &nbsp;&nbsp; ; Mazu — instrumental stoner</span>
+    </div>
+  </div>
+
+  <div class="seg">.text:projects <span>$100..$1FF</span></div>
+  <div class="listing">
+    <div class="label-row"><span class="addr">0100</span><span class="lbl">nerdy_terminal</span></div>
+    <div class="row"><span class="addr">0100</span><span class="bytes">B8 00 10</span><span></span><span class="mnem">mov</span><span class="op">ax, SESSION</span></div>
+    <div class="row"><span class="addr">0103</span><span class="bytes">CD 21</span><span></span><span class="mnem">int</span><span class="op">21h</span></div>
+    <div class="comment-block">Keyboard-first terminal manager for macOS. Why move your hand 30 cm to the right when you can press two keys?</div>
+
+    <div class="label-row"><span class="addr">0140</span><span class="lbl">kubernetes_home</span></div>
+    <div class="row"><span class="addr">0140</span><span class="bytes">E8 05 00</span><span></span><span class="mnem">call</span><span class="op">scale_up</span></div>
+    <div class="row"><span class="addr">0143</span><span class="bytes">E8 05 00</span><span></span><span class="mnem">call</span><span class="op">scale_up</span></div>
+    <div class="row"><span class="addr">0146</span><span class="bytes">E8 05 00</span><span></span><span class="mnem">call</span><span class="op">scale_up</span></div>
+    <div class="comment-block">Own Kubernetes control plane at home. A few clusters too many. Wildly over-engineered for a one-person operation — but GitOps.</div>
+
+    <div class="label-row"><span class="addr">0180</span><span class="lbl">mcp_gateway</span></div>
+    <div class="row"><span class="addr">0180</span><span class="bytes">B9 07 00</span><span></span><span class="mnem">mov</span><span class="op">cx, 7 &nbsp;&nbsp;</span> <span class="cmt">; integrations</span></div>
+    <div class="row"><span class="addr">0183</span><span class="bytes">F3 A4</span><span></span><span class="mnem">rep</span><span class="op">movsb</span></div>
+    <div class="comment-block">Bridge between AI agents and Slack, Jira, databases, Grafana, Tailscale. One gateway to rule them all.</div>
+
+    <div class="label-row"><span class="addr">01C0</span><span class="lbl">pixel_tanks</span></div>
+    <div class="row"><span class="addr">01C0</span><span class="bytes">B0 08</span><span></span><span class="mnem">mov</span><span class="op">al, 08h &nbsp;&nbsp;</span> <span class="cmt">; low resolution</span></div>
+    <div class="row"><span class="addr">01C2</span><span class="bytes">CD 10</span><span></span><span class="mnem">int</span><span class="op">10h &nbsp;&nbsp;</span> <span class="cmt">; set mode; destroy friends</span></div>
+    <div class="comment-block">Top-down multiplayer tank combat. Built for the joy of destroying friends in low resolution.</div>
+
+    <div class="label-row"><span class="addr">01F0</span><span class="lbl">tbd</span></div>
+    <div class="row"><span class="addr">01F0</span><span class="bytes">90</span><span></span><span class="mnem">nop</span><span class="op"></span> <span class="cmt">; reserved</span></div>
+    <div class="comment-block">Personal productivity. Captures, projects, tasks. No bells. No whistles. WIP — possibly forever.</div>
+  </div>
+
+  <div class="seg">.text:offstage <span>$200..$2FF</span></div>
+  <div class="listing">
+    <div class="label-row"><span class="addr">0200</span><span class="lbl">mazu_drums</span></div>
+    <div class="row"><span class="addr">0200</span><span class="bytes">F4</span><span></span><span class="mnem">hlt</span><span class="op"></span> <span class="cmt">; no lyrics to decode</span></div>
+    <div class="comment-block">Drummer in Mazu. Instrumental stoner band. The kind of music where nobody asks what the lyrics are about.</div>
+
+    <div class="label-row"><span class="addr">0220</span><span class="lbl">guitar_hobby</span></div>
+    <div class="row"><span class="addr">0220</span><span class="bytes">EB FE</span><span></span><span class="mnem">jmp</span><span class="op">$</span> <span class="cmt">; infinite loop — neighbors noticed</span></div>
+    <div class="comment-block">Guitar. Badly but enthusiastically. The neighbors have opinions.</div>
+
+    <div class="label-row"><span class="addr">0260</span><span class="lbl">workshop</span></div>
+    <div class="row"><span class="addr">0260</span><span class="bytes">89 C8</span><span></span><span class="mnem">mov</span><span class="op">ax, sawdust</span></div>
+    <div class="comment-block">Basement woodworking workshop. Currently: mostly sawdust and ambition. Every tool purchase: "investment in the hobby".</div>
+
+    <div class="label-row"><span class="addr">02A0</span><span class="lbl">dad_x3</span></div>
+    <div class="row"><span class="addr">02A0</span><span class="bytes">8B 1E 06</span><span></span><span class="mnem">mov</span><span class="op">bx, [kids]</span></div>
+    <div class="row"><span class="addr">02A3</span><span class="bytes">E8 FF FF</span><span></span><span class="mnem">call</span><span class="op">smart_lights</span> <span class="cmt">; WAF &gt; 0</span></div>
+    <div class="comment-block">Three kids. They don't care about Kubernetes. They do care about the smart lights. Only use case with a WAF above zero.</div>
+  </div>
+
+  <div class="seg">.text:_start <span>entry</span></div>
+  <div class="listing">
+    <div class="row"><span class="addr">0300</span><span class="bytes">BB 00 01</span><span></span><span class="mnem">mov</span><span class="op">bx, nerdy_terminal</span></div>
+    <div class="row"><span class="addr">0303</span><span class="bytes">FF E3</span><span></span><span class="mnem">jmp</span><span class="op">bx</span> <span class="cmt">; start here</span></div>
+    <div class="row"><span class="addr">0305</span><span class="bytes">CD 20</span><span></span><span class="mnem">int</span><span class="op">20h</span> <span class="cmt">; never reached</span></div>
+  </div>
+
+  <div class="symtab">
+    <h3>&mdash; SYMBOL TABLE &mdash;</h3>
+    <table>
+      <tr><th>Addr</th><th>Symbol</th><th>Type</th><th>Comment</th></tr>
+      <tr><td>0100</td><td>nerdy_terminal</td><td>proc</td><td>tm cli, keyboard-first</td></tr>
+      <tr><td>0140</td><td>kubernetes_home</td><td>proc</td><td>5 clusters, one dev</td></tr>
+      <tr><td>0180</td><td>mcp_gateway</td><td>proc</td><td>ai ↔ everything</td></tr>
+      <tr><td>01C0</td><td>pixel_tanks</td><td>proc</td><td>multiplayer, low-res</td></tr>
+      <tr><td>01F0</td><td>tbd</td><td>proc</td><td>reserved, no bells</td></tr>
+      <tr><td>0200</td><td>mazu_drums</td><td>proc</td><td>instrumental stoner</td></tr>
+      <tr><td>0260</td><td>workshop</td><td>proc</td><td>basement, sawdust</td></tr>
+      <tr><td>02A0</td><td>dad_x3</td><td>proc</td><td>three kids, zigbee lights</td></tr>
+      <tr><td>0300</td><td>_start</td><td>entry</td><td>everything begins here</td></tr>
+    </table>
+  </div>
+
+  <div class="footer">
+    <span>&copy; nerdy.nl &middot; <b>assembled</b> in 1 pass</span>
+    <a href="https://github.com/enipo">github.com/enipo</a>
+    <span>&mdash; no errors, many side effects &mdash;</span>
+  </div>
+</div>
+</body>
+</html>

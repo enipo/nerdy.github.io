@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>nerdy.nl &mdash; dot-matrix print</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e8eadd'/%3E%3Ctext y='.9em' font-size='70' font-family='monospace' fill='%232a3b1a'%3EN%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--paper:#e8ead8;--paper2:#d8dbc6;--ink:#1e2518;--faded:#4a5842;--red:#a2281c;--accent:#326033}
+body{background:#514a3c;font-family:'IBM Plex Mono','Courier New',monospace;color:var(--ink);padding:18px;min-height:100vh;
+  background-image:
+    repeating-linear-gradient(45deg,rgba(0,0,0,.05) 0,rgba(0,0,0,.05) 2px,transparent 2px,transparent 6px);
+}
+
+/* ═══ CONTINUOUS-FEED PAPER ═══ */
+.sheet{max-width:920px;margin:0 auto;background:var(--paper);
+  background-image:repeating-linear-gradient(to bottom,transparent 0 53px,rgba(50,96,51,.18) 53px 54px,rgba(50,96,51,.18) 53px 68px,transparent 68px);
+  box-shadow:0 12px 40px rgba(0,0,0,.5);position:relative;padding:60px 64px;
+  border-left:20px solid var(--paper);border-right:20px solid var(--paper)}
+
+/* tractor-feed holes */
+.sheet::before,.sheet::after{content:'';position:absolute;top:0;bottom:0;width:28px;
+  background:var(--paper2);
+  background-image:radial-gradient(circle at center,#514a3c 5px,transparent 6px);
+  background-size:28px 28px;background-repeat:repeat-y;border-right:1px dashed rgba(0,0,0,.2)}
+.sheet::before{left:0}
+.sheet::after{right:0;border-right:none;border-left:1px dashed rgba(0,0,0,.2)}
+
+/* dot-matrix text effect: ink bleed */
+.sheet,.sheet *{
+  font-feature-settings:"calt" 0;
+  text-shadow:0.4px 0.4px 0 rgba(30,37,24,.35);
+}
+
+/* header banner — ASCII-ish big letters via text */
+.banner{font-family:'VT323',monospace;font-size:clamp(60px,11vw,140px);line-height:.85;letter-spacing:-2px;
+  color:var(--ink);text-align:center;margin-bottom:6px;
+  -webkit-text-stroke:1px var(--ink);
+  background:repeating-linear-gradient(to bottom,var(--ink) 0 3px,transparent 3px 5px);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.sub{text-align:center;font-size:14px;letter-spacing:.4em;color:var(--faded);text-transform:uppercase;margin-bottom:32px}
+
+.hr{border:none;border-top:1px dashed var(--faded);margin:24px 0}
+.hr::before{content:'<-- TEAR HERE --------------------------------------------------------- ';color:var(--faded);font-size:11px;letter-spacing:.1em;display:block;margin-bottom:2px}
+
+.print-meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:6px 18px;font-size:12px;color:var(--faded);margin-bottom:20px;text-transform:uppercase;letter-spacing:.08em}
+.print-meta span b{color:var(--ink);font-weight:600}
+
+h2{font-family:'VT323',monospace;font-size:38px;letter-spacing:3px;text-transform:uppercase;margin:30px 0 4px;color:var(--ink);
+  display:flex;align-items:center;gap:12px}
+h2::before{content:'▌';color:var(--red)}
+h2 small{font-size:14px;font-family:'IBM Plex Mono',monospace;color:var(--faded);letter-spacing:.1em;font-weight:400;margin-left:auto}
+
+.intro{font-size:16px;line-height:1.7;max-width:56ch;margin-bottom:8px}
+
+/* project list — carbon-copy receipt style */
+.list{font-size:15px;line-height:1.85}
+.list .item{display:grid;grid-template-columns:30px 1fr auto;align-items:start;gap:10px;padding:3px 0;border-bottom:1px dotted rgba(30,37,24,.35)}
+.list .n{color:var(--red);font-weight:600}
+.list .desc{font-size:13px;color:var(--faded);display:block;margin-top:2px}
+.list .tag{font-size:11px;padding:1px 6px;border:1px solid var(--ink);letter-spacing:.1em;text-transform:uppercase;align-self:center}
+
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:20px 32px;margin:10px 0}
+.cols h3{font-size:14px;letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px;color:var(--red)}
+.cols p{font-size:14px;line-height:1.7}
+
+.big-note{border:2px solid var(--ink);padding:14px 18px;margin:24px 0;position:relative;background:rgba(50,96,51,.08)}
+.big-note::before{content:'*** NOTICE ***';position:absolute;top:-10px;left:16px;background:var(--paper);padding:0 8px;font-size:12px;letter-spacing:.2em;color:var(--red);font-weight:600}
+.big-note p{font-size:14px;line-height:1.7}
+
+.totals{display:grid;grid-template-columns:1fr auto;gap:4px 20px;font-size:14px;margin-top:10px;max-width:440px}
+.totals b{font-weight:600}
+.totals hr{grid-column:1/3;border:none;border-top:1px solid var(--ink);margin:4px 0}
+.totals .grand{font-size:16px;font-weight:600;color:var(--red)}
+
+.footer{margin-top:30px;padding-top:14px;border-top:3px double var(--ink);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:12px;color:var(--faded);letter-spacing:.1em;text-transform:uppercase}
+.footer a{color:var(--ink);text-decoration:underline}
+
+@media(max-width:700px){
+  body{padding:6px}
+  .sheet{padding:40px 36px;border-left-width:14px;border-right-width:14px}
+  .sheet::before,.sheet::after{width:18px;background-size:18px 22px;background-image:radial-gradient(circle at center,#514a3c 3px,transparent 4px)}
+  .cols{grid-template-columns:1fr}
+  .banner{font-size:56px}
+  h2{font-size:28px}
+}
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="banner">NERDY.NL</div>
+  <div class="sub">// Epson FX-80 &middot; 9-pin &middot; ribbon: almost dead</div>
+
+  <hr class="hr">
+
+  <div class="print-meta">
+    <span>JOB: <b>NERDY-HOMEPAGE</b></span>
+    <span>FORM: <b>GREENBAR 14⅞"×11"</b></span>
+    <span>PAGE: <b>001 of 001</b></span>
+    <span>DENSITY: <b>DRAFT / HI-CONTRAST</b></span>
+  </div>
+
+  <h2>WHOIS<small>&mdash; record #0001</small></h2>
+  <p class="intro">Nederlandse ontwikkelaar. Bouwt dingen die niemand gevraagd heeft.
+  Automatiseert huizen met YAML en koppigheid. Draait Kubernetes voor een persoon.
+  Trommelt in een instrumentale stonerband. Slijpt stof in de kelder.
+  Drie kinderen die niks om clusters geven. Slimme lampen: enige use case met WAF boven nul.</p>
+
+  <h2>PROJECTS.TXT<small>&mdash; 5 records</small></h2>
+  <div class="list">
+    <div class="item"><span class="n">01</span><span><b>Nerdy Terminal</b><span class="desc">Keyboard-first terminal manager for macOS. Instant session switching. No mouse required.</span></span><span class="tag">macOS</span></div>
+    <div class="item"><span class="n">02</span><span><b>Kubernetes at Home</b><span class="desc">Own control plane. Monitoring, legacy prod, prod, test, AI cluster. Wildly over-engineered for a one-person operation.</span></span><span class="tag">K8s</span></div>
+    <div class="item"><span class="n">03</span><span><b>MCP Gateway</b><span class="desc">Bridge between AI agents and Slack, Jira, databases, Grafana, Tailscale. One bridge to rule them all.</span></span><span class="tag">AI</span></div>
+    <div class="item"><span class="n">04</span><span><b>Pixel Tanks</b><span class="desc">Top-down multiplayer tank combat. Built for the joy of destroying friends in low resolution.</span></span><span class="tag">Game</span></div>
+    <div class="item"><span class="n">05</span><span><b>TBD</b><span class="desc">Personal productivity. Captures, projects, tasks. No bells. No whistles.</span></span><span class="tag">WIP</span></div>
+  </div>
+
+  <hr class="hr">
+
+  <div class="cols">
+    <div>
+      <h3>Music</h3>
+      <p>Drummer in <b>Mazu</b> &mdash; instrumental stoner.
+      The kind of music where nobody asks about the lyrics.
+      Also plays guitar, badly but enthusiastically. Neighbors have opinions.</p>
+    </div>
+    <div>
+      <h3>Home &amp; Workshop</h3>
+      <p>Home Assistant holds the house together with Zigbee and stubbornness.
+      The basement is becoming a woodworking workshop. Currently: mostly sawdust and ambition.</p>
+    </div>
+  </div>
+
+  <div class="big-note">
+    <p>No blog. No thought leadership. No content strategy. Everything worth saying has already been generated by an LLM somewhere. This is just a workbench.</p>
+  </div>
+
+  <h2>FIGURES<small>&mdash; approx.</small></h2>
+  <div class="totals">
+    <span>Kubernetes clusters operated</span><b>5</b>
+    <span>YAML lines in home automation</span><b>&gt; 2&thinsp;000</b>
+    <span>Kids who care about clusters</span><b>0</b>
+    <span>Kids who care about lights</span><b>3</b>
+    <hr>
+    <span class="grand">WIFE ACCEPTANCE FACTOR</span><b class="grand">LOW</b>
+  </div>
+
+  <div class="footer">
+    <span>&copy; nerdy.nl &middot; printed at 80 cps</span>
+    <a href="https://github.com/enipo">github.com/enipo</a>
+    <span>--- END OF JOB ---</span>
+  </div>
+</div>
+</body>
+</html>
