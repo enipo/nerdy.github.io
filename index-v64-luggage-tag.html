@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>nerdy.nl — handle with care</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.88em' font-size='85'%3E🛄%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--leather:#3b2a1e;--leather2:#2a1d14;--manilla:#e8d5a8;--manilla2:#dcc48c;--ink:#1d1410;--red:#9a2420;--stamp:#4a6530;--type:'Special Elite',monospace;--disp:'Bebas Neue',sans-serif;--mono:'IBM Plex Mono',monospace}
+body{background:var(--leather);background-image:
+  radial-gradient(ellipse at top left,#4a3628 0%,var(--leather) 40%,var(--leather2) 100%),
+  repeating-linear-gradient(45deg,transparent 0 3px,rgba(0,0,0,.04) 3px 4px);
+  min-height:100vh;padding:2rem 1rem;color:var(--ink);font-family:var(--mono)}
+.baggage{max-width:920px;margin:0 auto;position:relative}
+
+.handle{height:90px;position:relative;margin-bottom:-30px;display:flex;justify-content:center}
+.handle svg{overflow:visible;filter:drop-shadow(0 4px 4px rgba(0,0,0,.5))}
+
+.tags{display:grid;gap:1.6rem}
+
+/* ═══ BIG TAG ═══ */
+.tag{background:var(--manilla);background-image:
+  radial-gradient(ellipse at 70% 30%,rgba(255,255,255,.25) 0%,transparent 40%),
+  repeating-linear-gradient(0deg,transparent 0 2px,rgba(0,0,0,.025) 2px 3px);
+  position:relative;padding:1.5rem 1.8rem 1.6rem;box-shadow:0 12px 30px rgba(0,0,0,.55),inset 0 0 0 2px rgba(0,0,0,.22);clip-path:polygon(24px 0,calc(100% - 24px) 0,100% 24px,100% 100%,0 100%,0 24px);transform:rotate(var(--r,-1.2deg))}
+.tag::before{content:'';position:absolute;top:22px;left:50%;transform:translateX(-50%);width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 50% 40%,var(--leather2) 0%,var(--leather) 65%,transparent 66%);box-shadow:inset 0 0 0 3px rgba(0,0,0,.6)}
+.tag::after{content:'';position:absolute;top:20px;left:calc(50% - 15px);width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.1);filter:blur(2px);z-index:0}
+
+.tag-header{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;padding-top:2.5rem;padding-bottom:1rem;border-bottom:2px dashed var(--ink);margin-bottom:1rem;flex-wrap:wrap}
+.airline{font-family:var(--disp);font-size:clamp(2rem,5vw,3.4rem);letter-spacing:.08em;line-height:.9;color:var(--ink)}
+.airline em{display:block;font-family:var(--type);font-size:.32em;font-style:normal;color:var(--red);letter-spacing:.25em;text-transform:uppercase;margin-top:.1rem}
+.airline b{color:var(--red);font-style:normal}
+.destination{text-align:right;font-family:var(--disp);font-size:clamp(1.6rem,3.5vw,2.6rem);letter-spacing:.05em;line-height:.9}
+.destination small{display:block;font-family:var(--mono);font-size:.7rem;letter-spacing:.18em;margin-top:.3rem;color:var(--red)}
+
+.address{display:grid;grid-template-columns:1fr 1fr;gap:.8rem 1.4rem}
+.field{border-bottom:1px dashed rgba(0,0,0,.4);padding-bottom:.35rem}
+.field .k{font-family:var(--mono);font-size:.55rem;letter-spacing:.22em;text-transform:uppercase;color:var(--red);margin-bottom:.15rem}
+.field .v{font-family:var(--type);font-size:1rem;line-height:1.1;color:var(--ink)}
+.field.wide{grid-column:1/-1}
+.field .v.big{font-size:1.25rem}
+
+.barcode{margin-top:1rem;padding-top:.9rem;border-top:2px dashed var(--ink);display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+.bars{flex:1;height:32px;background:repeating-linear-gradient(to right,var(--ink) 0 2px,transparent 2px 5px,var(--ink) 5px 6px,transparent 6px 10px,var(--ink) 10px 11px,transparent 11px 14px,var(--ink) 14px 16px,transparent 16px 21px,var(--ink) 21px 22px,transparent 22px 25px);min-width:200px}
+.seq{font-family:var(--mono);font-size:.85rem;letter-spacing:.15em;color:var(--ink);font-weight:600}
+.priority{background:var(--red);color:var(--manilla);padding:.35rem .7rem;font-family:var(--disp);letter-spacing:.2em;font-size:.9rem;transform:rotate(-3deg);display:inline-block}
+
+/* rubber stamp */
+.rstamp{position:absolute;top:1rem;right:1.2rem;color:var(--stamp);border:3px double var(--stamp);padding:.25rem .55rem;font-family:var(--disp);font-size:.95rem;letter-spacing:.2em;transform:rotate(-12deg);opacity:.65}
+.rstamp.blue{color:#1f4a78;border-color:#1f4a78;top:auto;bottom:3rem;right:1.8rem;transform:rotate(8deg)}
+
+/* sub tags */
+.subtags{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.2rem;margin-top:.5rem}
+.subtag{background:var(--manilla2);position:relative;padding:1.3rem 1.2rem 1.2rem;box-shadow:0 8px 20px rgba(0,0,0,.45),inset 0 0 0 1.5px rgba(0,0,0,.2);clip-path:polygon(18px 0,calc(100% - 18px) 0,100% 18px,100% 100%,0 100%,0 18px);transform:rotate(var(--r,.8deg))}
+.subtag::before{content:'';position:absolute;top:16px;left:50%;transform:translateX(-50%);width:16px;height:16px;border-radius:50%;background:radial-gradient(circle,var(--leather2) 0 5px,transparent 6px);box-shadow:inset 0 0 0 2px rgba(0,0,0,.55)}
+.subtag h3{font-family:var(--disp);font-size:1.3rem;letter-spacing:.08em;padding-top:1.8rem;color:var(--ink)}
+.subtag .code{font-family:var(--mono);font-size:.6rem;letter-spacing:.22em;color:var(--red);text-transform:uppercase;margin-bottom:.5rem}
+.subtag p{font-family:var(--type);font-size:.9rem;line-height:1.45;color:var(--ink)}
+.subtag .wt{font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;color:rgba(0,0,0,.55);border-top:1px dashed var(--ink);padding-top:.4rem;margin-top:.6rem;display:flex;justify-content:space-between}
+
+/* manifest */
+.manifest{background:var(--manilla);padding:1.4rem 1.6rem;box-shadow:0 8px 22px rgba(0,0,0,.4),inset 0 0 0 2px rgba(0,0,0,.22);clip-path:polygon(20px 0,calc(100% - 20px) 0,100% 20px,100% 100%,0 100%,0 20px);transform:rotate(-.4deg);margin-top:.5rem}
+.manifest h2{font-family:var(--disp);font-size:1.7rem;letter-spacing:.15em;padding-top:1.6rem;color:var(--ink);border-bottom:2px dashed var(--ink);padding-bottom:.5rem;margin-bottom:.7rem;position:relative}
+.manifest h2::before{content:'';position:absolute;top:6px;left:50%;transform:translateX(-50%);width:18px;height:18px;border-radius:50%;background:radial-gradient(circle,var(--leather2) 0 6px,transparent 7px);box-shadow:inset 0 0 0 2px rgba(0,0,0,.55)}
+.mrow{display:grid;grid-template-columns:100px 1fr 1fr 80px;gap:1rem;padding:.3rem 0;font-family:var(--mono);font-size:.82rem;border-bottom:1px dotted rgba(0,0,0,.3)}
+.mrow .c1{font-family:var(--type);color:var(--red)}
+.mrow .c4{text-align:right}
+.manifest .foot{font-family:var(--type);font-size:.95rem;margin-top:.8rem;text-align:center;color:var(--ink);font-style:italic}
+
+footer.base{text-align:center;color:var(--manilla2);font-family:var(--mono);font-size:.7rem;letter-spacing:.18em;margin-top:2rem;opacity:.85;text-transform:uppercase}
+footer.base a{color:var(--manilla);text-decoration:underline}
+
+@media(max-width:520px){
+  .address{grid-template-columns:1fr}
+  .mrow{grid-template-columns:80px 1fr 60px;font-size:.75rem}
+  .mrow .c3{display:none}
+  .tag-header{flex-direction:column;align-items:flex-start}
+  .destination{text-align:left}
+}
+</style>
+</head>
+<body>
+<div class="baggage">
+
+  <div class="handle">
+    <svg width="220" height="90" viewBox="0 0 220 90">
+      <path d="M 20 80 Q 20 10 110 10 Q 200 10 200 80" fill="none" stroke="#1a0e08" stroke-width="18" stroke-linecap="round"/>
+      <path d="M 20 80 Q 20 10 110 10 Q 200 10 200 80" fill="none" stroke="#6a4a30" stroke-width="12" stroke-linecap="round"/>
+      <path d="M 20 80 Q 20 18 110 18 Q 200 18 200 80" fill="none" stroke="#8a6a4a" stroke-width="2" stroke-linecap="round" opacity=".6"/>
+    </svg>
+  </div>
+
+  <div class="tags">
+
+    <!-- MAIN LUGGAGE TAG -->
+    <div class="tag" style="--r:-1.4deg">
+      <span class="rstamp">★ INSPECTED ★</span>
+      <span class="rstamp blue">THIS SIDE UP</span>
+
+      <div class="tag-header">
+        <div class="airline">NERDY<em>airways · est. whenever</em></div>
+        <div class="destination">NRD&thinsp;·&thinsp;NL<small>→ final destination</small></div>
+      </div>
+
+      <div class="address">
+        <div class="field wide"><div class="k">If found, return to</div><div class="v big">The one putting the Y in Nerdy</div></div>
+        <div class="field"><div class="k">From</div><div class="v">A home office, NL</div></div>
+        <div class="field"><div class="k">To</div><div class="v">Wherever the builds run</div></div>
+        <div class="field"><div class="k">Flight</div><div class="v">NRDY‑001 · daily</div></div>
+        <div class="field"><div class="k">Gate</div><div class="v">TTY / SSH / HTTP</div></div>
+        <div class="field"><div class="k">Class</div><div class="v">Keyboard‑first</div></div>
+        <div class="field"><div class="k">Baggage</div><div class="v">5 projects + tools</div></div>
+        <div class="field wide"><div class="k">Contents (declared)</div><div class="v">terminal manager · a few K8s clusters too many · one MCP gateway · pixel tanks · one TBD</div></div>
+        <div class="field wide"><div class="k">Remarks</div><div class="v">Fragile: ego. Handle with care. Do not get wet. No tipping.</div></div>
+      </div>
+
+      <div class="barcode">
+        <span class="priority">Priority</span>
+        <div class="bars"></div>
+        <span class="seq">NRDY 0000001 NL</span>
+      </div>
+    </div>
+
+    <!-- SUB TAGS: 5 PROJECTS -->
+    <div class="subtags">
+      <div class="subtag" style="--r:-1.2deg">
+        <div class="code">TAG · NRD‑TRM</div>
+        <h3>Nerdy Terminal</h3>
+        <p>Keyboard‑first terminal manager. Multiple sessions, instant switching, no mouse required. Packed in carry‑on for macOS use only.</p>
+        <div class="wt"><span>weight 0.4&nbsp;MB</span><span>→ gate&nbsp;T1</span></div>
+      </div>
+      <div class="subtag" style="--r:.9deg">
+        <div class="code">TAG · CTRL‑01</div>
+        <h3>Kubernetes</h3>
+        <p>A personal control plane, a few clusters too many. Wildly over‑engineered for a one‑person operation. GitOps whispered at check‑in.</p>
+        <div class="wt"><span>weight ~∞&nbsp;pods</span><span>→ gate&nbsp;K8</span></div>
+      </div>
+      <div class="subtag" style="--r:-.7deg">
+        <div class="code">TAG · MCP‑3</div>
+        <h3>MCP Gateway</h3>
+        <p>Bridge between AI agents and everything else: Slack, Jira, DB, Grafana, Tailscale. Declare at customs — one gateway, many protocols.</p>
+        <div class="wt"><span>weight varies</span><span>→ gate&nbsp;API</span></div>
+      </div>
+      <div class="subtag" style="--r:1.1deg">
+        <div class="code">TAG · TNK‑4</div>
+        <h3>Pixel Tanks</h3>
+        <p>Top‑down multiplayer tank combat, built for the joy of destroying your friends in low resolution. Friendships: do not check in.</p>
+        <div class="wt"><span>weight 16×16&nbsp;px</span><span>→ gate&nbsp;GG</span></div>
+      </div>
+      <div class="subtag" style="--r:-.4deg">
+        <div class="code">TAG · TBD‑5</div>
+        <h3>TBD</h3>
+        <p>Personal productivity. Captures, projects, tasks. No bells, no whistles. Currently waiting at the baggage carousel of life.</p>
+        <div class="wt"><span>weight 0&nbsp;kB</span><span>→ gate&nbsp;??</span></div>
+      </div>
+      <div class="subtag" style="--r:.6deg">
+        <div class="code">TAG · LIFE‑∞</div>
+        <h3>Carry‑on: the rest</h3>
+        <p>Drums in Mazu (instrumental stoner). Guitar, badly. Basement workshop, mostly sawdust and ambition. Dad × 3 — the only WAF&nbsp;&gt;&nbsp;0 use case.</p>
+        <div class="wt"><span>weight: load‑bearing</span><span>→ gate&nbsp;HOME</span></div>
+      </div>
+    </div>
+
+    <!-- MANIFEST -->
+    <div class="manifest">
+      <h2>CARGO MANIFEST · NRDY‑001</h2>
+      <div class="mrow"><span class="c1">#01</span><span>Nerdy Terminal</span><span class="c3">NRD‑TRM</span><span class="c4">0.4 MB</span></div>
+      <div class="mrow"><span class="c1">#02</span><span>Kubernetes Home Edition</span><span class="c3">CTRL‑01</span><span class="c4">∞ pods</span></div>
+      <div class="mrow"><span class="c1">#03</span><span>MCP Gateway</span><span class="c3">MCP‑003</span><span class="c4">1 br.</span></div>
+      <div class="mrow"><span class="c1">#04</span><span>Pixel Tanks</span><span class="c3">TNK‑004</span><span class="c4">low‑res</span></div>
+      <div class="mrow"><span class="c1">#05</span><span>TBD</span><span class="c3">TBD‑005</span><span class="c4">0 kB</span></div>
+      <div class="mrow"><span class="c1">#06</span><span>Drums · Mazu</span><span class="c3">MUSIC‑1</span><span class="c4">loud</span></div>
+      <div class="mrow"><span class="c1">#07</span><span>Guitar · open mic</span><span class="c3">MUSIC‑2</span><span class="c4">louder</span></div>
+      <div class="mrow"><span class="c1">#08</span><span>Basement workshop</span><span class="c3">WOOD‑01</span><span class="c4">sawdust</span></div>
+      <div class="mrow"><span class="c1">#09</span><span>Dad × 3</span><span class="c3">FAM‑003</span><span class="c4">priceless</span></div>
+      <p class="foot">— All baggage accepted at owner's risk · nothing to declare except a mild preference for YAML —</p>
+    </div>
+
+  </div>
+
+  <footer class="base">nerdy.nl · <a href="https://github.com/enipo">github.com/enipo</a> · lost &amp; found at the terminal</footer>
+</div>
+</body>
+</html>

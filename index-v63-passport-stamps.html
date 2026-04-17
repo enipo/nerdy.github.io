@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>nerdy.nl — passport</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.88em' font-size='85'%3E🛂%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Special+Elite&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--cover:#1b2b4d;--gold:#c9a94a;--page:#f4ecd6;--page2:#ebe0bd;--ink:#1a1614;--blue:#1b3a6b;--red:#a22822;--green:#1f5a3a;--type:'Special Elite',monospace;--mono:'IBM Plex Mono',monospace;--serif:'Cormorant Garamond',serif}
+body{background:#1a1410;min-height:100vh;padding:2rem 1rem;font-family:var(--serif)}
+
+.passport{max-width:960px;margin:0 auto;background:var(--cover);border-radius:6px;padding:10px;box-shadow:0 15px 40px rgba(0,0,0,.6),inset 0 0 0 2px var(--gold)}
+.cover-top{text-align:center;padding:.6rem 0 .8rem;color:var(--gold);letter-spacing:.3em;font-family:var(--mono);font-size:.65rem;border-bottom:1px solid rgba(201,169,74,.3)}
+
+.spread{background:var(--page);background-image:
+  repeating-linear-gradient(0deg,transparent 0 28px,rgba(27,58,107,.04) 28px 29px),
+  radial-gradient(ellipse at 50% 50%,var(--page) 0%,var(--page2) 100%);
+  padding:2rem 2rem 2.5rem;position:relative;overflow:hidden;border-radius:2px}
+.spread::before{content:'';position:absolute;top:0;bottom:0;left:50%;width:2px;background:linear-gradient(180deg,rgba(0,0,0,.14),rgba(0,0,0,.04));transform:translateX(-50%);z-index:1}
+/* security guilloché */
+.spread::after{content:'';position:absolute;inset:0;background:
+  repeating-radial-gradient(circle at 20% 30%,transparent 0 12px,rgba(27,58,107,.05) 12px 12.5px),
+  repeating-radial-gradient(circle at 80% 70%,transparent 0 10px,rgba(162,40,34,.04) 10px 10.5px);
+  pointer-events:none;opacity:.6}
+
+.header{position:relative;z-index:2;border-bottom:2px solid var(--ink);padding-bottom:.8rem;margin-bottom:1.4rem;display:flex;justify-content:space-between;align-items:flex-end;gap:1rem;flex-wrap:wrap}
+.header h1{font-family:var(--serif);font-weight:700;font-size:clamp(1.6rem,3.8vw,2.6rem);letter-spacing:.04em;color:var(--ink);line-height:1}
+.header h1 em{font-weight:400;font-style:italic;color:var(--blue);display:block;font-size:.55em;margin-top:.2rem;letter-spacing:.12em}
+.issuer{font-family:var(--mono);font-size:.65rem;letter-spacing:.18em;color:var(--ink);text-transform:uppercase;text-align:right}
+.issuer strong{color:var(--red);display:block;font-size:.9rem;letter-spacing:.22em;margin-bottom:.1rem}
+
+/* ID page */
+.idpage{position:relative;z-index:2;display:grid;grid-template-columns:130px 1fr;gap:1.4rem;margin-bottom:1.6rem;padding-bottom:1rem;border-bottom:1px dashed rgba(27,58,107,.4)}
+.photo{aspect-ratio:3/4;background:linear-gradient(135deg,#354f7a,#1b3a6b);display:flex;align-items:center;justify-content:center;font-family:var(--serif);color:var(--gold);font-size:3.5rem;font-weight:700;position:relative;box-shadow:inset 0 0 0 3px rgba(244,236,214,.15);transform:rotate(-.8deg)}
+.photo::after{content:'PHOTO';position:absolute;bottom:-16px;left:0;right:0;text-align:center;font-family:var(--mono);font-size:.55rem;color:rgba(244,236,214,.35);letter-spacing:.25em}
+.iddetails{display:grid;grid-template-columns:1fr 1fr;gap:.5rem .9rem;align-content:start}
+.field{font-family:var(--mono)}
+.field .k{font-size:.5rem;letter-spacing:.22em;color:var(--blue);text-transform:uppercase;margin-bottom:.1rem}
+.field .v{font-family:var(--type);font-size:.98rem;color:var(--ink);line-height:1.15}
+.field.wide{grid-column:1/-1}
+.mrz{grid-column:1/-1;font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;color:var(--ink);background:rgba(27,58,107,.06);padding:.45rem .6rem;border-top:1px solid var(--ink);margin-top:.5rem;line-height:1.5}
+
+/* stamps section */
+.stampsnote{position:relative;z-index:2;font-family:var(--serif);font-style:italic;color:var(--blue);font-size:1.05rem;margin-bottom:.9rem;text-align:center;letter-spacing:.04em}
+.stamps{position:relative;z-index:2;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.3rem}
+.stamp{padding:1rem 1.1rem;position:relative;transform:rotate(var(--r,0deg));filter:drop-shadow(1px 1px 0 rgba(0,0,0,.05))}
+.stamp.round{border:3px double;border-radius:50%;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem 1rem;max-width:260px;margin:0 auto}
+.stamp.rect{border:3px solid;border-radius:3px;text-align:left}
+.stamp.tri{border:3px solid;padding:1rem;position:relative;background:transparent}
+.stamp.tri::before{content:'';position:absolute;inset:6px;border:1px solid currentColor;opacity:.4}
+.stamp .country{font-family:var(--serif);font-weight:700;font-size:1.25rem;line-height:1;letter-spacing:.05em;margin-bottom:.25rem;text-transform:uppercase}
+.stamp .date{font-family:var(--type);font-size:.85rem;letter-spacing:.15em;margin-bottom:.4rem}
+.stamp .desc{font-family:var(--mono);font-size:.72rem;line-height:1.45;opacity:.85}
+.stamp.round .desc{max-width:180px}
+.stamp .flag{font-family:var(--mono);font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;margin-top:.3rem;opacity:.7}
+
+.stamp.blue{color:var(--blue)}
+.stamp.red{color:var(--red)}
+.stamp.green{color:var(--green)}
+.stamp.black{color:var(--ink)}
+
+/* sticker section */
+.sticker-row{position:relative;z-index:2;margin-top:1.6rem;padding-top:1.2rem;border-top:2px solid var(--ink);display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
+.visa{background:linear-gradient(180deg,#faf5e0 0%,#f0e8c8 100%);border:1px solid var(--ink);padding:.9rem 1rem;position:relative;transform:rotate(var(--r,-.6deg));box-shadow:2px 3px 0 rgba(0,0,0,.08);overflow:hidden}
+.visa::before{content:'';position:absolute;top:0;bottom:0;left:0;width:4px;background:repeating-linear-gradient(to bottom,var(--red) 0 8px,var(--blue) 8px 16px)}
+.visa .title{font-family:var(--serif);font-weight:700;font-size:1.1rem;margin-bottom:.2rem;letter-spacing:.02em}
+.visa .kind{font-family:var(--mono);font-size:.55rem;letter-spacing:.22em;color:var(--red);text-transform:uppercase;margin-bottom:.4rem}
+.visa p{font-family:var(--mono);font-size:.78rem;line-height:1.5;color:var(--ink)}
+.visa .sig{font-family:var(--type);font-size:.95rem;color:var(--blue);text-align:right;margin-top:.4rem;border-top:1px dashed rgba(0,0,0,.3);padding-top:.3rem}
+
+footer.cover{text-align:center;padding:.9rem .5rem .3rem;font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;color:var(--gold);opacity:.7;text-transform:uppercase}
+footer.cover a{color:var(--gold);text-decoration:underline}
+
+@media(max-width:640px){
+  .spread{padding:1.2rem 1rem 1.6rem}
+  .spread::before{display:none}
+  .idpage{grid-template-columns:100px 1fr;gap:1rem}
+  .iddetails{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="passport">
+  <div class="cover-top">★ REPUBLIC OF NERDY · DIGITAL IDENTITY ★</div>
+  <div class="spread">
+    <div class="header">
+      <h1>Putting the Y in Nerdy<em>travel history · all ports of entry</em></h1>
+      <div class="issuer"><strong>R.O.N.</strong>ministry of builds<br>nerdy.nl &nbsp;·&nbsp; no visa required</div>
+    </div>
+
+    <!-- ID PAGE -->
+    <section class="idpage">
+      <div class="photo">N</div>
+      <div class="iddetails">
+        <div class="field"><div class="k">Surname</div><div class="v">Nerdy</div></div>
+        <div class="field"><div class="k">Given name</div><div class="v">The</div></div>
+        <div class="field"><div class="k">Nationality</div><div class="v">Nederlandse</div></div>
+        <div class="field"><div class="k">Date of issue</div><div class="v">2024‑01‑01</div></div>
+        <div class="field"><div class="k">Sex</div><div class="v">Y (why?)</div></div>
+        <div class="field"><div class="k">Date of expiry</div><div class="v">∞ (never)</div></div>
+        <div class="field wide"><div class="k">Occupation</div><div class="v">Automates things · builds things · sometimes they work</div></div>
+        <div class="field wide"><div class="k">Distinguishing marks</div><div class="v">Dangerously low WAF · fluent in YAML · stares into middle distance when asked why</div></div>
+        <div class="mrz">P&lt;NLDNERDY&lt;&lt;THE&lt;ONE&lt;AND&lt;ONLY&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;<br>NRDY42000007NLD9999999M∞∞∞∞∞∞&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;07</div>
+      </div>
+    </section>
+
+    <p class="stampsnote">— Entries, stamps &amp; permits across the shipping projects —</p>
+
+    <!-- STAMPS -->
+    <div class="stamps">
+      <div class="stamp round blue" style="--r:-4deg">
+        <div class="country">Port of Terminal</div>
+        <div class="date">◆ 02 · JUN · 2024 ◆</div>
+        <div class="desc">ENTRY · keyboard‑first<br>macOS border crossing<br>no mouse required</div>
+        <div class="flag">NRDY‑TRM · admitted</div>
+      </div>
+
+      <div class="stamp rect red" style="--r:2deg">
+        <div class="country">Kubernetopia</div>
+        <div class="date">— 14 · FEB · 2024 —</div>
+        <div class="desc">CUSTOMS DECLARATION: wildly over‑engineered for a one‑person operation. GitOps declared. Cluster count: classified.</div>
+        <div class="flag">CTRL‑PLANE · cleared</div>
+      </div>
+
+      <div class="stamp round green" style="--r:3deg">
+        <div class="country">Gateway State</div>
+        <div class="date">◆ 09 · SEP · 2024 ◆</div>
+        <div class="desc">TRANSIT · bridge between<br>AI agents &amp; the rest<br>Slack/Jira/DB/Grafana</div>
+        <div class="flag">MCP‑001 · in transit</div>
+      </div>
+
+      <div class="stamp tri black" style="--r:-2deg">
+        <div class="country">Pixel Territories</div>
+        <div class="date">↓ 22 · NOV · 2024 ↓</div>
+        <div class="desc">TOURIST VISA · top‑down combat, low resolution, friendships tested. Bring your own tank.</div>
+        <div class="flag">TANK‑04 · gaming permit</div>
+      </div>
+
+      <div class="stamp rect blue" style="--r:-3deg">
+        <div class="country">Republic of TBD</div>
+        <div class="date">— ?? · ??? · 2025 —</div>
+        <div class="desc">ARRIVAL PENDING: productivity app. Captures, projects, tasks. No bells. No whistles. Border still under construction.</div>
+        <div class="flag">TBD‑05 · provisional</div>
+      </div>
+
+      <div class="stamp round red" style="--r:5deg">
+        <div class="country">Mazu</div>
+        <div class="date">◆ INSTRUMENTAL ◆</div>
+        <div class="desc">RESIDENT MUSICIAN<br>drums · stoner<br>no lyrics to declare</div>
+        <div class="flag">BAND · permanent</div>
+      </div>
+    </div>
+
+    <!-- VISA STICKERS -->
+    <div class="sticker-row">
+      <div class="visa" style="--r:-1deg">
+        <div class="kind">Work permit</div>
+        <div class="title">The Basement</div>
+        <p>Sawdust &amp; ambition. Every tool purchase justified as "investment in the hobby". Permit valid while saws keep spinning.</p>
+        <div class="sig">✎ G. Bazuin</div>
+      </div>
+      <div class="visa" style="--r:.8deg">
+        <div class="kind">Family visa</div>
+        <div class="title">Dad × 3</div>
+        <p>Three dependents. They don't care about the Kubernetes. They do care about the smart lights. Only WAF &gt; 0 use case on record.</p>
+        <div class="sig">✎ G. Bazuin</div>
+      </div>
+      <div class="visa" style="--r:-.4deg">
+        <div class="kind">Cultural pass</div>
+        <div class="title">Guitar, Open Mic</div>
+        <p>Badly, but enthusiastically. The neighbors have opinions. Pass revocable on complaint from downstairs flat.</p>
+        <div class="sig">✎ G. Bazuin</div>
+      </div>
+    </div>
+  </div>
+  <footer class="cover">★ nerdy.nl · <a href="https://github.com/enipo">github.com/enipo</a> · this document is the property of the bearer ★</footer>
+</div>
+</body>
+</html>

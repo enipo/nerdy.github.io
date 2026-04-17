@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>nerdy.nl — admit one</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.88em' font-size='85'%3E🎟%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@400;700&family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--stock:#f3e6c9;--stock2:#ecd9b4;--ink:#1a0f08;--bleed:#a61e22;--fade:#7a6b4e;--mono:'JetBrains Mono',monospace}
+body{background:#2b1b12;background-image:repeating-linear-gradient(45deg,#2b1b12 0 20px,#30201a 20px 40px);min-height:100vh;padding:2rem 1rem;color:var(--ink);font-family:'Oswald',sans-serif}
+.wrap{max-width:900px;margin:0 auto}
+h1.pres{font-family:'Anton',sans-serif;color:#f3e6c9;text-align:center;letter-spacing:.4em;font-size:.85rem;margin-bottom:1.5rem;opacity:.6}
+
+/* ═══ TICKET ═══ */
+.ticket{background:var(--stock);background-image:radial-gradient(circle at 1px 1px,rgba(0,0,0,.08) 1px,transparent 0);background-size:6px 6px;display:grid;grid-template-columns:1fr 140px;margin-bottom:1.4rem;box-shadow:0 6px 20px rgba(0,0,0,.4),inset 0 0 0 1px rgba(0,0,0,.1);position:relative;overflow:hidden;transform:rotate(var(--r,0deg))}
+.ticket::before{content:'';position:absolute;top:0;bottom:0;left:calc(100% - 140px);width:2px;background:repeating-linear-gradient(to bottom,transparent 0 6px,var(--ink) 6px 12px);opacity:.4}
+.ticket::after{content:'';position:absolute;top:-8px;bottom:-8px;left:calc(100% - 140px);width:16px;background:radial-gradient(circle,#2b1b12 6px,transparent 6.5px);background-size:16px 14px;background-position:center}
+
+.t-main{padding:1.2rem 1.4rem 1.2rem 1.6rem;position:relative}
+.t-top{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--fade);border-bottom:1px dashed var(--ink);padding-bottom:.4rem;margin-bottom:.7rem}
+.t-row{display:flex;gap:1rem;margin-bottom:.7rem;align-items:flex-start;flex-wrap:wrap}
+.t-field{font-family:var(--mono);font-size:.58rem;letter-spacing:.16em;color:var(--fade);text-transform:uppercase;display:block;margin-bottom:.2rem}
+.t-val{font-family:'Anton',sans-serif;font-size:1.15rem;line-height:1;letter-spacing:.05em;text-transform:uppercase}
+.t-val.big{font-size:2.2rem;line-height:.95}
+.t-val.med{font-size:1.5rem}
+.t-body{font-family:'Oswald',sans-serif;font-size:.88rem;line-height:1.5;margin-top:.6rem;max-width:52ch}
+.t-bar{height:28px;background:repeating-linear-gradient(to right,var(--ink) 0 1px,transparent 1px 3px,var(--ink) 3px 4px,transparent 4px 9px,var(--ink) 9px 11px,transparent 11px 14px,var(--ink) 14px 15px,transparent 15px 20px);margin-top:.8rem}
+.t-barlab{font-family:var(--mono);font-size:.6rem;letter-spacing:.3em;color:var(--fade);margin-top:.3rem;text-align:right}
+
+.t-stub{padding:1.2rem .8rem 1.2rem 1.2rem;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;background:linear-gradient(180deg,var(--stock) 0%,var(--stock2) 100%)}
+.t-stub .admit{font-family:'Anton',sans-serif;font-size:.9rem;letter-spacing:.2em;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);padding:.35rem .4rem;width:100%;text-align:center}
+.t-stub .num{font-family:var(--mono);font-weight:700;font-size:1.3rem;letter-spacing:.08em;line-height:1;color:var(--bleed);margin-top:.3rem}
+.t-stub .num-lab{font-family:var(--mono);font-size:.55rem;letter-spacing:.25em;color:var(--fade);margin-top:.1rem;margin-bottom:.8rem}
+.t-stub .seat{font-family:'Anton',sans-serif;font-size:1.8rem;line-height:.9;margin-bottom:.2rem}
+.t-stub .seat-lab{font-family:var(--mono);font-size:.55rem;letter-spacing:.25em;color:var(--fade)}
+.t-stub .foot{font-family:var(--mono);font-size:.52rem;letter-spacing:.18em;color:var(--fade);margin-top:.6rem;line-height:1.3;text-transform:uppercase}
+
+/* colour variations */
+.ticket[data-color="red"] .t-val,.ticket[data-color="red"] .t-stub .admit,.ticket[data-color="red"] h2{color:var(--bleed)}
+.ticket[data-color="red"] .t-stub .admit{border-color:var(--bleed)}
+.ticket[data-color="blue"] .t-val{color:#1b3a5b}
+.ticket[data-color="blue"] .t-stub .admit{border-color:#1b3a5b;color:#1b3a5b}
+.ticket[data-color="blue"] .t-stub .num{color:#1b3a5b}
+.ticket[data-color="green"] .t-val{color:#1d4a2a}
+.ticket[data-color="green"] .t-stub .admit{border-color:#1d4a2a;color:#1d4a2a}
+.ticket[data-color="green"] .t-stub .num{color:#1d4a2a}
+
+/* stamp */
+.stamp{position:absolute;top:10px;right:160px;border:2px solid var(--bleed);color:var(--bleed);padding:.2rem .5rem;font-family:var(--mono);font-size:.65rem;font-weight:700;letter-spacing:.15em;transform:rotate(-6deg);opacity:.55}
+
+.billing{background:var(--stock);padding:1.4rem 1.6rem;text-align:center;margin-bottom:1.4rem;box-shadow:0 6px 20px rgba(0,0,0,.4)}
+.billing h2{font-family:'Anton',sans-serif;font-size:clamp(2.4rem,7vw,4.6rem);letter-spacing:.04em;line-height:.95;color:var(--ink)}
+.billing h2 em{color:var(--bleed);font-style:normal}
+.billing .sub{font-family:var(--mono);font-size:.62rem;letter-spacing:.3em;color:var(--fade);text-transform:uppercase;margin-top:.4rem}
+.billing .venue{font-family:'Anton',sans-serif;font-size:1rem;letter-spacing:.2em;margin-top:.8rem;padding:.4rem 0;border-top:1px dashed var(--ink);border-bottom:1px dashed var(--ink)}
+
+.sectionhead{font-family:var(--mono);color:#f3e6c9;text-align:center;letter-spacing:.3em;font-size:.65rem;text-transform:uppercase;margin:1.4rem 0 .8rem;opacity:.7}
+
+.tiny-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin-bottom:1.4rem}
+.stub-only{background:var(--stock);padding:1rem;display:flex;flex-direction:column;gap:.2rem;position:relative;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.stub-only::before{content:'';position:absolute;left:0;right:0;top:0;height:6px;background:repeating-linear-gradient(to right,var(--ink) 0 4px,transparent 4px 8px);opacity:.4}
+.stub-only .lab{font-family:var(--mono);font-size:.55rem;letter-spacing:.2em;color:var(--fade);text-transform:uppercase}
+.stub-only .val{font-family:'Anton',sans-serif;font-size:1.1rem;letter-spacing:.05em;color:var(--ink)}
+.stub-only p{font-family:'Oswald',sans-serif;font-size:.82rem;margin-top:.4rem;line-height:1.45;color:var(--ink)}
+
+footer.boxoffice{text-align:center;color:#c8b79a;font-family:var(--mono);font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;margin-top:2rem;opacity:.7;line-height:1.8}
+footer.boxoffice a{color:#c8b79a;text-decoration:underline}
+
+@media(max-width:560px){
+  .ticket{grid-template-columns:1fr}
+  .ticket::before,.ticket::after{top:auto;bottom:150px;left:0;right:0;width:auto;height:2px;background:repeating-linear-gradient(to right,transparent 0 6px,var(--ink) 6px 12px)}
+  .ticket::after{bottom:142px;height:16px;background:radial-gradient(circle,#2b1b12 6px,transparent 6.5px);background-size:14px 16px}
+  .t-stub{flex-direction:row;justify-content:space-around;gap:1rem;padding:1rem}
+  .stamp{right:10px;top:auto;bottom:170px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 class="pres">Nerdy Productions presents</h1>
+
+  <div class="billing">
+    <h2><em>Putting the Y</em><br>in Nerdy</h2>
+    <div class="sub">a one-person operation · doors at 09:00</div>
+    <div class="venue">NERDY.NL · MAIN STAGE · ALL AGES</div>
+  </div>
+
+  <div class="sectionhead">— Main Programme —</div>
+
+  <div class="ticket" data-color="red" style="--r:-.3deg">
+    <div class="t-main">
+      <div class="t-top"><span>Section A · Row 01</span><span>No refunds · No resale</span></div>
+      <span class="t-field">Feature Presentation</span>
+      <div class="t-val big">Nerdy Terminal</div>
+      <div class="t-row" style="margin-top:.7rem">
+        <div><span class="t-field">Runtime</span><div class="t-val">macOS</div></div>
+        <div><span class="t-field">Cast</span><div class="t-val">Keyboard only</div></div>
+        <div><span class="t-field">Rating</span><div class="t-val">★★★★☆</div></div>
+      </div>
+      <p class="t-body">Keyboard-first terminal manager. Multiple sessions, instant switching, zero mouse movement. Why move your hand 30cm when you could press two keys?</p>
+      <div class="t-bar"></div>
+      <div class="t-barlab">NRDY-2024-TERMINAL-0001</div>
+      <span class="stamp">★ ADMIT ★</span>
+    </div>
+    <div class="t-stub">
+      <span class="admit">ADMIT ONE</span>
+      <div><div class="num">01</div><div class="num-lab">Project</div></div>
+      <div><div class="seat">A1</div><div class="seat-lab">Front row</div></div>
+      <div class="foot">Tear here<br>Keep stub</div>
+    </div>
+  </div>
+
+  <div class="ticket" data-color="blue" style="--r:.2deg">
+    <div class="t-main">
+      <div class="t-top"><span>Section B · Row 02</span><span>No flash photography</span></div>
+      <span class="t-field">Now Showing</span>
+      <div class="t-val big">Kubernetes (Home Edition)</div>
+      <div class="t-row" style="margin-top:.7rem">
+        <div><span class="t-field">Running time</span><div class="t-val">Perpetual</div></div>
+        <div><span class="t-field">Cast</span><div class="t-val">A few clusters too many</div></div>
+        <div><span class="t-field">Genre</span><div class="t-val">Over-engineered</div></div>
+      </div>
+      <p class="t-body">A personal control plane built for exactly one person. The developer stares into the distance, whispers "GitOps", and returns to his terminal.</p>
+      <div class="t-bar"></div>
+      <div class="t-barlab">NRDY-2024-K8S-0002</div>
+    </div>
+    <div class="t-stub">
+      <span class="admit">ADMIT ONE</span>
+      <div><div class="num">02</div><div class="num-lab">Project</div></div>
+      <div><div class="seat">B2</div><div class="seat-lab">Balcony</div></div>
+      <div class="foot">Tear here<br>Keep stub</div>
+    </div>
+  </div>
+
+  <div class="ticket" data-color="green" style="--r:-.2deg">
+    <div class="t-main">
+      <div class="t-top"><span>Section C · Row 03</span><span>Latecomers may not be seated</span></div>
+      <span class="t-field">Matinée</span>
+      <div class="t-val big">MCP Gateway</div>
+      <div class="t-row" style="margin-top:.7rem">
+        <div><span class="t-field">Length</span><div class="t-val">Bridge-length</div></div>
+        <div><span class="t-field">Cast</span><div class="t-val">Slack · Jira · DB · Grafana</div></div>
+        <div><span class="t-field">Tagline</span><div class="t-val">One gateway</div></div>
+      </div>
+      <p class="t-body">The thing that makes the other things talk to each other. A bridge between AI agents and everything else the world runs on.</p>
+      <div class="t-bar"></div>
+      <div class="t-barlab">NRDY-2024-MCP-0003</div>
+    </div>
+    <div class="t-stub">
+      <span class="admit">ADMIT ONE</span>
+      <div><div class="num">03</div><div class="num-lab">Project</div></div>
+      <div><div class="seat">C3</div><div class="seat-lab">Orchestra</div></div>
+      <div class="foot">Tear here<br>Keep stub</div>
+    </div>
+  </div>
+
+  <div class="ticket" data-color="red" style="--r:.3deg">
+    <div class="t-main">
+      <div class="t-top"><span>Section D · Row 04</span><span>Concessions: pixels only</span></div>
+      <span class="t-field">Late Show</span>
+      <div class="t-val big">Pixel Tanks</div>
+      <div class="t-row" style="margin-top:.7rem">
+        <div><span class="t-field">Mode</span><div class="t-val">Top-down MP</div></div>
+        <div><span class="t-field">Warning</span><div class="t-val">Friendships tested</div></div>
+        <div><span class="t-field">Resolution</span><div class="t-val">Low, on purpose</div></div>
+      </div>
+      <p class="t-body">Tank combat for the joy of destroying your friends. The pixel art is intentionally retro — not a result of limited artistic ability.</p>
+      <div class="t-bar"></div>
+      <div class="t-barlab">NRDY-2024-TANKS-0004</div>
+    </div>
+    <div class="t-stub">
+      <span class="admit">ADMIT ONE</span>
+      <div><div class="num">04</div><div class="num-lab">Project</div></div>
+      <div><div class="seat">D4</div><div class="seat-lab">Rear mezz</div></div>
+      <div class="foot">Tear here<br>Keep stub</div>
+    </div>
+  </div>
+
+  <div class="ticket" data-color="blue" style="--r:0deg">
+    <div class="t-main">
+      <div class="t-top"><span>Section E · Row 05</span><span>Still in pre-production</span></div>
+      <span class="t-field">Coming Soon</span>
+      <div class="t-val big">TBD</div>
+      <div class="t-row" style="margin-top:.7rem">
+        <div><span class="t-field">Category</span><div class="t-val">Productivity</div></div>
+        <div><span class="t-field">Features</span><div class="t-val">No bells · No whistles</div></div>
+        <div><span class="t-field">Status</span><div class="t-val">In rehearsal</div></div>
+      </div>
+      <p class="t-body">Captures, projects, tasks. Just the things that need doing. The opposite of a Notion template.</p>
+      <div class="t-bar"></div>
+      <div class="t-barlab">NRDY-2024-TBD-0005</div>
+    </div>
+    <div class="t-stub">
+      <span class="admit">ADMIT ONE</span>
+      <div><div class="num">05</div><div class="num-lab">Project</div></div>
+      <div><div class="seat">E5</div><div class="seat-lab">Preview</div></div>
+      <div class="foot">Tear here<br>Keep stub</div>
+    </div>
+  </div>
+
+  <div class="sectionhead">— Supporting Acts · Will-Call Pickup —</div>
+
+  <div class="tiny-grid">
+    <div class="stub-only">
+      <span class="lab">Venue · Night act</span>
+      <span class="val">Mazu · instrumental stoner</span>
+      <p>Drummer. The kind of music where nobody asks "what are the lyrics about?".</p>
+    </div>
+    <div class="stub-only">
+      <span class="lab">Open mic</span>
+      <span class="val">Guitar, badly</span>
+      <p>Badly, but enthusiastically. The neighbors have opinions.</p>
+    </div>
+    <div class="stub-only">
+      <span class="lab">Crew-only area</span>
+      <span class="val">The basement workshop</span>
+      <p>Mostly sawdust and ambition. Every tool purchase: "investment in the hobby".</p>
+    </div>
+    <div class="stub-only">
+      <span class="lab">VIP section · 3 tickets</span>
+      <span class="val">Dad × 3</span>
+      <p>They don't care about the Kubernetes. They do care about the smart lights.</p>
+    </div>
+  </div>
+
+  <footer class="boxoffice">
+    box office · nerdy.nl · <a href="https://github.com/enipo">github.com/enipo</a><br>
+    this ticket constitutes a revocable licence · hold onto the stub
+  </footer>
+</div>
+</body>
+</html>
