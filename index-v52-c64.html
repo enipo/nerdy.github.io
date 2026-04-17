@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NERDY.NL — COMMODORE 64 BASIC V2</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%234040e0'/%3E%3Ctext y='.9em' x='10' font-size='78' font-family='monospace' fill='%23a0a0ff'%3EN%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--border:#7878c8;--bg:#4040c0;--fg:#a0a0ff;--hot:#ffffff;--dim:#6868b8;--str:#ffd060}
+html,body{min-height:100%}
+body{background:var(--border);font-family:'VT323','Courier New',monospace;color:var(--fg);padding:2vw;display:flex;justify-content:center;align-items:flex-start;min-height:100vh}
+.crt{width:100%;max-width:820px;background:var(--bg);border:14px solid var(--border);border-radius:4px;padding:24px 28px;position:relative;box-shadow:inset 0 0 80px rgba(0,0,0,.25),0 0 40px rgba(0,0,0,.4)}
+.crt::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(transparent,transparent 3px,rgba(0,0,0,.08) 3px,rgba(0,0,0,.08) 4px);border-radius:4px;mix-blend-mode:multiply}
+.crt::after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.35) 100%);border-radius:4px}
+.line{font-family:inherit;font-size:clamp(14px,1.7vw,20px);line-height:1.25;letter-spacing:.02em;white-space:pre-wrap;word-wrap:break-word}
+.banner{text-align:center;margin-bottom:1.2em;border-bottom:1px solid var(--dim);padding-bottom:.8em}
+.banner .title{font-size:clamp(20px,3vw,32px);color:var(--hot);letter-spacing:.05em}
+.banner .sub{font-size:clamp(12px,1.4vw,16px);color:var(--fg);opacity:.75;margin-top:.3em}
+.ready{color:var(--hot);margin:.8em 0 .2em}
+.num{color:var(--dim)}
+.kw{color:var(--hot)}
+.str{color:var(--str)}
+.cursor{display:inline-block;width:.6ch;height:1.1em;background:var(--hot);vertical-align:text-bottom;animation:blink .8s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.prompt{margin-top:1.4em;border-top:1px solid var(--dim);padding-top:.8em}
+.btnrow{display:flex;flex-wrap:wrap;gap:.4em;margin:.6em 0}
+.btn{font-family:inherit;font-size:inherit;background:var(--bg);border:2px solid var(--fg);color:var(--fg);padding:.1em .7em;cursor:pointer;text-transform:uppercase;letter-spacing:.05em}
+.btn:hover,.btn.on{background:var(--fg);color:var(--bg)}
+.petscii{font-size:clamp(18px,2.4vw,28px);letter-spacing:.12em;color:var(--hot);text-align:center;margin:.4em 0 1em;text-shadow:0 0 12px rgba(255,255,255,.3)}
+.sid{margin-top:.8em;font-size:clamp(12px,1.3vw,15px);color:var(--dim);text-align:center;border-top:1px dashed var(--dim);padding-top:.6em}
+a{color:var(--str);text-decoration:none;border-bottom:1px dotted var(--str)}
+a:hover{color:var(--hot);border-color:var(--hot)}
+.mem{display:flex;justify-content:space-between;font-size:clamp(11px,1.2vw,14px);opacity:.7;margin-top:1em;border-top:1px dashed var(--dim);padding-top:.5em}
+.screen{min-height:540px}
+.prog{display:none}
+.prog.on{display:block}
+.list{color:var(--hot);margin-bottom:.6em}
+@media(max-width:520px){.crt{border-width:8px;padding:14px}}
+</style>
+</head>
+<body>
+<div class="crt">
+<div class="banner">
+<div class="title">**** COMMODORE 64 BASIC V2 ****</div>
+<div class="sub">64K RAM SYSTEM &middot; 38911 BASIC BYTES FREE</div>
+</div>
+<div class="petscii">&#x2552;&#x2550;&#x2550;&#x2550; NERDY.NL &#x2550;&#x2550;&#x2550;&#x2555;</div>
+<div class="screen">
+
+<div class="prog on" data-p="main">
+<div class="line list">LIST MAIN</div>
+<div class="line"><span class="num">  10</span> <span class="kw">PRINT</span> <span class="str">"GERTJAN — PUTTING THE Y IN NERDY"</span></div>
+<div class="line"><span class="num">  20</span> <span class="kw">PRINT</span> <span class="str">"WHY, DEAR GOD... WHY!?"</span></div>
+<div class="line"><span class="num">  30</span> <span class="kw">REM</span> ------- BUILDS KEYBOARD-FIRST THINGS -------</div>
+<div class="line"><span class="num">  40</span> <span class="kw">LET</span> WAF = 0.2 : <span class="kw">REM</span> DANGEROUSLY LOW</div>
+<div class="line"><span class="num">  50</span> <span class="kw">IF</span> YAML = TRUE <span class="kw">THEN</span> <span class="kw">PRINT</span> <span class="str">"THE FUTURE OF LIVING"</span></div>
+<div class="line"><span class="num">  60</span> <span class="kw">GOSUB</span> 1000 : <span class="kw">REM</span> SPIN UP K8S CLUSTERS</div>
+<div class="line"><span class="num">  70</span> <span class="kw">POKE</span> 53280,6 : <span class="kw">REM</span> BORDER BLUE</div>
+<div class="line"><span class="num">  80</span> <span class="kw">PRINT</span> <span class="str">"THE SIDE PROJECTS OUTNUMBER THE DAYS."</span></div>
+<div class="line"><span class="num">  90</span> <span class="kw">PRINT</span> <span class="str">"AND THE DAYS ARE LONG."</span> : <span class="kw">GOTO</span> 10</div>
+<div class="line"><span class="num"> 100</span> <span class="kw">REM</span> DAD × 3. THREE KIDS.</div>
+<div class="line"><span class="num"> 110</span> <span class="kw">REM</span> THEY DON'T CARE ABOUT CLUSTERS.</div>
+<div class="line"><span class="num"> 120</span> <span class="kw">REM</span> THEY CARE ABOUT THE LIGHTS.</div>
+<div class="line ready" style="margin-top:.6em">READY.</div>
+</div>
+
+<div class="prog" data-p="projects">
+<div class="line list">LIST PROJECTS</div>
+<div class="line"><span class="num">  10</span> <span class="kw">REM</span> ============ PROJ/*.PRG ============</div>
+<div class="line"><span class="num">  20</span> <span class="kw">PRINT</span> <span class="str">"NERDY TERMINAL"</span></div>
+<div class="line"><span class="num">  25</span> <span class="kw">PRINT</span> <span class="str">" KEYBOARD-FIRST SESSIONS. NO MOUSE."</span></div>
+<div class="line"><span class="num">  30</span> <span class="kw">PRINT</span> <span class="str">"KUBERNETES FLEET"</span></div>
+<div class="line"><span class="num">  35</span> <span class="kw">PRINT</span> <span class="str">" OWN CONTROL PLANE. ONE-PERSON OP."</span></div>
+<div class="line"><span class="num">  40</span> <span class="kw">PRINT</span> <span class="str">"MCP GATEWAY"</span></div>
+<div class="line"><span class="num">  45</span> <span class="kw">PRINT</span> <span class="str">" BRIDGE AI TO SLACK/JIRA/DB/GRAFANA."</span></div>
+<div class="line"><span class="num">  50</span> <span class="kw">PRINT</span> <span class="str">"PIXEL TANKS"</span></div>
+<div class="line"><span class="num">  55</span> <span class="kw">PRINT</span> <span class="str">" TOP-DOWN MULTIPLAYER. LOW-RES RAGE."</span></div>
+<div class="line"><span class="num">  60</span> <span class="kw">PRINT</span> <span class="str">"TBD"</span></div>
+<div class="line"><span class="num">  65</span> <span class="kw">PRINT</span> <span class="str">" CAPTURES, PROJECTS, TASKS. THAT'S IT."</span></div>
+<div class="line"><span class="num">  99</span> <span class="kw">END</span></div>
+<div class="line ready" style="margin-top:.6em">READY.</div>
+</div>
+
+<div class="prog" data-p="music">
+<div class="line list">LIST NOISE</div>
+<div class="line"><span class="num">  10</span> <span class="kw">REM</span> NOISE.PRG — LOAD <span class="str">"NOISE"</span>,8,1</div>
+<div class="line"><span class="num">  20</span> <span class="kw">PRINT</span> <span class="str">"DRUMS — MAZU"</span></div>
+<div class="line"><span class="num">  30</span> <span class="kw">PRINT</span> <span class="str">" INSTRUMENTAL STONER."</span></div>
+<div class="line"><span class="num">  40</span> <span class="kw">PRINT</span> <span class="str">" NOBODY ASKS ABOUT LYRICS."</span></div>
+<div class="line"><span class="num">  50</span> <span class="kw">PRINT</span> <span class="str">"GUITAR"</span></div>
+<div class="line"><span class="num">  60</span> <span class="kw">PRINT</span> <span class="str">" BADLY, BUT ENTHUSIASTICALLY."</span></div>
+<div class="line"><span class="num">  70</span> <span class="kw">PRINT</span> <span class="str">" THE NEIGHBORS HAVE OPINIONS."</span></div>
+<div class="line"><span class="num">  80</span> <span class="kw">POKE</span> 54296,15 : <span class="kw">REM</span> VOLUME = MAX</div>
+<div class="line ready" style="margin-top:.6em">READY.</div>
+</div>
+
+<div class="prog" data-p="home">
+<div class="line list">LIST HOMEAUTOMATION</div>
+<div class="line"><span class="num">  10</span> <span class="kw">REM</span> HOMEASSISTANT.YAML</div>
+<div class="line"><span class="num">  20</span> <span class="kw">PRINT</span> <span class="str">"WAF = 0.2 — DANGEROUSLY LOW."</span></div>
+<div class="line"><span class="num">  30</span> <span class="kw">PRINT</span> <span class="str">"HELD TOGETHER BY ZIGBEE AND STUBBORNNESS."</span></div>
+<div class="line"><span class="num">  40</span> <span class="kw">PRINT</span> <span class="str">"YAML-BASED AUTOMATIONS:"</span></div>
+<div class="line"><span class="num">  50</span> <span class="kw">PRINT</span> <span class="str">" — THE FUTURE OF LIVING (DEVELOPER)"</span></div>
+<div class="line"><span class="num">  60</span> <span class="kw">PRINT</span> <span class="str">" — A WASTE OF WEEKENDS (WIFE)"</span></div>
+<div class="line"><span class="num">  70</span> <span class="kw">WAIT</span> 53265, 128 : <span class="kw">REM</span> WAIT FOR MOTION SENSOR</div>
+<div class="line ready" style="margin-top:.6em">READY.</div>
+</div>
+
+<div class="prog" data-p="dad">
+<div class="line list">LIST DAD3</div>
+<div class="line"><span class="num">  10</span> <span class="kw">REM</span> DAD3.PRG</div>
+<div class="line"><span class="num">  20</span> <span class="kw">PRINT</span> <span class="str">"THREE KIDS."</span></div>
+<div class="line"><span class="num">  30</span> <span class="kw">PRINT</span> <span class="str">"KUBERNETES? NO."</span></div>
+<div class="line"><span class="num">  40</span> <span class="kw">PRINT</span> <span class="str">"SMART LIGHTS? YES."</span></div>
+<div class="line"><span class="num">  50</span> <span class="kw">PRINT</span> <span class="str">"ONLY USE CASE WITH WAF &gt; 0."</span></div>
+<div class="line"><span class="num">  99</span> <span class="kw">REM</span> END OF LINE.</div>
+<div class="line ready" style="margin-top:.6em">READY.</div>
+</div>
+
+<div class="prog" data-p="workshop">
+<div class="line list">LIST WOOD</div>
+<div class="line"><span class="num">  10</span> <span class="kw">REM</span> WOOD.PRG</div>
+<div class="line"><span class="num">  20</span> <span class="kw">PRINT</span> <span class="str">"BASEMENT WORKSHOP"</span></div>
+<div class="line"><span class="num">  30</span> <span class="kw">PRINT</span> <span class="str">" STATE: MOSTLY SAWDUST AND AMBITION."</span></div>
+<div class="line"><span class="num">  40</span> <span class="kw">PRINT</span> <span class="str">" EVERY TOOL: 'INVESTMENT IN THE HOBBY'."</span></div>
+<div class="line"><span class="num">  50</span> <span class="kw">FOR</span> T=1 <span class="kw">TO</span> 1000 : <span class="kw">REM</span> SANDING LOOP</div>
+<div class="line"><span class="num">  60</span> <span class="kw">NEXT</span> T</div>
+<div class="line"><span class="num">  70</span> <span class="kw">PRINT</span> <span class="str">"STILL NOT FLAT."</span></div>
+<div class="line ready" style="margin-top:.6em">READY.</div>
+</div>
+
+</div>
+<div class="prompt">
+<div class="line">READY.<span class="cursor"></span></div>
+<div class="btnrow">
+<button class="btn on" data-p="main">RUN</button>
+<button class="btn" data-p="projects">LOAD "PROJ",8</button>
+<button class="btn" data-p="music">LOAD "NOISE",8</button>
+<button class="btn" data-p="home">LOAD "HOME",8</button>
+<button class="btn" data-p="dad">LOAD "DAD3",8</button>
+<button class="btn" data-p="workshop">LOAD "WOOD",8</button>
+</div>
+</div>
+<div class="sid">&#x266A; SID 6581 &middot; <a href="https://github.com/enipo">GITHUB.COM/ENIPO</a> &#x266A;</div>
+<div class="mem"><span>PRG:"NERDY",8,1</span><span>38K FREE</span></div>
+</div>
+<script>
+const btns=document.querySelectorAll('.btn');
+const progs=document.querySelectorAll('.prog');
+btns.forEach(b=>b.addEventListener('click',()=>{
+const target=b.dataset.p;
+btns.forEach(x=>x.classList.toggle('on',x===b));
+progs.forEach(p=>p.classList.toggle('on',p.dataset.p===target));
+}));
+</script>
+</body>
+</html>

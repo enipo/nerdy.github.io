@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NERDY.JCL — Hollerith Card Deck</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e8d8b0'/%3E%3Crect x='10' y='10' width='80' height='10' fill='%23000'/%3E%3Ctext y='.8em' x='20' font-size='70' font-family='monospace' fill='%23000'%3EN%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--paper:#e7d6ac;--paper2:#efe0bc;--ink:#1a1410;--dim:#7a6848;--stamp:#803018;--hole:#2a2218}
+html,body{min-height:100%}
+body{background:#8a7d5a;font-family:'IBM Plex Mono','Courier New',monospace;color:var(--ink);min-height:100vh;padding:2vw;
+background-image:
+repeating-linear-gradient(90deg,rgba(0,0,0,.04) 0 1px,transparent 1px 24px),
+linear-gradient(#8a7d5a,#6a5d40)}
+.rack{max-width:920px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+.card{background:var(--paper);position:relative;padding:12px 16px 14px;border-radius:0 8px 0 8px;box-shadow:
+0 2px 0 rgba(0,0,0,.15),
+0 8px 20px rgba(0,0,0,.25),
+inset 0 0 80px rgba(0,0,0,.03);
+background-image:
+repeating-linear-gradient(transparent 0 14px,rgba(0,0,0,.04) 14px 15px),
+linear-gradient(180deg,var(--paper),var(--paper2));
+cursor:pointer;transition:transform .15s ease}
+.card:active{transform:scale(.998) rotate(-.1deg)}
+.card::before{content:'';position:absolute;top:0;right:0;width:34px;height:34px;background:linear-gradient(225deg,#b09870 46%,var(--paper) 50%)}
+.card.rev::before{background:linear-gradient(45deg,#b09870 46%,var(--paper) 50%);left:0;right:auto;width:34px;height:34px;top:0}
+.colnums{font-size:9px;letter-spacing:0;color:var(--dim);display:flex;justify-content:space-between;border-bottom:1px dotted var(--dim);padding:0 1px 2px;margin-bottom:4px;line-height:1;font-variant-numeric:tabular-nums}
+.colnums span{flex:0 0 1.2ch;text-align:center}
+.holes{height:14px;background-color:transparent;
+background-image:
+radial-gradient(var(--hole) 36%,transparent 40%),
+radial-gradient(var(--hole) 30%,transparent 36%),
+radial-gradient(var(--hole) 40%,transparent 44%);
+background-size:28px 14px,36px 14px,50px 14px;
+background-position:0 50%,14px 50%,8px 50%;
+background-repeat:repeat-x;margin-bottom:8px;opacity:.85;
+mask-image:linear-gradient(90deg,#000 0 6%,transparent 6% 10%,#000 10% 18%,transparent 18% 22%,#000 22% 32%,transparent 32% 36%,#000 36% 48%,transparent 48% 52%,#000 52% 62%,transparent 62% 66%,#000 66% 78%,transparent 78% 82%,#000 82% 94%,transparent 94% 100%)}
+.card.v2 .holes{mask-image:linear-gradient(90deg,#000 0 4%,transparent 4% 8%,#000 8% 14%,transparent 14% 20%,#000 20% 28%,transparent 28% 32%,#000 32% 42%,transparent 42% 48%,#000 48% 60%,transparent 60% 64%,#000 64% 74%,transparent 74% 80%,#000 80% 92%,transparent 92% 96%,#000 96% 100%)}
+.card.v3 .holes{mask-image:linear-gradient(90deg,#000 0 8%,transparent 8% 12%,#000 12% 22%,transparent 22% 26%,#000 26% 36%,transparent 36% 42%,#000 42% 54%,transparent 54% 58%,#000 58% 70%,transparent 70% 74%,#000 74% 86%,transparent 86% 90%,#000 90% 100%)}
+.card.v4 .holes{mask-image:linear-gradient(90deg,#000 0 6%,transparent 6% 12%,#000 12% 26%,transparent 26% 30%,#000 30% 44%,transparent 44% 48%,#000 48% 58%,transparent 58% 62%,#000 62% 74%,transparent 74% 80%,#000 80% 92%,transparent 92% 100%)}
+.card.v5 .holes{mask-image:linear-gradient(90deg,#000 0 10%,transparent 10% 16%,#000 16% 28%,transparent 28% 34%,#000 34% 48%,transparent 48% 54%,#000 54% 64%,transparent 64% 70%,#000 70% 82%,transparent 82% 88%,#000 88% 100%)}
+.card.v6 .holes{mask-image:linear-gradient(90deg,#000 0 50%,transparent 50% 58%,#000 58% 72%,transparent 72% 78%,#000 78% 100%)}
+.line{font-size:clamp(11px,1.4vw,15px);line-height:1.45;white-space:pre-wrap;word-wrap:break-word;font-weight:500}
+.kw{color:var(--stamp);font-weight:600}
+.cmt{color:var(--dim);font-style:italic}
+.str{color:#3a5a18}
+.num{color:#203060}
+.stampbox{position:absolute;top:14px;right:50px;transform:rotate(-7deg);border:2px solid var(--stamp);color:var(--stamp);padding:2px 10px;font-size:12px;letter-spacing:.2em;font-weight:600;opacity:.88;text-transform:uppercase;pointer-events:none}
+.cardno{position:absolute;bottom:4px;right:10px;font-size:9px;color:var(--dim);letter-spacing:.1em}
+.titlebar{display:flex;justify-content:space-between;align-items:baseline;font-size:clamp(10px,1.2vw,13px);margin-bottom:6px;color:var(--dim);letter-spacing:.06em;border-bottom:1px solid var(--dim);padding-bottom:4px}
+.titlebar b{color:var(--ink)}
+.jobbanner{background:var(--ink);color:var(--paper);padding:8px 14px;font-size:clamp(11px,1.3vw,14px);letter-spacing:.08em;display:flex;justify-content:space-between;border-radius:3px}
+.jobbanner b{color:#f8e8b0}
+.bottom{background:var(--ink);color:var(--paper);padding:8px 14px;font-size:clamp(10px,1.2vw,13px);border-radius:3px;text-align:center;letter-spacing:.1em}
+.bottom a{color:#f8e8b0}
+a{color:inherit}
+@media(max-width:520px){.colnums{display:none}}
+</style>
+</head>
+<body>
+<div class="rack">
+
+<div class="jobbanner">
+<span><b>//NERDY</b> JOB (ACCT,'GERTJAN'),CLASS=A,MSGCLASS=X</span>
+<span>IBM 029</span>
+</div>
+
+<div class="card" data-card="1">
+<div class="titlebar"><span>CARD <b>001</b> / DECK: NERDY.JCL</span><span>HOLLERITH 80-COL</span></div>
+<div class="colnums"><span>1</span><span>10</span><span>20</span><span>30</span><span>40</span><span>50</span><span>60</span><span>70</span><span>80</span></div>
+<div class="holes"></div>
+<div class="line"><span class="kw">//STEP1</span>  <span class="kw">EXEC</span> PGM=NERDY,PARM=<span class="str">'PUTTING-THE-Y-IN-NERDY'</span></div>
+<div class="line"><span class="kw">//SYSPRINT</span> DD SYSOUT=*</div>
+<div class="line"><span class="kw">//SYSIN</span>   DD *</div>
+<div class="line"><span class="cmt">C  WELCOME TO NERDY.NL. RUNNING ON AMBITION AND YAML.</span></div>
+<div class="line"><span class="cmt">C  WAF = 0.2  (DANGEROUSLY LOW)</span></div>
+<div class="line"><span class="cmt">C  WHY, DEAR GOD... WHY!?</span></div>
+<div class="stampbox">Processed</div>
+<div class="cardno">FORM IBM 5081 — 001</div>
+</div>
+
+<div class="card v2" data-card="2">
+<div class="titlebar"><span>CARD <b>002</b> / PROJECTS</span><span>SUBROUTINE PROJ</span></div>
+<div class="colnums"><span>1</span><span>10</span><span>20</span><span>30</span><span>40</span><span>50</span><span>60</span><span>70</span><span>80</span></div>
+<div class="holes"></div>
+<div class="line"><span class="kw">      SUBROUTINE</span> PROJ</div>
+<div class="line"><span class="kw">      WRITE</span>(6,10) <span class="str">'NERDY TERMINAL'</span></div>
+<div class="line"><span class="cmt">C        KEYBOARD-FIRST. NO MOUSE. NO MERCY.</span></div>
+<div class="line"><span class="kw">      WRITE</span>(6,10) <span class="str">'KUBERNETES'</span></div>
+<div class="line"><span class="cmt">C        ONE-PERSON CONTROL PLANE. GITOPS. HUBRIS.</span></div>
+<div class="line"><span class="kw">      WRITE</span>(6,10) <span class="str">'MCP GATEWAY'</span></div>
+<div class="line"><span class="cmt">C        ONE BRIDGE: SLACK, JIRA, DB, GRAFANA, TS.</span></div>
+<div class="line"><span class="kw">      WRITE</span>(6,10) <span class="str">'PIXEL TANKS'</span></div>
+<div class="line"><span class="cmt">C        MULTIPLAYER. LOW-RES. HIGH FRICTION.</span></div>
+<div class="line"><span class="kw">      WRITE</span>(6,10) <span class="str">'TBD'</span></div>
+<div class="line"><span class="cmt">C        CAPTURES, PROJECTS, TASKS. NO CRUFT.</span></div>
+<div class="line"> <span class="num">10</span>  <span class="kw">FORMAT</span>(1X,A)</div>
+<div class="line"><span class="kw">      RETURN</span></div>
+<div class="line"><span class="kw">      END</span></div>
+<div class="cardno">FORM IBM 5081 — 002</div>
+</div>
+
+<div class="card v3" data-card="3">
+<div class="titlebar"><span>CARD <b>003</b> / NOISE DIVISION</span><span>MUSIC.FOR</span></div>
+<div class="colnums"><span>1</span><span>10</span><span>20</span><span>30</span><span>40</span><span>50</span><span>60</span><span>70</span><span>80</span></div>
+<div class="holes"></div>
+<div class="line"><span class="kw">      PROGRAM</span> NOISE</div>
+<div class="line"><span class="cmt">C     BAND: MAZU. GENRE: INSTRUMENTAL STONER.</span></div>
+<div class="line"><span class="kw">      CALL</span> DRUMS(<span class="num">11</span>)</div>
+<div class="line"><span class="cmt">C        VOLUME DIAL LITERALLY REMOVED.</span></div>
+<div class="line"><span class="kw">      CALL</span> GUITAR(<span class="str">'BADLY'</span>,<span class="str">'ENTHUSIASTICALLY'</span>)</div>
+<div class="line"><span class="cmt">C        NEIGHBORS HAVE FILED FORMAL OPINIONS.</span></div>
+<div class="line"><span class="kw">      END</span></div>
+<div class="cardno">FORM IBM 5081 — 003</div>
+</div>
+
+<div class="card v4" data-card="4">
+<div class="titlebar"><span>CARD <b>004</b> / HOME.AUTOMATE</span><span>WARNING: WAF</span></div>
+<div class="colnums"><span>1</span><span>10</span><span>20</span><span>30</span><span>40</span><span>50</span><span>60</span><span>70</span><span>80</span></div>
+<div class="holes"></div>
+<div class="line"><span class="kw">      DIMENSION</span> LIGHT(128), SENSOR(64)</div>
+<div class="line"><span class="kw">      DATA</span> WAF /<span class="num">0.2</span>/</div>
+<div class="line"><span class="kw">      IF</span>(WAF .LT. <span class="num">0.3</span>) <span class="kw">CALL</span> DUCK()</div>
+<div class="line"><span class="cmt">C     HELD TOGETHER BY ZIGBEE AND STUBBORNNESS.</span></div>
+<div class="line"><span class="cmt">C     YAML: FUTURE OF LIVING (DEV)</span></div>
+<div class="line"><span class="cmt">C     YAML: WASTE OF WEEKENDS (SPOUSE)</span></div>
+<div class="line"><span class="kw">      DO</span> <span class="num">20</span> I = <span class="num">1</span>, <span class="num">3</span></div>
+<div class="line">        KIDS(I) = <span class="str">'INDIFFERENT-TO-K8S'</span></div>
+<div class="line">        KIDS(I) = <span class="str">'LOVES-SMART-LIGHTS'</span></div>
+<div class="line"> <span class="num">20</span>  <span class="kw">CONTINUE</span></div>
+<div class="line"><span class="kw">      END</span></div>
+<div class="stampbox" style="transform:rotate(5deg);top:auto;bottom:40px">Caution</div>
+<div class="cardno">FORM IBM 5081 — 004</div>
+</div>
+
+<div class="card v5" data-card="5">
+<div class="titlebar"><span>CARD <b>005</b> / WORKSHOP</span><span>STATUS REPORT</span></div>
+<div class="colnums"><span>1</span><span>10</span><span>20</span><span>30</span><span>40</span><span>50</span><span>60</span><span>70</span><span>80</span></div>
+<div class="holes"></div>
+<div class="line"><span class="kw">      PROGRAM</span> SHOP</div>
+<div class="line"><span class="cmt">C     LOCATION: BASEMENT.</span></div>
+<div class="line"><span class="cmt">C     CURRENT STATE: SAWDUST + AMBITION.</span></div>
+<div class="line"><span class="cmt">C     EVERY TOOL = INVESTMENT IN HOBBY.</span></div>
+<div class="line"><span class="kw">      WRITE</span>(6,<span class="num">30</span>) <span class="str">'SANDING...'</span></div>
+<div class="line"><span class="kw">      DO</span> <span class="num">30</span> T = <span class="num">1</span>, <span class="num">10000</span></div>
+<div class="line"> <span class="num">30</span>  <span class="kw">CONTINUE</span></div>
+<div class="line"><span class="cmt">C     STILL NOT FLAT.</span></div>
+<div class="line"><span class="kw">      STOP</span></div>
+<div class="cardno">FORM IBM 5081 — 005</div>
+</div>
+
+<div class="card v6" data-card="6">
+<div class="titlebar"><span>CARD <b>006</b> / EOJ</span><span>JOB END</span></div>
+<div class="colnums"><span>1</span><span>10</span><span>20</span><span>30</span><span>40</span><span>50</span><span>60</span><span>70</span><span>80</span></div>
+<div class="holes"></div>
+<div class="line"><span class="kw">/*</span></div>
+<div class="line"><span class="kw">//</span></div>
+<div class="line"><span class="cmt">C  IEF142I NERDY STEP1 - STEP WAS EXECUTED - COND CODE 0000</span></div>
+<div class="line"><span class="cmt">C  IEF373I STEP/STEP1/START</span></div>
+<div class="line"><span class="cmt">C  RC = 0 (SUCCESS). SIDE PROJECTS &gt; SIDE EFFECTS.</span></div>
+<div class="stampbox" style="transform:rotate(-4deg)">Accepted</div>
+<div class="cardno">FORM IBM 5081 — 006 (LAST)</div>
+</div>
+
+<div class="bottom">&#9776; END OF DECK &middot; OPERATOR: GERTJAN &middot; <a href="https://github.com/enipo">GITHUB.COM/ENIPO</a> &middot; NERDY.NL &#9776;</div>
+
+</div>
+<script>
+document.querySelectorAll('.card').forEach(card=>{
+card.addEventListener('click',()=>card.classList.toggle('rev'));
+});
+</script>
+</body>
+</html>

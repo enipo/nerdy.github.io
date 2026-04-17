@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NERDY — ON AIR</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23000'/%3E%3Ccircle cx='50' cy='50' r='30' fill='%23d02020'/%3E%3Ctext y='.9em' x='30' font-size='70' font-family='sans-serif' fill='%23fff' font-weight='900'%3EN%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#000;--fg:#fff;--red:#e02020;--dim:#808080;--amber:#ffb030;--cue:#7dd0ff}
+html,body{min-height:100%}
+body{background:var(--bg);color:var(--fg);font-family:'Inter',-apple-system,sans-serif;min-height:100vh;overflow-x:hidden;
+background:radial-gradient(ellipse at center top,#181818 0%,#000 60%)}
+.studio{max-width:1100px;margin:0 auto;padding:2vw 3vw 12vh;position:relative}
+/* ═══ SLATE ═══ */
+.slate{display:flex;align-items:center;gap:14px;padding:14px 20px;background:#0a0a0a;border:1px solid #222;margin-bottom:18px;font-family:'Archivo Black',sans-serif;letter-spacing:.08em;text-transform:uppercase;font-size:clamp(10px,1.2vw,13px);position:sticky;top:0;z-index:10;backdrop-filter:blur(8px)}
+.onair{display:flex;align-items:center;gap:8px;color:var(--red)}
+.onair::before{content:'';width:10px;height:10px;border-radius:50%;background:var(--red);box-shadow:0 0 12px var(--red);animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.slate .mid{color:var(--dim);flex:1;text-align:center}
+.slate .tc{font-variant-numeric:tabular-nums;color:var(--amber)}
+/* ═══ COUNTDOWN ═══ */
+.count{font-family:'Archivo Black';font-size:clamp(80px,15vw,200px);line-height:1;color:var(--red);text-align:center;padding:10vh 0;letter-spacing:-.02em;text-shadow:0 0 60px rgba(224,32,32,.3)}
+.count small{display:block;font-size:clamp(14px,1.6vw,20px);letter-spacing:.4em;color:var(--dim);margin-top:20px;font-family:'Inter';font-weight:800}
+/* ═══ PROMPTER ═══ */
+.prompter{font-family:'Archivo Black',sans-serif;font-size:clamp(28px,5vw,64px);line-height:1.15;letter-spacing:-.01em;text-transform:uppercase;padding:3vh 0;min-height:60vh;
+background:linear-gradient(transparent 0%,#fff 18%,#fff 82%,transparent 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.prompter .block{padding:6vh 0;border-bottom:1px dashed #1a1a1a}
+.prompter .block:last-child{border:none}
+.cue{display:block;font-family:'Inter',sans-serif;font-weight:800;font-size:clamp(11px,1.3vw,15px);letter-spacing:.3em;color:var(--cue);text-transform:uppercase;margin-bottom:20px;text-shadow:0 0 12px rgba(125,208,255,.5)}
+.stage{display:block;font-family:'Inter',sans-serif;font-style:italic;font-weight:400;font-size:clamp(13px,1.4vw,17px);color:var(--amber);text-transform:none;letter-spacing:.02em;margin-top:16px}
+.hl{color:var(--red);-webkit-text-fill-color:var(--red)}
+.arrow{margin:0 .3em;color:var(--amber);-webkit-text-fill-color:var(--amber)}
+/* ═══ CONTROL STRIP ═══ */
+.ctrl{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(transparent,#000 30%);padding:14px 20px 18px;display:flex;justify-content:center;gap:10px;z-index:20}
+.btn{background:#0a0a0a;border:1px solid #333;color:var(--fg);padding:.6em 1.4em;font-family:'Archivo Black';letter-spacing:.12em;text-transform:uppercase;font-size:clamp(11px,1.2vw,14px);cursor:pointer;transition:all .15s}
+.btn:hover{border-color:var(--red);color:var(--red)}
+.btn.on{background:var(--red);color:#fff;border-color:var(--red)}
+.btn.pause{border-color:var(--amber);color:var(--amber)}
+.btn.pause:hover,.btn.pause.on{background:var(--amber);color:#000}
+.speedbar{display:flex;align-items:center;gap:8px;color:var(--dim);font-family:'Archivo Black';font-size:11px;letter-spacing:.15em}
+.speedbar input{accent-color:var(--red)}
+/* ═══ CREDITS ═══ */
+.credits{padding:14vh 0 4vh;text-align:center;font-size:clamp(14px,1.5vw,18px);color:var(--dim)}
+.credits .t{font-family:'Archivo Black';color:var(--fg);font-size:clamp(20px,2.4vw,32px);letter-spacing:.2em;margin-bottom:12px}
+.credits a{color:var(--amber);text-decoration:none}
+.credits a:hover{color:var(--red)}
+/* ═══ TICKER ═══ */
+.ticker{position:relative;background:var(--red);color:#fff;padding:12px 0;font-family:'Archivo Black';letter-spacing:.12em;text-transform:uppercase;font-size:clamp(12px,1.3vw,15px);overflow:hidden;margin:3vh 0}
+.ticker-track{display:flex;gap:48px;white-space:nowrap;animation:tick 45s linear infinite;padding-left:100%;width:max-content}
+.ticker-track span::before{content:'★';margin-right:20px;color:#ffe0a0}
+@keyframes tick{to{transform:translateX(-100%)}}
+@media(max-width:520px){.prompter{font-size:26px}.count{font-size:70px}}
+</style>
+</head>
+<body>
+<div class="studio">
+
+<div class="slate">
+<span class="onair">ON AIR</span>
+<span class="mid">NERDY — STUDIO 3B · STREAM 01 · TAKE 1 · LIVE TO TAPE</span>
+<span class="tc" id="tc">00:00:01:00</span>
+</div>
+
+<div class="count">3<small>STAND BY</small></div>
+
+<div class="prompter">
+
+<div class="block">
+<span class="cue">cue: cold open</span>
+Putting the <span class="hl">Y</span> in <span class="hl">Nerdy.</span>
+<span class="stage">[camera 1 — tight on hands typing]</span>
+</div>
+
+<div class="block">
+<span class="cue">cue: personal — slow</span>
+I'm Gertjan. I build things <span class="arrow">→</span> mostly things nobody asked for <span class="arrow">→</span> sometimes things people actually use.
+<span class="stage">[pause two beats — then warm smile]</span>
+</div>
+
+<div class="block">
+<span class="cue">cue: segment — projects</span>
+Exhibit A <span class="arrow">→</span> <span class="hl">Nerdy Terminal.</span> Keyboard-first manager for macOS. No mouse. No mercy.
+<span class="stage">[B-roll: tmux grid, instant switching]</span>
+</div>
+
+<div class="block">
+<span class="cue">cue: segment — infrastructure</span>
+Exhibit B <span class="arrow">→</span> a <span class="hl">Kubernetes fleet</span> for a one-person operation. Wildly over-engineered. Filed under: GitOps.
+<span class="stage">[pause — stare into middle distance — whisper "gitops"]</span>
+</div>
+
+<div class="block">
+<span class="cue">cue: segment — ai plumbing</span>
+Exhibit C <span class="arrow">→</span> <span class="hl">MCP Gateway.</span> One bridge between AI agents and Slack, Jira, databases, Grafana, Tailscale. The thing that makes the other things talk.
+</div>
+
+<div class="block">
+<span class="cue">cue: segment — games</span>
+Exhibit D <span class="arrow">→</span> <span class="hl">Pixel Tanks.</span> Top-down multiplayer combat. Built for the joy of destroying friends in low resolution.
+<span class="stage">[roll clip: 30s gameplay]</span>
+</div>
+
+</div>
+
+<div class="ticker" aria-hidden="true">
+<div class="ticker-track"><span>BREAKING: DEV WRITES YAML AT 11PM</span><span>WAF PLUMMETS TO 0.2, ALL-TIME LOW</span><span>THREE KIDS UNIMPRESSED BY CLUSTERS</span><span>SMART LIGHTS SURVIVE ANOTHER NIGHT</span><span>BASEMENT WORKSHOP STILL NOT FLAT</span><span>NEIGHBORS FILE GUITAR-RELATED GRIEVANCE</span><span>MAZU REHEARSAL RUNS LONG</span></div>
+</div>
+
+<div class="prompter">
+
+<div class="block">
+<span class="cue">cue: segment — music</span>
+Off-camera <span class="arrow">→</span> I drum in <span class="hl">Mazu</span>. Instrumental stoner. The kind of music where nobody asks what the lyrics are about.
+<span class="stage">[cut to: drum kit, warm tungsten]</span>
+</div>
+
+<div class="block">
+<span class="cue">cue: segment — guitar</span>
+I also play guitar. <span class="hl">Badly</span>, but <span class="hl">enthusiastically.</span> The neighbors have filed formal opinions.
+<span class="stage">[laugh — short]</span>
+</div>
+
+<div class="block">
+<span class="cue">cue: segment — home</span>
+At home: a smart home held together by <span class="hl">Zigbee</span> and <span class="hl">stubbornness.</span> WAF dangerously low. YAML as a lifestyle choice.
+</div>
+
+<div class="block">
+<span class="cue">cue: segment — dad</span>
+Three kids. They do not care about Kubernetes. They do care, deeply, about the smart lights. <span class="hl">The only use case with a WAF above zero.</span>
+<span class="stage">[camera 2 — slow push]</span>
+</div>
+
+<div class="block">
+<span class="cue">cue: segment — workshop</span>
+In the basement: a woodworking workshop under construction. State of the build: <span class="hl">mostly sawdust and ambition.</span> Every tool an "investment in the hobby."
+</div>
+
+<div class="block">
+<span class="cue">cue: close</span>
+That's the show. Why do I build this much? <span class="hl">Why, dear god... why!?</span>
+<span class="stage">[beat — wink — fade to black]</span>
+</div>
+
+</div>
+
+<div class="credits">
+<div class="t">— END OF BROADCAST —</div>
+<div>Written, produced, filmed, edited, and hosted by <a href="https://github.com/enipo">Gertjan</a></div>
+<div style="margin-top:8px;font-size:.85em">nerdy.nl &middot; est. in a basement &middot; no script supervisor</div>
+</div>
+
+</div>
+
+<div class="ctrl">
+<button class="btn on" id="play">&#9654; ROLL</button>
+<button class="btn pause" id="stop">&#9632; CUT</button>
+<button class="btn" id="top">&#8613; TOP</button>
+<div class="speedbar"><span>SPD</span><input id="spd" type="range" min="20" max="180" value="80"></div>
+</div>
+
+<script>
+// timecode
+const tcEl=document.getElementById('tc');
+let frames=0;
+setInterval(()=>{
+frames++;
+const fps=24, f=frames%fps, s=Math.floor(frames/fps)%60, m=Math.floor(frames/(fps*60))%60, h=Math.floor(frames/(fps*3600));
+tcEl.textContent=[h,m,s,f].map(n=>String(n).padStart(2,'0')).join(':');
+},1000/24);
+// auto-scroll
+let rolling=true, speed=80;
+let pos=window.scrollY;
+function tick(){
+if(rolling){
+pos+=speed/60;
+window.scrollTo(0,pos);
+if(pos+window.innerHeight>=document.body.scrollHeight-2)pos=0,window.scrollTo(0,0);
+}
+requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+document.getElementById('play').addEventListener('click',e=>{rolling=true;e.target.classList.add('on');document.getElementById('stop').classList.remove('on')});
+document.getElementById('stop').addEventListener('click',e=>{rolling=false;e.target.classList.add('on');document.getElementById('play').classList.remove('on')});
+document.getElementById('top').addEventListener('click',()=>{pos=0;window.scrollTo({top:0,behavior:'smooth'})});
+document.getElementById('spd').addEventListener('input',e=>{speed=+e.target.value});
+// sync manual scrolls
+let manual=false;
+window.addEventListener('wheel',()=>{pos=window.scrollY});
+window.addEventListener('touchmove',()=>{pos=window.scrollY});
+// keyboard
+document.addEventListener('keydown',e=>{
+if(e.code==='Space'){e.preventDefault();rolling=!rolling;document.getElementById(rolling?'play':'stop').classList.add('on');document.getElementById(rolling?'stop':'play').classList.remove('on')}
+else if(e.key==='ArrowUp'){speed=Math.max(20,speed-10);document.getElementById('spd').value=speed}
+else if(e.key==='ArrowDown'){speed=Math.min(180,speed+10);document.getElementById('spd').value=speed}
+});
+</script>
+</body>
+</html>
