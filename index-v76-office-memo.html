@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>nerdy.nl — Interoffice Memorandum</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='78'%3E%F0%9F%93%8E%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Courier+Prime&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+ --manila:#e7d8aa;          /* folder color */
+ --paper:#f5edd4;
+ --ink:#22201a;
+ --accent:#2f4a2f;          /* bureau green */
+ --stamp:#a32726;           /* red rubber stamp */
+ --blue:#24437f;            /* carbon blue */
+ --faded:#7e765c;
+ --rule:#b7ab86;
+}
+html,body{background:#3a332a;min-height:100vh}
+body{font-family:'Courier Prime','Courier New',monospace;color:var(--ink);padding:28px 10px;display:flex;justify-content:center}
+.folder{max-width:860px;width:100%;background:var(--manila);background-image:
+ radial-gradient(circle at 8% 4%,rgba(0,0,0,.08),transparent 22%),
+ radial-gradient(circle at 96% 98%,rgba(0,0,0,.08),transparent 25%),
+ repeating-linear-gradient(135deg,rgba(30,22,4,.03) 0,rgba(30,22,4,.03) 1px,transparent 1px,transparent 4px);
+ padding:22px 22px 28px;box-shadow:0 26px 52px rgba(0,0,0,.55);position:relative}
+.folder::before{content:'';position:absolute;top:-16px;left:60px;width:120px;height:18px;background:var(--manila);border-radius:10px 10px 0 0;box-shadow:inset 0 -1px 0 rgba(0,0,0,.08)}
+.tablabel{position:absolute;top:-12px;left:70px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.24em;color:var(--accent);text-transform:uppercase;font-weight:600}
+.memo{background:var(--paper);padding:42px 52px 40px;position:relative;border:1px solid var(--rule);box-shadow:inset 0 0 0 1px rgba(0,0,0,.03)}
+.memo::before{content:'';position:absolute;inset:12px;border:1px dashed rgba(0,0,0,.09);pointer-events:none}
+.header{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:end;padding-bottom:14px;border-bottom:4px solid var(--ink);margin-bottom:8px}
+.header__h{font-family:'Oswald',sans-serif;font-size:clamp(30px,4.8vw,46px);letter-spacing:.02em;line-height:1;color:var(--ink);text-transform:uppercase}
+.header__sub{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--accent);margin-top:6px}
+.header__brand{font-family:'Oswald',sans-serif;text-align:right;line-height:1.1;color:var(--ink);text-transform:uppercase;letter-spacing:.1em}
+.header__brand b{display:block;font-size:24px}
+.header__brand small{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--faded);text-transform:uppercase}
+.filecodes{display:flex;justify-content:space-between;border-bottom:1px solid var(--ink);padding:6px 0;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--faded);gap:10px;flex-wrap:wrap}
+.filecodes b{color:var(--ink)}
+.fields{display:grid;grid-template-columns:92px 1fr;gap:10px 18px;margin-top:14px;font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.04em}
+.fields dt{font-weight:700;color:var(--ink);text-transform:uppercase;letter-spacing:.2em;font-size:11px;padding-top:4px;border-right:1px solid var(--rule)}
+.fields dd{font-family:'Courier Prime',monospace;font-size:15px;line-height:1.55;color:var(--ink)}
+.fields dd b{background:#2f4a2f11;padding:0 2px}
+.divider{border:0;border-top:2px solid var(--ink);margin:22px 0 14px;position:relative}
+.divider::after{content:'· · ·';position:absolute;left:50%;top:-12px;transform:translateX(-50%);background:var(--paper);padding:0 10px;color:var(--accent);font-family:'IBM Plex Mono',monospace;font-size:14px;letter-spacing:.4em}
+.body{font-size:15px;line-height:1.85}
+.body p{margin-bottom:10px}
+.body p b{background:rgba(163,39,38,.12);padding:0 2px}
+.actionlist{margin:14px 0 6px;padding:14px 16px;border:2px solid var(--ink);background:repeating-linear-gradient(180deg,transparent 0,transparent 26px,rgba(0,0,0,.04) 26px,rgba(0,0,0,.04) 27px)}
+.actionlist__title{font-family:'Oswald',sans-serif;letter-spacing:.22em;text-transform:uppercase;font-size:13px;margin-bottom:10px;color:var(--accent);border-bottom:1px solid var(--rule);padding-bottom:4px;display:flex;justify-content:space-between}
+.actionlist__title b{color:var(--stamp)}
+.actionlist ul{list-style:none;padding:0;margin:0}
+.actionlist li{display:grid;grid-template-columns:28px 1fr 90px;gap:10px;padding:6px 0;align-items:baseline;border-bottom:1px dotted var(--rule);font-size:14px}
+.actionlist li:last-child{border:0}
+.actionlist .box{display:inline-block;width:16px;height:16px;border:2px solid var(--ink);text-align:center;font-family:'Courier Prime',monospace;line-height:12px;font-size:14px;font-weight:700;color:var(--accent);background:#fff9e4}
+.actionlist .chk{color:var(--accent)}
+.actionlist .x{color:var(--stamp)}
+.actionlist .due{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--faded);text-transform:uppercase;text-align:right}
+.priority{display:inline-block;padding:0 4px;font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#fff;margin-right:6px;vertical-align:2px}
+.pA{background:var(--stamp)}.pB{background:var(--accent)}.pC{background:var(--blue)}
+.stamps{position:absolute;inset:auto;pointer-events:none}
+.rubber{position:absolute;font-family:'Oswald',sans-serif;font-weight:700;letter-spacing:.18em;text-transform:uppercase;border:3px solid currentColor;padding:6px 12px 4px;opacity:.85;border-radius:2px;line-height:1;filter:contrast(1.1)}
+.rubber--filed{top:36px;right:-6px;color:var(--stamp);transform:rotate(10deg);font-size:18px}
+.rubber--confidential{top:130px;left:-8px;color:var(--blue);transform:rotate(-12deg);font-size:14px}
+.rubber--approved{bottom:96px;right:10px;color:var(--accent);transform:rotate(-6deg);font-size:16px}
+.sig{margin-top:26px;display:grid;grid-template-columns:2fr 1fr;gap:30px;align-items:end}
+.sig__name{font-family:'Caveat','Special Elite',cursive;font-size:28px;color:var(--blue);transform:rotate(-2deg);border-bottom:1px solid var(--ink);padding-bottom:2px}
+.sig__meta{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--faded);margin-top:4px}
+.sig__meta b{color:var(--ink)}
+.sig__right{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--faded);text-align:right}
+.sig__right b{color:var(--ink)}
+.foot{margin-top:28px;padding-top:12px;border-top:1px solid var(--rule);display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--faded);gap:10px;flex-wrap:wrap}
+.foot a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--ink)}
+@media(max-width:720px){
+ .memo{padding:26px 22px 28px}
+ .fields{grid-template-columns:72px 1fr}
+ .actionlist li{grid-template-columns:22px 1fr;}
+ .actionlist .due{grid-column:1/-1;text-align:left;padding-left:30px}
+ .sig{grid-template-columns:1fr}
+ .rubber--confidential,.rubber--approved{display:none}
+}
+</style>
+</head>
+<body>
+<article class="folder">
+ <span class="tablabel">FILE · NERDY · 2026</span>
+
+ <section class="memo">
+  <span class="rubber rubber--filed">FILED · 04/26</span>
+  <span class="rubber rubber--confidential">Internal Use</span>
+  <span class="rubber rubber--approved">Approved</span>
+
+  <header class="header">
+   <div>
+    <h1 class="header__h">Interoffice Memorandum</h1>
+    <div class="header__sub">Nerdy Holdings · Research &amp; Tinkering Division</div>
+   </div>
+   <div class="header__brand">
+    <b>NERDY</b>
+    <small>estb. 2014 · Utrecht NL</small>
+   </div>
+  </header>
+
+  <div class="filecodes">
+   <span><b>FILE</b> 2026-Q1-0031</span>
+   <span><b>SERIES</b> IO-MEMO/14</span>
+   <span><b>CLASS</b> II · Routine</span>
+   <span><b>PAGES</b> 01 of 01</span>
+  </div>
+
+  <dl class="fields">
+   <dt>To</dt>         <dd>All visitors, readers &amp; casual browsers of <b>nerdy.nl</b></dd>
+   <dt>From</dt>       <dd>G. Bazuin — &ldquo;enipo&rdquo;, Principal Tinkerer</dd>
+   <dt>cc</dt>         <dd>Archive · Domestic Affairs · The Internet · &ldquo;Hobbies That Got Out of Hand&rdquo;</dd>
+   <dt>Date</dt>       <dd>14 April 2026 · 10:42 CET</dd>
+   <dt>Subject</dt>    <dd>Status of works, projects &amp; sundry enthusiasms — <b>for your information</b>.</dd>
+  </dl>
+
+  <hr class="divider">
+
+  <div class="body">
+   <p>Further to the memorandum of the previous quarter, this dispatch outlines the current state of affairs at <b>nerdy.nl</b>. No action is required of the reader, save for a modest appreciation of side projects shipped purely for the joy of shipping them.</p>
+
+   <div class="actionlist">
+    <div class="actionlist__title"><span>■ Project Roster</span><b>Status</b></div>
+    <ul>
+     <li><span class="box chk">✓</span><span><span class="priority pA">A1</span><b>Nerdy Terminal</b> — keyboard-first terminal multiplexer for macOS. Nine sessions, zero mice.</span><span class="due">Shipped</span></li>
+     <li><span class="box chk">✓</span><span><span class="priority pB">B2</span><b>MCP Gateway</b> — bridges AI agents to Slack, Jira, Grafana, Tailscale &amp; DBs.</span><span class="due">Shipped</span></li>
+     <li><span class="box chk">✓</span><span><span class="priority pB">B2</span><b>Pixel Tanks</b> — top-down multiplayer tank combat in purposeful low-res.</span><span class="due">Shipped</span></li>
+     <li><span class="box">▢</span><span><span class="priority pC">C3</span><b>TBD</b> — productivity app. No bells, no whistles, no release date either.</span><span class="due">In Progress</span></li>
+     <li><span class="box x">×</span><span><span class="priority pA">A1</span><b>K8s Control Plane</b> — five clusters, slightly excessive. Explanation: &ldquo;GitOps&rdquo;.</span><span class="due">Excessive</span></li>
+     <li><span class="box chk">✓</span><span><span class="priority pC">C3</span><b>Home Assistant</b> — Zigbee, YAML &amp; stubbornness. Lights only feature approved by household.</span><span class="due">Operational</span></li>
+    </ul>
+   </div>
+
+   <p><b>Culture &amp; Personnel.</b> The undersigned plays drums in <b>MAZU</b>, an instrumental stoner band, and guitar elsewhere with enthusiasm exceeding skill. Neighbours have opined. A basement woodworking shop is under construction; current state is &ldquo;mostly sawdust, mostly ambition&rdquo;. Two children remain on-staff as QA for smart-light automations.</p>
+
+   <p><b>Editorial policy.</b> This site maintains no blog, no thought leadership, no content strategy. Everything worth saying has already been generated by a large language model somewhere. nerdy.nl is a workbench, and this memo is the documentation.</p>
+  </div>
+
+  <div class="sig">
+   <div>
+    <div class="sig__name">G. Bazuin</div>
+    <div class="sig__meta"><b>Signed</b> · Principal Tinkerer · <b>enipo</b></div>
+   </div>
+   <div class="sig__right">
+    <b>Dist.</b> Intranet<br>
+    <b>Retention</b> Indefinite<br>
+    <b>Next Review</b> When bored
+   </div>
+  </div>
+
+  <footer class="foot">
+   <span>© nerdy.nl · Form IO-14 · rev. 2026</span>
+   <a href="https://github.com/enipo">github.com/enipo</a>
+  </footer>
+ </section>
+</article>
+</body>
+</html>

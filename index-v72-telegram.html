@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NERDY.NL — TELEGRAM 001</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='78'%3E%E2%98%8E%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--paper:#f4ecd0;--paper-edge:#e8ddb8;--ink:#1a2340;--stamp:#9b1a2a;--faded:#635a3b;--rule:#c8bc8c}
+html,body{background:#2a2a26;min-height:100vh}
+body{font-family:'IBM Plex Mono',monospace;font-size:14px;line-height:1.65;color:var(--ink);padding:32px 12px;display:flex;justify-content:center}
+.telegram{max-width:760px;width:100%;background:var(--paper);background-image:repeating-linear-gradient(180deg,transparent 0,transparent 27px,rgba(99,90,59,.06) 27px,rgba(99,90,59,.06) 28px);box-shadow:0 18px 48px rgba(0,0,0,.6),0 2px 0 rgba(0,0,0,.1);position:relative;padding:0;overflow:hidden}
+.telegram::before,.telegram::after{content:'';position:absolute;left:0;right:0;height:18px;background:
+ radial-gradient(circle at 12px 50%,var(--paper) 6px,transparent 6.5px) 0 0/24px 18px repeat-x;}
+.telegram::before{top:-8px;background-color:#2a2a26}
+.telegram::after{bottom:-8px;background-color:#2a2a26}
+.hdr{border-bottom:3px double var(--ink);padding:38px 32px 14px;position:relative}
+.hdr__brand{font-size:10px;letter-spacing:.38em;color:var(--faded);text-transform:uppercase;margin-bottom:6px}
+.hdr__title{font-family:'Special Elite',monospace;font-size:clamp(28px,5.6vw,44px);letter-spacing:.14em;color:var(--ink);text-align:center;line-height:1;margin:4px 0 2px}
+.hdr__sub{font-size:11px;letter-spacing:.22em;color:var(--faded);text-align:center;text-transform:uppercase}
+.meta{display:grid;grid-template-columns:1fr 1fr;gap:2px 24px;padding:14px 32px;border-bottom:1px solid var(--rule);font-size:11px;letter-spacing:.08em;color:var(--faded);text-transform:uppercase}
+.meta b{color:var(--ink);font-weight:700}
+.stamp{position:absolute;top:18px;right:20px;border:2px solid var(--stamp);color:var(--stamp);padding:6px 10px 4px;font-size:10px;letter-spacing:.18em;text-transform:uppercase;transform:rotate(8deg);opacity:.85;font-weight:700;text-align:center;line-height:1.2}
+.stamp small{display:block;font-size:8px;letter-spacing:.12em;margin-top:2px}
+.routing{padding:12px 32px;font-size:11px;letter-spacing:.1em;color:var(--faded);text-transform:uppercase;border-bottom:1px solid var(--rule);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.body{padding:22px 32px 12px;font-family:'Special Elite',monospace;font-size:15px;line-height:1.9;text-transform:uppercase;letter-spacing:.02em}
+.body p{margin-bottom:14px}
+.stop{color:var(--stamp);font-weight:700;letter-spacing:.16em;font-family:'IBM Plex Mono',monospace;font-size:12px;padding:0 4px}
+.section{border-top:1px dashed var(--rule);margin-top:14px;padding-top:14px}
+.section__kicker{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.34em;color:var(--faded);text-transform:uppercase;margin-bottom:6px}
+.msglist{list-style:none;padding:0;margin:0}
+.msglist li{padding:6px 0;border-bottom:1px dotted var(--rule)}
+.msglist li:last-child{border:0}
+.msglist .no{display:inline-block;width:42px;color:var(--stamp);font-weight:700}
+.cost{padding:16px 32px;border-top:3px double var(--ink);display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--faded)}
+.cost b{color:var(--ink);display:block;font-size:13px;margin-top:2px;font-family:'Special Elite',monospace;letter-spacing:.04em}
+.foot{padding:10px 32px 28px;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--faded);display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.foot a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--ink)}
+.tape{position:absolute;top:-6px;left:50%;transform:translateX(-50%) rotate(-1deg);width:120px;height:22px;background:rgba(155,120,80,.35);border:1px dashed rgba(80,60,30,.4)}
+@media(max-width:640px){
+ .meta{grid-template-columns:1fr}
+ .cost{grid-template-columns:1fr 1fr}
+ .body{font-size:14px;padding:18px 22px 10px}
+ .hdr,.routing,.meta,.foot{padding-left:22px;padding-right:22px}
+}
+</style>
+</head>
+<body>
+<article class="telegram">
+ <span class="tape"></span>
+ <header class="hdr">
+  <div class="stamp">RECEIVED<small>14 APR · 10:42</small></div>
+  <div class="hdr__brand">— NEDERLANDSE TELEGRAAFDIENST —</div>
+  <h1 class="hdr__title">NERDY · TELEGRAM</h1>
+  <div class="hdr__sub">Transmission Nº 001 · nerdy.nl · urgent stop</div>
+ </header>
+ <div class="meta">
+  <span><b>FROM</b> ENIPO / UTRECHT NL</span>
+  <span><b>TO</b> THE INTERNET</span>
+  <span><b>VIA</b> STATION AMSTERDAM-CS</span>
+  <span><b>WORDS</b> 184 &nbsp; <b>RATE</b> FL 0,04/WD</span>
+ </div>
+ <div class="routing">
+  <span>· LINE 47-K ·</span><span>· RELAY EINDHOVEN ·</span><span>· CONFIRMED ·</span><span>· PRIORITY CLASS B ·</span>
+ </div>
+
+ <div class="body">
+  <p>ATTENTION STOP LOCAL NERD BUILDING THINGS NOBODY ASKED FOR <span class="stop">STOP</span> TERMINAL MANAGER KEYBOARD FIRST NO MOUSE PLEASE <span class="stop">STOP</span> NINE SESSIONS TOGGLED SIMULTANEOUSLY CONDITION REPORTED STABLE <span class="stop">STOP</span></p>
+
+  <div class="section">
+   <div class="section__kicker">— Relay 02 · Infrastructure —</div>
+   <p>KUBERNETES CLUSTERS DEEMED SLIGHTLY EXCESSIVE <span class="stop">STOP</span> FIVE NODES FOR ONE HOBBY PROJECT CONFIRMED <span class="stop">STOP</span> DEVELOPER WHISPERED GITOPS INTO THE VOID <span class="stop">STOP</span> NO FURTHER COMMENT <span class="stop">STOP</span></p>
+  </div>
+
+  <div class="section">
+   <div class="section__kicker">— Relay 03 · Domestic —</div>
+   <p>SMART HOME WAF LOW <span class="stop">STOP</span> YAML AUTOMATIONS HOLDING BY THREAD <span class="stop">STOP</span> LIGHTS ONLY FEATURE APPROVED BY OCCUPANTS <span class="stop">STOP</span> CHILDREN UNIMPRESSED <span class="stop">STOP</span> ENGINEER UNDETERRED <span class="stop">STOP</span></p>
+  </div>
+
+  <div class="section">
+   <div class="section__kicker">— Relay 04 · Workshop —</div>
+   <p>BASEMENT WOODWORK IN PROGRESS <span class="stop">STOP</span> SAWDUST LEVEL RISING <span class="stop">STOP</span> EVERY TOOL JUSTIFIED AS INVESTMENT <span class="stop">STOP</span> PROGRESS MEASURED IN PLANKS <span class="stop">STOP</span></p>
+  </div>
+
+  <div class="section">
+   <div class="section__kicker">— Relay 05 · Culture —</div>
+   <p>DRUMMER IN MAZU INSTRUMENTAL STONER BAND <span class="stop">STOP</span> NO LYRICS NO PROBLEMS <span class="stop">STOP</span> ALSO GUITAR BADLY BUT LOUDLY <span class="stop">STOP</span> NEIGHBOURS HAVE OPINIONS <span class="stop">STOP</span></p>
+  </div>
+ </div>
+
+ <div class="body" style="padding-top:0">
+  <div class="section">
+   <div class="section__kicker">— MANIFEST · Open Dispatches —</div>
+   <ul class="msglist">
+    <li><span class="no">001</span>NERDY TERMINAL — MULTIPLEXER W/ MOUSE BAN</li>
+    <li><span class="no">002</span>MCP GATEWAY — BRIDGES AI TO ALL THE THINGS</li>
+    <li><span class="no">003</span>PIXEL TANKS — FRIENDSHIP DESTROYER IN 16X16</li>
+    <li><span class="no">004</span>TBD — PRODUCTIVITY APP, NO BELLS, NO WHISTLES</li>
+    <li><span class="no">005</span>HA AUTOMATIONS — LIGHTS THAT SOMETIMES OBEY</li>
+    <li><span class="no">006</span>KRANT.HTML — THIS SITE, V3, FOR OLD TIMES SAKE</li>
+   </ul>
+  </div>
+
+  <div class="section">
+   <div class="section__kicker">— ADDENDUM · Personal —</div>
+   <p>TWO KIDS PRESENT <span class="stop">STOP</span> INDIFFERENT TO CLUSTERS <span class="stop">STOP</span> FOND OF SMART LIGHTS <span class="stop">STOP</span> ONE USE CASE APPROVED <span class="stop">STOP</span> END OF MESSAGE <span class="stop">STOP</span></p>
+  </div>
+ </div>
+
+ <div class="cost">
+  <div><span>Charge</span><b>FL 7,36</b></div>
+  <div><span>Operator</span><b>68-K</b></div>
+  <div><span>Delivery</span><b>FOOT</b></div>
+ </div>
+ <footer class="foot">
+  <span>© NERDY.NL · TELEGRAPH OFFICE</span>
+  <a href="https://github.com/enipo">GITHUB/ENIPO</a>
+ </footer>
+</article>
+</body>
+</html>

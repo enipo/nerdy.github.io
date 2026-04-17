@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>nerdy.nl — FAX TRANSMISSION</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='78'%3E%F0%9F%93%A0%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--thermal:#f3ecd9;--ink:#2a2824;--faded:#726a52;--smudge:rgba(42,40,36,.08);--rule:#bdb18c}
+html,body{background:#1c1b18;min-height:100vh}
+body{font-family:'Courier Prime','Courier New',monospace;color:var(--ink);padding:26px 12px;display:flex;justify-content:center}
+.fax{max-width:780px;width:100%;background:var(--thermal);position:relative;padding:0;box-shadow:0 22px 50px rgba(0,0,0,.55);filter:contrast(1.02)}
+/* thermal warp lines + speckle */
+.fax::before{content:'';position:absolute;inset:0;pointer-events:none;
+ background:
+  repeating-linear-gradient(180deg,transparent 0,transparent 3px,rgba(0,0,0,.03) 3px,rgba(0,0,0,.03) 4px),
+  radial-gradient(circle at 12% 20%,var(--smudge) 0,transparent 40%),
+  radial-gradient(circle at 88% 70%,var(--smudge) 0,transparent 35%);
+ mix-blend-mode:multiply;opacity:.9}
+.fax::after{content:'';position:absolute;left:0;right:0;top:0;height:4px;background:linear-gradient(180deg,rgba(0,0,0,.25),transparent)}
+.topstrip{padding:6px 18px;border-bottom:2px solid var(--ink);display:flex;justify-content:space-between;font-size:11px;letter-spacing:.08em;color:var(--ink);font-weight:700;background:repeating-linear-gradient(90deg,var(--thermal) 0,var(--thermal) 6px,rgba(0,0,0,.06) 6px,rgba(0,0,0,.06) 7px)}
+.topstrip span{white-space:nowrap}
+.hdr{padding:24px 32px 16px;border-bottom:1px dashed var(--rule);display:grid;grid-template-columns:1fr auto;align-items:end;gap:16px}
+.hdr__title{font-family:'VT323',monospace;font-size:clamp(42px,7vw,72px);line-height:.9;letter-spacing:.04em;color:var(--ink)}
+.hdr__sub{font-size:12px;letter-spacing:.18em;color:var(--faded);text-transform:uppercase;margin-top:6px}
+.hdr__logo{font-family:'VT323',monospace;font-size:14px;text-align:right;color:var(--faded);line-height:1.15}
+.hdr__logo b{display:block;color:var(--ink);font-size:18px;letter-spacing:.14em}
+.fax-meta{padding:16px 32px;border-bottom:2px solid var(--ink);display:grid;grid-template-columns:repeat(4,1fr);gap:14px;font-size:11px;letter-spacing:.08em}
+.fax-meta .lab{display:block;color:var(--faded);text-transform:uppercase;font-size:9px;letter-spacing:.28em;margin-bottom:4px}
+.fax-meta .val{font-family:'VT323',monospace;font-size:18px;letter-spacing:.04em;color:var(--ink)}
+.pagebox{padding:22px 32px 10px}
+.note{border:2px solid var(--ink);padding:14px 18px;margin-bottom:18px;position:relative;background:linear-gradient(180deg,transparent 0,rgba(0,0,0,.02) 100%)}
+.note__title{font-size:11px;letter-spacing:.24em;text-transform:uppercase;margin-bottom:8px;color:var(--faded)}
+.note__body{font-size:14px;line-height:1.75}
+.note__body b{font-weight:700}
+.redact{background:var(--ink);color:var(--ink);user-select:none}
+.redact:hover{background:transparent;user-select:text}
+.columns{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-bottom:16px}
+.entry{border-top:1px dotted var(--rule);padding-top:10px}
+.entry__kick{font-size:10px;letter-spacing:.28em;color:var(--faded);text-transform:uppercase;margin-bottom:4px}
+.entry__h{font-family:'VT323',monospace;font-size:22px;line-height:1.1;margin-bottom:4px}
+.entry__p{font-size:13px;line-height:1.6}
+.transcheck{margin:18px 0;padding:14px 18px;border:1px dashed var(--ink);background:repeating-linear-gradient(90deg,transparent 0,transparent 8px,rgba(0,0,0,.02) 8px,rgba(0,0,0,.02) 9px)}
+.transcheck__title{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--faded);margin-bottom:10px;display:flex;justify-content:space-between}
+.checkgrid{display:grid;grid-template-columns:1fr 1fr;gap:4px 24px;font-size:12px}
+.checkgrid div::before{content:'[ ✓ ]  ';color:var(--ink);font-weight:700;font-family:'VT323',monospace}
+.rx{padding:18px 32px;border-top:3px double var(--ink);display:flex;justify-content:space-between;font-family:'VT323',monospace;font-size:18px;gap:14px;flex-wrap:wrap}
+.rx b{color:var(--ink)}
+.rx small{color:var(--faded);font-family:'Courier Prime',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;display:block}
+.foot{padding:10px 32px 22px;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--faded);display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;border-top:1px dashed var(--rule)}
+.foot a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--ink)}
+.bang{font-family:'VT323',monospace;font-size:20px;color:#8a2020;letter-spacing:.1em}
+.barcode{display:flex;gap:1px;height:28px;align-items:flex-end;margin-top:6px}
+.barcode span{background:var(--ink);width:2px}
+.barcode span:nth-child(3n){width:3px}.barcode span:nth-child(5n){width:1px}
+@media(max-width:640px){
+ .hdr,.pagebox,.rx,.foot,.fax-meta{padding-left:20px;padding-right:20px}
+ .fax-meta{grid-template-columns:1fr 1fr}
+ .columns{grid-template-columns:1fr}
+ .checkgrid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<article class="fax">
+ <div class="topstrip">
+  <span>03/14/2026  10:42 AM</span>
+  <span>FROM: NERDY.NL</span>
+  <span>PAGE 01 OF 01</span>
+  <span>ID: 00031-ENIPO</span>
+ </div>
+ <header class="hdr">
+  <div>
+   <div class="hdr__title">FAX // NERDY</div>
+   <div class="hdr__sub">A Cover Page Longer Than The Memo</div>
+  </div>
+  <div class="hdr__logo">
+   <b>NERDY.NL</b>
+   +31 (0) ──── ──<br>
+   Utrecht · NL
+  </div>
+ </header>
+ <div class="fax-meta">
+  <div><span class="lab">To</span><span class="val">The Internet</span></div>
+  <div><span class="lab">From</span><span class="val">G. B. / enipo</span></div>
+  <div><span class="lab">Pages</span><span class="val">1 (+cover)</span></div>
+  <div><span class="lab">Subject</span><span class="val">Status Rpt.</span></div>
+ </div>
+
+ <div class="pagebox">
+  <div class="note">
+   <div class="note__title">■ MESSAGE</div>
+   <div class="note__body">
+    <b>Gentlemen,</b> please find enclosed a brief status of ongoing works at the nerdy.nl concern. Kindly <b>confirm receipt</b> by return fax. Apologies for the smudged line 4; thermal roll is due for replacement again. Any URL in this document ending in <span class="redact">██████</span> is intentional.
+   </div>
+  </div>
+
+  <div class="columns">
+   <div class="entry">
+    <div class="entry__kick">01 · Terminals</div>
+    <div class="entry__h">Nerdy Terminal</div>
+    <div class="entry__p">Keyboard-first multiplexer for macOS. 9 sessions, zero mouse. &ldquo;Why would I move my hand 30cm?&rdquo; — the management.</div>
+   </div>
+   <div class="entry">
+    <div class="entry__kick">02 · Integration</div>
+    <div class="entry__h">MCP Gateway</div>
+    <div class="entry__p">Bridges AI agents to Slack, Jira, Grafana, DBs &amp; Tailscale. The thing that makes the other things talk.</div>
+   </div>
+   <div class="entry">
+    <div class="entry__kick">03 · Games</div>
+    <div class="entry__h">Pixel Tanks</div>
+    <div class="entry__p">Top-down multiplayer tank combat in purposefully low resolution. Friendships not included after match 3.</div>
+   </div>
+   <div class="entry">
+    <div class="entry__kick">04 · Prod.</div>
+    <div class="entry__h">TBD</div>
+    <div class="entry__p">Captures, projects, tasks. No bells. No whistles. Just the things that need doing, eventually.</div>
+   </div>
+   <div class="entry">
+    <div class="entry__kick">05 · Infra</div>
+    <div class="entry__h">K8s (×5 clusters)</div>
+    <div class="entry__p">Slightly excessive for one nerd. Justified with a whispered &ldquo;GitOps&rdquo; and sustained eye contact.</div>
+   </div>
+   <div class="entry">
+    <div class="entry__kick">06 · Home</div>
+    <div class="entry__h">Home Assistant</div>
+    <div class="entry__p">Zigbee &amp; stubbornness. WAF at record low. Lights remain the only feature anyone else uses.</div>
+   </div>
+  </div>
+
+  <div class="transcheck">
+   <div class="transcheck__title"><span>■ TRANSMISSION REPORT</span><span class="bang">▓▓▓░ 78%</span></div>
+   <div class="checkgrid">
+    <div>Drums in band MAZU (stoner)</div>
+    <div>Guitar, enthusiastic, loud</div>
+    <div>Basement woodworking shop</div>
+    <div>Two kids, smart lights fans</div>
+    <div>No blog. No thought leadership.</div>
+    <div>Putting the Y in Nerdy</div>
+   </div>
+  </div>
+ </div>
+
+ <div class="rx">
+  <div><small>Result</small><b>OK</b></div>
+  <div><small>Mode</small><b>FINE</b></div>
+  <div><small>Resolution</small><b>203×98 dpi</b></div>
+  <div><small>Duration</small><b>00:47</b></div>
+  <div><small>Error Code</small><b>— · —</b></div>
+  <div>
+   <small>Barcode</small>
+   <div class="barcode">
+    <span style="height:20px"></span><span style="height:28px"></span><span style="height:14px"></span><span style="height:24px"></span><span style="height:18px"></span><span style="height:28px"></span><span style="height:10px"></span><span style="height:22px"></span><span style="height:26px"></span><span style="height:14px"></span><span style="height:20px"></span><span style="height:28px"></span><span style="height:16px"></span><span style="height:22px"></span><span style="height:12px"></span><span style="height:26px"></span>
+   </div>
+  </div>
+ </div>
+ <footer class="foot">
+  <span>© nerdy.nl · transmitted with thermal ink + determination</span>
+  <a href="https://github.com/enipo">github.com/enipo</a>
+ </footer>
+</article>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>nerdy.nl — a manuscript</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='78'%3E%E2%9C%8D%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+ --paper:#fbfaf3;
+ --ink:#15120e;
+ --ribbon:#a11c1c;       /* red ribbon */
+ --faded:#7a7365;
+ --rule:#cfc6af;
+}
+html,body{background:#201c17;min-height:100vh}
+body{font-family:'Courier Prime','Courier New',monospace;color:var(--ink);font-size:16px;line-height:2;padding:28px 10px;display:flex;justify-content:center}
+.paper{max-width:760px;width:100%;background:var(--paper);background-image:
+ repeating-linear-gradient(180deg,transparent 0,transparent 31px,rgba(21,18,14,.04) 31px,rgba(21,18,14,.04) 32px);
+ box-shadow:0 26px 60px rgba(0,0,0,.5), inset 0 0 0 1px rgba(0,0,0,.03);
+ position:relative;padding:64px 64px 48px;
+ /* typewriter slightly uneven paper */
+ transform:rotate(-.08deg)}
+.paper::after{content:'';position:absolute;inset:0;pointer-events:none;
+ background:
+  radial-gradient(circle at 10% 10%,rgba(0,0,0,.05),transparent 35%),
+  radial-gradient(circle at 90% 90%,rgba(0,0,0,.05),transparent 40%);
+ mix-blend-mode:multiply}
+.ink{text-shadow:.4px 0 0 rgba(21,18,14,.25), 0 .4px 0 rgba(21,18,14,.15)}
+.hdr{text-align:center;margin-bottom:36px}
+.hdr__line{font-family:'Special Elite',monospace;font-size:12px;letter-spacing:.26em;color:var(--faded);text-transform:uppercase}
+.hdr__title{font-family:'Special Elite',monospace;font-size:clamp(34px,5.5vw,50px);letter-spacing:.1em;line-height:1.1;margin:10px 0 4px;color:var(--ink)}
+.hdr__by{font-size:14px;letter-spacing:.14em;color:var(--faded);text-transform:uppercase}
+.hdr__by b{color:var(--ink)}
+.indent{text-indent:3ch}
+p{margin-bottom:4px}
+.redtype{color:var(--ribbon)}
+.strike{position:relative;color:var(--faded)}
+.strike::after{content:'';position:absolute;left:-1px;right:-1px;top:50%;height:2px;background:var(--ink);transform:skewY(-1deg);opacity:.85}
+.xxx{color:var(--ribbon);letter-spacing:.05em}
+.chapter{margin:34px 0 12px;text-align:center;font-family:'Special Elite',monospace;letter-spacing:.3em;font-size:13px;color:var(--ribbon);text-transform:uppercase}
+.chapter::before,.chapter::after{content:' — — — ';color:var(--faded);letter-spacing:.1em}
+.correction{position:relative;display:inline-block}
+.correction::before{content:'';position:absolute;left:-2px;right:-2px;top:0;bottom:0;background:rgba(255,253,240,.88);border-bottom:1px solid rgba(21,18,14,.08)}
+.correction span{position:relative;color:var(--ribbon)}
+.footline{margin-top:44px;padding-top:14px;border-top:1px solid var(--rule);display:flex;justify-content:space-between;font-family:'Special Elite',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--faded);gap:10px;flex-wrap:wrap}
+.footline a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--ink)}
+.pageno{position:absolute;bottom:18px;right:30px;font-family:'Special Elite',monospace;font-size:12px;color:var(--faded);letter-spacing:.2em}
+.pageno b{color:var(--ink)}
+.tab{display:inline-block;width:2ch}
+/* numbered list old-school */
+.entries{list-style:none;padding:0;margin:12px 0 8px}
+.entries li{padding:6px 0;border-bottom:1px dotted var(--rule);display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start}
+.entries .n{font-family:'Special Elite',monospace;color:var(--ribbon);letter-spacing:.14em;width:5ch}
+.entries b{color:var(--ink);font-weight:700}
+@media(max-width:640px){
+ .paper{padding:36px 26px 36px}
+ body{font-size:14px;line-height:1.9}
+}
+/* punch hole on left margin */
+.hole{position:absolute;left:22px;width:10px;height:10px;border-radius:50%;background:#201c17;opacity:.9}
+.h1{top:40px}.h2{top:50%}.h3{bottom:40px}
+</style>
+</head>
+<body>
+<main class="paper ink">
+ <span class="hole h1"></span><span class="hole h2"></span><span class="hole h3"></span>
+
+ <header class="hdr">
+  <div class="hdr__line">— working draft · do not circulate —</div>
+  <h1 class="hdr__title">A Brief Inventory,<br>Typed on a Tuesday</h1>
+  <div class="hdr__by">by <b>G. Bazuin</b> · for <b>nerdy.nl</b></div>
+ </header>
+
+ <p class="indent">This is the first page of a very short book. It is being typed, not rendered. Pressing the <span class="redtype">RED</span> key on the ribbon shifter is how emphasis happens around here; there is no bold, there is only <span class="redtype">leaning on the key harder</span>.</p>
+ <p>The manuscript, in full, is as follows.</p>
+
+ <div class="chapter">Chapter One · The Tools</div>
+
+ <ol class="entries">
+  <li><span class="n">§ 01</span><span><b>Nerdy Terminal.</b> A keyboard-first terminal manager for <span class="redtype">macOS</span>. Nine sessions, no mouse, no regrets. Tab, tab, tab — as the author prefers it.</span></li>
+  <li><span class="n">§ 02</span><span><b>MCP Gateway.</b> A bridge between AI agents and the rest of one's messy professional life: Slack, Jira, Grafana, Tailscale, and <span class="strike">four</span> three too many databases.</span></li>
+  <li><span class="n">§ 03</span><span><b>Pixel Tanks.</b> Top-down multiplayer tank combat, rendered deliberately small, built for the <span class="redtype">joy of losing to friends</span>.</span></li>
+  <li><span class="n">§ 04</span><span><b>TBD.</b> A productivity application with no bells, no whistles, and no name yet, which the author finds appropriate.</span></li>
+  <li><span class="n">§ 05</span><span><b>Kubernetes.</b> Five clusters. One engineer. The word &ldquo;<span class="redtype">GitOps</span>&rdquo; is offered by way of explanation.</span></li>
+  <li><span class="n">§ 06</span><span><b>Home Assistant.</b> A smart home held together by <span class="redtype">Zigbee and stubbornness</span>. WAF at record low; the lights, at least, obey.</span></li>
+ </ol>
+
+ <div class="chapter">Chapter Two · The Author</div>
+
+ <p class="indent">The author plays drums in <span class="redtype">MAZU</span>, an instrumental stoner band. The author also plays guitar, badly but enthusiastically; the neighbours have been informed, as a courtesy. The author has two children. They remain indifferent to his Kubernetes clusters and enthusiastic about the smart lights — the <span class="correction"><span>only</span></span> only use case with a WAF above zero.</p>
+
+ <p class="indent">The author is also building a basement woodworking shop. Current state: mostly sawdust, mostly ambition. Every tool purchase is justified as an &ldquo;investment in the hobby&rdquo;; every hour in the shop is justified as &ldquo;not looking at a screen&rdquo;.</p>
+
+ <div class="chapter">Chapter Three · Editorial</div>
+
+ <p class="indent">There is no blog here. There is no thought leadership, no content strategy, no newsletter, no course. Everything worth saying has already been generated by a large language model somewhere. This is just a workbench, and one types at it on Tuesdays.</p>
+
+ <p class="indent" style="margin-top:18px">— <span class="redtype">end of draft</span>, 14 April 2026, 22:14, Utrecht.</p>
+
+ <footer class="footline">
+  <span>© nerdy.nl · manuscript · typed, not set</span>
+  <a href="https://github.com/enipo">github.com/enipo</a>
+ </footer>
+ <div class="pageno">Page <b>1</b> of 1</div>
+</main>
+</body>
+</html>
