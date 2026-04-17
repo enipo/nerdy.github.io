@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nerdy — Boarding Pass</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.88em' font-size='85'%3E✈%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Bebas+Neue&family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --sky:#a8c4e0;
+            --sky-dark:#6a8aa8;
+            --paper:#fafaf4;
+            --paper-edge:#e4e0d4;
+            --dotted:#b0a898;
+            --ink:#141824;
+            --dim:#6a7080;
+            --brand:#c82020;
+            --brand-dark:#8a1414;
+            --stamp:#2a6a30;
+        }
+        body{
+            background:
+                linear-gradient(160deg,var(--sky) 0%,#d8e8f4 35%,#f4e8d0 65%,#d8a870 100%);
+            background-attachment:fixed;
+            color:var(--ink);
+            font-family:'JetBrains Mono',monospace;
+            min-height:100vh;
+            padding:2rem 1rem 3rem;
+            position:relative;
+            overflow-x:hidden;
+        }
+        body::before{
+            content:'';
+            position:fixed;
+            inset:0;
+            background:
+                radial-gradient(circle at 85% 15%,rgba(255,240,200,.5),transparent 35%),
+                radial-gradient(ellipse at 15% 90%,rgba(200,32,32,.1),transparent 50%);
+            pointer-events:none;
+        }
+        body::after{
+            content:'';
+            position:fixed;
+            top:10%;left:0;
+            width:100%;height:30px;
+            background:
+                radial-gradient(ellipse 60px 8px at 10% 50%,white,transparent),
+                radial-gradient(ellipse 90px 10px at 30% 50%,white,transparent),
+                radial-gradient(ellipse 70px 8px at 60% 50%,white,transparent),
+                radial-gradient(ellipse 50px 6px at 85% 50%,white,transparent);
+            opacity:.7;
+            pointer-events:none;
+        }
+
+        a{color:var(--brand);text-decoration:none;border-bottom:1px dotted var(--brand)}
+        a:hover{border-bottom-style:solid}
+
+        .ticket-wrap{max-width:880px;margin:0 auto;position:relative;z-index:1}
+
+        .pass{
+            background:var(--paper);
+            border-radius:10px;
+            box-shadow:
+                0 1px 0 rgba(255,255,255,.8) inset,
+                0 20px 50px rgba(0,0,0,.3),
+                0 6px 20px rgba(0,0,0,.15);
+            display:grid;
+            grid-template-columns:1fr 240px;
+            overflow:hidden;
+            position:relative;
+            transform:rotate(-.4deg);
+        }
+        .pass::before,
+        .pass::after{
+            content:'';
+            position:absolute;
+            width:22px;height:22px;border-radius:50%;
+            background:var(--sky);
+            top:50%;
+            margin-top:-11px;
+            z-index:3;
+            box-shadow:inset 0 1px 2px rgba(0,0,0,.25);
+        }
+        .pass::before{left:calc(100% - 251px)}
+        .pass::after{left:calc(100% - 229px);background:transparent;box-shadow:none;
+            border:none;display:none}
+
+        /* main panel */
+        .main{
+            padding:1.3rem 1.6rem 1.2rem;
+            position:relative;
+            background:
+                linear-gradient(180deg,rgba(200,32,32,.04),transparent 40%),
+                var(--paper);
+        }
+        .main::after{
+            content:'';
+            position:absolute;
+            right:0;top:0;bottom:0;
+            width:2px;
+            background-image:linear-gradient(180deg,var(--dotted) 50%,transparent 50%);
+            background-size:2px 10px;
+        }
+
+        /* header bar */
+        .brand-bar{
+            display:flex;
+            align-items:center;
+            gap:.7rem;
+            padding-bottom:.9rem;
+            border-bottom:1.5px solid var(--paper-edge);
+            margin-bottom:1rem;
+        }
+        .brand-logo{
+            font-family:'Bebas Neue',sans-serif;
+            font-size:1.7rem;
+            background:var(--brand);
+            color:white;
+            padding:.05rem .5rem;
+            letter-spacing:.08em;
+            border-radius:3px;
+            line-height:1;
+        }
+        .brand-name{
+            font-family:'Inter',sans-serif;
+            font-weight:900;
+            font-size:1rem;
+            letter-spacing:.15em;
+            text-transform:uppercase;
+        }
+        .brand-name span{color:var(--brand)}
+        .brand-slogan{
+            font-family:'Inter',sans-serif;
+            font-size:.7rem;
+            color:var(--dim);
+            margin-left:auto;
+            font-style:italic;
+            letter-spacing:.04em;
+        }
+        .pass-kind{
+            font-family:'Inter',sans-serif;
+            font-weight:700;
+            font-size:.65rem;
+            letter-spacing:.25em;
+            color:var(--brand);
+            text-transform:uppercase;
+            border:1.5px solid var(--brand);
+            padding:.18rem .5rem;
+            border-radius:3px;
+        }
+
+        /* route */
+        .route{
+            display:grid;
+            grid-template-columns:1fr auto 1fr;
+            gap:1rem;
+            align-items:end;
+            margin:.4rem 0 1rem;
+        }
+        .airport__code{
+            font-family:'Bebas Neue',sans-serif;
+            font-size:clamp(3rem,9vw,4.5rem);
+            line-height:.9;
+            color:var(--ink);
+            letter-spacing:.02em;
+        }
+        .airport__name{
+            font-family:'Inter',sans-serif;
+            font-size:.7rem;
+            color:var(--dim);
+            letter-spacing:.06em;
+            text-transform:uppercase;
+            margin-top:.2rem;
+        }
+        .airport--to{text-align:right}
+        .route__mid{
+            font-size:1.3rem;
+            color:var(--brand);
+            padding-bottom:.8rem;
+            position:relative;
+        }
+        .route__mid::before,
+        .route__mid::after{
+            content:'';
+            position:absolute;
+            top:50%;
+            width:40px;height:1px;
+            background:repeating-linear-gradient(90deg,var(--dotted) 0,var(--dotted) 3px,transparent 3px,transparent 6px);
+        }
+        .route__mid::before{right:calc(100% + 6px)}
+        .route__mid::after{left:calc(100% + 6px)}
+
+        /* info grid */
+        .details{
+            display:grid;
+            grid-template-columns:repeat(4,1fr);
+            gap:.3rem 1rem;
+            margin-top:1rem;
+            padding-top:.9rem;
+            border-top:1.5px dashed var(--paper-edge);
+        }
+        .detail__label{
+            font-family:'Inter',sans-serif;
+            font-size:.58rem;
+            letter-spacing:.2em;
+            color:var(--dim);
+            text-transform:uppercase;
+            margin-bottom:.1rem;
+        }
+        .detail__value{
+            font-family:'Bebas Neue',sans-serif;
+            font-size:1.2rem;
+            line-height:1.1;
+            color:var(--ink);
+            letter-spacing:.04em;
+        }
+        .detail__value small{
+            font-family:'JetBrains Mono',monospace;
+            font-size:.6rem;
+            color:var(--dim);
+            letter-spacing:.08em;
+            display:block;
+            margin-top:.1rem;
+        }
+
+        /* passenger */
+        .passenger{
+            background:rgba(200,32,32,.05);
+            padding:.9rem 1rem;
+            margin-top:1rem;
+            border-radius:5px;
+            border-left:3px solid var(--brand);
+            display:grid;
+            grid-template-columns:1fr auto;
+            gap:1rem;
+            align-items:center;
+        }
+        .passenger__label{
+            font-family:'Inter',sans-serif;
+            font-size:.58rem;
+            letter-spacing:.2em;
+            color:var(--dim);
+            text-transform:uppercase;
+            margin-bottom:.1rem;
+        }
+        .passenger__name{
+            font-family:'Bebas Neue',sans-serif;
+            font-size:1.5rem;
+            line-height:1;
+            letter-spacing:.04em;
+        }
+        .passenger__tag{
+            font-family:'JetBrains Mono',monospace;
+            font-size:.7rem;
+            color:var(--dim);
+            letter-spacing:.1em;
+        }
+        .passenger__freq{
+            text-align:right;
+            font-family:'JetBrains Mono',monospace;
+            font-size:.65rem;
+            color:var(--brand);
+            letter-spacing:.08em;
+        }
+        .passenger__freq strong{
+            font-family:'Bebas Neue',sans-serif;
+            font-size:1.2rem;
+            display:block;
+            color:var(--ink);
+            letter-spacing:.05em;
+        }
+
+        /* itinerary */
+        .itinerary{
+            margin-top:1rem;
+            padding-top:.9rem;
+            border-top:1.5px dashed var(--paper-edge);
+        }
+        .itinerary__title{
+            font-family:'Inter',sans-serif;
+            font-size:.6rem;
+            letter-spacing:.25em;
+            color:var(--dim);
+            text-transform:uppercase;
+            margin-bottom:.6rem;
+        }
+        .segment{
+            display:grid;
+            grid-template-columns:auto 1fr auto;
+            gap:.8rem;
+            padding:.5rem 0;
+            border-bottom:1px dotted var(--paper-edge);
+            font-size:.78rem;
+            line-height:1.4;
+            align-items:center;
+        }
+        .segment:last-child{border-bottom:none}
+        .segment__time{
+            font-family:'Bebas Neue',sans-serif;
+            font-size:1rem;
+            color:var(--ink);
+            letter-spacing:.02em;
+            min-width:72px;
+        }
+        .segment__desc{color:var(--ink)}
+        .segment__desc strong{display:block;font-family:'Inter',sans-serif;font-size:.82rem;font-weight:700;margin-bottom:.05rem;letter-spacing:.02em}
+        .segment__desc span{color:var(--dim);font-size:.72rem}
+        .segment__gate{
+            font-family:'Inter',sans-serif;
+            font-weight:700;
+            color:var(--brand);
+            font-size:.7rem;
+            letter-spacing:.1em;
+            text-transform:uppercase;
+            white-space:nowrap;
+        }
+
+        /* stub */
+        .stub{
+            background:linear-gradient(180deg,var(--paper) 0%,#f0ecdf 100%);
+            padding:1rem 1.1rem;
+            position:relative;
+            display:flex;
+            flex-direction:column;
+            gap:.7rem;
+        }
+        .stub__row{display:flex;flex-direction:column;gap:.05rem}
+        .stub__label{
+            font-family:'Inter',sans-serif;
+            font-size:.55rem;
+            letter-spacing:.22em;
+            color:var(--dim);
+            text-transform:uppercase;
+        }
+        .stub__value{
+            font-family:'Bebas Neue',sans-serif;
+            font-size:1.15rem;
+            color:var(--ink);
+            letter-spacing:.03em;
+            line-height:1;
+        }
+        .stub__value--big{font-size:2.2rem;color:var(--brand)}
+        .stub__barcode{
+            margin-top:auto;
+            height:54px;
+            background:
+                repeating-linear-gradient(90deg,var(--ink) 0,var(--ink) 1px,transparent 1px,transparent 3px,var(--ink) 3px,var(--ink) 4px,transparent 4px,transparent 6px,var(--ink) 6px,var(--ink) 8px,transparent 8px,transparent 11px,var(--ink) 11px,var(--ink) 12px,transparent 12px,transparent 15px,var(--ink) 15px,var(--ink) 17px,transparent 17px,transparent 20px);
+        }
+        .stub__barcode-num{
+            font-family:'JetBrains Mono',monospace;
+            font-size:.62rem;
+            color:var(--ink);
+            text-align:center;
+            letter-spacing:.1em;
+            margin-top:.2rem;
+        }
+
+        .stamp{
+            position:absolute;
+            right:18px;top:60px;
+            border:2.5px solid var(--stamp);
+            color:var(--stamp);
+            padding:.2rem .6rem;
+            font-family:'JetBrains Mono',monospace;
+            font-size:.75rem;
+            font-weight:700;
+            letter-spacing:.2em;
+            text-transform:uppercase;
+            transform:rotate(-14deg);
+            border-radius:3px;
+            opacity:.75;
+            pointer-events:none;
+        }
+        .stamp::before,.stamp::after{
+            content:'';
+            position:absolute;
+            left:-4px;right:-4px;top:-4px;bottom:-4px;
+            border:1px dotted var(--stamp);
+            opacity:.5;
+            border-radius:4px;
+        }
+
+        /* notice strip below pass */
+        .notice{
+            margin-top:1.6rem;
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+            gap:1rem;
+        }
+        .notice__item{
+            background:rgba(255,255,255,.5);
+            backdrop-filter:blur(6px);
+            padding:.9rem 1rem;
+            border-radius:6px;
+            border:1px solid rgba(255,255,255,.5);
+            font-size:.76rem;
+            line-height:1.55;
+            color:var(--ink);
+        }
+        .notice__item strong{
+            display:block;
+            font-family:'Inter',sans-serif;
+            font-size:.62rem;
+            letter-spacing:.22em;
+            color:var(--brand);
+            text-transform:uppercase;
+            margin-bottom:.3rem;
+            font-weight:700;
+        }
+
+        .footer{
+            margin-top:1.2rem;
+            text-align:center;
+            font-size:.68rem;
+            color:var(--ink);
+            letter-spacing:.12em;
+            opacity:.7;
+        }
+
+        @media(max-width:740px){
+            .pass{grid-template-columns:1fr;transform:rotate(0)}
+            .pass::before{display:none}
+            .stub{border-top:2px dashed var(--dotted)}
+            .details{grid-template-columns:repeat(2,1fr)}
+            .stub__barcode{height:44px}
+            .passenger{grid-template-columns:1fr}
+            .passenger__freq{text-align:left}
+            .stamp{top:20px;right:16px}
+        }
+    </style>
+</head>
+<body>
+    <div class="ticket-wrap">
+        <article class="pass">
+            <div class="main">
+                <div class="stamp">Boarded</div>
+                <header class="brand-bar">
+                    <div class="brand-logo">N</div>
+                    <div class="brand-name">NERDY<span>AIR</span></div>
+                    <div class="brand-slogan">“We over‑engineer the in‑flight wifi.”</div>
+                </header>
+
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.2rem">
+                    <div class="pass-kind">Boarding Pass · All Access</div>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--dim);letter-spacing:.1em">FLIGHT NR 1985 · DAILY</div>
+                </div>
+
+                <div class="route">
+                    <div class="airport airport--from">
+                        <div class="airport__code">IDE</div>
+                        <div class="airport__name">Idea · from anywhere</div>
+                    </div>
+                    <div class="route__mid">✈</div>
+                    <div class="airport airport--to">
+                        <div class="airport__code">SHP</div>
+                        <div class="airport__name">Ship · eventually, probably</div>
+                    </div>
+                </div>
+
+                <div class="details">
+                    <div>
+                        <div class="detail__label">Date</div>
+                        <div class="detail__value">EVERMORE<small>ongoing · no return</small></div>
+                    </div>
+                    <div>
+                        <div class="detail__label">Boarding</div>
+                        <div class="detail__value">08:14<small>after 2 coffees</small></div>
+                    </div>
+                    <div>
+                        <div class="detail__label">Depart</div>
+                        <div class="detail__value">WHEN READY<small>never quite</small></div>
+                    </div>
+                    <div>
+                        <div class="detail__label">Arrive</div>
+                        <div class="detail__value">TBD<small>see ticket stub</small></div>
+                    </div>
+                </div>
+
+                <section class="passenger">
+                    <div>
+                        <div class="passenger__label">Passenger</div>
+                        <div class="passenger__name">Nerdy / Himself</div>
+                        <div class="passenger__tag">NL · ID NRDY‑0001 · eTKT</div>
+                    </div>
+                    <div class="passenger__freq">
+                        <strong>∞ mi</strong>
+                        LIFETIME GOLD
+                    </div>
+                </section>
+
+                <section class="itinerary">
+                    <div class="itinerary__title">Itinerary &middot; connecting flights</div>
+                    <div class="segment">
+                        <div class="segment__time">IDE→TRM</div>
+                        <div class="segment__desc"><strong><a href="#">Nerdy Terminal</a></strong><span>keyboard‑first, no mouse, nine sessions at a time</span></div>
+                        <div class="segment__gate">Gate A1</div>
+                    </div>
+                    <div class="segment">
+                        <div class="segment__time">TRM→K8S</div>
+                        <div class="segment__desc"><strong><a href="#">Kubernetes Clusters</a></strong><span>mini‑PCs, k3s, Tailscale, “GitOps” (whispered)</span></div>
+                        <div class="segment__gate">Gate B2</div>
+                    </div>
+                    <div class="segment">
+                        <div class="segment__time">K8S→MCP</div>
+                        <div class="segment__desc"><strong><a href="#">MCP Gateway</a></strong><span>one bridge: Slack, Jira, Grafana, Tailscale, databases</span></div>
+                        <div class="segment__gate">Gate B3</div>
+                    </div>
+                    <div class="segment">
+                        <div class="segment__time">MCP→TNK</div>
+                        <div class="segment__desc"><strong><a href="#">Pixel Tanks</a></strong><span>multiplayer, low‑res, friendship‑ending</span></div>
+                        <div class="segment__gate">Gate C7</div>
+                    </div>
+                    <div class="segment">
+                        <div class="segment__time">TNK→MZU</div>
+                        <div class="segment__desc"><strong>Mazu · Drums</strong><span>instrumental stoner · guitar, badly</span></div>
+                        <div class="segment__gate">Gate D1</div>
+                    </div>
+                    <div class="segment">
+                        <div class="segment__time">MZU→HA</div>
+                        <div class="segment__desc"><strong>Home Assistant</strong><span>YAML, Zigbee, WAF near zero, smart lights OK</span></div>
+                        <div class="segment__gate">Gate X9</div>
+                    </div>
+                    <div class="segment">
+                        <div class="segment__time">HA→SHP</div>
+                        <div class="segment__desc"><strong>The Workshop</strong><span>sawdust, ambition, “investment in the hobby”</span></div>
+                        <div class="segment__gate">Basement</div>
+                    </div>
+                </section>
+            </div>
+
+            <aside class="stub">
+                <div class="stub__row">
+                    <div class="stub__label">Carrier</div>
+                    <div class="stub__value">NERDYAIR · NA1985</div>
+                </div>
+                <div class="stub__row">
+                    <div class="stub__label">Passenger</div>
+                    <div class="stub__value">NERDY / ENIPO</div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem">
+                    <div class="stub__row">
+                        <div class="stub__label">Seat</div>
+                        <div class="stub__value stub__value--big">1A</div>
+                    </div>
+                    <div class="stub__row">
+                        <div class="stub__label">Class</div>
+                        <div class="stub__value stub__value--big">NRD</div>
+                    </div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem">
+                    <div class="stub__row">
+                        <div class="stub__label">Gate</div>
+                        <div class="stub__value">A1</div>
+                    </div>
+                    <div class="stub__row">
+                        <div class="stub__label">Grp</div>
+                        <div class="stub__value">1</div>
+                    </div>
+                </div>
+                <div class="stub__row">
+                    <div class="stub__label">Baggage</div>
+                    <div class="stub__value" style="font-family:'JetBrains Mono',monospace;font-size:.78rem">1× terminal<br>∞× opinions</div>
+                </div>
+                <div class="stub__barcode"></div>
+                <div class="stub__barcode-num">NA1985 IDE→SHP NRDY 0001 ENIPO</div>
+            </aside>
+        </article>
+
+        <div class="notice">
+            <div class="notice__item">
+                <strong>In‑flight reading</strong>
+                TBD — a personal productivity app. Captures, projects, tasks. No bells, no whistles. Just the things that need doing.
+            </div>
+            <div class="notice__item">
+                <strong>Meal service</strong>
+                Dad × 3. Three children. They do not care about the clusters. They do care about the smart lights. Only use case with WAF above zero.
+            </div>
+            <div class="notice__item">
+                <strong>Important notice</strong>
+                No blog, no thought leadership, no content strategy. Putting the Y in Nerdy — as in: Why, dear god, why?
+            </div>
+        </div>
+
+        <div class="footer">© NerdyAir · operated by <a href="https://github.com/enipo" style="color:var(--ink);border-bottom-color:var(--ink)">github.com/enipo</a> · please retain this stub</div>
+    </div>
+</body>
+</html>

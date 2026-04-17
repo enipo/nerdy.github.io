@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nerdy — A Production in Three Acts</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.88em' font-size='85' font-family='serif'%3E🎭%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Playfair+Display:wght@400;700;900&family=IM+Fell+DW+Pica:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --paper:#f3e9d2;
+            --paper-dark:#e8dcc0;
+            --ink:#1a0e06;
+            --velvet:#7a1420;
+            --velvet-dark:#4a0810;
+            --gold:#b08a3a;
+            --dim:#6b5a40;
+        }
+        body{
+            background:#2a0810 radial-gradient(circle at 30% 20%,#4a1020,#2a0810 70%);
+            color:var(--ink);
+            font-family:'Cormorant Garamond',Georgia,serif;
+            font-size:16px;
+            line-height:1.5;
+            min-height:100vh;
+            padding:2rem 1rem;
+        }
+        .booklet{
+            max-width:680px;
+            margin:0 auto;
+            background:var(--paper);
+            padding:3rem 3rem 2.5rem;
+            box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 0 1px rgba(0,0,0,.1);
+            position:relative;
+            background-image:
+                radial-gradient(ellipse at top left,rgba(122,20,32,.04),transparent 50%),
+                radial-gradient(ellipse at bottom right,rgba(176,138,58,.05),transparent 50%);
+        }
+        .booklet::before{
+            content:'';
+            position:absolute;
+            inset:14px;
+            border:1px solid var(--velvet);
+            pointer-events:none;
+            opacity:.4;
+        }
+        .booklet::after{
+            content:'';
+            position:absolute;
+            inset:20px;
+            border:3px double var(--velvet);
+            pointer-events:none;
+            opacity:.3;
+        }
+        a{color:var(--velvet);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .2s}
+        a:hover{border-bottom-color:var(--velvet)}
+
+        .theater{
+            text-align:center;
+            font-family:'IM Fell DW Pica',serif;
+            font-size:.75rem;
+            letter-spacing:.3em;
+            color:var(--velvet);
+            text-transform:uppercase;
+            margin-bottom:.6rem;
+        }
+        .masks{
+            font-size:1.8rem;
+            color:var(--velvet);
+            margin-bottom:.3rem;
+            letter-spacing:.2em;
+        }
+        .ornament{
+            text-align:center;
+            color:var(--gold);
+            font-size:1.4rem;
+            margin:.8rem 0;
+            letter-spacing:.5em;
+        }
+        h1.title{
+            font-family:'Playfair Display',serif;
+            font-weight:900;
+            font-size:clamp(3rem,8vw,5rem);
+            text-align:center;
+            line-height:.95;
+            color:var(--velvet-dark);
+            text-shadow:0 1px 0 rgba(255,255,255,.3);
+            margin:.4rem 0;
+            letter-spacing:-.01em;
+        }
+        .presents{
+            text-align:center;
+            font-style:italic;
+            font-size:1.1rem;
+            color:var(--dim);
+            margin:.3rem 0 .2rem;
+        }
+        .subtitle{
+            text-align:center;
+            font-family:'Playfair Display',serif;
+            font-size:1.15rem;
+            letter-spacing:.15em;
+            color:var(--ink);
+            text-transform:uppercase;
+            margin-bottom:1.2rem;
+        }
+        .dates{
+            text-align:center;
+            font-family:'IM Fell DW Pica',serif;
+            font-size:.85rem;
+            letter-spacing:.1em;
+            color:var(--dim);
+            font-style:italic;
+            margin-bottom:1.5rem;
+        }
+
+        .rule{
+            border:none;
+            height:1px;
+            background:linear-gradient(90deg,transparent,var(--velvet) 20%,var(--velvet) 80%,transparent);
+            margin:1.5rem 0;
+            opacity:.5;
+        }
+
+        .section-head{
+            font-family:'Playfair Display',serif;
+            font-weight:900;
+            font-size:1.4rem;
+            letter-spacing:.08em;
+            color:var(--velvet);
+            text-align:center;
+            text-transform:uppercase;
+            margin:1rem 0 .2rem;
+        }
+        .section-sub{
+            text-align:center;
+            font-style:italic;
+            color:var(--dim);
+            font-size:.95rem;
+            margin-bottom:1.2rem;
+        }
+
+        .cast{display:grid;gap:.55rem;font-size:1.05rem}
+        .cast__row{
+            display:grid;
+            grid-template-columns:1fr auto 1fr;
+            align-items:baseline;
+            gap:.5rem;
+        }
+        .cast__role{text-align:right;font-family:'Playfair Display',serif;font-weight:700}
+        .cast__dots{color:var(--dim);letter-spacing:.1em;overflow:hidden}
+        .cast__actor{font-style:italic;color:var(--velvet-dark)}
+
+        .act{
+            margin:1.4rem 0;
+            padding:1rem 1.2rem;
+            background:rgba(176,138,58,.06);
+            border-left:3px solid var(--gold);
+        }
+        .act__num{
+            font-family:'IM Fell DW Pica',serif;
+            font-style:italic;
+            font-size:.8rem;
+            letter-spacing:.25em;
+            color:var(--velvet);
+            text-transform:uppercase;
+        }
+        .act__title{
+            font-family:'Playfair Display',serif;
+            font-weight:700;
+            font-size:1.4rem;
+            margin:.2rem 0 .5rem;
+            color:var(--ink);
+        }
+        .act__scene{
+            font-size:.95rem;
+            line-height:1.6;
+            color:var(--ink);
+        }
+        .act__scene em{color:var(--velvet-dark)}
+
+        .notes{
+            font-size:.9rem;
+            line-height:1.7;
+            text-align:justify;
+            hyphens:auto;
+            columns:2;
+            column-gap:1.8rem;
+            column-rule:1px solid var(--paper-dark);
+            margin:.5rem 0;
+        }
+        .notes p{margin-bottom:.6rem;text-indent:1.2rem}
+        .notes p:first-child{text-indent:0}
+        .notes p:first-child::first-letter{
+            font-family:'Playfair Display',serif;
+            font-weight:900;
+            font-size:3rem;
+            float:left;
+            line-height:.85;
+            padding:.15rem .45rem 0 0;
+            color:var(--velvet);
+        }
+
+        .patrons{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+            gap:.8rem;
+            margin:1rem 0;
+            font-size:.88rem;
+        }
+        .patron{
+            padding:.8rem;
+            border:1px solid var(--paper-dark);
+            text-align:center;
+        }
+        .patron__kicker{
+            font-family:'IM Fell DW Pica',serif;
+            font-size:.7rem;
+            letter-spacing:.2em;
+            text-transform:uppercase;
+            color:var(--gold);
+            margin-bottom:.3rem;
+        }
+        .patron__name{
+            font-family:'Playfair Display',serif;
+            font-weight:700;
+            margin-bottom:.3rem;
+        }
+        .patron__line{font-style:italic;color:var(--dim);font-size:.85rem}
+
+        .curtain-call{
+            text-align:center;
+            margin-top:2rem;
+            padding-top:1rem;
+            border-top:1px solid var(--paper-dark);
+        }
+        .curtain-call__line{
+            font-family:'IM Fell DW Pica',serif;
+            font-style:italic;
+            color:var(--dim);
+            font-size:.85rem;
+            letter-spacing:.08em;
+        }
+        .curtain-call__links{
+            margin-top:.7rem;
+            font-family:'IM Fell DW Pica',serif;
+            font-size:.8rem;
+            letter-spacing:.15em;
+            text-transform:uppercase;
+        }
+        .curtain-call__links a{margin:0 .6rem}
+
+        @media(max-width:640px){
+            body{padding:.8rem .3rem}
+            .booklet{padding:2rem 1.3rem}
+            .notes{columns:1}
+            .cast__row{grid-template-columns:1fr;text-align:center;gap:.1rem}
+            .cast__role{text-align:center}
+            .cast__dots{display:none}
+        }
+    </style>
+</head>
+<body>
+    <div class="booklet">
+        <div class="theater">De Nerdy Schouwburg</div>
+        <div class="masks" style="text-align:center">🎭</div>
+        <div class="theater">Est. MMXXIV — Proudly Presents</div>
+
+        <h1 class="title">NERDY</h1>
+        <p class="presents">a chronicle, in three acts, of one man and his terminals</p>
+        <p class="subtitle">“Building Things Nobody Asked For”</p>
+        <p class="dates">nightly · evermore · on the machine before you</p>
+
+        <div class="ornament">❦ ❧ ❦</div>
+
+        <h2 class="section-head">Dramatis Personae</h2>
+        <p class="section-sub">in order of appearance upon the stage</p>
+        <div class="cast">
+            <div class="cast__row"><div class="cast__role">The Protagonist</div><div class="cast__dots">· · · · · · · · · · · · ·</div><div class="cast__actor">Nerdy, himself</div></div>
+            <div class="cast__row"><div class="cast__role">His Workbench</div><div class="cast__dots">· · · · · · · · · · · · ·</div><div class="cast__actor">a stout mahogany conspirator</div></div>
+            <div class="cast__row"><div class="cast__role">The Clusters</div><div class="cast__dots">· · · · · · · · · · · · ·</div><div class="cast__actor">Kubernetes, playing themselves</div></div>
+            <div class="cast__row"><div class="cast__role">The Gateway</div><div class="cast__dots">· · · · · · · · · · · · ·</div><div class="cast__actor">MCP, in a dual role</div></div>
+            <div class="cast__row"><div class="cast__role">The Children</div><div class="cast__dots">· · · · · · · · · · · · ·</div><div class="cast__actor">Three, unruly, disinterested in YAML</div></div>
+            <div class="cast__row"><div class="cast__role">The Spouse</div><div class="cast__dots">· · · · · · · · · · · · ·</div><div class="cast__actor">a truth-teller of the smart home</div></div>
+            <div class="cast__row"><div class="cast__role">The Drum Kit</div><div class="cast__dots">· · · · · · · · · · · · ·</div><div class="cast__actor">Mazu, stoner instrumental</div></div>
+            <div class="cast__row"><div class="cast__role">Ensemble</div><div class="cast__dots">· · · · · · · · · · · · ·</div><div class="cast__actor">Sawdust, Zigbee, Ambition</div></div>
+        </div>
+
+        <hr class="rule">
+
+        <h2 class="section-head">The Programme</h2>
+        <p class="section-sub">three acts, two intermissions, one lukewarm coffee</p>
+
+        <div class="act">
+            <div class="act__num">Act the First</div>
+            <div class="act__title">In Which Our Hero Refuses the Mouse</div>
+            <div class="act__scene">A dimly lit study. Upon the desk: <a href="#">Nerdy Terminal</a>, a keyboard-first session manager for macOS. The protagonist glances at his trackpad as at a rival. <em>“Why would I move my hand thirty centimetres to the right,”</em> he declares, <em>“when I could press two keys?”</em> Nine sessions switch instantly. The audience gasps politely.</div>
+        </div>
+
+        <div class="act">
+            <div class="act__num">Act the Second</div>
+            <div class="act__title">The Over‑Engineering of a Domestic Life</div>
+            <div class="act__scene">Lights rise on a rack of humming <a href="#">Kubernetes clusters</a>, wildly excessive for one household. Enter <a href="#">MCP Gateway</a> stage left, bridging agents to Slack, Jira, databases, Grafana. Enter <a href="#">Home Assistant</a>, held aloft by Zigbee and stubbornness alone. The WAF drops. The lights dim. Our hero whispers: <em>“GitOps.”</em></div>
+        </div>
+
+        <div class="act">
+            <div class="act__num">Act the Third</div>
+            <div class="act__title">Of Drums, Sawdust, and Small Humans</div>
+            <div class="act__scene">A basement workshop, mostly shavings and aspiration. A drum kit in the corner, occasionally in rhythm. <a href="#">Pixel Tanks</a> rumble across a distant CRT — friendships tested in low resolution. Three children enter; they do not care about the clusters. They <em>do</em> care about the smart lights. Curtain.</div>
+        </div>
+
+        <hr class="rule">
+
+        <h2 class="section-head">Director’s Note</h2>
+        <p class="section-sub">a word from the stage</p>
+        <div class="notes">
+            <p>This production began, as so many do, with a wife who asked what he was building. He could not explain. He gestured vaguely at a terminal, muttered about YAML, and promised the lights would still work. They did. Mostly.</p>
+            <p>What you are about to witness is not a website. It is a workbench on which things are made, broken, and occasionally shipped: a terminal manager, a bridge between AI and everything, a tank game played in pixels, a smart home held together by Zigbee and hope.</p>
+            <p>There will be no thought leadership. There will be no content strategy. Everything worth saying has already been said, probably by a large language model, somewhere on the internet, at 3 a.m. This is simply a playbill for a man who keeps tinkering because the alternative is sitting still.</p>
+            <p>The drums are real. The kids are real. The clusters, regrettably, are also real. Enjoy the show.</p>
+        </div>
+
+        <hr class="rule">
+
+        <h2 class="section-head">With Thanks to Our Patrons</h2>
+        <p class="section-sub">who support this foolishness in kind</p>
+        <div class="patrons">
+            <div class="patron">
+                <div class="patron__kicker">Benefactor</div>
+                <div class="patron__name">TBD</div>
+                <div class="patron__line">A personal productivity app. Captures, projects, tasks. No bells.</div>
+            </div>
+            <div class="patron">
+                <div class="patron__kicker">Anonymous</div>
+                <div class="patron__name">The Workshop</div>
+                <div class="patron__line">Every tool purchase justified as “investment in the hobby.”</div>
+            </div>
+            <div class="patron">
+                <div class="patron__kicker">Sustaining</div>
+                <div class="patron__name">Mazu</div>
+                <div class="patron__line">Instrumental stoner. The kind of music where nobody asks about the lyrics.</div>
+            </div>
+        </div>
+
+        <div class="curtain-call">
+            <div class="curtain-call__line">— Fin —</div>
+            <div class="curtain-call__line" style="margin-top:.3rem">Putting the Y in Nerdy · as in: Why, dear god, why?</div>
+            <div class="curtain-call__links">
+                <a href="https://github.com/enipo">GitHub</a>
+                <a href="#">Archive</a>
+                <a href="#">Colophon</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

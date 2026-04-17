@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nerdy — Card Catalog</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.88em' font-size='85'%3E📇%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --wood:#6b3a20;
+            --wood-dark:#4a2510;
+            --wood-light:#8a5230;
+            --brass:#b08a3a;
+            --card:#f0e6d0;
+            --card-aged:#e4d4b0;
+            --ink:#2a1a0a;
+            --red:#8a1a1a;
+            --dim:#6a5a40;
+            --line:#a0906a;
+        }
+        body{
+            background:#3a2418;
+            background-image:
+                repeating-linear-gradient(90deg,rgba(0,0,0,.15) 0,rgba(0,0,0,.15) 1px,transparent 1px,transparent 4px),
+                repeating-linear-gradient(180deg,rgba(0,0,0,.08) 0,rgba(0,0,0,.08) 2px,transparent 2px,transparent 30px),
+                linear-gradient(180deg,#4a2a18,#2a180c);
+            color:var(--ink);
+            font-family:'Courier Prime',monospace;
+            min-height:100vh;
+            padding:2.5rem 1rem 4rem;
+        }
+
+        .cabinet{max-width:780px;margin:0 auto}
+        a{color:var(--red);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+
+        /* drawer header */
+        .drawer-head{
+            background:linear-gradient(180deg,#7a4224,#5a2c14);
+            padding:1.2rem 2rem 1.4rem;
+            border:2px solid #2a1408;
+            border-bottom:none;
+            box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 10px 30px rgba(0,0,0,.5);
+            position:relative;
+            border-radius:8px 8px 0 0;
+        }
+        .drawer-head::after{
+            content:'';
+            position:absolute;
+            left:50%;
+            bottom:-14px;
+            transform:translateX(-50%);
+            width:62px;
+            height:28px;
+            background:linear-gradient(180deg,var(--brass),#7a5818);
+            border:1px solid #4a3810;
+            border-radius:0 0 8px 8px;
+            box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 2px 4px rgba(0,0,0,.4);
+        }
+        .drawer-head::before{
+            content:'';
+            position:absolute;
+            left:50%;
+            bottom:-4px;
+            transform:translateX(-50%);
+            width:18px;
+            height:10px;
+            background:#3a2810;
+            border-radius:50%;
+            z-index:2;
+        }
+
+        .plate{
+            background:#f0e6d0;
+            border:1px solid #8a6a40;
+            padding:.6rem 1rem;
+            text-align:center;
+            font-family:'IM Fell English',serif;
+            font-style:italic;
+            box-shadow:inset 0 0 0 2px #3a2810;
+            max-width:380px;
+            margin:0 auto;
+        }
+        .plate__eyebrow{font-family:'Courier Prime',monospace;font-size:.65rem;letter-spacing:.3em;color:var(--dim);text-transform:uppercase;font-style:normal}
+        .plate__title{font-size:1.6rem;color:var(--ink);letter-spacing:.02em;margin:.15rem 0}
+        .plate__sub{font-size:.8rem;color:var(--dim);font-style:normal;letter-spacing:.1em;text-transform:uppercase}
+
+        /* card stack */
+        .stack{
+            background:#2a1810;
+            padding:2rem 1.8rem 2.5rem;
+            border:2px solid #1a0c04;
+            border-top:none;
+            display:grid;
+            gap:1.4rem;
+            position:relative;
+            box-shadow:inset 0 0 40px rgba(0,0,0,.5);
+        }
+
+        .card{
+            background:var(--card);
+            padding:1rem 1.2rem 1.2rem 3.5rem;
+            border:1px solid #c0a878;
+            box-shadow:
+                0 1px 0 #fff inset,
+                0 3px 0 -1px #e4d4b0,
+                0 6px 0 -2px #d8c8a4,
+                0 9px 0 -3px #ccbc98,
+                0 12px 24px rgba(0,0,0,.4);
+            position:relative;
+            background-image:
+                repeating-linear-gradient(180deg,transparent 0,transparent 19px,rgba(160,144,106,.5) 19px,rgba(160,144,106,.5) 20px);
+            min-height:200px;
+            transform:rotate(-.3deg);
+            transition:transform .25s;
+        }
+        .card:nth-child(even){transform:rotate(.4deg)}
+        .card:nth-child(3n){transform:rotate(-.1deg)}
+        .card:hover{transform:rotate(0) translateY(-2px)}
+
+        .card::before{
+            content:'';
+            position:absolute;
+            left:2.2rem;
+            top:0;
+            bottom:0;
+            width:1px;
+            background:var(--red);
+            opacity:.6;
+        }
+        .card__hole{
+            position:absolute;
+            left:50%;
+            bottom:-10px;
+            transform:translateX(-50%);
+            width:14px;
+            height:14px;
+            border-radius:50%;
+            background:#2a1810;
+            box-shadow:inset 0 1px 2px rgba(0,0,0,.6);
+        }
+
+        .card__dewey{
+            position:absolute;
+            left:.6rem;
+            top:.9rem;
+            font-family:'Special Elite',monospace;
+            font-size:.72rem;
+            line-height:1.2;
+            color:var(--ink);
+            width:1.4rem;
+            text-align:center;
+        }
+        .card__dewey span{display:block}
+
+        .card__call{
+            font-family:'Courier Prime',monospace;
+            font-size:.7rem;
+            letter-spacing:.12em;
+            color:var(--dim);
+            text-transform:uppercase;
+            margin-bottom:.3rem;
+        }
+        .card__title{
+            font-family:'Special Elite',monospace;
+            font-size:1.25rem;
+            line-height:1.25;
+            color:var(--ink);
+            margin-bottom:.1rem;
+        }
+        .card__author{
+            font-family:'Special Elite',monospace;
+            font-size:.85rem;
+            color:var(--ink);
+            margin-bottom:.5rem;
+            letter-spacing:.02em;
+        }
+        .card__author span{color:var(--dim)}
+        .card__summary{
+            font-family:'Courier Prime',monospace;
+            font-size:.8rem;
+            line-height:1.5;
+            color:#3a2a1a;
+        }
+        .card__summary em{font-style:italic;color:var(--red)}
+
+        .card__stamps{
+            display:flex;
+            flex-wrap:wrap;
+            gap:.4rem .8rem;
+            margin-top:.8rem;
+            padding-top:.6rem;
+            border-top:1px solid rgba(160,144,106,.6);
+        }
+        .stamp{
+            font-family:'Courier Prime',monospace;
+            font-size:.65rem;
+            padding:.12rem .5rem;
+            border:1.5px solid var(--red);
+            color:var(--red);
+            letter-spacing:.08em;
+            text-transform:uppercase;
+            transform:rotate(-2deg);
+            opacity:.85;
+            border-radius:2px;
+        }
+        .stamp:nth-child(2){transform:rotate(1deg)}
+        .stamp:nth-child(3){transform:rotate(-1deg)}
+        .stamp:nth-child(4){transform:rotate(2deg)}
+
+        /* reference section */
+        .ref{
+            margin-top:2rem;
+            background:var(--card);
+            padding:1.2rem 1.4rem;
+            border:1px solid #c0a878;
+            box-shadow:0 6px 20px rgba(0,0,0,.4);
+        }
+        .ref__title{
+            font-family:'Special Elite',monospace;
+            font-size:1.05rem;
+            border-bottom:1.5px solid var(--red);
+            padding-bottom:.3rem;
+            margin-bottom:.8rem;
+            letter-spacing:.06em;
+            text-transform:uppercase;
+        }
+        .ref__entries{display:grid;gap:.7rem;font-size:.82rem}
+        .ref__entry{
+            display:grid;
+            grid-template-columns:auto 1fr;
+            gap:.8rem;
+            line-height:1.45;
+        }
+        .ref__entry strong{
+            font-family:'Special Elite',monospace;
+            font-weight:400;
+            color:var(--red);
+            letter-spacing:.04em;
+        }
+
+        .foot{
+            text-align:center;
+            margin-top:2rem;
+            font-family:'Courier Prime',monospace;
+            color:#c0a878;
+            font-size:.7rem;
+            letter-spacing:.25em;
+            text-transform:uppercase;
+        }
+        .foot a{color:var(--brass)}
+
+        @media(max-width:640px){
+            body{padding:1.2rem .5rem 3rem}
+            .drawer-head{padding:.9rem 1rem 1.1rem}
+            .plate__title{font-size:1.3rem}
+            .stack{padding:1.2rem .8rem 1.8rem}
+            .card{padding:.8rem .8rem .9rem 3rem}
+            .card__dewey{left:.3rem;font-size:.65rem}
+        }
+    </style>
+</head>
+<body>
+    <div class="cabinet">
+        <header class="drawer-head">
+            <div class="plate">
+                <div class="plate__eyebrow">Drawer 004 · N — NER</div>
+                <div class="plate__title">Nerdy, &nbsp;—&nbsp;</div>
+                <div class="plate__sub">subject catalog · do not remove cards</div>
+            </div>
+        </header>
+
+        <main class="stack">
+
+            <article class="card">
+                <div class="card__dewey"><span>005</span><span>.1</span><span>NER</span></div>
+                <div class="card__call">Computer Programming · Terminals · Keyboards</div>
+                <h2 class="card__title">Nerdy Terminal</h2>
+                <p class="card__author">Nerdy, <span>author &middot; 2024 &middot; macOS application, 1 exec.</span></p>
+                <p class="card__summary">Keyboard‑first terminal manager, built on the philosophy that <em>moving one’s hand thirty centimetres to a mouse</em> is an avoidable tragedy. Supports instant session switching across nine or more concurrent shells. Includes: tab‑based workflow, persistent layouts, <em>absolutely no mouse</em>. Notes: “surprisingly useful,” per colleagues; “surprisingly stubborn,” per same.</p>
+                <div class="card__stamps">
+                    <span class="stamp">Checked Out</span>
+                    <span class="stamp">Daily Use</span>
+                    <span class="stamp">Ref. Only</span>
+                </div>
+                <div class="card__hole"></div>
+            </article>
+
+            <article class="card">
+                <div class="card__dewey"><span>004</span><span>.67</span><span>NER</span></div>
+                <div class="card__call">Distributed Systems · Over‑Engineering · Home</div>
+                <h2 class="card__title">Several Kubernetes Clusters, Domestic</h2>
+                <p class="card__author">Nerdy, <span>operator &middot; 2023– &middot; ongoing</span></p>
+                <p class="card__summary">A personal control plane spanning <em>more clusters than anyone needs</em>. Includes monitoring, production (legacy), production, test, and AI clusters; a tailnet; a tear in reality. Justified via GitOps. Catalogued under “architecture, sprawling.” See also: “weekend, entire.”</p>
+                <div class="card__stamps">
+                    <span class="stamp">Permanent</span>
+                    <span class="stamp">Excessive</span>
+                    <span class="stamp">Do Not Touch</span>
+                </div>
+                <div class="card__hole"></div>
+            </article>
+
+            <article class="card">
+                <div class="card__dewey"><span>006</span><span>.3</span><span>NER</span></div>
+                <div class="card__call">Artificial Intelligence · Integrations · Gateways</div>
+                <h2 class="card__title">MCP Gateway: One Bridge to Rule Them All</h2>
+                <p class="card__author">Nerdy, <span>author &middot; 2025 &middot; 1 gateway, many tools</span></p>
+                <p class="card__summary">A Model Context Protocol gateway bridging AI agents with <em>Slack, Jira, databases, Grafana, Tailscale</em>, and occasionally common sense. Described by the author as “the thing that makes the other things talk to each other,” a description that is both accurate and maddeningly insufficient.</p>
+                <div class="card__stamps">
+                    <span class="stamp">New Acquisition</span>
+                    <span class="stamp">Popular</span>
+                </div>
+                <div class="card__hole"></div>
+            </article>
+
+            <article class="card">
+                <div class="card__dewey"><span>794</span><span>.8</span><span>NER</span></div>
+                <div class="card__call">Games · Multiplayer · Pixels (low)</div>
+                <h2 class="card__title">Pixel Tanks</h2>
+                <p class="card__author">Nerdy et al., <span>authors &middot; 2022 &middot; 1 browser game</span></p>
+                <p class="card__summary">Top‑down tank combat rendered in deliberately poor resolution, for the sole purpose of <em>destroying one’s friends</em> in a manner historically unavailable to previous generations. Contains mild violence against other rectangles.</p>
+                <div class="card__stamps">
+                    <span class="stamp">Juv. Collection</span>
+                    <span class="stamp">Check Out</span>
+                </div>
+                <div class="card__hole"></div>
+            </article>
+
+            <article class="card">
+                <div class="card__dewey"><span>781</span><span>.66</span><span>MAZ</span></div>
+                <div class="card__call">Music · Rock · Instrumental · Stoner</div>
+                <h2 class="card__title">Mazu — Drums &amp; Guitar</h2>
+                <p class="card__author">Nerdy, <span>performer &middot; 2019– &middot; no lyrics incl.</span></p>
+                <p class="card__summary">Instrumental stoner band in which the author drums. The kind of music where <em>nobody asks what the lyrics are about</em>. He also plays guitar — <em>badly, but enthusiastically</em>. The neighbours have filed formal opinions.</p>
+                <div class="card__stamps">
+                    <span class="stamp">Loud</span>
+                    <span class="stamp">Adults Only</span>
+                </div>
+                <div class="card__hole"></div>
+            </article>
+
+            <article class="card">
+                <div class="card__dewey"><span>684</span><span>.08</span><span>NER</span></div>
+                <div class="card__call">Woodworking · Basement · Aspiration</div>
+                <h2 class="card__title">The Workshop (In Progress)</h2>
+                <p class="card__author">Nerdy, <span>shop owner &middot; 2024– &middot; ongoing, sawdust‑strewn</span></p>
+                <p class="card__summary">A woodworking workshop slowly accreting beneath the family home. <em>Mostly sawdust and ambition.</em> Every tool purchase catalogued under “investment in the hobby,” a fund of apparently unlimited capacity. See also: CHECKBOOK, DOMESTIC.</p>
+                <div class="card__stamps">
+                    <span class="stamp">Restricted</span>
+                    <span class="stamp">Dust Warning</span>
+                </div>
+                <div class="card__hole"></div>
+            </article>
+
+            <article class="card">
+                <div class="card__dewey"><span>643</span><span>.7</span><span>NER</span></div>
+                <div class="card__call">Home Automation · YAML · Domestic Politics</div>
+                <h2 class="card__title">Home Assistant (WAF Study)</h2>
+                <p class="card__author">Nerdy &amp; spouse (coll.), <span>2021– &middot; mixed media</span></p>
+                <p class="card__summary">A long‑running study of the <em>Wife Acceptance Factor</em>, held together by Zigbee, YAML, and stubbornness. Operates on what the author calls a “shoestring budget” and what his partner calls “a waste of perfectly good weekends.” The smart lights, crucially, still work.</p>
+                <div class="card__stamps">
+                    <span class="stamp">Overdue</span>
+                    <span class="stamp">Disputed</span>
+                </div>
+                <div class="card__hole"></div>
+            </article>
+
+            <section class="ref">
+                <h3 class="ref__title">See Also —</h3>
+                <div class="ref__entries">
+                    <div class="ref__entry"><strong>TBD</strong><span>Personal productivity app. Captures, projects, tasks. No bells, no whistles. Just the things that need doing.</span></div>
+                    <div class="ref__entry"><strong>Dad × 3</strong><span>Three children. They do not care about the clusters. They do care about the smart lights. Only use case with WAF &gt; 0.</span></div>
+                    <div class="ref__entry"><strong>The Y in Nerdy</strong><span>As in: Why, dear god, why? &mdash; see cross‑reference at EXISTENCE, DAILY.</span></div>
+                </div>
+            </section>
+
+        </main>
+
+        <div class="foot">
+            Cat. No. 2024–∞ · <a href="https://github.com/enipo">github.com/enipo</a> · Return before closing
+        </div>
+    </div>
+</body>
+</html>

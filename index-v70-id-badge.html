@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nerdy — Employee Badge</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.88em' font-size='85'%3E🪪%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --bg:#0d1220;
+            --bg2:#1a2140;
+            --card:#f4f2ee;
+            --card-edge:#d8d4cc;
+            --ink:#141a28;
+            --dim:#6a7088;
+            --accent:#0066cc;
+            --accent2:#00a878;
+            --red:#c82020;
+            --lanyard:#c82020;
+            --lanyard2:#8a1414;
+        }
+        body{
+            background:
+                radial-gradient(circle at 30% 20%,#1a2a50,transparent 60%),
+                radial-gradient(circle at 70% 80%,#0a1838,transparent 50%),
+                linear-gradient(180deg,var(--bg),#050810);
+            background-attachment:fixed;
+            color:#e0e6f0;
+            font-family:'Inter',system-ui,sans-serif;
+            min-height:100vh;
+            padding:2rem 1rem 3rem;
+            overflow-x:hidden;
+        }
+
+        .wrapper{max-width:440px;margin:0 auto}
+
+        /* lanyard */
+        .lanyard{
+            position:relative;
+            width:100%;
+            max-width:440px;
+            margin:0 auto;
+            padding-top:0;
+        }
+        .strap{
+            height:180px;
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            justify-content:center;
+            align-items:flex-start;
+            margin-bottom:-1px;
+        }
+        .strap__side{
+            width:22px;
+            justify-self:end;
+            height:100%;
+            background:
+                repeating-linear-gradient(-30deg,var(--lanyard) 0,var(--lanyard) 8px,var(--lanyard2) 8px,var(--lanyard2) 10px),
+                var(--lanyard);
+            transform:skewY(-8deg) translateX(6px);
+            box-shadow:inset -3px 0 0 rgba(0,0,0,.25),0 2px 4px rgba(0,0,0,.4);
+            position:relative;
+        }
+        .strap__side:last-child{
+            justify-self:start;
+            transform:skewY(8deg) translateX(-6px);
+            box-shadow:inset 3px 0 0 rgba(0,0,0,.25),0 2px 4px rgba(0,0,0,.4);
+        }
+        .clip{
+            position:absolute;
+            left:50%;
+            top:168px;
+            transform:translateX(-50%);
+            width:60px;
+            height:30px;
+            background:linear-gradient(180deg,#d8d8d8,#8a8a8a);
+            border-radius:6px 6px 3px 3px;
+            box-shadow:inset 0 1px 0 #fff,0 2px 6px rgba(0,0,0,.4);
+            z-index:2;
+        }
+        .clip::after{
+            content:'';
+            position:absolute;
+            left:50%;
+            bottom:-6px;
+            transform:translateX(-50%);
+            width:10px;
+            height:10px;
+            background:#6a6a6a;
+            border-radius:50%;
+            box-shadow:inset 0 1px 0 rgba(255,255,255,.3);
+        }
+
+        /* card */
+        .badge{
+            position:relative;
+            margin-top:18px;
+            background:var(--card);
+            border:1px solid var(--card-edge);
+            border-radius:14px;
+            box-shadow:
+                0 1px 0 rgba(255,255,255,.8) inset,
+                0 30px 60px rgba(0,0,0,.5),
+                0 0 0 1px rgba(255,255,255,.05);
+            color:var(--ink);
+            overflow:hidden;
+            transform:rotate(-.8deg);
+        }
+        .badge::before{
+            content:'';
+            position:absolute;
+            top:0;
+            left:50%;
+            transform:translateX(-50%);
+            width:38px;
+            height:16px;
+            background:var(--bg);
+            border-radius:0 0 12px 12px;
+            box-shadow:inset 0 -2px 4px rgba(0,0,0,.5);
+            z-index:3;
+        }
+        .badge::after{
+            content:'';
+            position:absolute;
+            top:5px;
+            left:50%;
+            transform:translateX(-50%);
+            width:18px;
+            height:3px;
+            background:#333;
+            border-radius:2px;
+            z-index:4;
+        }
+
+        /* header bar */
+        .badge__head{
+            background:linear-gradient(135deg,var(--bg),var(--bg2) 80%);
+            color:#e0e6f0;
+            padding:1.4rem 1.2rem 1rem;
+            position:relative;
+            overflow:hidden;
+        }
+        .badge__head::after{
+            content:'';
+            position:absolute;
+            inset:0;
+            background:
+                radial-gradient(circle at 90% 10%,rgba(0,168,120,.15),transparent 50%),
+                radial-gradient(circle at 10% 90%,rgba(0,102,204,.2),transparent 50%);
+            pointer-events:none;
+        }
+        .corp{
+            display:flex;
+            align-items:center;
+            gap:.6rem;
+            font-size:.7rem;
+            letter-spacing:.25em;
+            text-transform:uppercase;
+            color:#8aa0c8;
+            margin-bottom:.2rem;
+        }
+        .corp__mark{
+            width:22px;height:22px;border-radius:5px;
+            background:linear-gradient(135deg,var(--accent),var(--accent2));
+            display:flex;align-items:center;justify-content:center;
+            font-weight:900;font-size:.85rem;color:white;letter-spacing:0;
+        }
+        .corp__name{flex:1}
+        .badge__title{
+            font-family:'JetBrains Mono',monospace;
+            font-size:.68rem;
+            letter-spacing:.35em;
+            color:#5a7098;
+            text-transform:uppercase;
+            margin-top:.6rem;
+        }
+        .badge__kind{
+            font-weight:900;
+            font-size:1.4rem;
+            color:white;
+            letter-spacing:.02em;
+            margin-top:.1rem;
+        }
+        .auth{
+            position:absolute;
+            top:1rem;
+            right:1.2rem;
+            font-family:'JetBrains Mono',monospace;
+            font-size:.6rem;
+            letter-spacing:.15em;
+            padding:.25rem .5rem;
+            border:1px solid rgba(0,168,120,.6);
+            background:rgba(0,168,120,.15);
+            color:#4adca0;
+            border-radius:3px;
+            z-index:1;
+            text-transform:uppercase;
+        }
+
+        /* body */
+        .badge__body{
+            padding:1.2rem 1.2rem 1rem;
+            display:grid;
+            grid-template-columns:auto 1fr;
+            gap:1rem;
+        }
+        .photo{
+            width:90px;
+            height:110px;
+            border-radius:6px;
+            background:linear-gradient(135deg,#5aa070,#2a6a50);
+            position:relative;
+            overflow:hidden;
+            box-shadow:inset 0 0 0 2px rgba(255,255,255,.5),inset 0 0 0 3px rgba(0,0,0,.1);
+        }
+        .photo::before{
+            content:'';
+            position:absolute;
+            left:50%;top:22%;
+            transform:translateX(-50%);
+            width:32px;height:32px;border-radius:50%;
+            background:#d4b08a;
+            box-shadow:inset 0 -3px 5px rgba(0,0,0,.1);
+        }
+        .photo::after{
+            content:'';
+            position:absolute;
+            left:50%;top:58%;
+            transform:translateX(-50%);
+            width:66px;height:50px;
+            background:#1a2a50;
+            border-radius:30px 30px 0 0;
+        }
+        .photo__glyph{
+            position:absolute;
+            left:50%;top:34%;
+            transform:translate(-50%,-50%);
+            font-size:.9rem;z-index:2;color:#2a1a0a;
+        }
+        .photo__shine{
+            position:absolute;inset:0;
+            background:linear-gradient(135deg,rgba(255,255,255,.4) 0%,transparent 40%,transparent 100%);
+            pointer-events:none;
+        }
+
+        .info{display:flex;flex-direction:column;gap:.15rem}
+        .info__name{
+            font-family:'Inter',sans-serif;
+            font-weight:900;
+            font-size:1.35rem;
+            line-height:1.1;
+            letter-spacing:-.01em;
+            color:var(--ink);
+        }
+        .info__role{
+            font-family:'JetBrains Mono',monospace;
+            font-size:.72rem;
+            letter-spacing:.1em;
+            color:var(--accent);
+            text-transform:uppercase;
+            margin-top:.2rem;
+        }
+        .info__motto{
+            font-size:.82rem;
+            color:var(--dim);
+            margin-top:.5rem;
+            line-height:1.4;
+            font-style:italic;
+        }
+        .info__stats{
+            display:grid;
+            grid-template-columns:auto 1fr;
+            gap:.05rem .6rem;
+            font-family:'JetBrains Mono',monospace;
+            font-size:.68rem;
+            margin-top:.6rem;
+        }
+        .info__stats dt{color:var(--dim);letter-spacing:.08em;text-transform:uppercase}
+        .info__stats dd{color:var(--ink)}
+
+        /* access section */
+        .access{
+            margin:0 1.2rem;
+            padding:.9rem 0;
+            border-top:1.5px dashed var(--card-edge);
+            border-bottom:1.5px dashed var(--card-edge);
+        }
+        .access__title{
+            font-family:'JetBrains Mono',monospace;
+            font-size:.62rem;
+            letter-spacing:.2em;
+            color:var(--dim);
+            text-transform:uppercase;
+            margin-bottom:.6rem;
+        }
+        .access__grid{
+            display:grid;
+            grid-template-columns:repeat(2,1fr);
+            gap:.5rem;
+        }
+        .access__item{
+            display:flex;
+            align-items:center;
+            gap:.55rem;
+            font-size:.82rem;
+            color:var(--ink);
+            padding:.35rem .55rem;
+            background:white;
+            border:1px solid var(--card-edge);
+            border-radius:4px;
+        }
+        .access__dot{
+            width:8px;height:8px;border-radius:50%;
+            background:var(--accent2);
+            box-shadow:0 0 4px rgba(0,168,120,.6);
+            flex-shrink:0;
+        }
+        .access__item.denied .access__dot{background:var(--red);box-shadow:0 0 4px rgba(200,32,32,.6)}
+        .access__item a{color:var(--ink);text-decoration:none}
+        .access__item a:hover{color:var(--accent)}
+        .access__name{font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        .access__tag{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--dim);letter-spacing:.06em}
+
+        /* log */
+        .log{
+            margin:0 1.2rem;
+            padding:.8rem 0 0;
+        }
+        .log__title{
+            font-family:'JetBrains Mono',monospace;
+            font-size:.62rem;
+            letter-spacing:.2em;
+            color:var(--dim);
+            text-transform:uppercase;
+            margin-bottom:.4rem;
+        }
+        .log__entry{
+            display:grid;
+            grid-template-columns:auto 1fr;
+            gap:.7rem;
+            font-family:'JetBrains Mono',monospace;
+            font-size:.72rem;
+            padding:.2rem 0;
+            color:var(--ink);
+            border-bottom:1px dotted var(--card-edge);
+        }
+        .log__entry:last-child{border-bottom:none}
+        .log__time{color:var(--dim)}
+        .log__entry em{color:var(--accent);font-style:normal}
+
+        /* barcode + footer */
+        .badge__foot{
+            padding:1rem 1.2rem 1.2rem;
+            display:grid;
+            grid-template-columns:1fr auto;
+            align-items:center;
+            gap:1rem;
+            background:linear-gradient(0deg,#edeae4,transparent);
+        }
+        .barcode{
+            height:40px;
+            width:100%;
+            background:
+                repeating-linear-gradient(90deg,var(--ink) 0,var(--ink) 1px,transparent 1px,transparent 3px,var(--ink) 3px,var(--ink) 4px,transparent 4px,transparent 7px,var(--ink) 7px,var(--ink) 9px,transparent 9px,transparent 11px,var(--ink) 11px,var(--ink) 12px,transparent 12px,transparent 15px,var(--ink) 15px,var(--ink) 17px,transparent 17px,transparent 19px);
+            margin-bottom:.2rem;
+        }
+        .barcode-wrap{flex:1}
+        .barcode__num{
+            font-family:'JetBrains Mono',monospace;
+            font-size:.68rem;
+            letter-spacing:.15em;
+            color:var(--ink);
+            text-align:center;
+        }
+        .chip{
+            width:48px;height:36px;
+            background:linear-gradient(135deg,#d4b060 0%,#b08838 50%,#886828 100%);
+            border-radius:4px;
+            position:relative;
+            flex-shrink:0;
+            box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 1px 2px rgba(0,0,0,.2);
+        }
+        .chip::before,.chip::after{
+            content:'';position:absolute;left:4px;right:4px;
+            border:.8px solid rgba(0,0,0,.3);
+        }
+        .chip::before{top:6px;height:9px;border-bottom:none;border-radius:2px 2px 0 0}
+        .chip::after{bottom:6px;height:9px;border-top:none;border-radius:0 0 2px 2px}
+
+        /* holo overlay */
+        .holo{
+            position:absolute;
+            right:14px;top:58px;
+            width:52px;height:52px;
+            border-radius:50%;
+            background:conic-gradient(from 0deg,#ff00aa,#ffaa00,#00ffaa,#00aaff,#aa00ff,#ff00aa);
+            opacity:.22;
+            mix-blend-mode:screen;
+            pointer-events:none;
+            filter:blur(1px);
+            z-index:2;
+        }
+        .holo::after{
+            content:'NERDY';
+            position:absolute;inset:0;
+            display:flex;align-items:center;justify-content:center;
+            color:white;font-family:'JetBrains Mono',monospace;
+            font-size:.55rem;letter-spacing:.15em;
+            mix-blend-mode:difference;
+            font-weight:700;
+        }
+
+        .back-of-card{
+            margin-top:1.4rem;
+            background:rgba(244,242,238,.06);
+            border:1px solid rgba(255,255,255,.08);
+            border-radius:10px;
+            padding:1rem 1.2rem;
+            font-family:'JetBrains Mono',monospace;
+            font-size:.72rem;
+            line-height:1.7;
+            color:#a0b0d0;
+        }
+        .back-of-card strong{color:#e0e6f0;font-weight:500;letter-spacing:.05em}
+        .back-of-card a{color:#8ac0f0;text-decoration:underline;text-decoration-color:rgba(138,192,240,.3)}
+        .back-of-card ul{list-style:none}
+        .back-of-card li{padding:.15rem 0}
+        .back-of-card li::before{content:'>';color:var(--accent2);margin-right:.5rem}
+
+        @media(max-width:480px){
+            .badge__body{grid-template-columns:1fr;text-align:center}
+            .photo{margin:0 auto}
+            .access__grid{grid-template-columns:1fr}
+            .strap{height:140px}
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="lanyard">
+            <div class="strap">
+                <div class="strap__side"></div>
+                <div class="strap__side"></div>
+            </div>
+            <div class="clip"></div>
+        </div>
+
+        <article class="badge">
+            <header class="badge__head">
+                <div class="corp">
+                    <div class="corp__mark">N</div>
+                    <div class="corp__name">nerdy.nl &middot; one‑person collective</div>
+                </div>
+                <div class="auth">ACTIVE</div>
+                <div class="badge__title">Employee Identification</div>
+                <div class="badge__kind">All‑Access Pass</div>
+            </header>
+
+            <div class="badge__body">
+                <div class="photo">
+                    <span class="photo__glyph">🤓</span>
+                    <div class="photo__shine"></div>
+                </div>
+                <div class="info">
+                    <h1 class="info__name">Nerdy</h1>
+                    <div class="info__role">Senior Principal YAML Engineer</div>
+                    <p class="info__motto">“Building things nobody asked for, since 2018.”</p>
+                    <dl class="info__stats">
+                        <dt>ID&nbsp;NO.</dt><dd>NRDY‑0001</dd>
+                        <dt>DEPT.</dt><dd>Everything / Nothing</dd>
+                        <dt>MGR.</dt><dd>Self‑managed (disputed)</dd>
+                        <dt>SINCE</dt><dd>forever ·&nbsp; ongoing</dd>
+                    </dl>
+                </div>
+                <div class="holo"></div>
+            </div>
+
+            <section class="access">
+                <div class="access__title">Access Privileges &middot; Zones</div>
+                <div class="access__grid">
+                    <div class="access__item"><span class="access__dot"></span><span class="access__name"><a href="#">Nerdy Terminal</a></span><span class="access__tag">ZONE‑A</span></div>
+                    <div class="access__item"><span class="access__dot"></span><span class="access__name"><a href="#">k8s control plane</a></span><span class="access__tag">ZONE‑A</span></div>
+                    <div class="access__item"><span class="access__dot"></span><span class="access__name"><a href="#">MCP Gateway</a></span><span class="access__tag">ZONE‑B</span></div>
+                    <div class="access__item"><span class="access__dot"></span><span class="access__name"><a href="#">Pixel Tanks</a></span><span class="access__tag">PLAYROOM</span></div>
+                    <div class="access__item"><span class="access__dot"></span><span class="access__name"><a href="#">Workshop (basement)</a></span><span class="access__tag">SUB‑B</span></div>
+                    <div class="access__item"><span class="access__dot"></span><span class="access__name">Home Assistant / YAML</span><span class="access__tag">DOMESTIC</span></div>
+                    <div class="access__item"><span class="access__dot"></span><span class="access__name">Drum room · Mazu</span><span class="access__tag">LOUD</span></div>
+                    <div class="access__item denied"><span class="access__dot"></span><span class="access__name">Lyric writing</span><span class="access__tag">DENIED</span></div>
+                </div>
+            </section>
+
+            <section class="log">
+                <div class="log__title">Last 4 swipes</div>
+                <div class="log__entry"><span class="log__time">08:14</span><span>entered <em>terminal/session</em> — 9 tabs open</span></div>
+                <div class="log__entry"><span class="log__time">10:02</span><span>entered <em>k8s/prod</em> — muttered “GitOps”</span></div>
+                <div class="log__entry"><span class="log__time">13:47</span><span>entered <em>workshop</em> — sawdust +12%</span></div>
+                <div class="log__entry"><span class="log__time">22:11</span><span>entered <em>drum room</em> — neighbors opinion logged</span></div>
+            </section>
+
+            <footer class="badge__foot">
+                <div class="barcode-wrap">
+                    <div class="barcode"></div>
+                    <div class="barcode__num">NRDY 0001 ENIPO 2024 ∞</div>
+                </div>
+                <div class="chip" aria-label="chip"></div>
+            </footer>
+        </article>
+
+        <div class="back-of-card">
+            <div style="color:#6a7088;letter-spacing:.2em;font-size:.6rem;text-transform:uppercase;margin-bottom:.6rem">/* reverse side · conditions of use */</div>
+            <ul>
+                <li><strong>TBD —</strong> Personal productivity app. Captures, projects, tasks. No bells, no whistles.</li>
+                <li><strong>Dad × 3 —</strong> Three children. Do not care about clusters. Do care about smart lights.</li>
+                <li><strong>Band —</strong> Drums, instrumental stoner. Guitar: badly, but enthusiastically.</li>
+                <li><strong>Editorial —</strong> No blog. No thought leadership. Everything worth saying has been said by an LLM.</li>
+                <li><strong>Returns —</strong> If found, please return to <a href="https://github.com/enipo">github.com/enipo</a>.</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
