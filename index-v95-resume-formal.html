@@ -1,0 +1,1002 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Curriculum Vitae — Gertjan Bazuin (Nerdy)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet">
+<style>
+  /* ---------- design tokens ---------- */
+  :root {
+    --paper:       #fdfaf3;
+    --paper-edge:  #f1ebdc;
+    --ink:         #1a1816;
+    --ink-soft:    #3b342c;
+    --ink-faded:   #6e6557;
+    --rule:        #c9beac;
+    --rule-soft:   #e3dac4;
+    --accent:      #7a2d2d;        /* maroon — academic */
+    --accent-soft: #b46666;
+    --margin:      #8b7d63;        /* sepia margin notes */
+    --highlight:   #f5e4a8;        /* footnote yellow */
+    --shadow:      0 1px 2px rgba(40,30,15,.06), 0 18px 60px -22px rgba(40,30,15,.22);
+
+    --serif:    "EB Garamond", "Iowan Old Style", Georgia, serif;
+    --display:  "Cormorant Garamond", "EB Garamond", Georgia, serif;
+    --mono:     "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+    --leading:  1.55;
+    --measure:  64ch;
+    --page-pad: clamp(28px, 6vw, 84px);
+  }
+
+  /* ---------- reset ---------- */
+  *,*::before,*::after { box-sizing: border-box; }
+  html,body { margin:0; padding:0; }
+  html { background: linear-gradient(180deg,#e8dfc9 0%,#dccfb1 100%); color: var(--ink); }
+  body {
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: var(--leading);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "liga","kern","onum";
+    padding: clamp(16px, 4vw, 56px) clamp(8px, 2vw, 32px);
+    min-height: 100vh;
+  }
+
+  ::selection { background: var(--highlight); color: var(--ink); }
+
+  /* ---------- toolbar (above the page) ---------- */
+  .toolbar {
+    max-width: 880px;
+    margin: 0 auto 18px;
+    display:flex; gap:10px; align-items:center; justify-content:space-between;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: #3a3328;
+    letter-spacing:.02em;
+  }
+  .toolbar .doc {
+    background: rgba(255,255,255,.55);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(122,45,45,.18);
+    padding: 6px 10px; border-radius: 4px;
+  }
+  .toolbar button {
+    font-family: var(--mono); font-size:11.5px;
+    background: var(--ink); color: var(--paper);
+    border:0; padding:7px 12px; border-radius:4px;
+    cursor:pointer; letter-spacing:.04em;
+    transition: transform .12s ease, background .2s;
+  }
+  .toolbar button:hover { background: var(--accent); }
+  .toolbar button:active { transform: translateY(1px); }
+  .toolbar .meta { display:flex; gap:14px; align-items:center; }
+  .toolbar .meta span { opacity:.78; }
+  .toolbar .dot { width:7px; height:7px; border-radius:50%; background:var(--accent); display:inline-block; vertical-align:middle; margin-right:6px; }
+
+  /* ---------- the page ---------- */
+  .page {
+    background: var(--paper);
+    max-width: 880px;
+    margin: 0 auto;
+    padding: var(--page-pad);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--paper-edge);
+    position: relative;
+    overflow: hidden;
+  }
+  .page::before {
+    /* subtle paper grain */
+    content:""; position:absolute; inset:0; pointer-events:none; opacity:.35;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(120,90,30,.045) 0, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(60,40,10,.035) 0, transparent 45%);
+  }
+  .page::after {
+    /* corner mark */
+    content:""; position:absolute; left:var(--page-pad); right:var(--page-pad); top:calc(var(--page-pad) - 22px);
+    height:1px; background:var(--rule); opacity:.55;
+  }
+
+  /* ---------- title block ---------- */
+  .titleblock { text-align:center; padding: 24px 0 26px; position:relative; }
+  .titleblock .kicker {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .42em;
+    color: var(--ink-faded);
+    text-transform: uppercase;
+  }
+  .titleblock h1 {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(38px, 6.4vw, 62px);
+    line-height: 1.04;
+    margin: 12px 0 6px;
+    letter-spacing: -0.005em;
+  }
+  .titleblock h1 .amp { color: var(--accent); font-style:italic; }
+  .titleblock .subtitle {
+    font-style: italic;
+    font-size: 19px;
+    color: var(--ink-soft);
+    margin: 0 0 10px;
+  }
+  .titleblock .author {
+    font-family: var(--serif);
+    font-size: 15px;
+    color: var(--ink-faded);
+    font-variant: small-caps;
+    letter-spacing: .12em;
+  }
+  .titleblock .author a { color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent-soft); }
+  .titleblock .author a:hover { color: var(--ink); border-color: var(--ink); }
+  .titleblock .rule {
+    width: 64%; height: 1px; background: var(--rule);
+    margin: 22px auto 6px; position:relative;
+  }
+  .titleblock .rule::before, .titleblock .rule::after {
+    content:""; position:absolute; top:50%; width:8px; height:8px;
+    background: var(--paper); border:1px solid var(--rule);
+    transform: translateY(-50%) rotate(45deg);
+  }
+  .titleblock .rule::before { left:-4px; }
+  .titleblock .rule::after { right:-4px; }
+  .titleblock .compiled {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--ink-faded);
+    margin-top: 14px;
+    opacity: .8;
+  }
+  .titleblock .compiled em { font-style: normal; color: var(--accent); }
+
+  /* ---------- abstract ---------- */
+  .abstract {
+    max-width: 60ch; margin: 18px auto 28px;
+    padding: 12px 18px;
+    border-top: 1px solid var(--rule-soft);
+    border-bottom: 1px solid var(--rule-soft);
+    text-align: justify; hyphens: auto;
+  }
+  .abstract h3 {
+    font-variant: small-caps; letter-spacing:.16em;
+    text-align:center; font-weight:500; font-size:13px;
+    color: var(--ink-faded); margin: 0 0 8px;
+  }
+  .abstract p { margin:0; font-size: 15.5px; }
+
+  /* ---------- section ---------- */
+  section.cv-section { margin: 36px 0 24px; }
+  .sec-head {
+    display:flex; align-items:baseline; gap:14px;
+    border-bottom: 1px solid var(--ink); padding-bottom: 4px; margin-bottom: 14px;
+  }
+  .sec-head .num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 500;
+    letter-spacing: .04em;
+    min-width: 38px;
+  }
+  .sec-head h2 {
+    font-family: var(--display); font-weight: 700;
+    font-size: 24px; margin:0; letter-spacing: 0;
+    flex: 1;
+  }
+  .sec-head .anchor {
+    font-family: var(--mono); font-size: 10.5px;
+    color: var(--ink-faded); letter-spacing:.08em;
+  }
+
+  /* layout: main column + margin notes */
+  .body-grid {
+    display: grid;
+    grid-template-columns: 1fr 168px;
+    gap: 28px;
+  }
+  .body-grid .main { min-width: 0; }
+  .body-grid .margin {
+    font-family: var(--serif);
+    font-size: 12.5px; line-height: 1.45;
+    color: var(--margin); font-style: italic;
+    border-left: 1px solid var(--rule-soft);
+    padding-left: 14px;
+  }
+  .body-grid .margin .note {
+    margin-bottom: 12px;
+    transition: color .25s, transform .25s;
+  }
+  .body-grid .margin .note .lbl {
+    font-family: var(--mono);
+    font-style: normal;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing:.12em;
+    display:block; margin-bottom:2px;
+    text-transform: uppercase;
+  }
+  .body-grid .margin .note:hover { color: var(--ink); transform: translateX(-2px); }
+
+  @media (max-width: 720px) {
+    .body-grid { grid-template-columns: 1fr; }
+    .body-grid .margin { border-left:none; border-top:1px solid var(--rule-soft); padding: 10px 0 0; }
+  }
+
+  /* drop cap on first section paragraph */
+  .dropcap::first-letter {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 3.6em;
+    float: left;
+    line-height: .9;
+    padding: 4px 8px 0 0;
+    color: var(--accent);
+  }
+
+  /* ---------- entries (experience/education) ---------- */
+  .entry { margin-bottom: 16px; break-inside: avoid; }
+  .entry-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 12px; flex-wrap: wrap;
+  }
+  .entry-title {
+    font-weight: 600; font-size: 17px; color: var(--ink);
+  }
+  .entry-title em { color: var(--ink-soft); font-weight: 500; }
+  .entry-date {
+    font-family: var(--mono);
+    font-size: 11.5px; color: var(--ink-faded);
+    letter-spacing: .04em; white-space: nowrap;
+  }
+  .entry-org {
+    font-style: italic; color: var(--ink-soft);
+    font-size: 15px; margin-top: 1px;
+  }
+  .entry-desc { margin-top: 6px; text-align: justify; hyphens: auto; }
+  .entry-desc ul { margin: 6px 0 0; padding-left: 18px; }
+  .entry-desc li { margin-bottom: 2px; }
+
+  /* footnote markers */
+  sup.fn {
+    font-family: var(--serif);
+    font-size: .72em;
+    vertical-align: super;
+    color: var(--accent);
+    cursor: pointer;
+    padding: 0 2px;
+    border-radius: 2px;
+    transition: background .2s;
+  }
+  sup.fn:hover, sup.fn.active { background: var(--highlight); color: var(--ink); }
+
+  /* ---------- projects ---------- */
+  .project {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 14px;
+    align-items: baseline;
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--rule-soft);
+    cursor: pointer;
+  }
+  .project:last-child { border-bottom: 0; }
+  .project .pnum {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faded);
+    letter-spacing:.04em;
+  }
+  .project .pname {
+    font-weight: 600;
+    font-size: 16.5px;
+    font-feature-settings: "liga","kern";
+  }
+  .project .pname em {
+    font-weight: 500;
+    color: var(--ink-soft);
+    font-style: italic;
+    margin-left: 6px;
+  }
+  .project .pmeta {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--ink-faded);
+    text-transform: uppercase;
+    letter-spacing:.1em;
+  }
+  .project .pdesc {
+    grid-column: 2 / 4;
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    margin-top: 3px;
+    text-align: justify; hyphens: auto;
+    max-height: 0; overflow: hidden; opacity: 0;
+    transition: max-height .35s ease, opacity .25s ease, margin-top .2s;
+  }
+  .project[data-open="true"] .pdesc {
+    max-height: 200px; opacity: 1; margin-top: 6px;
+  }
+  .project[data-open="true"] .pname { color: var(--accent); }
+  .project:hover .pname { color: var(--accent); }
+
+  /* ---------- skills ---------- */
+  .skills {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px 28px;
+  }
+  @media (max-width: 720px) { .skills { grid-template-columns: 1fr; } }
+  .skill-row {
+    display: grid;
+    grid-template-columns: 100px 1fr auto;
+    gap: 10px; align-items: center;
+    padding: 4px 0;
+    border-bottom: 1px dotted var(--rule-soft);
+  }
+  .skill-row .lbl {
+    font-family: var(--mono); font-size: 11.5px;
+    color: var(--ink-faded); letter-spacing:.04em;
+    text-transform: uppercase;
+  }
+  .skill-row .bar {
+    height: 4px; background: var(--rule-soft); position: relative; overflow: hidden;
+    border-radius: 2px;
+  }
+  .skill-row .bar i {
+    position: absolute; left: 0; top: 0; bottom: 0;
+    background: var(--accent); width: 0; transition: width 1.2s cubic-bezier(.2,.7,.2,1);
+  }
+  .skill-row .pct {
+    font-family: var(--mono); font-size: 10.5px;
+    color: var(--ink-faded); min-width: 40px; text-align: right;
+  }
+  .stacks {
+    margin-top: 14px; font-family: var(--mono); font-size: 12px;
+    color: var(--ink-soft); line-height: 1.85;
+  }
+  .stacks .row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .stacks .tag {
+    border: 1px solid var(--rule); padding: 1px 7px; border-radius: 2px;
+    background: rgba(255,253,243,.6);
+    transition: all .15s;
+  }
+  .stacks .tag:hover { border-color: var(--accent); color: var(--accent); }
+  .stacks .label { color: var(--accent); font-weight:500; }
+
+  /* ---------- references / footnotes ---------- */
+  .footnotes {
+    margin-top: 38px; padding-top: 14px;
+    border-top: 1px solid var(--ink);
+    font-size: 13.5px;
+    color: var(--ink-soft);
+  }
+  .footnotes h4 {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .14em;
+    color: var(--ink-faded); text-transform: uppercase;
+    margin: 0 0 8px; font-weight: 500;
+  }
+  .footnotes ol { margin: 0; padding-left: 20px; }
+  .footnotes li {
+    margin-bottom: 6px; padding: 2px 4px; border-radius: 2px;
+    transition: background .25s;
+  }
+  .footnotes li.active { background: var(--highlight); }
+  .footnotes li code {
+    font-family: var(--mono); font-size: 12px;
+    background: rgba(122,45,45,.07); padding: 0 4px; border-radius: 2px;
+    color: var(--accent);
+  }
+
+  /* ---------- page footer ---------- */
+  .pagefoot {
+    margin-top: 38px; padding-top: 12px;
+    border-top: 1px solid var(--rule);
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: var(--mono); font-size: 10.5px;
+    color: var(--ink-faded); letter-spacing:.08em;
+  }
+  .pagefoot .center { font-style: italic; font-family: var(--serif); font-size: 12px; }
+  .pagefoot .center b { font-weight: 500; color: var(--accent); }
+
+  /* ---------- compile flash ---------- */
+  .page.compiling .body-grid > .main > * ,
+  .page.compiling section { animation: typeset .55s ease both; }
+  .page.compiling section:nth-child(2) { animation-delay: .04s; }
+  .page.compiling section:nth-child(3) { animation-delay: .08s; }
+  .page.compiling section:nth-child(4) { animation-delay: .12s; }
+  .page.compiling section:nth-child(5) { animation-delay: .16s; }
+  .page.compiling section:nth-child(6) { animation-delay: .20s; }
+  @keyframes typeset {
+    0%   { opacity: 0; filter: blur(2px); transform: translateY(4px); }
+    100% { opacity: 1; filter: blur(0);  transform: translateY(0); }
+  }
+
+  /* ---------- source modal ---------- */
+  .modal-back {
+    position: fixed; inset: 0; background: rgba(20,16,8,.55);
+    backdrop-filter: blur(3px);
+    display: none; align-items: center; justify-content: center;
+    z-index: 50; padding: 24px;
+  }
+  .modal-back.open { display: flex; }
+  .modal {
+    background: #1c1812; color: #f1ead8;
+    width: min(720px, 100%); max-height: 80vh; overflow: auto;
+    border-radius: 6px; border: 1px solid #3a2e20;
+    font-family: var(--mono); font-size: 12.5px; line-height: 1.55;
+    padding: 18px 22px;
+  }
+  .modal h5 {
+    margin: 0 0 12px; font-size: 11px; letter-spacing: .2em;
+    color: #c8a878; text-transform: uppercase;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .modal h5 button {
+    font-family: var(--mono); font-size: 11px;
+    background: transparent; color: #c8a878; border: 1px solid #5a4a30;
+    padding: 4px 10px; border-radius: 3px; cursor: pointer;
+  }
+  .modal h5 button:hover { background: #2a2218; color: #f1ead8; }
+  .modal pre { margin: 0; white-space: pre-wrap; word-break: break-word; }
+  .tex-c { color: #d99c5b; }     /* command */
+  .tex-b { color: #7faab7; }     /* braces */
+  .tex-s { color: #93b56a; }     /* string */
+  .tex-x { color: #888076; }     /* comment */
+
+  /* ---------- responsive tightening ---------- */
+  @media (max-width: 540px) {
+    body { font-size: 16px; padding: 8px; }
+    .titleblock h1 { font-size: 36px; }
+    .titleblock .subtitle { font-size: 16px; }
+    .sec-head h2 { font-size: 20px; }
+    .skill-row { grid-template-columns: 80px 1fr auto; }
+    .toolbar { flex-direction: column; gap:6px; align-items: stretch; }
+    .toolbar .meta { justify-content: space-between; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ====================================================================== -->
+<!-- TOOLBAR                                                                -->
+<!-- ====================================================================== -->
+<div class="toolbar" role="toolbar" aria-label="Document toolbar">
+  <div class="doc">
+    <span class="dot"></span>cv-nerdy.tex &nbsp;·&nbsp; <em style="font-style:italic">a4paper, 11pt, twoside</em>
+  </div>
+  <div class="meta">
+    <span>build: <em id="buildHash" style="font-style:normal">0x4e7d</em></span>
+    <button id="btnCompile" type="button" title="Re-typeset the document">↻ \compile</button>
+    <button id="btnSource" type="button" title="View .tex source">{ } source</button>
+  </div>
+</div>
+
+<!-- ====================================================================== -->
+<!-- PAGE                                                                   -->
+<!-- ====================================================================== -->
+<article class="page" id="page" aria-label="Curriculum Vitae">
+
+  <!-- ---------- title block ---------- -->
+  <header class="titleblock">
+    <div class="kicker">Curriculum Vitæ</div>
+    <h1>Gertjan <span class="amp">&amp;</span> Nerdy</h1>
+    <div class="subtitle">Putting the <span style="color:var(--accent)">Y</span> in nerdy &mdash; since approximately forever.</div>
+    <div class="author">
+      developer · infrastructure engineer · builder of bouwsels<br>
+      <a href="https://github.com/enipo" target="_blank" rel="noopener">github.com/enipo</a> &nbsp;·&nbsp;
+      <a href="https://nerdy.nl">nerdy.nl</a>
+    </div>
+    <div class="rule" aria-hidden="true"></div>
+    <div class="compiled">
+      typeset on <em id="todayDate">30 April 2026</em> &nbsp;·&nbsp; revision <em>v95</em> &nbsp;·&nbsp; <em>resume-formal</em> class
+    </div>
+  </header>
+
+  <!-- ---------- abstract ---------- -->
+  <div class="abstract">
+    <h3>— Abstract —</h3>
+    <p>
+      A short monograph documenting the professional output of one
+      <em>self-classified nerd</em>: terminals that respect the keyboard,
+      tanks rendered at low resolution, clusters that mostly stay up, and a
+      modest collection of bridges between language models and the rest of
+      the world. Years of experience: <em>many</em>. Yaks shaved: a similar
+      number.
+    </p>
+  </div>
+
+  <!-- ====================================================================== -->
+  <!-- §I  PROFILE                                                            -->
+  <!-- ====================================================================== -->
+  <section class="cv-section" id="sec-profile">
+    <div class="sec-head">
+      <div class="num">§ I.</div>
+      <h2>Profile</h2>
+      <div class="anchor">\label{sec:profile}</div>
+    </div>
+    <div class="body-grid">
+      <div class="main">
+        <p class="dropcap" style="text-align:justify;hyphens:auto">
+          Builder by inclination, infrastructure engineer by trade. Operates
+          comfortably across the stack &mdash; from <em>kernel-adjacent</em>
+          plumbing (Kubernetes, Terraform, Postgres) up to the user-visible
+          surfaces (TypeScript, terminals, small games)<sup class="fn" data-fn="1">1</sup>.
+          Recent work has concentrated on <em>agentic systems</em>: the tools,
+          gateways and protocols that allow language models to act on real
+          infrastructure without breaking it.
+        </p>
+        <p style="text-align:justify;hyphens:auto">
+          Prefers small, sharp tools to large frameworks; long-lived projects
+          to one-off scripts; and reproducible builds to demo magic. Will
+          happily justify a YAML refactor with the same gravity normally
+          reserved for refactoring a parser<sup class="fn" data-fn="2">2</sup>.
+        </p>
+      </div>
+      <aside class="margin">
+        <div class="note">
+          <span class="lbl">side-note A</span>
+          The author admits to occasional Lisp sympathies. These are managed.
+        </div>
+        <div class="note">
+          <span class="lbl">side-note B</span>
+          “Production” is a state of mind &mdash; usually somebody else’s.
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ====================================================================== -->
+  <!-- §II  EDUCATION                                                          -->
+  <!-- ====================================================================== -->
+  <section class="cv-section" id="sec-education">
+    <div class="sec-head">
+      <div class="num">§ II.</div>
+      <h2>Education</h2>
+      <div class="anchor">\label{sec:edu}</div>
+    </div>
+    <div class="body-grid">
+      <div class="main">
+
+        <div class="entry">
+          <div class="entry-head">
+            <div class="entry-title">Self-directed Studies, <em>Distributed Systems &amp; Cloud-Native Operations</em></div>
+            <div class="entry-date">2014 — present</div>
+          </div>
+          <div class="entry-org">Documentation, post-mortems, and the school of running things in production.</div>
+          <div class="entry-desc">
+            A continuing programme in the operation of clusters, the design of
+            reproducible infrastructure, and the etiquette of the on-call
+            rotation<sup class="fn" data-fn="3">3</sup>. Coursework includes
+            etcd recovery, certificate rotation, and the slow art of <em>not</em>
+            paging colleagues at three in the morning.
+          </div>
+        </div>
+
+        <div class="entry">
+          <div class="entry-head">
+            <div class="entry-title">Practical Doctorate, <em>YAML &amp; Adjacent Configuration Languages</em></div>
+            <div class="entry-date">2018 — present</div>
+          </div>
+          <div class="entry-org">Conferred by years of structured suffering.</div>
+          <div class="entry-desc">
+            Dissertation in progress: <em>“On the Indentation of Things,
+            and Other Costs.”</em>
+          </div>
+        </div>
+
+        <div class="entry">
+          <div class="entry-head">
+            <div class="entry-title">Earlier &amp; Foundational</div>
+            <div class="entry-date">prior</div>
+          </div>
+          <div class="entry-org">General computing &amp; engineering background; specifics on request.</div>
+        </div>
+
+      </div>
+      <aside class="margin">
+        <div class="note">
+          <span class="lbl">curriculum</span>
+          The honest <em>real</em> education happened after graduation, on weekends, and during outages.
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ====================================================================== -->
+  <!-- §III  EXPERIENCE                                                        -->
+  <!-- ====================================================================== -->
+  <section class="cv-section" id="sec-experience">
+    <div class="sec-head">
+      <div class="num">§ III.</div>
+      <h2>Experience</h2>
+      <div class="anchor">\label{sec:exp}</div>
+    </div>
+    <div class="body-grid">
+      <div class="main">
+
+        <div class="entry">
+          <div class="entry-head">
+            <div class="entry-title">Infrastructure Engineer &amp; Builder <em>(principal capacity)</em></div>
+            <div class="entry-date">ongoing</div>
+          </div>
+          <div class="entry-org">Multiple engagements, predominantly in energy &amp; agentic-AI domains.</div>
+          <div class="entry-desc">
+            <ul>
+              <li>Operates a multi-cluster Kubernetes estate (production, monitoring, AI, test) under a strict GitOps regime.</li>
+              <li>Designs and maintains a <em>Model Context Protocol gateway</em> that mediates between language models and a non-trivial set of internal systems<sup class="fn" data-fn="4">4</sup>.</li>
+              <li>Authors small, sharp tools &mdash; notably <em>Nerdy Terminal</em>, a multi-session terminal manager &mdash; in service of the keyboard-first life.</li>
+              <li>Conducts the occasional <em>game-development side-quest</em> when the production graphs are flat enough to allow it.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="entry">
+          <div class="entry-head">
+            <div class="entry-title">Senior Developer / Engineer <em>(prior roles)</em></div>
+            <div class="entry-date">earlier years</div>
+          </div>
+          <div class="entry-org">Backend systems, integrations, and the long tail of internal tooling.</div>
+          <div class="entry-desc">
+            Shipped and maintained services in TypeScript, Go and Python;
+            argued constructively about API design; learned, mostly the hard
+            way, that <em>observability</em> belongs in the first commit, not
+            the seventeenth.
+          </div>
+        </div>
+
+        <div class="entry">
+          <div class="entry-head">
+            <div class="entry-title">Home-Lab Resident Engineer <em>(unpaid, voluntary)</em></div>
+            <div class="entry-date">continuous</div>
+          </div>
+          <div class="entry-org">A modest cluster, a quantity of Zigbee, and one increasingly opinionated <em>Home Assistant</em> instance.</div>
+          <div class="entry-desc">
+            Reference architecture for everything described above, at the scale
+            of a single household. Uptime SLA: <em>best-effort, when the cat
+            permits.</em>
+          </div>
+        </div>
+
+      </div>
+      <aside class="margin">
+        <div class="note">
+          <span class="lbl">methodology</span>
+          Boring infrastructure is a feature, not a defect.
+        </div>
+        <div class="note">
+          <span class="lbl">on titles</span>
+          “Senior” is mostly a function of <em>years not panicking</em>.
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ====================================================================== -->
+  <!-- §IV  SELECTED PROJECTS                                                  -->
+  <!-- ====================================================================== -->
+  <section class="cv-section" id="sec-projects">
+    <div class="sec-head">
+      <div class="num">§ IV.</div>
+      <h2>Selected Projects</h2>
+      <div class="anchor">\label{sec:proj}</div>
+    </div>
+    <div class="body-grid">
+      <div class="main">
+
+        <div class="project" data-open="false">
+          <div class="pnum">[01]</div>
+          <div>
+            <div class="pname">Nerdy Terminal <em>— keyboard-first session manager (macOS)</em></div>
+          </div>
+          <div class="pmeta">TypeScript · Tauri</div>
+          <div class="pdesc">
+            A multi-session terminal that treats the keyboard as the primary
+            interface, the mouse as a polite fallback, and tabs as a problem
+            already solved by tmux. Optimised for parallel work across clusters.
+          </div>
+        </div>
+
+        <div class="project" data-open="false">
+          <div class="pnum">[02]</div>
+          <div>
+            <div class="pname">Pixel Tanks <em>— top-down low-res multiplayer</em></div>
+          </div>
+          <div class="pmeta">TypeScript · Canvas · WebSockets</div>
+          <div class="pdesc">
+            A small game in the lineage of the <em>arcade-by-night, garage-by-day</em>
+            tradition. Pixel art, deterministic netcode, four directions of
+            destruction, and surprisingly stubborn lag compensation.
+          </div>
+        </div>
+
+        <div class="project" data-open="false">
+          <div class="pnum">[03]</div>
+          <div>
+            <div class="pname">Kubernetes / GitOps Estate <em>— multi-cluster, production &amp; lab</em></div>
+          </div>
+          <div class="pmeta">Terraform · Argo · Helm</div>
+          <div class="pdesc">
+            A reproducible cluster topology with strict
+            infrastructure-as-code and continuous reconciliation. Survives
+            certificate rotation, node-pool churn and the occasional act of
+            nature.
+          </div>
+        </div>
+
+        <div class="project" data-open="false">
+          <div class="pnum">[04]</div>
+          <div>
+            <div class="pname">MCP Gateway <em>— bridge: LLM ↔ Slack · Jira · Postgres · Grafana · Tailscale</em></div>
+          </div>
+          <div class="pmeta">Go · MCP · OAuth</div>
+          <div class="pdesc">
+            A typed, audited gateway that exposes internal systems to language
+            models <em>through</em> a single trust boundary, rather than around
+            it. Designed to be boring to operate and hard to misuse.
+          </div>
+        </div>
+
+        <div class="project" data-open="false">
+          <div class="pnum">[05]</div>
+          <div>
+            <div class="pname">Home Assistant Configuration <em>— smart-home automation, in YAML, regrettably</em></div>
+          </div>
+          <div class="pmeta">YAML · Zigbee · MQTT</div>
+          <div class="pdesc">
+            A long-running automation graph: light, climate, presence, and the
+            careful avoidance of any switch that would inconvenience a
+            non-technical household member.
+          </div>
+        </div>
+
+        <div class="project" data-open="false">
+          <div class="pnum">[06]</div>
+          <div>
+            <div class="pname">TBD <em>— a productivity application, currently codenamed</em></div>
+          </div>
+          <div class="pmeta">in progress</div>
+          <div class="pdesc">
+            Captures, projects, tasks. Built around the observation that most
+            productivity tools optimise for the wrong verb. <em>More in the
+            footnotes</em><sup class="fn" data-fn="5">5</sup>.
+          </div>
+        </div>
+
+      </div>
+      <aside class="margin">
+        <div class="note">
+          <span class="lbl">on selection</span>
+          “Selected” is doing a lot of work in this heading.
+        </div>
+        <div class="note">
+          <span class="lbl">tip</span>
+          Click any entry above to expand the abstract.
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ====================================================================== -->
+  <!-- §V  TECHNICAL SKILLS                                                    -->
+  <!-- ====================================================================== -->
+  <section class="cv-section" id="sec-skills">
+    <div class="sec-head">
+      <div class="num">§ V.</div>
+      <h2>Technical Skills</h2>
+      <div class="anchor">\label{sec:skills}</div>
+    </div>
+    <div class="body-grid">
+      <div class="main">
+        <div class="skills">
+          <div class="skill-row"><span class="lbl">TypeScript</span><span class="bar"><i data-w="92"></i></span><span class="pct">— ofte</span></div>
+          <div class="skill-row"><span class="lbl">Go</span>        <span class="bar"><i data-w="80"></i></span><span class="pct">— saepe</span></div>
+          <div class="skill-row"><span class="lbl">Python</span>    <span class="bar"><i data-w="78"></i></span><span class="pct">— saepe</span></div>
+          <div class="skill-row"><span class="lbl">Kubernetes</span><span class="bar"><i data-w="90"></i></span><span class="pct">— ofte</span></div>
+          <div class="skill-row"><span class="lbl">Terraform</span> <span class="bar"><i data-w="84"></i></span><span class="pct">— saepe</span></div>
+          <div class="skill-row"><span class="lbl">Postgres</span>  <span class="bar"><i data-w="82"></i></span><span class="pct">— saepe</span></div>
+          <div class="skill-row"><span class="lbl">Redis</span>     <span class="bar"><i data-w="70"></i></span><span class="pct">— interdum</span></div>
+          <div class="skill-row"><span class="lbl">AI / LLMs</span> <span class="bar"><i data-w="88"></i></span><span class="pct">— ofte</span></div>
+          <div class="skill-row"><span class="lbl">MCP</span>       <span class="bar"><i data-w="86"></i></span><span class="pct">— ofte</span></div>
+          <div class="skill-row"><span class="lbl">YAML therapy</span><span class="bar"><i data-w="99"></i></span><span class="pct">— certe</span></div>
+        </div>
+
+        <div class="stacks">
+          <div class="row"><span class="label">/* runtimes */</span>
+            <span class="tag">node</span><span class="tag">bun</span>
+            <span class="tag">deno</span><span class="tag">wasm</span>
+            <span class="tag">python 3.12</span><span class="tag">go 1.22</span>
+          </div>
+          <div class="row"><span class="label">/* infra */</span>
+            <span class="tag">k8s</span><span class="tag">argo cd</span>
+            <span class="tag">helm</span><span class="tag">terraform</span>
+            <span class="tag">docker</span><span class="tag">tailscale</span>
+            <span class="tag">linux</span>
+          </div>
+          <div class="row"><span class="label">/* data */</span>
+            <span class="tag">postgres</span><span class="tag">redis</span>
+            <span class="tag">timescale</span><span class="tag">mqtt</span>
+          </div>
+          <div class="row"><span class="label">/* ai */</span>
+            <span class="tag">claude</span><span class="tag">gpt</span>
+            <span class="tag">mcp</span><span class="tag">embeddings</span>
+            <span class="tag">tool-use</span>
+          </div>
+          <div class="row"><span class="label">/* dispositions */</span>
+            <span class="tag">curiosity</span><span class="tag">low ego</span>
+            <span class="tag">finishability</span><span class="tag">naming things</span>
+          </div>
+        </div>
+      </div>
+      <aside class="margin">
+        <div class="note">
+          <span class="lbl">legend</span>
+          <em>ofte / saepe / interdum / certe</em> &mdash;
+          a Latin substitute for the meaningless <em>5/5</em>.
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ---------- footnotes / references ---------- -->
+  <div class="footnotes">
+    <h4>References &amp; Footnotes</h4>
+    <ol>
+      <li id="fn-1"><span>The boundary between “user-visible” and “kernel-adjacent” has been moving for years; the author no longer takes it personally. See <code>kubectl exec</code>, <code>tcpdump</code>, <em>passim</em>.</span></li>
+      <li id="fn-2"><span>YAML is, for better or worse, the lingua franca of operations. The refactor is sincere.</span></li>
+      <li id="fn-3"><span>The on-call rotation is the most expensive teacher most engineers will ever have.</span></li>
+      <li id="fn-4"><span>See <em>Anthropic, Model Context Protocol specification</em>, &amp; the unwritten internal documentation that makes it actually work.</span></li>
+      <li id="fn-5"><span>The codename is not <em>TBD</em> in the disrespectful sense; it is <em>TBD</em> as in <em>To Be Definitive</em>. Probably. Allegedly.</span></li>
+    </ol>
+  </div>
+
+  <!-- ---------- page footer ---------- -->
+  <div class="pagefoot">
+    <div>cv-nerdy.tex</div>
+    <div class="center">— <b>1</b> of <b>1</b> —</div>
+    <div>© mmxxvi · all rights cheerfully retained</div>
+  </div>
+
+</article>
+
+<!-- ====================================================================== -->
+<!-- LATEX SOURCE MODAL                                                     -->
+<!-- ====================================================================== -->
+<div class="modal-back" id="modalBack" role="dialog" aria-modal="true" aria-label="LaTeX source">
+  <div class="modal" id="modal">
+    <h5>
+      <span>cv-nerdy.tex &nbsp;·&nbsp; source</span>
+      <button id="btnCloseModal" type="button">close</button>
+    </h5>
+<pre id="texSrc"><span class="tex-x">% cv-nerdy.tex — Curriculum Vitae of Gertjan Bazuin (Nerdy)
+% compile: pdflatex cv-nerdy.tex   (twice, for the references)
+</span><span class="tex-c">\documentclass</span><span class="tex-b">[</span>11pt,a4paper,twoside<span class="tex-b">]{</span>cv-nerdy<span class="tex-b">}</span>
+<span class="tex-c">\usepackage</span><span class="tex-b">{</span>microtype,ebgaramond,jetbrainsmono<span class="tex-b">}</span>
+<span class="tex-c">\usepackage</span><span class="tex-b">{</span>understatement,smallcaps,marginnotes<span class="tex-b">}</span>
+
+<span class="tex-c">\title</span><span class="tex-b">{</span>Gertjan <span class="tex-c">\amp</span> Nerdy<span class="tex-b">}</span>
+<span class="tex-c">\subtitle</span><span class="tex-b">{</span>Putting the Y in nerdy.<span class="tex-b">}</span>
+<span class="tex-c">\author</span><span class="tex-b">{</span>github.com/enipo<span class="tex-b">}</span>
+<span class="tex-c">\date</span><span class="tex-b">{</span><span class="tex-c">\today</span><span class="tex-b">}</span>
+
+<span class="tex-c">\begin</span><span class="tex-b">{</span>document<span class="tex-b">}</span>
+<span class="tex-c">\maketitle</span>
+
+<span class="tex-c">\begin</span><span class="tex-b">{</span>abstract<span class="tex-b">}</span>
+A short monograph documenting the professional output of one
+self-classified nerd: terminals, tanks, clusters, gateways.
+<span class="tex-c">\end</span><span class="tex-b">{</span>abstract<span class="tex-b">}</span>
+
+<span class="tex-c">\section</span><span class="tex-b">{</span>Profile<span class="tex-b">}</span>           <span class="tex-c">\input</span><span class="tex-b">{</span>parts/profile<span class="tex-b">}</span>
+<span class="tex-c">\section</span><span class="tex-b">{</span>Education<span class="tex-b">}</span>         <span class="tex-c">\input</span><span class="tex-b">{</span>parts/education<span class="tex-b">}</span>
+<span class="tex-c">\section</span><span class="tex-b">{</span>Experience<span class="tex-b">}</span>        <span class="tex-c">\input</span><span class="tex-b">{</span>parts/experience<span class="tex-b">}</span>
+<span class="tex-c">\section</span><span class="tex-b">{</span>Selected Projects<span class="tex-b">}</span> <span class="tex-c">\input</span><span class="tex-b">{</span>parts/projects<span class="tex-b">}</span>
+<span class="tex-c">\section</span><span class="tex-b">{</span>Technical Skills<span class="tex-b">}</span>  <span class="tex-c">\input</span><span class="tex-b">{</span>parts/skills<span class="tex-b">}</span>
+
+<span class="tex-c">\bibliographystyle</span><span class="tex-b">{</span>plain<span class="tex-b">}</span>
+<span class="tex-c">\bibliography</span><span class="tex-b">{</span>references<span class="tex-b">}</span>
+
+<span class="tex-x">% built-in disclaimer: this CV typesets even when life does not.</span>
+<span class="tex-c">\end</span><span class="tex-b">{</span>document<span class="tex-b">}</span></pre>
+  </div>
+</div>
+
+<script>
+  /* ====================================================================== */
+  /*  small interactive layer                                                */
+  /* ====================================================================== */
+  (() => {
+    const $  = (s, r=document) => r.querySelector(s);
+    const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+
+    /* ---- today's date in title block ---------------------------------- */
+    const fmt = new Intl.DateTimeFormat('en-GB', { day:'numeric', month:'long', year:'numeric' });
+    const t = $('#todayDate'); if (t) t.textContent = fmt.format(new Date());
+
+    /* ---- random-ish build hash -------------------------------------- */
+    const hash = () => '0x' + Math.floor(Math.random()*0xffff).toString(16).padStart(4,'0');
+    const setHash = () => { const el = $('#buildHash'); if (el) el.textContent = hash(); };
+
+    /* ---- skill bars: animate widths on load + re-compile -------------- */
+    const animateBars = () => {
+      $$('.skill-row .bar i').forEach(i => {
+        i.style.width = '0';
+        const w = i.getAttribute('data-w') || '60';
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => { i.style.width = w + '%'; });
+        });
+      });
+    };
+    animateBars();
+
+    /* ---- compile button: re-typesets the page ------------------------ */
+    const compile = () => {
+      const page = $('#page');
+      page.classList.remove('compiling');
+      void page.offsetWidth;        /* reflow to restart animation */
+      page.classList.add('compiling');
+      setHash();
+      animateBars();
+      setTimeout(() => page.classList.remove('compiling'), 1200);
+    };
+    $('#btnCompile')?.addEventListener('click', compile);
+
+    /* ---- source modal -------------------------------------------- */
+    const back = $('#modalBack');
+    const openModal = () => { back.classList.add('open'); document.body.style.overflow='hidden'; };
+    const closeModal = () => { back.classList.remove('open'); document.body.style.overflow=''; };
+    $('#btnSource')?.addEventListener('click', openModal);
+    $('#btnCloseModal')?.addEventListener('click', closeModal);
+    back?.addEventListener('click', e => { if (e.target === back) closeModal(); });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeModal();
+      if (e.key.toLowerCase() === 'c' && (e.metaKey || e.ctrlKey) && e.shiftKey) { e.preventDefault(); compile(); }
+    });
+
+    /* ---- footnote bidirectional highlight ---------------------------- */
+    $$('sup.fn').forEach(sup => {
+      const id = sup.dataset.fn;
+      const li = $('#fn-' + id);
+      const activate = (on) => {
+        sup.classList.toggle('active', on);
+        if (li) li.classList.toggle('active', on);
+      };
+      sup.addEventListener('mouseenter', () => activate(true));
+      sup.addEventListener('mouseleave', () => activate(false));
+      sup.addEventListener('click', e => {
+        e.preventDefault();
+        if (li) {
+          li.scrollIntoView({ behavior:'smooth', block:'center' });
+          li.classList.add('active');
+          setTimeout(() => li.classList.remove('active'), 1600);
+        }
+      });
+    });
+
+    /* ---- project rows: click to expand abstract ---------------------- */
+    $$('.project').forEach(p => {
+      p.addEventListener('click', () => {
+        const open = p.dataset.open === 'true';
+        p.dataset.open = open ? 'false' : 'true';
+      });
+      p.setAttribute('role','button');
+      p.setAttribute('tabindex','0');
+      p.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); p.click(); }
+      });
+    });
+
+    /* ---- accessibility: announce compile ---------------------------- */
+    const live = document.createElement('div');
+    live.setAttribute('aria-live','polite'); live.setAttribute('role','status');
+    live.style.cssText = 'position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden';
+    document.body.appendChild(live);
+    $('#btnCompile')?.addEventListener('click', () => { live.textContent = 'Document recompiled.'; });
+  })();
+</script>
+</body>
+</html>
