@@ -1,0 +1,1383 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Nerdy — Series ∞ Pitch Deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #f4efe6;
+    --bg-alt:    #ebe4d4;
+    --ink:       #14110d;
+    --ink-soft:  #4a4438;
+    --muted:     #8a8170;
+    --rule:      #d8cfba;
+    --accent:    #ff5a1f;
+    --accent-2:  #2a6f5a;
+    --hot:       #c8311c;
+    --paper:     #fbf8f1;
+    --grid:      rgba(20,17,13,0.06);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-snap-type: y mandatory; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ------------------------------- chrome ------------------------------- */
+
+  .chrome {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 100;
+    mix-blend-mode: multiply;
+  }
+  .chrome > * { pointer-events: auto; }
+
+  .brand {
+    position: absolute;
+    top: 22px; left: 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .brand .dot {
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px rgba(255,90,31,0.18);
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 3px rgba(255,90,31,0.18); }
+    50%      { box-shadow: 0 0 0 6px rgba(255,90,31,0.05); }
+  }
+
+  .meta {
+    position: absolute;
+    top: 22px; right: 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    text-align: right;
+  }
+  .meta .counter {
+    color: var(--ink);
+    font-weight: 700;
+  }
+  .meta .counter b { color: var(--accent); }
+
+  .progress {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 3px;
+    background: var(--rule);
+  }
+  .progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent), var(--hot));
+    transition: width 240ms ease;
+  }
+
+  .nav-dots {
+    position: absolute;
+    right: 22px; top: 50%;
+    transform: translateY(-50%);
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .nav-dots button {
+    width: 10px; height: 10px;
+    border: 1.5px solid var(--ink-soft);
+    background: transparent;
+    border-radius: 50%;
+    padding: 0; cursor: pointer;
+    transition: all 200ms ease;
+  }
+  .nav-dots button:hover { border-color: var(--accent); transform: scale(1.2); }
+  .nav-dots button.is-active {
+    background: var(--accent);
+    border-color: var(--accent);
+    transform: scale(1.3);
+  }
+
+  .hint {
+    position: absolute;
+    bottom: 18px; left: 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex; gap: 14px;
+    transition: opacity 400ms ease;
+  }
+  .hint kbd {
+    font-family: inherit;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-bottom-width: 2px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    color: var(--ink);
+  }
+  .hint.is-faded { opacity: 0; }
+
+  /* ------------------------------- slides ------------------------------- */
+
+  .slide {
+    min-height: 100vh;
+    width: 100%;
+    padding: 80px 8vw 100px;
+    scroll-snap-align: start;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-bottom: 1px solid var(--rule);
+  }
+  .slide::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    opacity: 0.6;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+  }
+
+  .slide-num {
+    position: absolute;
+    top: 60px; left: 8vw;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .slide-num::before {
+    content: ''; width: 28px; height: 1px; background: var(--ink-soft);
+  }
+
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 22px;
+  }
+
+  h1, h2, h3 {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin: 0;
+  }
+  h1 { font-size: clamp(54px, 9vw, 132px); line-height: 0.95; }
+  h2 { font-size: clamp(38px, 5.4vw, 78px); line-height: 1.0; }
+  h3 { font-size: clamp(22px, 2.4vw, 32px); line-height: 1.2; }
+
+  .lede {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-style: italic;
+    font-size: clamp(20px, 2.2vw, 28px);
+    color: var(--ink-soft);
+    max-width: 50ch;
+    line-height: 1.4;
+  }
+
+  .grid-12 {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 24px;
+    width: 100%;
+  }
+
+  /* ------------------------------- slide 1 — title ------------------------------- */
+
+  .slide--title {
+    background: linear-gradient(180deg, var(--bg) 0%, var(--bg-alt) 100%);
+  }
+  .slide--title .stamp {
+    position: absolute;
+    top: 80px; right: 8vw;
+    width: 130px; height: 130px;
+    border: 2px solid var(--hot);
+    color: var(--hot);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.18em;
+    text-align: center;
+    text-transform: uppercase;
+    transform: rotate(-12deg);
+    line-height: 1.3;
+    opacity: 0.85;
+  }
+  .slide--title .stamp span { display: block; }
+  .slide--title .stamp b { font-size: 13px; font-weight: 700; letter-spacing: 0.2em; }
+
+  .title-block { max-width: 1100px; }
+  .title-block h1 {
+    font-size: clamp(72px, 14vw, 220px);
+    line-height: 0.86;
+    letter-spacing: -0.04em;
+  }
+  .title-block h1 i {
+    color: var(--accent);
+    font-style: italic;
+  }
+  .title-meta {
+    margin-top: 36px;
+    display: grid;
+    grid-template-columns: repeat(4, max-content);
+    gap: 36px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+  }
+  .title-meta dt {
+    color: var(--muted);
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    margin-bottom: 6px;
+  }
+  .title-meta dd { margin: 0; color: var(--ink); font-weight: 600; }
+
+  .tagline {
+    margin-top: 44px;
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: clamp(20px, 2vw, 26px);
+    color: var(--ink-soft);
+    border-left: 3px solid var(--accent);
+    padding-left: 18px;
+  }
+
+  /* ------------------------------- slide — problem ------------------------------- */
+
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin-top: 56px;
+  }
+  .stat {
+    border-top: 1px solid var(--ink);
+    padding-top: 18px;
+  }
+  .stat .num {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(48px, 6vw, 84px);
+    line-height: 1;
+    color: var(--ink);
+  }
+  .stat .num em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .stat .label {
+    margin-top: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .problem-list {
+    list-style: none;
+    padding: 0;
+    margin: 40px 0 0;
+    display: grid;
+    gap: 14px;
+    max-width: 720px;
+  }
+  .problem-list li {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(22px, 2.4vw, 32px);
+    line-height: 1.3;
+    color: var(--ink);
+    display: flex; align-items: baseline; gap: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px dashed var(--rule);
+  }
+  .problem-list li::before {
+    content: '✗';
+    color: var(--hot);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  /* ------------------------------- slide — solution ------------------------------- */
+
+  .slide--solution { background: var(--paper); }
+
+  .solution-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    align-items: start;
+    margin-top: 48px;
+  }
+  .principle-list {
+    list-style: none;
+    padding: 0; margin: 0;
+    display: grid; gap: 24px;
+  }
+  .principle {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+  .principle .pid {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    color: var(--muted);
+    border: 1px solid var(--ink);
+    padding: 6px 8px;
+    text-align: center;
+    background: var(--bg);
+  }
+  .principle h3 { font-size: 26px; margin-bottom: 6px; }
+  .principle p { margin: 0; color: var(--ink-soft); font-size: 15px; line-height: 1.55; }
+
+  .terminal {
+    background: #14110d;
+    color: #f4ead4;
+    border-radius: 8px;
+    padding: 18px 22px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    box-shadow: 0 24px 60px -20px rgba(0,0,0,0.45), 0 4px 0 var(--accent);
+    position: relative;
+    overflow: hidden;
+  }
+  .terminal::before {
+    content: '● ● ●';
+    position: absolute; top: 8px; left: 14px;
+    font-size: 9px; color: #4a4438; letter-spacing: 4px;
+  }
+  .terminal-body { margin-top: 22px; }
+  .terminal-body .prompt { color: var(--accent); }
+  .terminal-body .ok     { color: #88c87f; }
+  .terminal-body .warn   { color: #f4c47a; }
+  .terminal-body .dim    { color: #6a6354; }
+  .terminal-body .line   { display: block; }
+  .terminal-body .typed::after {
+    content: '▌';
+    color: var(--accent);
+    animation: blink 1s steps(2) infinite;
+    margin-left: 2px;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* ------------------------------- slide — why now ------------------------------- */
+
+  .timeline {
+    margin-top: 48px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-top: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+  }
+  .timeline-cell {
+    padding: 28px 22px;
+    border-right: 1px solid var(--rule);
+    position: relative;
+  }
+  .timeline-cell:last-child { border-right: none; }
+  .timeline-cell::before {
+    content: '';
+    position: absolute;
+    top: -7px; left: 22px;
+    width: 12px; height: 12px;
+    background: var(--bg);
+    border: 2px solid var(--ink);
+    border-radius: 50%;
+  }
+  .timeline-cell.now::before { background: var(--accent); }
+  .timeline-cell .yr {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .timeline-cell.now .yr { color: var(--accent); font-weight: 700; }
+  .timeline-cell h3 {
+    margin-top: 8px;
+    font-size: 22px;
+  }
+  .timeline-cell p {
+    margin: 8px 0 0;
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+
+  /* ------------------------------- slide — product ------------------------------- */
+
+  .slide--product { background: var(--bg-alt); }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: auto auto;
+    gap: 16px;
+    margin-top: 44px;
+  }
+  .product {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    padding: 22px 22px 24px;
+    display: flex; flex-direction: column;
+    transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .product:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+    box-shadow: 0 16px 32px -16px rgba(20,17,13,0.25);
+  }
+  .product::after {
+    content: '↗';
+    position: absolute; top: 18px; right: 18px;
+    color: var(--muted);
+    font-size: 14px;
+    transition: color 200ms;
+  }
+  .product:hover::after { color: var(--accent); }
+  .product.span-2 { grid-column: span 2; }
+  .product.span-3 { grid-column: span 3; }
+  .product .ptype {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .product h3 {
+    font-size: 26px;
+    margin: 8px 0 6px;
+  }
+  .product p {
+    color: var(--ink-soft);
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0 0 14px;
+    flex: 1;
+  }
+  .product .ptags {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-soft);
+  }
+  .product .ptags span {
+    border: 1px solid var(--rule);
+    padding: 3px 7px;
+    border-radius: 3px;
+  }
+  .product .ascii {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 1.0;
+    white-space: pre;
+    margin: 12px 0;
+    opacity: 0.7;
+  }
+
+  /* ------------------------------- slide — traction ------------------------------- */
+
+  .traction {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 56px;
+    align-items: end;
+  }
+
+  .chart {
+    border: 1px solid var(--rule);
+    background: var(--paper);
+    padding: 28px;
+    position: relative;
+  }
+  .chart-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 18px;
+    display: flex; justify-content: space-between;
+  }
+  .chart svg { display: block; width: 100%; height: auto; }
+  .chart-axis {
+    margin-top: 8px;
+    display: flex; justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  .kpi-grid { display: grid; gap: 14px; }
+  .kpi {
+    border-left: 3px solid var(--accent);
+    padding: 4px 0 4px 16px;
+  }
+  .kpi .v {
+    font-family: 'Instrument Serif', serif;
+    font-size: 44px;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .kpi .l {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .kpi .delta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent-2);
+    font-weight: 700;
+    margin-left: 6px;
+  }
+
+  /* ------------------------------- slide — stack ------------------------------- */
+
+  .stack-rows { margin-top: 44px; display: grid; gap: 20px; }
+  .stack-row {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 28px;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .stack-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .stack-tags {
+    display: flex; flex-wrap: wrap; gap: 8px 12px;
+    font-family: 'Inter', sans-serif;
+  }
+  .stack-tags span {
+    font-size: 14px;
+    color: var(--ink);
+    padding: 6px 12px;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 100px;
+    transition: all 180ms ease;
+    cursor: default;
+  }
+  .stack-tags span:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-1px);
+  }
+  .stack-tags span.hot {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+
+  /* ------------------------------- slide — team ------------------------------- */
+
+  .slide--team { background: var(--paper); }
+
+  .team-card {
+    margin-top: 44px;
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 48px;
+    max-width: 980px;
+    align-items: start;
+  }
+  .avatar {
+    width: 200px; height: 240px;
+    background: var(--ink);
+    color: var(--paper);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Instrument Serif', serif;
+    font-size: 140px;
+    line-height: 1;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar::after {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border: 1px solid rgba(244,234,212,0.2);
+    pointer-events: none;
+  }
+  .avatar i {
+    color: var(--accent);
+    font-style: italic;
+  }
+  .team-info h3 { font-size: 38px; margin-bottom: 4px; }
+  .team-info .role {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
+  }
+  .team-info p {
+    font-family: 'Instrument Serif', serif;
+    font-size: 19px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    margin: 0 0 16px;
+    max-width: 56ch;
+  }
+  .team-info .bullets {
+    list-style: none; padding: 0; margin: 24px 0 0;
+    display: grid; gap: 8px;
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .team-info .bullets li {
+    display: flex; align-items: baseline; gap: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+  }
+  .team-info .bullets li::before {
+    content: '▸';
+    color: var(--accent);
+  }
+
+  /* ------------------------------- slide — moat ------------------------------- */
+
+  .moat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+    margin-top: 48px;
+  }
+  .moat-card {
+    border: 1px solid var(--ink);
+    padding: 28px;
+    background: var(--paper);
+    position: relative;
+  }
+  .moat-card .mn {
+    position: absolute;
+    top: -1px; right: -1px;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 4px 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+  }
+  .moat-card h3 { font-size: 28px; margin-bottom: 12px; }
+  .moat-card p {
+    color: var(--ink-soft);
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  /* ------------------------------- slide — ask ------------------------------- */
+
+  .slide--ask {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .slide--ask::before {
+    background-image:
+      linear-gradient(rgba(244,234,212,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(244,234,212,0.04) 1px, transparent 1px);
+  }
+  .slide--ask .slide-num,
+  .slide--ask .eyebrow,
+  .slide--ask h1, .slide--ask h2, .slide--ask h3 { color: var(--paper); }
+  .slide--ask .eyebrow { color: var(--accent); }
+
+  .ask-block { max-width: 900px; }
+  .ask-block h2 {
+    font-size: clamp(48px, 7vw, 96px);
+    margin-bottom: 28px;
+  }
+  .ask-block h2 i { color: var(--accent); font-style: italic; }
+
+  .ask-list {
+    list-style: none; padding: 0; margin: 32px 0 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border-top: 1px solid rgba(244,234,212,0.18);
+  }
+  .ask-list li {
+    padding: 22px 22px 22px 0;
+    border-bottom: 1px solid rgba(244,234,212,0.18);
+    border-right: 1px solid rgba(244,234,212,0.18);
+  }
+  .ask-list li:last-child { border-right: none; }
+  .ask-list li:nth-child(3n) { border-right: none; }
+  .ask-list li:nth-child(n+4) { padding-left: 22px; }
+  .ask-list .lab {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .ask-list h3 {
+    font-size: 22px;
+    color: var(--paper);
+  }
+
+  .contact {
+    margin-top: 56px;
+    display: flex; flex-wrap: wrap; gap: 20px;
+    align-items: center;
+  }
+  .contact a {
+    color: var(--paper);
+    border: 1px solid rgba(244,234,212,0.4);
+    padding: 14px 22px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 200ms ease;
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .contact a:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--ink);
+  }
+  .contact a .ar { font-size: 16px; transition: transform 200ms; }
+  .contact a:hover .ar { transform: translate(2px, -2px); }
+
+  /* ------------------------------- slide — closing ------------------------------- */
+
+  .slide--end {
+    background: var(--bg);
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+  }
+  .slide--end .end-mark {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: clamp(120px, 22vw, 320px);
+    line-height: 1;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .slide--end .end-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.36em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .slide--end .end-sig {
+    margin-top: 56px;
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: var(--ink);
+  }
+
+  /* ------------------------------- responsive ------------------------------- */
+
+  @media (max-width: 900px) {
+    .slide { padding: 90px 6vw 90px; }
+    .nav-dots { display: none; }
+    .stat-row { grid-template-columns: 1fr; gap: 18px; }
+    .solution-grid { grid-template-columns: 1fr; gap: 32px; }
+    .timeline { grid-template-columns: 1fr 1fr; }
+    .timeline-cell:nth-child(2) { border-right: none; }
+    .product-grid { grid-template-columns: 1fr 1fr; }
+    .product.span-2, .product.span-3 { grid-column: span 2; }
+    .traction { grid-template-columns: 1fr; gap: 32px; }
+    .stack-row { grid-template-columns: 1fr; gap: 8px; }
+    .team-card { grid-template-columns: 1fr; gap: 28px; }
+    .avatar { width: 140px; height: 170px; font-size: 100px; }
+    .moat-grid { grid-template-columns: 1fr; }
+    .ask-list { grid-template-columns: 1fr; }
+    .ask-list li, .ask-list li:nth-child(n+4) { padding: 22px 0; border-right: none; }
+    .title-meta { grid-template-columns: 1fr 1fr; gap: 20px; }
+    .meta { font-size: 9px; right: 20px; top: 18px; }
+    .brand { font-size: 9px; left: 20px; top: 18px; }
+    .slide--title .stamp { width: 86px; height: 86px; font-size: 8px; right: 6vw; top: 56px; }
+    .slide--title .stamp b { font-size: 10px; }
+  }
+
+  @media (max-width: 480px) {
+    .product-grid { grid-template-columns: 1fr; }
+    .product.span-2, .product.span-3 { grid-column: span 1; }
+    h1 { font-size: 56px !important; }
+    .title-meta { grid-template-columns: 1fr; }
+  }
+
+  /* reveal anim */
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 700ms ease, transform 700ms ease; }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .brand .dot { animation: none; }
+    .terminal-body .typed::after { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="chrome" aria-hidden="true">
+  <div class="brand">
+    <span class="dot"></span>
+    <span>Nerdy / pitch deck v∞</span>
+  </div>
+  <div class="meta">
+    <div>Confidential — for prospective collaborators</div>
+    <div class="counter"><b id="cnow">01</b> / <span id="ctot">11</span></div>
+  </div>
+  <div class="nav-dots" id="nav"></div>
+  <div class="hint" id="hint">
+    <span><kbd>↓</kbd> next</span>
+    <span><kbd>↑</kbd> prev</span>
+    <span><kbd>1–9</kbd> jump</span>
+  </div>
+  <div class="progress"><div class="progress-bar" id="bar"></div></div>
+</div>
+
+<!-- ============================== 01 — title ============================== -->
+<section class="slide slide--title" id="s1" data-title="Cover">
+  <div class="slide-num">01 / cover</div>
+  <div class="stamp"><div><span>Series</span><b>∞</b><span>Round</span></div></div>
+  <div class="title-block">
+    <div class="eyebrow">// Pitch Deck — 2026 Edition</div>
+    <h1>Putting the<br><i>Y</i> in <i>Nerdy</i>.</h1>
+    <dl class="title-meta">
+      <div><dt>Product</dt><dd>nerdy.nl</dd></div>
+      <div><dt>Founder</dt><dd>Gertjan B.</dd></div>
+      <div><dt>Stage</dt><dd>Shipping</dd></div>
+      <div><dt>HQ</dt><dd>The Internet</dd></div>
+    </dl>
+    <p class="tagline">A one-person studio for keyboard-first software, AI plumbing, and infrastructure that quietly does the right thing.</p>
+  </div>
+</section>
+
+<!-- ============================== 02 — problem ============================== -->
+<section class="slide" id="s2" data-title="Problem">
+  <div class="slide-num">02 / problem</div>
+  <div class="eyebrow">// The market is broken</div>
+  <h2>Software got bigger.<br>It did not get <i>better</i>.</h2>
+  <p class="lede" style="margin-top:24px">Every tool wants 30 minutes of onboarding, a subscription, and your attention. Most don't survive a Tuesday.</p>
+
+  <ul class="problem-list">
+    <li>Productivity SaaS sprawl — 14 tabs, one task done.</li>
+    <li>AI demos that wow once, then ship as toys.</li>
+    <li>"Cloud-native" infra you can't actually reproduce.</li>
+    <li>Ops dashboards built for screenshots, not for fixing things.</li>
+  </ul>
+
+  <div class="stat-row">
+    <div class="stat">
+      <div class="num"><em>312</em>min</div>
+      <div class="label">Avg time/day spent context-switching between SaaS tools</div>
+    </div>
+    <div class="stat">
+      <div class="num"><em>74</em>%</div>
+      <div class="label">Of "AI integrations" that never make it past the demo</div>
+    </div>
+    <div class="stat">
+      <div class="num"><em>1</em>tab</div>
+      <div class="label">A keyboard-shortcut away from doing the actual work</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== 03 — solution ============================== -->
+<section class="slide slide--solution" id="s3" data-title="Solution">
+  <div class="slide-num">03 / solution</div>
+  <div class="eyebrow">// What we build instead</div>
+  <h2>Small tools.<br>Built sharp.<br>Wired together.</h2>
+
+  <div class="solution-grid">
+    <ul class="principle-list">
+      <li class="principle">
+        <div class="pid">P/01</div>
+        <div>
+          <h3>Keyboard-first, mouse-optional</h3>
+          <p>Every interaction reachable in under three keystrokes. Your hands stay on home row; the software works around you.</p>
+        </div>
+      </li>
+      <li class="principle">
+        <div class="pid">P/02</div>
+        <div>
+          <h3>Bring your own brain</h3>
+          <p>AI as a power tool, not a personality. Local-first when possible, MCP plumbing for the rest.</p>
+        </div>
+      </li>
+      <li class="principle">
+        <div class="pid">P/03</div>
+        <div>
+          <h3>Ship the boring layer</h3>
+          <p>Kubernetes, Terraform, observability — done once, done well, then ignored. The fun lives upstream.</p>
+        </div>
+      </li>
+      <li class="principle">
+        <div class="pid">P/04</div>
+        <div>
+          <h3>Own the whole stack</h3>
+          <p>Frontend to packet. Less context, more leverage. One brain holds the model end-to-end.</p>
+        </div>
+      </li>
+    </ul>
+
+    <div class="terminal" aria-label="Demo terminal">
+      <div class="terminal-body">
+        <span class="line"><span class="prompt">nerdy ›</span> tm sessions</span>
+        <span class="line"><span class="dim">→</span> 12 active · 3 babysitting · 0 stuck</span>
+        <span class="line"><span class="prompt">nerdy ›</span> mcp call slack.post --channel #ship</span>
+        <span class="line"><span class="ok">✓ posted</span> <span class="dim">(284ms)</span></span>
+        <span class="line"><span class="prompt">nerdy ›</span> kubectl apply -k clusters/k81xw</span>
+        <span class="line"><span class="ok">✓ 14 resources reconciled</span></span>
+        <span class="line"><span class="prompt">nerdy ›</span> ha run pixel-tanks --players 4</span>
+        <span class="line"><span class="warn">⏳ booting low-res arena…</span></span>
+        <span class="line"><span class="ok">✓ ready on :7777</span></span>
+        <span class="line typed"><span class="prompt">nerdy ›</span> </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== 04 — why now ============================== -->
+<section class="slide" id="s4" data-title="Why Now">
+  <div class="slide-num">04 / why now</div>
+  <div class="eyebrow">// Timing matters</div>
+  <h2>Why this works now.</h2>
+  <p class="lede" style="margin-top:24px">Three curves crossed in the last 18 months. The cost of building has collapsed. The cost of integrating just did the same. Distribution stayed roughly free.</p>
+
+  <div class="timeline">
+    <div class="timeline-cell">
+      <div class="yr">2018 — context</div>
+      <h3>Containers everywhere</h3>
+      <p>Kubernetes wins. One person can run a fleet, not just a server. Infrastructure stops being a team sport.</p>
+    </div>
+    <div class="timeline-cell">
+      <div class="yr">2022</div>
+      <h3>LLMs go general</h3>
+      <p>Code generation crosses the "actually useful" line. The bottleneck moves from typing to taste.</p>
+    </div>
+    <div class="timeline-cell">
+      <div class="yr">2024</div>
+      <h3>MCP standardizes</h3>
+      <p>Agents finally speak the same protocol as your tools. Glue code becomes a config file.</p>
+    </div>
+    <div class="timeline-cell now">
+      <div class="yr">2026 — now</div>
+      <h3>One nerd, full stack</h3>
+      <p>Solo builders ship what used to take a team. Leverage is no longer scarce; conviction is.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== 05 — product ============================== -->
+<section class="slide slide--product" id="s5" data-title="Product">
+  <div class="slide-num">05 / product</div>
+  <div class="eyebrow">// What's already shipping</div>
+  <h2>The portfolio.</h2>
+  <p class="lede" style="margin-top:18px">Six products, one operator. Every one is in production — used daily, monitored, on-call.</p>
+
+  <div class="product-grid">
+    <div class="product span-2">
+      <span class="ptype">P/01 — Tool</span>
+      <h3>Nerdy Terminal</h3>
+      <p>Keyboard-first multi-session terminal manager for macOS. Babysit, peek, dispatch — agents and humans, same interface.</p>
+      <div class="ptags"><span>Go</span><span>Bubble Tea</span><span>tmux</span><span>macOS</span></div>
+    </div>
+    <div class="product span-2">
+      <span class="ptype">P/02 — Plumbing</span>
+      <h3>MCP Gateway</h3>
+      <p>One protocol, every tool. Bridges agents to Slack, Jira, Postgres, Grafana, Tailscale — auth, audit, retry baked in.</p>
+      <div class="ptags"><span>TypeScript</span><span>MCP</span><span>OAuth</span><span>Postgres</span></div>
+    </div>
+    <div class="product span-2">
+      <span class="ptype">P/03 — Game</span>
+      <h3>Pixel Tanks</h3>
+      <p>Top-down 8-player tank battle. Authoritative server, sub-100ms ticks, low-res on purpose. Built to make latency visible.</p>
+      <div class="ptags"><span>Go</span><span>WebSocket</span><span>Canvas</span><span>Netcode</span></div>
+    </div>
+    <div class="product span-3">
+      <span class="ptype">P/04 — Infrastructure</span>
+      <h3>Multi-cluster Kubernetes</h3>
+      <p>Five clusters, one GitOps repo. Production, monitoring, AI, test — declarative all the way down. Sleep-grade reliable.</p>
+      <div class="ptags"><span>Kubernetes</span><span>Flux</span><span>Terraform</span><span>Cilium</span><span>Prometheus</span></div>
+    </div>
+    <div class="product span-3">
+      <span class="ptype">P/05 — Productivity</span>
+      <h3>TBD</h3>
+      <p>One-keystroke capture. Projects, tasks, threads, notes — under one roof, offline-first, opinionated about what stays.</p>
+      <div class="ptags"><span>Swift</span><span>SQLite</span><span>Local-first</span><span>iCloud</span></div>
+    </div>
+    <div class="product span-2">
+      <span class="ptype">P/06 — Home</span>
+      <h3>Home Assistant</h3>
+      <p>Zigbee mesh, YAML automations, presence. Every light, lock, and sensor under one roof — no clouds required.</p>
+      <div class="ptags"><span>Home Assistant</span><span>Zigbee</span><span>YAML</span><span>MQTT</span></div>
+    </div>
+    <div class="product span-2">
+      <span class="ptype">P/07 — Plumbing</span>
+      <h3>Observability stack</h3>
+      <p>Prometheus, Loki, Tempo, Grafana — wired so problems find you, not the other way around. Alerts that earn their keep.</p>
+      <div class="ptags"><span>Prometheus</span><span>Loki</span><span>Tempo</span><span>Grafana</span></div>
+    </div>
+    <div class="product span-2">
+      <span class="ptype">P/08 — Lab</span>
+      <h3>Side experiments</h3>
+      <p>Whatever's interesting this week. CRDTs, ray tracers, BPF probes, retro consoles. Most never ship — that's the point.</p>
+      <div class="ptags"><span>C</span><span>Rust</span><span>WebGPU</span><span>BPF</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== 06 — traction ============================== -->
+<section class="slide" id="s6" data-title="Traction">
+  <div class="slide-num">06 / traction</div>
+  <div class="eyebrow">// Receipts</div>
+  <h2>Things that go up<br>and to the right.</h2>
+
+  <div class="traction">
+    <div class="chart" aria-label="Cumulative commits chart">
+      <div class="chart-title"><span>Cumulative commits — last 12 months</span><span>↑ 38% YoY</span></div>
+      <svg viewBox="0 0 600 220" preserveAspectRatio="none" role="img">
+        <defs>
+          <linearGradient id="g1" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stop-color="#ff5a1f" stop-opacity="0.35"/>
+            <stop offset="100%" stop-color="#ff5a1f" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <g stroke="#d8cfba" stroke-dasharray="3 3">
+          <line x1="0" y1="44"  x2="600" y2="44"/>
+          <line x1="0" y1="88"  x2="600" y2="88"/>
+          <line x1="0" y1="132" x2="600" y2="132"/>
+          <line x1="0" y1="176" x2="600" y2="176"/>
+        </g>
+        <path d="M 0,200 L 50,192 L 100,178 L 150,160 L 200,148 L 250,130 L 300,118 L 350,96 L 400,82 L 450,60 L 500,42 L 550,28 L 600,16 L 600,220 L 0,220 Z"
+              fill="url(#g1)"/>
+        <path d="M 0,200 L 50,192 L 100,178 L 150,160 L 200,148 L 250,130 L 300,118 L 350,96 L 400,82 L 450,60 L 500,42 L 550,28 L 600,16"
+              fill="none" stroke="#ff5a1f" stroke-width="2.5"/>
+        <g fill="#14110d">
+          <circle cx="600" cy="16" r="4"/>
+        </g>
+        <text x="588" y="11" font-family="JetBrains Mono" font-size="10" fill="#14110d" text-anchor="end">14.2k</text>
+      </svg>
+      <div class="chart-axis">
+        <span>2025-05</span><span>2025-08</span><span>2025-11</span><span>2026-02</span><span>now</span>
+      </div>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi"><div class="v">14.2k<span class="delta">+38%</span></div><div class="l">Commits / 12 mo</div></div>
+      <div class="kpi"><div class="v">99.94%</div><div class="l">Cluster uptime / quarter</div></div>
+      <div class="kpi"><div class="v">0</div><div class="l">Pages woken at 3am</div></div>
+      <div class="kpi"><div class="v">∞</div><div class="l">Years of experience</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== 07 — moat ============================== -->
+<section class="slide" id="s7" data-title="Moat">
+  <div class="slide-num">07 / unfair advantage</div>
+  <div class="eyebrow">// Why this is hard to copy</div>
+  <h2>The moat is<br><i>taste × throughput</i>.</h2>
+  <p class="lede" style="margin-top:18px">A compounding combination: opinionated defaults, a personal toolchain that erases setup, and the discipline to delete more than you ship.</p>
+
+  <div class="moat-grid">
+    <div class="moat-card">
+      <span class="mn">M/01</span>
+      <h3>The toolchain compounds</h3>
+      <p>Every project sharpens the next. A new product spins up in hours, not weeks, because the boring layer is already paid for.</p>
+    </div>
+    <div class="moat-card">
+      <span class="mn">M/02</span>
+      <h3>End-to-end ownership</h3>
+      <p>One brain holds frontend, backend, infra, and ops. No handoff cost. The decision and the diff happen in the same tab.</p>
+    </div>
+    <div class="moat-card">
+      <span class="mn">M/03</span>
+      <h3>Opinionated defaults</h3>
+      <p>Strong taste rules out 80% of the design space upfront. What survives is small, fast, and doesn't apologize for itself.</p>
+    </div>
+    <div class="moat-card">
+      <span class="mn">M/04</span>
+      <h3>Discipline to delete</h3>
+      <p>The product gets better the more you remove. Shipping less is shipping a moat — competitors keep adding features.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== 08 — stack ============================== -->
+<section class="slide slide--solution" id="s8" data-title="Stack">
+  <div class="slide-num">08 / the stack</div>
+  <div class="eyebrow">// Tools of the trade</div>
+  <h2>Boring on purpose.</h2>
+  <p class="lede" style="margin-top:18px">Every tool below has earned its slot through a 2am incident. Hot picks are the ones currently doing real work.</p>
+
+  <div class="stack-rows">
+    <div class="stack-row">
+      <div class="stack-label">Languages</div>
+      <div class="stack-tags">
+        <span class="hot">TypeScript</span><span class="hot">Go</span><span>Python</span><span>Rust</span><span>Swift</span><span>SQL</span><span>Bash</span>
+      </div>
+    </div>
+    <div class="stack-row">
+      <div class="stack-label">Frontend</div>
+      <div class="stack-tags">
+        <span class="hot">React</span><span>Next.js</span><span>Vite</span><span>Tailwind</span><span>Bubble Tea</span><span>SwiftUI</span>
+      </div>
+    </div>
+    <div class="stack-row">
+      <div class="stack-label">Backend</div>
+      <div class="stack-tags">
+        <span class="hot">Postgres</span><span class="hot">Redis</span><span>NATS</span><span>FastAPI</span><span>Hono</span><span>gRPC</span>
+      </div>
+    </div>
+    <div class="stack-row">
+      <div class="stack-label">Infrastructure</div>
+      <div class="stack-tags">
+        <span class="hot">Kubernetes</span><span class="hot">Terraform</span><span>Flux</span><span>ArgoCD</span><span>Cilium</span><span>Tailscale</span>
+      </div>
+    </div>
+    <div class="stack-row">
+      <div class="stack-label">Observability</div>
+      <div class="stack-tags">
+        <span class="hot">Prometheus</span><span>Grafana</span><span>Loki</span><span>Tempo</span><span>OpenTelemetry</span>
+      </div>
+    </div>
+    <div class="stack-row">
+      <div class="stack-label">AI / ML</div>
+      <div class="stack-tags">
+        <span class="hot">Claude</span><span class="hot">MCP</span><span>OpenAI</span><span>llama.cpp</span><span>Ollama</span><span>pgvector</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== 09 — team ============================== -->
+<section class="slide slide--team" id="s9" data-title="Team">
+  <div class="slide-num">09 / team</div>
+  <div class="eyebrow">// The nerd in question</div>
+  <h2>Founder, engineer,<br>and entire org chart.</h2>
+
+  <div class="team-card">
+    <div class="avatar"><span>N<i>.</i></span></div>
+    <div class="team-info">
+      <h3>Nerdy / Gertjan</h3>
+      <div class="role">Founder · Engineer · On-call · Janitor</div>
+      <p>Builds software that respects your keyboard and your patience. Runs a small fleet of clusters, ships side-projects in production, refuses to add a 30-minute onboarding flow.</p>
+      <ul class="bullets">
+        <li>15+ yrs shipping in production — backend, infra, frontend, glue.</li>
+        <li>Architected and operates a five-cluster Kubernetes platform.</li>
+        <li>Designed the MCP plumbing that connects agents to real tools.</li>
+        <li>Reads the manual. Then writes a better one.</li>
+        <li>github.com/enipo · nerdy.nl</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== 10 — ask ============================== -->
+<section class="slide slide--ask" id="s10" data-title="Ask">
+  <div class="slide-num">10 / the ask</div>
+  <div class="eyebrow">// What we're looking for</div>
+  <div class="ask-block">
+    <h2>Hire the <i>nerd</i>,<br>or build with <i>them</i>.</h2>
+
+    <ul class="ask-list">
+      <li>
+        <div class="lab">Track A</div>
+        <h3>A serious engineering role where shipping is the metric, not Slack presence.</h3>
+      </li>
+      <li>
+        <div class="lab">Track B</div>
+        <h3>An interesting consulting problem — infra, AI plumbing, internal tools.</h3>
+      </li>
+      <li>
+        <div class="lab">Track C</div>
+        <h3>A co-founder conversation. You bring the wedge; I bring the stack.</h3>
+      </li>
+    </ul>
+
+    <div class="contact">
+      <a href="https://github.com/enipo" target="_blank" rel="noopener">github.com/enipo <span class="ar">↗</span></a>
+      <a href="https://nerdy.nl">nerdy.nl <span class="ar">↗</span></a>
+      <a href="#s1">deck.top <span class="ar">↑</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== 11 — closing ============================== -->
+<section class="slide slide--end" id="s11" data-title="End">
+  <div class="slide-num">11 / fin</div>
+  <div class="end-mark">¶</div>
+  <div class="end-text">end of deck — thank you for reading</div>
+  <div class="end-sig">Putting the <span style="color:var(--accent)"><i>Y</i></span> in <i>Nerdy</i>.</div>
+</section>
+
+<script>
+  (function () {
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const total = slides.length;
+    const nav = document.getElementById('nav');
+    const cnow = document.getElementById('cnow');
+    const ctot = document.getElementById('ctot');
+    const bar = document.getElementById('bar');
+    const hint = document.getElementById('hint');
+
+    ctot.textContent = String(total).padStart(2, '0');
+
+    // build dot navigation
+    slides.forEach((s, i) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('aria-label', 'Go to slide ' + (i + 1) + ': ' + (s.dataset.title || ''));
+      b.dataset.idx = i;
+      b.addEventListener('click', () => goTo(i));
+      nav.appendChild(b);
+    });
+    const dots = Array.from(nav.children);
+
+    let current = 0;
+    function setCurrent(i) {
+      i = Math.max(0, Math.min(total - 1, i));
+      current = i;
+      cnow.textContent = String(i + 1).padStart(2, '0');
+      bar.style.width = ((i / (total - 1)) * 100).toFixed(1) + '%';
+      dots.forEach((d, di) => d.classList.toggle('is-active', di === i));
+    }
+
+    function goTo(i) {
+      i = Math.max(0, Math.min(total - 1, i));
+      slides[i].scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // observe which slide is on screen
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting && e.intersectionRatio > 0.5) {
+          const idx = slides.indexOf(e.target);
+          if (idx !== -1) setCurrent(idx);
+        }
+      });
+      // reveal when in view
+      entries.forEach((e) => {
+        if (e.isIntersecting) e.target.classList.add('in');
+      });
+    }, { threshold: [0.5] });
+    slides.forEach((s) => { s.classList.add('reveal'); io.observe(s); });
+    setCurrent(0);
+
+    // keyboard nav
+    let hintTimer = setTimeout(() => hint.classList.add('is-faded'), 8000);
+    document.addEventListener('keydown', (ev) => {
+      const tag = (ev.target && ev.target.tagName) || '';
+      if (/INPUT|TEXTAREA|SELECT/.test(tag)) return;
+      let handled = false;
+      if (ev.key === 'ArrowDown' || ev.key === 'PageDown' || ev.key === 'j' || ev.key === ' ') {
+        goTo(current + 1); handled = true;
+      } else if (ev.key === 'ArrowUp' || ev.key === 'PageUp' || ev.key === 'k') {
+        goTo(current - 1); handled = true;
+      } else if (ev.key === 'Home') {
+        goTo(0); handled = true;
+      } else if (ev.key === 'End') {
+        goTo(total - 1); handled = true;
+      } else if (/^[1-9]$/.test(ev.key)) {
+        goTo(parseInt(ev.key, 10) - 1); handled = true;
+      } else if (ev.key === '0') {
+        goTo(9); handled = true;
+      }
+      if (handled) {
+        ev.preventDefault();
+        clearTimeout(hintTimer);
+        hint.classList.add('is-faded');
+      }
+    });
+
+    // touch swipe
+    let ty = null;
+    document.addEventListener('touchstart', (e) => { ty = e.touches[0].clientY; }, { passive: true });
+    document.addEventListener('touchend', (e) => {
+      if (ty === null) return;
+      const dy = ty - e.changedTouches[0].clientY;
+      if (Math.abs(dy) > 60) goTo(current + (dy > 0 ? 1 : -1));
+      ty = null;
+    }, { passive: true });
+
+    // dynamic counter — refresh on scroll for browsers without IO precision
+    let raf = 0;
+    document.addEventListener('scroll', () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        const mid = window.scrollY + window.innerHeight / 2;
+        for (let i = 0; i < slides.length; i++) {
+          const r = slides[i].getBoundingClientRect();
+          const top = r.top + window.scrollY;
+          if (mid >= top && mid < top + r.height) { setCurrent(i); break; }
+        }
+      });
+    }, { passive: true });
+  })();
+</script>
+</body>
+</html>
