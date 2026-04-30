@@ -1,0 +1,909 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>NERDY · Holographic First Edition · 001 of ∞</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bowlby+One+SC&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  /* ---------- design tokens ---------- */
+  :root {
+    --card-bg-1: #f7e8c2;
+    --card-bg-2: #ecd49a;
+    --card-border: #d4af37;
+    --card-border-deep: #8c6a1a;
+    --type-dev: #2f6fd0;
+    --type-infra: #7b3fb5;
+    --type-ai: #20b2a0;
+    --hp-red: #c8102e;
+    --energy-bolt: #ffcc00;
+    --bg-deep: #07091a;
+    --bg-mid: #11142a;
+    --bg-soft: #1c2042;
+    --text-on-card: #1a1a2e;
+    --text-muted-card: #4a3f24;
+    --text-on-dark: #e8ebff;
+    --text-muted-dark: #8990b8;
+    --foil-1: #ff3eb5;
+    --foil-2: #38f5ff;
+    --foil-3: #fff43e;
+    --foil-4: #7b3fb5;
+    --rare-gold: #ffd24a;
+    --shadow-card: 0 30px 60px -20px rgba(0, 0, 0, .6), 0 18px 36px -18px rgba(0, 0, 0, .55);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg-deep); color: var(--text-on-dark); }
+  body {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background:
+      radial-gradient(900px 600px at 12% 8%, rgba(123, 63, 181, .25), transparent 60%),
+      radial-gradient(700px 500px at 88% 102%, rgba(47, 111, 208, .22), transparent 60%),
+      linear-gradient(180deg, #04061a 0%, #0a0d24 50%, #06081c 100%);
+    background-attachment: fixed;
+  }
+
+  /* tiny stars in the deep bg */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image:
+      radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,.5), transparent 50%),
+      radial-gradient(1px 1px at 70% 80%, rgba(255,255,255,.4), transparent 50%),
+      radial-gradient(1px 1px at 40% 70%, rgba(255,255,255,.35), transparent 50%),
+      radial-gradient(1px 1px at 85% 20%, rgba(255,255,255,.5), transparent 50%),
+      radial-gradient(1px 1px at 10% 60%, rgba(255,255,255,.3), transparent 50%);
+    background-size: 600px 600px, 720px 720px, 540px 540px, 800px 800px, 480px 480px;
+    opacity: .55;
+  }
+
+  .tcg-page { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 28px 24px 80px; }
+
+  /* ---------- top bar ---------- */
+  .set-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 18px;
+    border: 1px solid rgba(255, 210, 74, .25);
+    background: linear-gradient(90deg, rgba(255, 210, 74, .06), rgba(123, 63, 181, .06));
+    border-radius: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--text-muted-dark);
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .set-bar strong { color: var(--rare-gold); font-weight: 700; }
+  .set-bar .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #57e389; box-shadow: 0 0 12px #57e389; margin-right: 8px; vertical-align: middle; animation: blink 1.6s infinite; }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+
+  /* ---------- intro ---------- */
+  .lede { display: grid; grid-template-columns: 1.1fr .9fr; gap: 28px; margin: 36px 0 28px; align-items: end; }
+  .lede h1 {
+    font-family: 'Bowlby One SC', system-ui;
+    font-size: clamp(48px, 9vw, 112px);
+    line-height: .92;
+    letter-spacing: -.02em;
+    background: linear-gradient(180deg, #fff 0%, #ffd24a 55%, #b87a18 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    text-shadow: 0 2px 0 rgba(0,0,0,.25);
+  }
+  .lede h1 small { display: block; font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--text-muted-dark); letter-spacing: .25em; margin-bottom: 14px; -webkit-text-fill-color: var(--text-muted-dark); }
+  .lede p { color: var(--text-muted-dark); font-size: 15px; line-height: 1.6; max-width: 38ch; }
+  .lede p em { color: var(--rare-gold); font-style: normal; }
+
+  /* ---------- main card stage ---------- */
+  .stage { perspective: 1600px; padding: 28px 0 12px; display: grid; place-items: center; }
+
+  .card {
+    --mx: 50%; --my: 50%; --tilt-x: 0deg; --tilt-y: 0deg; --gloss: .35;
+    width: min(420px, 86vw); aspect-ratio: 5 / 7;
+    position: relative; border-radius: 22px;
+    transform-style: preserve-3d;
+    transform: rotateX(var(--tilt-x)) rotateY(var(--tilt-y));
+    transition: transform .15s ease-out;
+    box-shadow: var(--shadow-card);
+    will-change: transform;
+  }
+
+  /* outer gold frame */
+  .card .frame {
+    position: absolute; inset: 0; border-radius: 22px;
+    background:
+      conic-gradient(from 220deg at 50% 50%, #b87a18, #ffe27a, #b87a18, #8c6a1a, #ffd24a, #b87a18);
+    padding: 8px;
+    box-shadow:
+      inset 0 0 0 1px rgba(0,0,0,.55),
+      inset 0 0 0 2px rgba(255, 240, 180, .4),
+      inset 0 6px 14px rgba(255, 240, 180, .25),
+      inset 0 -6px 14px rgba(0, 0, 0, .35);
+  }
+
+  /* card body */
+  .body {
+    position: absolute; inset: 8px; border-radius: 16px;
+    background: linear-gradient(165deg, var(--card-bg-1) 0%, var(--card-bg-2) 100%);
+    color: var(--text-on-card);
+    padding: 14px 14px 12px;
+    display: grid;
+    grid-template-rows: auto auto 1fr auto auto;
+    gap: 8px;
+    overflow: hidden;
+    transform: translateZ(0);
+  }
+
+  /* card header */
+  .card-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .card-head .name {
+    font-family: 'Bowlby One SC';
+    font-size: 28px; line-height: 1; letter-spacing: -.01em;
+    color: #1a1a2e; text-shadow: 0 1px 0 rgba(255,255,255,.6);
+  }
+  .card-head .name span { display: block; font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: .25em; color: var(--text-muted-card); margin-bottom: 3px; text-shadow: none; }
+  .hp { display: flex; align-items: baseline; gap: 5px; font-family: 'Bowlby One SC'; }
+  .hp .lbl { font-size: 10px; color: var(--text-muted-card); }
+  .hp .val { font-size: 26px; color: var(--hp-red); text-shadow: 0 1px 0 rgba(255,255,255,.6); letter-spacing: -.02em; }
+  .hp .type {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #fff5c0, #ffcc00 55%, #b07c00);
+    display: grid; place-items: center;
+    box-shadow: 0 1px 2px rgba(0,0,0,.45), inset 0 -2px 4px rgba(0,0,0,.25);
+    margin-left: 4px;
+  }
+  .hp .type::after { content: '⚡'; font-size: 14px; color: #5a3700; text-shadow: 0 1px 0 rgba(255,255,255,.4); line-height: 1; }
+
+  .stage-line { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: .14em; color: var(--text-muted-card); text-transform: uppercase; }
+  .stage-line b { color: #2f6fd0; font-weight: 700; }
+
+  /* artwork window */
+  .art {
+    position: relative; border-radius: 6px; overflow: hidden;
+    border: 2px solid #b87a18;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.3), inset 0 6px 18px rgba(0,0,0,.15);
+    background: linear-gradient(180deg, #1a2238 0%, #0e1224 100%);
+    min-height: 0;
+  }
+  .art svg { width: 100%; height: 100%; display: block; }
+  .art .label {
+    position: absolute; left: 8px; bottom: 6px;
+    font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: .14em;
+    color: rgba(255, 255, 255, .55); text-transform: uppercase;
+  }
+
+  /* abilities */
+  .abilities { display: flex; flex-direction: column; gap: 6px; padding: 0 2px; }
+  .move { display: grid; grid-template-columns: auto 1fr auto; gap: 8px; align-items: start; padding: 4px 0; border-bottom: 1px dashed rgba(140, 106, 26, .35); }
+  .move:last-child { border-bottom: none; }
+  .move .cost { display: flex; gap: 2px; padding-top: 1px; }
+  .move .e {
+    width: 14px; height: 14px; border-radius: 50%;
+    display: inline-grid; place-items: center;
+    font-size: 9px;
+    box-shadow: 0 1px 1px rgba(0,0,0,.35), inset 0 -1px 2px rgba(0,0,0,.2);
+  }
+  .e.dev { background: radial-gradient(circle at 35% 30%, #b8d6ff, var(--type-dev) 60%, #173f7a); color: #fff; }
+  .e.infra { background: radial-gradient(circle at 35% 30%, #d6b8ff, var(--type-infra) 60%, #3a1a59); color: #fff; }
+  .e.ai { background: radial-gradient(circle at 35% 30%, #b8fff0, var(--type-ai) 60%, #0e5a52); color: #fff; }
+  .e.bolt { background: radial-gradient(circle at 35% 30%, #fff5c0, var(--energy-bolt) 60%, #b07c00); color: #5a3700; }
+  .move .meta .nm { font-family: 'Bowlby One SC'; font-size: 13px; letter-spacing: .01em; line-height: 1.05; }
+  .move .meta .desc { font-size: 10px; color: var(--text-muted-card); line-height: 1.35; margin-top: 2px; }
+  .move .dmg { font-family: 'Bowlby One SC'; font-size: 18px; color: var(--text-on-card); align-self: center; }
+
+  /* stat row */
+  .stats {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 4px;
+    padding: 6px 4px;
+    border-top: 1px solid rgba(140, 106, 26, .35);
+    border-bottom: 1px solid rgba(140, 106, 26, .35);
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    color: var(--text-muted-card); text-transform: uppercase; letter-spacing: .1em;
+  }
+  .stats div { display: flex; flex-direction: column; gap: 1px; }
+  .stats div b { color: var(--text-on-card); font-size: 11px; font-family: 'Space Grotesk'; font-weight: 700; letter-spacing: 0; text-transform: none; }
+
+  /* footer of card */
+  .card-foot { display: flex; justify-content: space-between; align-items: end; gap: 8px; }
+  .flavor { font-family: 'Space Grotesk'; font-style: italic; font-size: 10.5px; color: var(--text-muted-card); line-height: 1.3; max-width: 70%; }
+  .meta-line { text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 8.5px; letter-spacing: .12em; color: var(--text-muted-card); text-transform: uppercase; }
+  .meta-line .rare { color: #a8851d; font-weight: 700; }
+
+  /* holographic foil layer */
+  .foil {
+    position: absolute; inset: 8px; border-radius: 16px;
+    pointer-events: none; mix-blend-mode: color-dodge; opacity: .55;
+    background:
+      radial-gradient(circle at var(--mx) var(--my),
+        rgba(255, 255, 255, .55) 0%,
+        rgba(255, 62, 181, .3) 18%,
+        rgba(56, 245, 255, .25) 40%,
+        rgba(255, 244, 62, .2) 60%,
+        transparent 75%);
+  }
+  .foil-2 {
+    position: absolute; inset: 8px; border-radius: 16px;
+    pointer-events: none; mix-blend-mode: overlay; opacity: .35;
+    background: repeating-linear-gradient(
+      115deg,
+      rgba(255, 255, 255, .35) 0px,
+      rgba(255, 62, 181, .35) 4px,
+      rgba(56, 245, 255, .35) 8px,
+      rgba(255, 244, 62, .35) 12px,
+      rgba(123, 63, 181, .35) 16px,
+      rgba(255, 255, 255, .35) 20px);
+    transform: translate3d(calc((var(--mx) - 50%) * .04), calc((var(--my) - 50%) * .04), 0);
+  }
+  .gloss {
+    position: absolute; inset: 8px; border-radius: 16px; pointer-events: none;
+    background: radial-gradient(160% 90% at var(--mx) var(--my), rgba(255,255,255, var(--gloss)) 0%, rgba(255,255,255,0) 35%);
+    mix-blend-mode: soft-light; opacity: .9;
+  }
+
+  .card.is-active .foil { opacity: .85; }
+  .card.is-active .foil-2 { opacity: .55; }
+
+  /* tilt hint */
+  .stage .hint {
+    margin-top: 22px; font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: .25em; text-transform: uppercase; color: var(--text-muted-dark);
+  }
+  .stage .hint::before { content: '◇ '; color: var(--rare-gold); }
+
+  /* ---------- block: collection grid ---------- */
+  .section-head {
+    display: flex; justify-content: space-between; align-items: end;
+    margin: 64px 0 18px; padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 210, 74, .15);
+  }
+  .section-head h2 {
+    font-family: 'Bowlby One SC'; font-size: clamp(28px, 4vw, 44px); letter-spacing: -.01em;
+    color: var(--text-on-dark);
+  }
+  .section-head h2 small {
+    display: block; font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: .28em; color: var(--rare-gold); text-transform: uppercase; margin-bottom: 6px;
+  }
+  .section-head .meta { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted-dark); letter-spacing: .15em; text-transform: uppercase; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 18px; }
+
+  .mini {
+    --mx: 50%; --my: 50%;
+    aspect-ratio: 5 / 7; border-radius: 14px; padding: 6px;
+    background: conic-gradient(from 220deg, #b87a18, #ffe27a, #8c6a1a, #ffd24a, #b87a18);
+    box-shadow: 0 14px 30px -16px rgba(0,0,0,.6), 0 8px 18px -10px rgba(0,0,0,.5);
+    position: relative; overflow: hidden; cursor: pointer;
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+  .mini:hover { transform: translateY(-4px); box-shadow: 0 22px 40px -16px rgba(0,0,0,.75), 0 10px 24px -10px rgba(0,0,0,.55); }
+  .mini .inner {
+    position: absolute; inset: 6px; border-radius: 10px;
+    background: linear-gradient(165deg, var(--card-bg-1), var(--card-bg-2));
+    color: var(--text-on-card);
+    padding: 10px; display: grid; grid-template-rows: auto auto 1fr auto auto; gap: 6px;
+  }
+  .mini .row1 { display: flex; justify-content: space-between; align-items: center; }
+  .mini .nm { font-family: 'Bowlby One SC'; font-size: 16px; line-height: 1; letter-spacing: 0; }
+  .mini .hp2 { font-family: 'Bowlby One SC'; font-size: 14px; color: var(--hp-red); }
+  .mini .typeline { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: .15em; color: var(--text-muted-card); text-transform: uppercase; }
+  .mini .art2 { background: linear-gradient(180deg, #1a2238, #0a0d24); border: 1.5px solid #b87a18; border-radius: 4px; min-height: 0; display: grid; place-items: center; overflow: hidden; }
+  .mini .art2 svg { width: 100%; height: 100%; }
+  .mini .ab { font-size: 10px; color: var(--text-muted-card); line-height: 1.35; padding: 0 2px; }
+  .mini .ab b { color: var(--text-on-card); font-family: 'Bowlby One SC'; font-size: 11.5px; display: inline-block; margin-right: 4px; font-weight: 400; letter-spacing: 0; }
+  .mini .ftr { display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: .12em; color: var(--text-muted-card); text-transform: uppercase; }
+  .mini .foil-mini {
+    position: absolute; inset: 6px; border-radius: 10px; pointer-events: none;
+    background: radial-gradient(circle at var(--mx) var(--my),
+      rgba(255,255,255,.5), rgba(255, 62, 181, .25) 25%, rgba(56, 245, 255, .2) 55%, transparent 75%);
+    mix-blend-mode: color-dodge; opacity: 0; transition: opacity .25s ease;
+  }
+  .mini:hover .foil-mini { opacity: .6; }
+
+  /* energy / deck legend */
+  .energy-legend {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px;
+    margin-top: 16px;
+  }
+  .energy {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 14px;
+    background: rgba(255, 255, 255, .03);
+    border: 1px solid rgba(255, 255, 255, .07);
+    border-radius: 12px;
+  }
+  .energy .ico {
+    width: 34px; height: 34px; border-radius: 50%;
+    box-shadow: inset 0 -3px 6px rgba(0,0,0,.3), 0 2px 4px rgba(0,0,0,.4);
+    display: grid; place-items: center; font-size: 16px; flex: none;
+  }
+  .energy .text strong { display: block; font-family: 'Bowlby One SC'; font-size: 14px; letter-spacing: 0; color: var(--text-on-dark); }
+  .energy .text span { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .14em; color: var(--text-muted-dark); text-transform: uppercase; }
+
+  /* tournament panel */
+  .panel {
+    margin-top: 22px;
+    border: 1px solid rgba(255, 210, 74, .18);
+    background: linear-gradient(180deg, rgba(255, 210, 74, .04), rgba(123, 63, 181, .04));
+    border-radius: 16px;
+    padding: 22px;
+    display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px;
+  }
+  .panel h3 {
+    font-family: 'Bowlby One SC'; font-size: 22px; letter-spacing: 0; margin-bottom: 12px;
+    color: var(--text-on-dark);
+  }
+  .panel h3 small { display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .25em; color: var(--rare-gold); text-transform: uppercase; margin-bottom: 6px; }
+  .ruleset { display: flex; flex-direction: column; gap: 10px; }
+  .ruleset li {
+    list-style: none; padding: 10px 12px; border-radius: 10px;
+    background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
+    display: grid; grid-template-columns: 90px 1fr; gap: 12px; align-items: center;
+  }
+  .ruleset li .k { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .18em; color: var(--rare-gold); text-transform: uppercase; }
+  .ruleset li .v { font-size: 14px; color: var(--text-on-dark); }
+  .ruleset li .v em { color: var(--text-muted-dark); font-style: normal; }
+
+  .deck-list { font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.85; color: var(--text-muted-dark); padding: 8px 0; }
+  .deck-list b { color: var(--text-on-dark); font-weight: 700; }
+  .deck-list .h { color: var(--rare-gold); display: block; margin: 8px 0 2px; font-size: 10px; letter-spacing: .25em; text-transform: uppercase; }
+  .deck-list .h:first-child { margin-top: 0; }
+
+  /* footer */
+  footer {
+    margin-top: 56px; padding-top: 22px;
+    border-top: 1px solid rgba(255, 210, 74, .15);
+    display: flex; justify-content: space-between; align-items: center; gap: 18px; flex-wrap: wrap;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .14em;
+    color: var(--text-muted-dark); text-transform: uppercase;
+  }
+  footer a { color: var(--rare-gold); text-decoration: none; border-bottom: 1px dashed rgba(255, 210, 74, .4); padding-bottom: 1px; }
+  footer a:hover { color: #fff; border-color: #fff; }
+
+  /* responsive */
+  @media (max-width: 820px) {
+    .lede { grid-template-columns: 1fr; }
+    .panel { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 480px) {
+    .tcg-page { padding: 18px 14px 60px; }
+    .set-bar { font-size: 10px; }
+    .lede h1 { font-size: 56px; }
+    .grid { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
+    .card { width: 92vw; }
+    .card-head .name { font-size: 24px; }
+    .move .meta .nm { font-size: 12px; }
+    .move .dmg { font-size: 16px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .card, .mini { transition: none !important; transform: none !important; }
+  }
+</style>
+</head>
+<body>
+  <main class="tcg-page">
+
+    <!-- top bar -->
+    <div class="set-bar">
+      <span><span class="dot"></span> Holographic First Edition · Master Set 2026</span>
+      <span><strong>001</strong> of ∞ · base set</span>
+      <span>illus. <strong>nerdy</strong> · putting the Y in nerdy</span>
+    </div>
+
+    <!-- intro -->
+    <section class="lede">
+      <h1>
+        <small>Curriculum Vitae · TCG edition</small>
+        Nerdy<br/>Trading<br/>Cards.
+      </h1>
+      <p>
+        This is a CV in the form of a deck. One <em>legendary</em> card up front,
+        a small collection of <em>projects</em> below — each a working thing
+        you can run, deploy, or break. Tilt the card to catch the foil.
+        Hover the collection to see what's in the binder.
+      </p>
+    </section>
+
+    <!-- main card stage -->
+    <div class="stage">
+      <article class="card" id="hero" aria-label="Nerdy holographic trading card">
+        <div class="frame"></div>
+        <div class="body">
+
+          <!-- header -->
+          <header class="card-head">
+            <div class="name">
+              <span>Basic · Tech · Foil</span>
+              NERDY
+            </div>
+            <div class="hp">
+              <span class="lbl">HP</span>
+              <span class="val">MANY</span>
+              <span class="type" aria-label="Code energy"></span>
+            </div>
+          </header>
+
+          <!-- evolution line -->
+          <div class="stage-line">Stage: <b>Senior</b> · evolves from <b>Junior Dev</b> · weight: 1.4 kg of caffeine</div>
+
+          <!-- artwork -->
+          <div class="art" aria-hidden="true">
+            <svg viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice">
+              <defs>
+                <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#1a2454"/>
+                  <stop offset="1" stop-color="#0a0d24"/>
+                </linearGradient>
+                <linearGradient id="hill" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#7b3fb5"/>
+                  <stop offset="1" stop-color="#2f1a4a"/>
+                </linearGradient>
+                <radialGradient id="moon" cx=".5" cy=".5" r=".5">
+                  <stop offset="0" stop-color="#fff5c0"/>
+                  <stop offset=".7" stop-color="#ffd24a"/>
+                  <stop offset="1" stop-color="#b87a18" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+              <rect width="400" height="220" fill="url(#sky)"/>
+              <!-- stars -->
+              <g fill="#fff" opacity=".7">
+                <circle cx="40" cy="30" r="1"/>
+                <circle cx="120" cy="20" r="1.2"/>
+                <circle cx="200" cy="40" r="1"/>
+                <circle cx="290" cy="22" r="1"/>
+                <circle cx="350" cy="50" r="1.4"/>
+                <circle cx="60" cy="80" r="1"/>
+                <circle cx="160" cy="70" r="1"/>
+                <circle cx="250" cy="60" r="1.3"/>
+                <circle cx="320" cy="90" r="1"/>
+                <circle cx="380" cy="30" r="1"/>
+              </g>
+              <!-- moon -->
+              <circle cx="320" cy="55" r="34" fill="url(#moon)"/>
+              <!-- mountain silhouette -->
+              <path d="M0 220 L0 150 L60 110 L100 130 L160 90 L220 130 L260 105 L320 145 L400 115 L400 220 Z" fill="url(#hill)" opacity=".9"/>
+              <!-- foreground server racks / city -->
+              <g fill="#0a0d24">
+                <rect x="20" y="160" width="40" height="60"/>
+                <rect x="70" y="170" width="30" height="50"/>
+                <rect x="110" y="155" width="44" height="65"/>
+                <rect x="170" y="170" width="28" height="50"/>
+                <rect x="210" y="150" width="48" height="70"/>
+                <rect x="270" y="165" width="32" height="55"/>
+                <rect x="310" y="155" width="40" height="65"/>
+                <rect x="360" y="170" width="30" height="50"/>
+              </g>
+              <!-- blinking lights -->
+              <g>
+                <circle cx="32" cy="175" r="1.5" fill="#57e389"><animate attributeName="opacity" values="1;.2;1" dur="2.4s" repeatCount="indefinite"/></circle>
+                <circle cx="128" cy="170" r="1.5" fill="#ffcc00"><animate attributeName="opacity" values=".3;1;.3" dur="1.8s" repeatCount="indefinite"/></circle>
+                <circle cx="226" cy="165" r="1.5" fill="#38f5ff"><animate attributeName="opacity" values="1;.4;1" dur="2.2s" repeatCount="indefinite"/></circle>
+                <circle cx="326" cy="170" r="1.5" fill="#ff3eb5"><animate attributeName="opacity" values=".3;1;.3" dur="2.6s" repeatCount="indefinite"/></circle>
+              </g>
+              <!-- character: a dev in front of a tower -->
+              <g transform="translate(140 95)">
+                <rect x="40" y="20" width="60" height="80" fill="#0a0d24" stroke="#ffd24a" stroke-width="1.2"/>
+                <circle cx="55" cy="35" r="2" fill="#57e389"/>
+                <rect x="50" y="50" width="40" height="2" fill="#38f5ff"/>
+                <rect x="50" y="58" width="32" height="2" fill="#38f5ff" opacity=".8"/>
+                <rect x="50" y="66" width="36" height="2" fill="#38f5ff" opacity=".6"/>
+                <rect x="50" y="80" width="28" height="2" fill="#ff3eb5"/>
+                <rect x="50" y="88" width="22" height="2" fill="#ff3eb5" opacity=".7"/>
+                <!-- person -->
+                <circle cx="20" cy="70" r="9" fill="#f7e8c2" stroke="#1a1a2e" stroke-width="1"/>
+                <rect x="11" y="78" width="18" height="22" fill="#7b3fb5" stroke="#1a1a2e" stroke-width="1"/>
+                <rect x="9" y="64" width="22" height="6" rx="3" fill="#1a1a2e"/>
+              </g>
+            </svg>
+            <span class="label">PIXEL // FIELD</span>
+          </div>
+
+          <!-- abilities -->
+          <div class="abilities">
+            <div class="move">
+              <span class="cost"><span class="e dev">⌨</span><span class="e bolt">⚡</span></span>
+              <span class="meta">
+                <span class="nm">Nerdy Terminal</span>
+                <span class="desc">Spawn a multi-session terminal. All open sockets are now keyboard-first.</span>
+              </span>
+              <span class="dmg">80</span>
+            </div>
+            <div class="move">
+              <span class="cost"><span class="e ai">🤖</span><span class="e dev">⌨</span><span class="e infra">⚙</span></span>
+              <span class="meta">
+                <span class="nm">MCP Gateway</span>
+                <span class="desc">Bridge any AI agent to Slack, Jira, Postgres, Grafana, Tailscale at once. Crit on Mondays.</span>
+              </span>
+              <span class="dmg">120</span>
+            </div>
+            <div class="move">
+              <span class="cost"><span class="e infra">⚙</span><span class="e infra">⚙</span></span>
+              <span class="meta">
+                <span class="nm">Kubernetes Homelab</span>
+                <span class="desc">Five clusters. GitOps. If the opponent has uptime &gt; 99 %, target ignores resistance.</span>
+              </span>
+              <span class="dmg">95</span>
+            </div>
+            <div class="move">
+              <span class="cost"><span class="e bolt">⚡</span></span>
+              <span class="meta">
+                <span class="nm">Pixel Tanks</span>
+                <span class="desc">Top-down multiplayer. Low-res, high stakes. Splash damage on lan parties.</span>
+              </span>
+              <span class="dmg">60</span>
+            </div>
+          </div>
+
+          <!-- stats row -->
+          <div class="stats">
+            <div>weakness <b>meetings ×2</b></div>
+            <div>resistance <b>bugs −30</b></div>
+            <div>retreat <b>⚡⚡</b></div>
+          </div>
+
+          <!-- footer -->
+          <div class="card-foot">
+            <p class="flavor">"Putting the <em>Y</em> in nerdy. Builds things that mostly stay built."</p>
+            <p class="meta-line"><span class="rare">★ HOLO RARE</span><br/>001/∞ · NRDY-001<br/>illus. nerdy</p>
+          </div>
+
+        </div>
+
+        <!-- foil layers -->
+        <div class="foil"></div>
+        <div class="foil-2"></div>
+        <div class="gloss"></div>
+      </article>
+
+      <p class="hint">Move the cursor over the card</p>
+    </div>
+
+    <!-- collection -->
+    <div class="section-head">
+      <h2><small>Set NRDY · Series A</small>The Binder</h2>
+      <span class="meta">6 cards · all foil · pull rate 100 %</span>
+    </div>
+
+    <div class="grid" id="grid">
+
+      <!-- mini 1: MCP Gateway -->
+      <article class="mini" data-name="mcp">
+        <div class="inner">
+          <div class="row1">
+            <div class="nm">MCP GW</div>
+            <div class="hp2">170</div>
+          </div>
+          <div class="typeline">Stage 2 · AI · Bridge</div>
+          <div class="art2">
+            <svg viewBox="0 0 100 60">
+              <defs>
+                <linearGradient id="m1" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#20b2a0"/><stop offset="1" stop-color="#0e5a52"/>
+                </linearGradient>
+              </defs>
+              <rect width="100" height="60" fill="url(#m1)"/>
+              <g stroke="#fff" stroke-width=".6" fill="none" opacity=".75">
+                <circle cx="20" cy="30" r="6"/>
+                <circle cx="50" cy="14" r="5"/>
+                <circle cx="50" cy="46" r="5"/>
+                <circle cx="80" cy="30" r="6"/>
+                <line x1="26" y1="30" x2="44" y2="30"/>
+                <line x1="50" y1="20" x2="50" y2="40"/>
+                <line x1="56" y1="30" x2="74" y2="30"/>
+                <line x1="50" y1="14" x2="74" y2="26"/>
+                <line x1="50" y1="46" x2="74" y2="34"/>
+              </g>
+              <circle cx="50" cy="30" r="3" fill="#ffd24a"/>
+            </svg>
+          </div>
+          <div class="ab"><b>Many-to-many.</b> Connects every agent to every system. Discard 1 boilerplate.</div>
+          <div class="ftr"><span>holo</span><span>002/∞</span></div>
+        </div>
+        <div class="foil-mini"></div>
+      </article>
+
+      <!-- mini 2: Nerdy Terminal -->
+      <article class="mini" data-name="terminal">
+        <div class="inner">
+          <div class="row1">
+            <div class="nm">TERMINAL</div>
+            <div class="hp2">140</div>
+          </div>
+          <div class="typeline">Stage 1 · Dev · Tool</div>
+          <div class="art2">
+            <svg viewBox="0 0 100 60">
+              <rect width="100" height="60" fill="#0a0d24"/>
+              <rect x="6" y="6" width="88" height="48" fill="#11142a" stroke="#ffd24a" stroke-width=".6"/>
+              <rect x="6" y="6" width="88" height="6" fill="#1c2042"/>
+              <circle cx="11" cy="9" r="1.4" fill="#ff5f57"/>
+              <circle cx="16" cy="9" r="1.4" fill="#febc2e"/>
+              <circle cx="21" cy="9" r="1.4" fill="#28c840"/>
+              <g font-family="monospace" font-size="4" fill="#57e389">
+                <text x="10" y="22">$ tm sessions</text>
+                <text x="10" y="30" fill="#38f5ff">main · 03 children</text>
+                <text x="10" y="38" fill="#38f5ff">w01 · w02 · w03</text>
+                <text x="10" y="48" fill="#ffd24a">▌</text>
+              </g>
+            </svg>
+          </div>
+          <div class="ab"><b>Multi-session.</b> Spawn N workers, each in its own worktree. Refresh inbox each turn.</div>
+          <div class="ftr"><span>holo</span><span>003/∞</span></div>
+        </div>
+        <div class="foil-mini"></div>
+      </article>
+
+      <!-- mini 3: Pixel Tanks -->
+      <article class="mini" data-name="tanks">
+        <div class="inner">
+          <div class="row1">
+            <div class="nm">PXL TANKS</div>
+            <div class="hp2">90</div>
+          </div>
+          <div class="typeline">Basic · Game · LAN</div>
+          <div class="art2">
+            <svg viewBox="0 0 100 60" shape-rendering="crispEdges">
+              <rect width="100" height="60" fill="#3d4a1d"/>
+              <g fill="#5a7028">
+                <rect x="0" y="0" width="4" height="4"/><rect x="20" y="8" width="4" height="4"/><rect x="44" y="20" width="4" height="4"/>
+                <rect x="76" y="6" width="4" height="4"/><rect x="92" y="40" width="4" height="4"/><rect x="60" y="50" width="4" height="4"/>
+              </g>
+              <!-- tank -->
+              <g transform="translate(28 22)" fill="#c8102e">
+                <rect x="0" y="4" width="14" height="8"/>
+                <rect x="2" y="2" width="10" height="2"/>
+                <rect x="12" y="6" width="8" height="2"/>
+                <rect x="0" y="12" width="14" height="2" fill="#5a0710"/>
+              </g>
+              <!-- tank2 -->
+              <g transform="translate(60 32)" fill="#2f6fd0">
+                <rect x="0" y="4" width="14" height="8"/>
+                <rect x="2" y="2" width="10" height="2"/>
+                <rect x="-6" y="6" width="6" height="2"/>
+                <rect x="0" y="12" width="14" height="2" fill="#173f7a"/>
+              </g>
+              <!-- bullet -->
+              <rect x="44" y="29" width="3" height="2" fill="#ffd24a"/>
+            </svg>
+          </div>
+          <div class="ab"><b>Top-down.</b> Multiplayer pixel armour. Splash damage. No tutorial.</div>
+          <div class="ftr"><span>holo</span><span>004/∞</span></div>
+        </div>
+        <div class="foil-mini"></div>
+      </article>
+
+      <!-- mini 4: Kubernetes -->
+      <article class="mini" data-name="k8s">
+        <div class="inner">
+          <div class="row1">
+            <div class="nm">K8S/IaC</div>
+            <div class="hp2">200</div>
+          </div>
+          <div class="typeline">Stage 2 · Infra · GitOps</div>
+          <div class="art2">
+            <svg viewBox="0 0 100 60">
+              <rect width="100" height="60" fill="#1a1a3a"/>
+              <g stroke="#7b3fb5" stroke-width="1" fill="none">
+                <polygon points="50,10 80,25 80,45 50,60 20,45 20,25"/>
+              </g>
+              <g fill="#ffd24a">
+                <polygon points="50,10 60,18 50,26 40,18" opacity=".9"/>
+                <polygon points="80,25 70,33 60,28 70,20" opacity=".7"/>
+                <polygon points="20,25 30,33 40,28 30,20" opacity=".7"/>
+                <polygon points="50,60 60,52 50,44 40,52" opacity=".5"/>
+              </g>
+              <circle cx="50" cy="35" r="5" fill="#38f5ff"/>
+              <text x="50" y="38" text-anchor="middle" font-family="monospace" font-size="4" fill="#0a0d24">k8s</text>
+            </svg>
+          </div>
+          <div class="ab"><b>Five clusters.</b> Tailscale-mesh + Terraform. 0 panic deploys (this quarter).</div>
+          <div class="ftr"><span>holo</span><span>005/∞</span></div>
+        </div>
+        <div class="foil-mini"></div>
+      </article>
+
+      <!-- mini 5: Home Assistant -->
+      <article class="mini" data-name="ha">
+        <div class="inner">
+          <div class="row1">
+            <div class="nm">HOME-AS</div>
+            <div class="hp2">120</div>
+          </div>
+          <div class="typeline">Stage 1 · IoT · YAML</div>
+          <div class="art2">
+            <svg viewBox="0 0 100 60">
+              <rect width="100" height="60" fill="#0e2a3a"/>
+              <path d="M50 10 L80 30 L80 55 L20 55 L20 30 Z" fill="#1a4a5e" stroke="#38f5ff"/>
+              <rect x="42" y="38" width="16" height="17" fill="#0e2a3a"/>
+              <rect x="44" y="40" width="12" height="2" fill="#ffcc00"/>
+              <circle cx="35" cy="42" r="2" fill="#57e389">
+                <animate attributeName="opacity" values="1;.3;1" dur="2s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="65" cy="42" r="2" fill="#ff3eb5">
+                <animate attributeName="opacity" values=".3;1;.3" dur="2.4s" repeatCount="indefinite"/>
+              </circle>
+            </svg>
+          </div>
+          <div class="ab"><b>Zigbee mesh.</b> 80+ entities, 0 cloud accounts. Lights respect &lt;dnd&gt;.</div>
+          <div class="ftr"><span>holo</span><span>006/∞</span></div>
+        </div>
+        <div class="foil-mini"></div>
+      </article>
+
+      <!-- mini 6: TBD -->
+      <article class="mini" data-name="tbd">
+        <div class="inner">
+          <div class="row1">
+            <div class="nm">TBD</div>
+            <div class="hp2">??</div>
+          </div>
+          <div class="typeline">Basic · Productivity · WIP</div>
+          <div class="art2">
+            <svg viewBox="0 0 100 60">
+              <rect width="100" height="60" fill="#1a1a2e"/>
+              <g fill="#ffd24a">
+                <rect x="14" y="12" width="22" height="4"/>
+                <rect x="14" y="22" width="32" height="4"/>
+                <rect x="14" y="32" width="18" height="4"/>
+                <rect x="14" y="42" width="28" height="4"/>
+              </g>
+              <g fill="#57e389">
+                <rect x="60" y="12" width="3" height="3"/>
+                <rect x="60" y="22" width="3" height="3"/>
+              </g>
+              <g fill="#4a3f24">
+                <rect x="60" y="32" width="3" height="3"/>
+                <rect x="60" y="42" width="3" height="3"/>
+              </g>
+              <text x="78" y="54" font-family="monospace" font-size="6" fill="#7b3fb5">v0.1</text>
+            </svg>
+          </div>
+          <div class="ab"><b>Captures, projects, tasks.</b> Personal-use first. Currently in alpha and judgmental.</div>
+          <div class="ftr"><span>secret</span><span>00?/∞</span></div>
+        </div>
+        <div class="foil-mini"></div>
+      </article>
+
+    </div>
+
+    <!-- energy legend -->
+    <div class="section-head" style="margin-top: 56px;">
+      <h2><small>Tech ◆ Mana</small>Energy Types</h2>
+      <span class="meta">required to play moves</span>
+    </div>
+    <div class="energy-legend">
+      <div class="energy"><div class="ico" style="background: radial-gradient(circle at 35% 30%, #b8d6ff, #2f6fd0 60%, #173f7a); color:#fff">⌨</div><div class="text"><strong>Code</strong><span>TypeScript · Go · Python</span></div></div>
+      <div class="energy"><div class="ico" style="background: radial-gradient(circle at 35% 30%, #d6b8ff, #7b3fb5 60%, #3a1a59); color:#fff">⚙</div><div class="text"><strong>Infra</strong><span>Kubernetes · Terraform</span></div></div>
+      <div class="energy"><div class="ico" style="background: radial-gradient(circle at 35% 30%, #b8fff0, #20b2a0 60%, #0e5a52); color:#fff">🤖</div><div class="text"><strong>AI</strong><span>LLMs · MCP · agents</span></div></div>
+      <div class="energy"><div class="ico" style="background: radial-gradient(circle at 35% 30%, #fff5c0, #ffcc00 60%, #b07c00); color:#5a3700">⚡</div><div class="text"><strong>Bolt</strong><span>raw shipping power</span></div></div>
+      <div class="energy"><div class="ico" style="background: radial-gradient(circle at 35% 30%, #ffd6dd, #c8102e 60%, #5a0710); color:#fff">♥</div><div class="text"><strong>Postgres</strong><span>data · indices · VIEWs</span></div></div>
+      <div class="energy"><div class="ico" style="background: radial-gradient(circle at 35% 30%, #d2d2d2, #57e389 60%, #1a4a2e); color:#0a0d24">∂</div><div class="text"><strong>Redis</strong><span>queues · pub/sub · cache</span></div></div>
+    </div>
+
+    <!-- panel -->
+    <section class="panel">
+      <div>
+        <h3><small>Tournament Rules · 2026</small>How I Play</h3>
+        <ul class="ruleset">
+          <li><span class="k">Format</span><span class="v">Standard. <em>Build, don't astonish.</em></span></li>
+          <li><span class="k">Deck size</span><span class="v">Small. Sharp. Edited. <em>Less is more attack.</em></span></li>
+          <li><span class="k">Rotation</span><span class="v">Boring tech where it matters, fresh tech where it's safe.</span></li>
+          <li><span class="k">Banlist</span><span class="v">Mock objects in integration tests. <em>(Burned once.)</em></span></li>
+          <li><span class="k">Side deck</span><span class="v">Bash, awk, jq, ripgrep, tmux. <em>Standard sleeves.</em></span></li>
+          <li><span class="k">Win con</span><span class="v">Things stay shipped after I move on.</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3><small>Sleeves · Stack</small>Deck List</h3>
+        <div class="deck-list">
+          <span class="h">Languages — 4×</span>
+          <b>TypeScript</b> · <b>Go</b> · <b>Python</b> · <b>Bash</b><br/>
+          <span class="h">Infra — 4×</span>
+          <b>Kubernetes</b> · <b>Terraform</b> · <b>Tailscale</b> · <b>GitOps</b><br/>
+          <span class="h">Data — 3×</span>
+          <b>Postgres</b> · <b>Redis</b> · <b>Grafana</b><br/>
+          <span class="h">AI / Agents — 3×</span>
+          <b>LLMs</b> · <b>MCP</b> · <b>tool-use loops</b><br/>
+          <span class="h">Trainers — 2×</span>
+          <b>retros</b> · <b>postmortems (blameless)</b><br/>
+          <span class="h">Energy — basic</span>
+          <b>caffeine</b> · <b>good chair</b>
+        </div>
+      </div>
+    </section>
+
+    <!-- footer -->
+    <footer>
+      <span>NRDY · base set · 001 of ∞ · printed in <span id="build">—</span></span>
+      <span>contact: <a href="https://github.com/enipo">github.com/enipo</a></span>
+      <span id="clock">— : —</span>
+    </footer>
+
+  </main>
+
+<script>
+  // ---- tilt + foil tracking on the hero card ----
+  (function () {
+    const card = document.getElementById('hero');
+    if (!card) return;
+    const max = 14;
+    let raf = null, lastEvt = null;
+
+    function update() {
+      raf = null;
+      if (!lastEvt) return;
+      const r = card.getBoundingClientRect();
+      const px = (lastEvt.clientX - r.left) / r.width;
+      const py = (lastEvt.clientY - r.top) / r.height;
+      const tiltY = (px - .5) * max * 2;
+      const tiltX = -(py - .5) * max * 2;
+      card.style.setProperty('--tilt-x', tiltX.toFixed(2) + 'deg');
+      card.style.setProperty('--tilt-y', tiltY.toFixed(2) + 'deg');
+      card.style.setProperty('--mx', (px * 100).toFixed(1) + '%');
+      card.style.setProperty('--my', (py * 100).toFixed(1) + '%');
+      const dist = Math.hypot(px - .5, py - .5);
+      card.style.setProperty('--gloss', (.55 - dist * .55).toFixed(3));
+    }
+    function onMove(e) {
+      lastEvt = e;
+      card.classList.add('is-active');
+      if (!raf) raf = requestAnimationFrame(update);
+    }
+    function onLeave() {
+      lastEvt = null;
+      card.classList.remove('is-active');
+      card.style.setProperty('--tilt-x', '0deg');
+      card.style.setProperty('--tilt-y', '0deg');
+      card.style.setProperty('--mx', '50%');
+      card.style.setProperty('--my', '50%');
+      card.style.setProperty('--gloss', '.35');
+    }
+    card.addEventListener('pointermove', onMove);
+    card.addEventListener('pointerleave', onLeave);
+
+    // touch: tap to wiggle
+    card.addEventListener('touchstart', () => {
+      card.classList.add('is-active');
+      let t = 0;
+      const id = setInterval(() => {
+        t += 1;
+        const a = Math.sin(t / 3) * 6;
+        card.style.setProperty('--tilt-y', a.toFixed(1) + 'deg');
+        card.style.setProperty('--mx', (50 + a * 4).toFixed(1) + '%');
+        if (t > 30) { clearInterval(id); onLeave(); }
+      }, 33);
+    }, { passive: true });
+
+    // ---- foil tracking on mini cards ----
+    document.querySelectorAll('.mini').forEach(m => {
+      m.addEventListener('pointermove', (e) => {
+        const r = m.getBoundingClientRect();
+        m.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%');
+        m.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%');
+      });
+    });
+  })();
+
+  // ---- footer "printed in" + clock ----
+  (function () {
+    const d = new Date();
+    const buildEl = document.getElementById('build');
+    if (buildEl) {
+      buildEl.textContent = d.getUTCFullYear().toString() + '·' + String(d.getUTCMonth() + 1).padStart(2, '0');
+    }
+    const clock = document.getElementById('clock');
+    function tick() {
+      const n = new Date();
+      const hh = String(n.getHours()).padStart(2, '0');
+      const mm = String(n.getMinutes()).padStart(2, '0');
+      const ss = String(n.getSeconds()).padStart(2, '0');
+      if (clock) clock.textContent = 'local time ' + hh + ':' + mm + ':' + ss;
+    }
+    tick(); setInterval(tick, 1000);
+  })();
+</script>
+</body>
+</html>
