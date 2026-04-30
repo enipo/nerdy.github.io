@@ -1,0 +1,1069 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="dark" />
+<title>nerdy@home:~$ — interactive cv</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" />
+<style>
+  /* ----------------------------------------------------------------
+   * TERMINAL-CV — putting the Y in nerdy
+   * Custom palette + dual-font pairing + interactive shell
+   * --------------------------------------------------------------- */
+
+  :root {
+    --bg-deep:        #07090d;
+    --bg-window:      #0d1117;
+    --bg-prompt:      #11161f;
+    --bg-chrome:      #161c27;
+    --line:           #1f2735;
+    --line-soft:      #161c27;
+
+    --fg:             #e6edf3;
+    --fg-soft:        #b8c0cc;
+    --fg-mute:        #6b7689;
+    --fg-dim:         #485061;
+
+    --accent:         #7ee787;
+    --accent-bright:  #a4f0aa;
+    --signal:         #f0a85f;
+    --magic:          #d2a8ff;
+    --string:         #9ecbff;
+    --error:          #ff7b72;
+    --pink:           #ff79c6;
+
+    --shadow: 0 30px 80px -30px rgba(0,0,0,.7),
+              0 10px 30px -10px rgba(0,0,0,.5),
+              inset 0 1px 0 rgba(255,255,255,.04);
+
+    --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    --sans: "Space Grotesk", -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  body.theme-amber {
+    --accent: #ffb454; --accent-bright: #ffd28a;
+    --string: #f6d8a8; --magic: #ffae57; --signal: #ffb454;
+    --bg-deep: #0a0703; --bg-window: #14100a; --bg-prompt: #1a1308;
+    --bg-chrome: #1f160b; --line: #2a1d0e; --fg: #ffd9a8; --fg-soft: #c89a5d;
+  }
+  body.theme-matrix {
+    --accent: #00ff7f; --accent-bright: #5fffaf;
+    --string: #4ade80; --magic: #22ff88; --signal: #00d96b;
+    --bg-deep: #000700; --bg-window: #020c04; --bg-prompt: #051509;
+    --bg-chrome: #061a09; --line: #0a2911; --fg: #c4ffd6; --fg-soft: #6dbf85;
+  }
+  body.theme-paper {
+    --accent: #1a7f37; --accent-bright: #2f9e4f;
+    --string: #0969da; --magic: #8250df; --signal: #bc4c00;
+    --bg-deep: #f6f7f9; --bg-window: #ffffff; --bg-prompt: #f6f8fa;
+    --bg-chrome: #eef1f4; --line: #d0d7de; --line-soft: #e4e8ee;
+    --fg: #1f2328; --fg-soft: #4a5260; --fg-mute: #6e7781; --fg-dim: #8c95a0;
+    --error: #cf222e;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { background: var(--bg-deep); }
+
+  body {
+    min-height: 100vh;
+    background:
+      radial-gradient(ellipse 1200px 600px at 20% -10%, rgba(126,231,135,.06), transparent 60%),
+      radial-gradient(ellipse 800px 400px at 90% 110%, rgba(210,168,255,.05), transparent 60%),
+      var(--bg-deep);
+    color: var(--fg);
+    font-family: var(--mono);
+    font-size: 14px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: "";
+    position: fixed; inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,.012) 0,
+      rgba(255,255,255,.012) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    mix-blend-mode: overlay;
+    z-index: 999;
+  }
+  body.theme-paper::before { display: none; }
+
+  .page {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+  }
+
+  .preamble {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+    font-family: var(--sans);
+    font-size: 12px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--fg-mute);
+    flex-wrap: wrap;
+  }
+  .preamble .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 4px 10px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+  }
+  .preamble .pulse {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 0 var(--accent);
+    animation: pulse 1.8s ease-out infinite;
+  }
+  @keyframes pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(126,231,135,.5); }
+    70%  { box-shadow: 0 0 0 10px rgba(126,231,135,0); }
+    100% { box-shadow: 0 0 0 0 rgba(126,231,135,0); }
+  }
+
+  .window {
+    background: var(--bg-window);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    position: relative;
+  }
+  .titlebar {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: linear-gradient(180deg, var(--bg-chrome), var(--bg-window));
+    border-bottom: 1px solid var(--line);
+  }
+  .lights { display: flex; gap: 8px; }
+  .light {
+    width: 12px; height: 12px; border-radius: 50%;
+    border: 1px solid rgba(0,0,0,.25);
+  }
+  .light.r { background: #ff5f57; }
+  .light.y { background: #febc2e; }
+  .light.g { background: #28c840; }
+  .title {
+    text-align: center;
+    font-family: var(--sans);
+    font-size: 12px;
+    letter-spacing: .08em;
+    color: var(--fg-soft);
+  }
+  .title b { color: var(--fg); font-weight: 600; }
+  .meta {
+    font-family: var(--sans);
+    font-size: 11px;
+    color: var(--fg-mute);
+    letter-spacing: .04em;
+    display: flex; gap: 10px; align-items: center;
+  }
+  .meta .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--fg-dim); }
+
+  .tabs {
+    display: flex;
+    background: var(--bg-deep);
+    border-bottom: 1px solid var(--line);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    padding: 9px 16px;
+    font-size: 12px;
+    color: var(--fg-mute);
+    border-right: 1px solid var(--line);
+    white-space: nowrap;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .tab.active {
+    background: var(--bg-window);
+    color: var(--fg);
+    box-shadow: inset 0 -2px 0 var(--accent);
+  }
+  .tab .glyph { color: var(--accent); font-weight: 700; }
+  .tab.add { color: var(--fg-dim); }
+
+  .term {
+    padding: 22px 24px 12px;
+    min-height: 60vh;
+    background:
+      linear-gradient(180deg, transparent, transparent 92%, rgba(0,0,0,.18)),
+      var(--bg-window);
+    cursor: text;
+  }
+  .term-inner { max-width: 100%; }
+
+  .line { white-space: pre-wrap; word-wrap: break-word; }
+  .line.user-line { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+  .line + .line { margin-top: 2px; }
+  .block { margin: 12px 0 18px; }
+
+  .prompt-prefix { color: var(--accent); font-weight: 700; user-select: none; }
+  .prompt-host   { color: var(--magic); font-weight: 600; }
+  .prompt-path   { color: var(--string); }
+  .prompt-sigil  { color: var(--fg-soft); }
+  .prompt-cmd    { color: var(--fg); }
+
+  .out          { color: var(--fg-soft); }
+  .out .key     { color: var(--magic); }
+  .out .val     { color: var(--string); }
+  .out .num     { color: var(--signal); }
+  .out .ok      { color: var(--accent); }
+  .out .warn    { color: var(--signal); }
+  .out .err     { color: var(--error); }
+  .out .mute    { color: var(--fg-mute); }
+  .out .accent  { color: var(--accent-bright); }
+  .out h2 {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--fg);
+    margin: 0 0 6px;
+  }
+  .out h2 .deco { color: var(--fg-dim); font-weight: 400; margin-right: 6px; }
+
+  .ascii {
+    color: var(--accent);
+    line-height: 1.05;
+    font-size: 12px;
+    font-weight: 700;
+    text-shadow: 0 0 18px rgba(126,231,135,.25);
+    margin: 0;
+    white-space: pre;
+    overflow-x: auto;
+  }
+  body.theme-paper .ascii { text-shadow: none; }
+
+  .fetch {
+    display: grid;
+    grid-template-columns: minmax(180px, auto) 1fr;
+    gap: 24px;
+    align-items: start;
+    padding: 4px 0 4px;
+  }
+  .fetch .logo {
+    color: var(--accent);
+    font-weight: 700;
+    line-height: 1.1;
+    font-size: 11px;
+    text-shadow: 0 0 16px rgba(126,231,135,.2);
+    white-space: pre;
+  }
+  .fetch dl { margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 4px 14px; }
+  .fetch dt { color: var(--magic); font-weight: 600; }
+  .fetch dd { margin: 0; color: var(--fg-soft); }
+  .fetch .bar { display: inline-block; color: var(--accent); }
+
+  .skills { display: grid; grid-template-columns: minmax(0,1fr); gap: 4px; padding-top: 2px; }
+  .skill { display: grid; grid-template-columns: 200px 1fr 70px; gap: 14px; align-items: center; }
+  .skill .n { color: var(--magic); }
+  .skill .b {
+    height: 10px; background: var(--bg-prompt); border: 1px solid var(--line);
+    border-radius: 3px; overflow: hidden; position: relative;
+  }
+  .skill .b::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(90deg, var(--accent), var(--accent-bright));
+    width: var(--w, 0%);
+    box-shadow: 0 0 12px rgba(126,231,135,.5);
+    animation: fillbar .9s cubic-bezier(.2,.7,.2,1) both;
+  }
+  @keyframes fillbar { from { width: 0; } to { width: var(--w, 0%); } }
+  .skill .v { color: var(--string); text-align: right; font-variant-numeric: tabular-nums; }
+
+  .projects { display: grid; gap: 6px; padding: 4px 0; }
+  .project {
+    display: grid;
+    grid-template-columns: 18px 200px 1fr auto;
+    gap: 14px;
+    align-items: baseline;
+    padding: 6px 0;
+    border-bottom: 1px dashed var(--line-soft);
+  }
+  .project:last-child { border-bottom: 0; }
+  .project .ico { color: var(--accent); }
+  .project .nm  { color: var(--magic); font-weight: 600; }
+  .project .ds  { color: var(--fg-soft); }
+  .project .tg  {
+    font-family: var(--sans); font-size: 10px; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--fg-mute);
+    border: 1px solid var(--line); padding: 2px 7px; border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  .contact { padding: 4px 0 6px; }
+  .contact a { color: var(--string); text-decoration: none; border-bottom: 1px solid currentColor; }
+  .contact a:hover { color: var(--accent-bright); }
+
+  .help { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 4px 24px; padding: 4px 0; }
+  .help .row { display: grid; grid-template-columns: 110px 1fr; gap: 6px; }
+  .help .cmd { color: var(--accent); }
+  .help .desc { color: var(--fg-soft); }
+
+  .prompt {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 12px 24px 22px;
+    background: linear-gradient(180deg, var(--bg-window), var(--bg-prompt));
+    border-top: 1px solid var(--line);
+    flex-wrap: wrap;
+    position: sticky;
+    bottom: 0;
+  }
+  .prompt-input-wrap {
+    flex: 1; min-width: 0; position: relative;
+    display: flex; align-items: baseline;
+  }
+  .prompt-input {
+    width: 100%;
+    background: transparent;
+    border: 0; outline: 0;
+    color: var(--fg);
+    font: inherit;
+    caret-color: var(--accent);
+    padding: 0;
+  }
+  .prompt-input::placeholder { color: var(--fg-dim); }
+  .ghost {
+    position: absolute;
+    left: 0; top: 0;
+    pointer-events: none;
+    color: var(--fg-dim);
+    white-space: pre;
+  }
+  .ghost b { color: var(--fg-mute); font-weight: inherit; }
+
+  .hint {
+    margin-top: 14px;
+    display: flex; gap: 16px; flex-wrap: wrap;
+    font-family: var(--sans);
+    font-size: 11px;
+    color: var(--fg-mute);
+    letter-spacing: .04em;
+    justify-content: space-between;
+  }
+  .hint kbd {
+    font-family: var(--mono);
+    font-size: 10px;
+    background: var(--bg-prompt);
+    border: 1px solid var(--line);
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    padding: 2px 6px;
+    color: var(--fg-soft);
+  }
+  .hint .keys { display: flex; gap: 6px; align-items: center; }
+  .hint .keys span { color: var(--fg-dim); }
+
+  .boot { color: var(--fg-mute); font-size: 12px; }
+  .boot .ok { color: var(--accent); }
+  .boot .info { color: var(--string); }
+  .boot .warn { color: var(--signal); }
+
+  @media (max-width: 720px) {
+    body { font-size: 13px; }
+    .page { padding: 14px 10px 60px; }
+    .term { padding: 16px 14px 8px; }
+    .prompt { padding: 10px 14px 16px; }
+    .skill { grid-template-columns: 110px 1fr 50px; gap: 8px; }
+    .project { grid-template-columns: 16px 1fr; }
+    .project .ds { grid-column: 2 / -1; color: var(--fg-mute); }
+    .project .tg { grid-column: 2 / -1; justify-self: start; }
+    .fetch { grid-template-columns: 1fr; }
+    .fetch .logo { display: none; }
+    .titlebar { grid-template-columns: auto 1fr; }
+    .meta { display: none; }
+    .ascii { font-size: 9px; }
+    .hint .right { display: none; }
+  }
+
+  @media (max-width: 420px) {
+    .skill { grid-template-columns: 1fr; }
+    .skill .v { text-align: left; }
+    .skill .b { order: 3; }
+    .help { grid-template-columns: 1fr; }
+  }
+
+  ::selection { background: var(--accent); color: var(--bg-deep); }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="preamble" aria-hidden="true">
+    <span class="badge"><span class="pulse"></span> session/active · tty1</span>
+    <span>cv · v93 · terminal</span>
+    <span>putting the <b style="color:var(--accent)">y</b> in nerdy</span>
+  </div>
+
+  <div class="window" role="application" aria-label="Interactive CV terminal">
+
+    <div class="titlebar">
+      <div class="lights">
+        <span class="light r" aria-hidden="true"></span>
+        <span class="light y" aria-hidden="true"></span>
+        <span class="light g" aria-hidden="true"></span>
+      </div>
+      <div class="title">— <b>nerdy@home</b>: ~/cv —</div>
+      <div class="meta">
+        <span>zsh</span><span class="dot"></span>
+        <span>120×40</span><span class="dot"></span>
+        <span id="clock">--:--:--</span>
+      </div>
+    </div>
+
+    <div class="tabs" role="tablist">
+      <div class="tab active" role="tab"><span class="glyph">●</span> ~/cv</div>
+      <div class="tab" role="tab">~/projects</div>
+      <div class="tab" role="tab">~/.dotfiles</div>
+      <div class="tab add">+</div>
+    </div>
+
+    <div class="term" id="term" tabindex="-1">
+      <div class="term-inner" id="term-inner"></div>
+      <div id="scroll-anchor"></div>
+    </div>
+
+    <form class="prompt" id="prompt-form" autocomplete="off">
+      <span class="prompt-prefix" aria-hidden="true">❯</span>
+      <span class="prompt-host">nerdy@home</span><span class="prompt-sigil">:</span><span class="prompt-path">~/cv</span><span class="prompt-sigil">$</span>
+      <div class="prompt-input-wrap">
+        <span class="ghost" id="ghost"></span>
+        <input
+          id="prompt-input"
+          class="prompt-input"
+          type="text"
+          spellcheck="false"
+          autocapitalize="off"
+          autocorrect="off"
+          aria-label="Terminal command"
+          placeholder="type 'help' and press enter…"
+        />
+      </div>
+    </form>
+  </div>
+
+  <div class="hint">
+    <div class="keys">
+      <kbd>↑</kbd><kbd>↓</kbd><span>history</span>
+      <kbd>Tab</kbd><span>complete</span>
+      <kbd>Ctrl</kbd><span>+</span><kbd>L</kbd><span>clear</span>
+    </div>
+    <div class="right">© nerdy.nl — handcrafted in Vim, deployed via SSH, served with espresso</div>
+  </div>
+
+</div>
+
+<script>
+(() => {
+  "use strict";
+
+  const term     = document.getElementById("term");
+  const out      = document.getElementById("term-inner");
+  const input    = document.getElementById("prompt-input");
+  const form     = document.getElementById("prompt-form");
+  const ghost    = document.getElementById("ghost");
+  const clockEl  = document.getElementById("clock");
+
+  const esc = (s) => String(s).replace(/[&<>"']/g, c => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[c]));
+
+  // Build a DOM fragment from a trusted HTML string (no inline user data
+  // is ever passed without going through esc() first).
+  const frag = (s) => document.createRange().createContextualFragment(s);
+  const setHTML = (el, s) => { el.replaceChildren(frag(s)); };
+
+  // ─── data ─────────────────────────────────────────────────────
+  const PROFILE = {
+    handle:   "nerdy",
+    name:     "Gertjan",
+    role:     "developer · infrastructure engineer · builder",
+    location: "the netherlands",
+    motto:    "putting the Y in nerdy",
+    contact:  { github: "github.com/enipo", web: "nerdy.nl" }
+  };
+
+  const SKILLS = [
+    { name: "TypeScript / Node",   level: 92 },
+    { name: "Go",                  level: 78 },
+    { name: "Python",              level: 80 },
+    { name: "Kubernetes / GitOps", level: 90 },
+    { name: "Terraform / IaC",     level: 84 },
+    { name: "Postgres / Redis",    level: 82 },
+    { name: "AI / LLMs / MCP",     level: 88 },
+    { name: "Bash / Vim / tmux",   level: 95 }
+  ];
+
+  const PROJECTS = [
+    {
+      id: "nerdy-terminal",
+      icon: "▍",
+      title: "Nerdy Terminal",
+      blurb: "keyboard-first multi-session terminal manager for macOS",
+      tag: "macOS · swift · ts",
+      detail: [
+        "A native terminal manager built for people who live in the shell.",
+        "Manages dozens of tmux/zsh sessions, agents, and worktrees in parallel.",
+        "First-class git integration, hierarchical agent supervision, modal UX.",
+        "",
+        "stack: swift, typescript, websocket, sqlite, tmux"
+      ]
+    },
+    {
+      id: "pixel-tanks",
+      icon: "▰",
+      title: "Pixel Tanks",
+      blurb: "top-down low-res multiplayer tank game",
+      tag: "game · ws · canvas",
+      detail: [
+        "Real-time multiplayer arena with crunchy 1-pixel art.",
+        "Authoritative game server, lockstep-friendly netcode, tile-based maps.",
+        "Built because everyone needs an excuse to write a game loop.",
+        "",
+        "stack: typescript, canvas, websockets, deno"
+      ]
+    },
+    {
+      id: "k8s-platform",
+      icon: "❖",
+      title: "K8s · GitOps Platform",
+      blurb: "multi-cluster homelab + production fleet, fully declarative",
+      tag: "k8s · argocd · flux",
+      detail: [
+        "5 clusters (test / prod / monitoring / ai / legacy) running real workloads.",
+        "Everything in git — argocd reconciles, terraform provisions, helm packages.",
+        "Tailscale mesh, cert-manager, prometheus stack, central log pipeline.",
+        "",
+        "stack: kubernetes, terraform, argocd, helm, tailscale, prometheus"
+      ]
+    },
+    {
+      id: "mcp-gateway",
+      icon: "⟁",
+      title: "MCP Gateway",
+      blurb: "bridge between AI agents and the messy real world",
+      tag: "ai · mcp · go",
+      detail: [
+        "Single auth-aware gateway that lets LLM agents talk to:",
+        "  slack · jira · postgres · grafana · tailscale · github",
+        "Code-execution mode lets the model script multi-tool workflows safely.",
+        "Audit log for every tool call, scoped tokens, per-integration rate limits.",
+        "",
+        "stack: go, mcp, oauth, postgres, opa"
+      ]
+    },
+    {
+      id: "home-assistant",
+      icon: "⌂",
+      title: "Home Assistant",
+      blurb: "smart home: zigbee, automations, no clouds harmed",
+      tag: "yaml · zigbee",
+      detail: [
+        "Fully local smart home. Zigbee2MQTT for sensors and switches.",
+        "Automations written in YAML, dashboards in lovelace, presence-aware.",
+        "Backed up to git, deployed with ansible. No vendor lock-in.",
+        "",
+        "stack: home-assistant, zigbee2mqtt, mqtt, ansible"
+      ]
+    },
+    {
+      id: "tbd",
+      icon: "◐",
+      title: "TBD (productivity app)",
+      blurb: "captures, projects, tasks — the one I actually use",
+      tag: "wip · personal",
+      detail: [
+        "A quick-capture inbox that flows into projects and tasks.",
+        "Built because every existing tool wanted to be Notion. None should.",
+        "Single-binary backend, offline-first client, nothing clever.",
+        "",
+        "stack: typescript, sqlite, swiftui",
+        "status: dogfooding daily · public release tbd"
+      ]
+    }
+  ];
+
+  // ─── output helpers ───────────────────────────────────────────
+  function append(html) {
+    const div = document.createElement("div");
+    div.className = "block";
+    div.append(frag(html));
+    out.append(div);
+    queueMicrotask(() => term.scrollTop = term.scrollHeight);
+  }
+  function echoCommand(cmd) {
+    append(`
+      <div class="line user-line">
+        <span class="prompt-prefix">❯</span>
+        <span class="prompt-host">${esc(PROFILE.handle)}@home</span><span class="prompt-sigil">:</span><span class="prompt-path">~/cv</span><span class="prompt-sigil">$</span>
+        <span class="prompt-cmd">${esc(cmd)}</span>
+      </div>`);
+  }
+
+  // ─── command renderers ────────────────────────────────────────
+  const ASCII_BANNER = String.raw`
+   ███╗   ██╗███████╗██████╗ ██████╗ ██╗   ██╗
+   ████╗  ██║██╔════╝██╔══██╗██╔══██╗╚██╗ ██╔╝
+   ██╔██╗ ██║█████╗  ██████╔╝██║  ██║ ╚████╔╝
+   ██║╚██╗██║██╔══╝  ██╔══██╗██║  ██║  ╚██╔╝
+   ██║ ╚████║███████╗██║  ██║██████╔╝   ██║
+   ╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═════╝    ╚═╝   .nl`;
+
+  const FETCH_LOGO = String.raw`
+        ▄▄▄▄▄▄▄▄▄
+     ▄██▀       ▀██▄
+    ██   ▄██▀██▄   ██
+   ██   ██  ▼  ██   ██
+   ██   ██▄▄▄▄▄██   ██
+    ██   ▀▀▀▀▀▀▀   ██
+     ▀██▄       ▄██▀
+        ▀▀▀▀▀▀▀▀▀`;
+
+  const cmd_banner = () => {
+    append(`<pre class="ascii">${esc(ASCII_BANNER)}</pre>
+      <div class="out mute">  ${esc(PROFILE.motto)} · type <span class="ok">help</span> for commands</div>`);
+  };
+
+  const cmd_help = () => {
+    const items = [
+      ["whoami",   "who is this person, anyway"],
+      ["skills",   "stack proficiency (with bars, because)"],
+      ["projects", "list the things i build"],
+      ["cat <p>",  "open a project file (e.g. cat mcp-gateway)"],
+      ["contact",  "where to find me online"],
+      ["neofetch", "system info, the way real people show off"],
+      ["ls",       "list directory contents"],
+      ["theme",    "switch palette: default · amber · matrix · paper"],
+      ["date",     "current timestamp"],
+      ["echo …",   "echo arguments back at you"],
+      ["sudo …",   "with great power comes great chmod"],
+      ["clear",    "wipe the screen (or Ctrl+L)"],
+      ["exit",     "you can't actually leave"],
+      ["help",     "this list"]
+    ];
+    append(`
+      <div class="out">
+        <h2><span class="deco">┌─</span>available commands</h2>
+        <div class="help">
+          ${items.map(([c, d]) => `
+            <div class="row"><span class="cmd">${esc(c)}</span><span class="desc">${esc(d)}</span></div>
+          `).join("")}
+        </div>
+        <div class="mute" style="margin-top:8px">tip: use <span class="ok">tab</span> to autocomplete · <span class="ok">↑/↓</span> for history</div>
+      </div>`);
+  };
+
+  const cmd_whoami = () => {
+    append(`
+      <div class="out">
+        <h2><span class="deco">┌─</span>$ whoami</h2>
+        <div class="line"><span class="key">handle</span>   :: <span class="val">${esc(PROFILE.handle)}</span></div>
+        <div class="line"><span class="key">name</span>     :: <span class="val">${esc(PROFILE.name)}</span></div>
+        <div class="line"><span class="key">role</span>     :: <span class="val">${esc(PROFILE.role)}</span></div>
+        <div class="line"><span class="key">location</span> :: <span class="val">${esc(PROFILE.location)}</span></div>
+        <div class="line"><span class="key">motto</span>    :: <span class="val">"${esc(PROFILE.motto)}"</span></div>
+        <div class="line mute" style="margin-top:8px">// builds infrastructure, ships products, breaks abstractions for fun.</div>
+        <div class="line mute">// preferred environment: terminal, dim lights, hot coffee, no meetings.</div>
+        <div class="line mute">// years of experience: <span class="num">many</span> · bugs introduced: <span class="num">∞</span> · bugs fixed: <span class="num">∞ + 1</span></div>
+      </div>`);
+  };
+
+  const cmd_skills = () => {
+    append(`
+      <div class="out">
+        <h2><span class="deco">┌─</span>$ ./skills --bars</h2>
+        <div class="skills">
+          ${SKILLS.map(s => `
+            <div class="skill">
+              <span class="n">${esc(s.name)}</span>
+              <span class="b" style="--w:${s.level}%"></span>
+              <span class="v">${s.level}<span class="mute">/100</span></span>
+            </div>`).join("")}
+        </div>
+        <div class="line mute" style="margin-top:10px">// numbers are vibes. proof in the projects.</div>
+      </div>`);
+  };
+
+  const cmd_projects = () => {
+    append(`
+      <div class="out">
+        <h2><span class="deco">┌─</span>$ ls -la projects/</h2>
+        <div class="projects">
+          ${PROJECTS.map(p => `
+            <div class="project">
+              <span class="ico">${esc(p.icon)}</span>
+              <span class="nm">${esc(p.title)}</span>
+              <span class="ds">${esc(p.blurb)}</span>
+              <span class="tg">${esc(p.tag)}</span>
+            </div>`).join("")}
+        </div>
+        <div class="line mute" style="margin-top:10px">// <span class="ok">cat &lt;name&gt;</span> for details, e.g. <span class="ok">cat mcp-gateway</span></div>
+      </div>`);
+  };
+
+  const cmd_cat = (arg) => {
+    if (!arg) {
+      append(`<div class="out err">cat: missing operand. try: <span class="ok">cat mcp-gateway</span></div>`);
+      return;
+    }
+    const key = arg.toLowerCase().replace(/\.(md|txt)$/, "");
+    const p = PROJECTS.find(x => x.id === key || x.id.includes(key) || x.title.toLowerCase().includes(key));
+    if (!p) {
+      append(`<div class="out err">cat: <span class="val">${esc(arg)}</span>: no such project</div>
+              <div class="out mute">// try one of: ${PROJECTS.map(x => `<span class="ok">${esc(x.id)}</span>`).join(" · ")}</div>`);
+      return;
+    }
+    append(`
+      <div class="out">
+        <h2><span class="deco">┌─</span>$ cat projects/${esc(p.id)}.md</h2>
+        <div class="line"><span class="accent">${esc(p.icon)} ${esc(p.title)}</span> <span class="mute">— ${esc(p.tag)}</span></div>
+        <div class="line mute" style="margin-bottom:6px">${esc(p.blurb)}</div>
+        ${p.detail.map(l => `<div class="line">${l ? esc(l) : "&nbsp;"}</div>`).join("")}
+      </div>`);
+  };
+
+  const cmd_contact = () => {
+    const g = PROFILE.contact.github;
+    const w = PROFILE.contact.web;
+    append(`
+      <div class="out contact">
+        <h2><span class="deco">┌─</span>$ cat .contact</h2>
+        <div class="line"><span class="key">github</span> :: <a href="https://${esc(g)}" target="_blank" rel="noopener">${esc(g)}</a></div>
+        <div class="line"><span class="key">web</span>    :: <a href="https://${esc(w)}" target="_blank" rel="noopener">${esc(w)}</a></div>
+        <div class="line mute" style="margin-top:6px">// no email, no phone — github issues are the new postcards.</div>
+      </div>`);
+  };
+
+  const cmd_ls = () => {
+    const files = [
+      { p: "drwxr-xr-x", n: "projects/",  c: "accent" },
+      { p: "drwxr-xr-x", n: "skills/",    c: "accent" },
+      { p: "-rw-r--r--", n: "whoami.txt", c: "val" },
+      { p: "-rw-r--r--", n: "contact.md", c: "val" },
+      { p: "-rwxr-xr-x", n: "neofetch",   c: "ok" },
+      { p: "-rw-------", n: ".secrets",   c: "err" },
+      { p: "-rw-r--r--", n: "README.md",  c: "val" }
+    ];
+    append(`
+      <div class="out">
+        <h2><span class="deco">┌─</span>$ ls -la ~/cv</h2>
+        ${files.map(f => `<div class="line"><span class="mute">${esc(f.p)}</span>  <span class="${f.c}">${esc(f.n)}</span></div>`).join("")}
+      </div>`);
+  };
+
+  const cmd_neofetch = () => {
+    const uptime = (() => {
+      const ms = performance.now();
+      const s = Math.floor(ms / 1000);
+      return `${Math.floor(s / 60)}m ${s % 60}s`;
+    })();
+    const ua = (navigator.userAgent.match(/(Firefox|Chrome|Safari|Edg|OPR)\/[\d.]+/) || ["browser"])[0];
+    const meter = (n) => `<span class="bar">${"█".repeat(Math.round(n / 10))}</span><span class="mute">${"░".repeat(10 - Math.round(n / 10))}</span> ${n}%`;
+    append(`
+      <div class="out">
+        <div class="fetch">
+          <pre class="logo">${esc(FETCH_LOGO)}</pre>
+          <dl>
+            <dt>user@host</dt>     <dd>${esc(PROFILE.handle)}@home</dd>
+            <dt>os</dt>            <dd>nerdy.nl 2026 · build 93</dd>
+            <dt>kernel</dt>        <dd>typescript 5.x · go 1.22 · python 3.12</dd>
+            <dt>shell</dt>         <dd>zsh + tmux + neovim</dd>
+            <dt>resolution</dt>    <dd>${window.innerWidth}×${window.innerHeight}</dd>
+            <dt>terminal</dt>      <dd>${esc(ua)}</dd>
+            <dt>uptime</dt>        <dd>${uptime} (this session) · ~years (career)</dd>
+            <dt>theme</dt>         <dd>${esc(document.body.className.replace("theme-", "") || "default")}</dd>
+            <dt>cpu</dt>           <dd>caffeine-driven · 1 core (focused)</dd>
+            <dt>memory</dt>        <dd>${meter(72)}</dd>
+            <dt>storage</dt>       <dd>${meter(58)}</dd>
+            <dt>packages</dt>      <dd>${PROJECTS.length} projects · ${SKILLS.length} stacks · ∞ side-quests</dd>
+          </dl>
+        </div>
+      </div>`);
+  };
+
+  const cmd_theme = (arg) => {
+    const themes = ["default", "amber", "matrix", "paper"];
+    if (!arg) {
+      append(`<div class="out">
+        <div class="line"><span class="key">themes</span> :: ${themes.map(t => `<span class="ok">${t}</span>`).join(" · ")}</div>
+        <div class="line mute">usage: <span class="ok">theme matrix</span></div>
+      </div>`);
+      return;
+    }
+    const t = arg.toLowerCase();
+    if (!themes.includes(t)) {
+      append(`<div class="out err">theme: unknown theme '<span class="val">${esc(arg)}</span>'</div>`);
+      return;
+    }
+    document.body.classList.remove("theme-amber", "theme-matrix", "theme-paper");
+    if (t !== "default") document.body.classList.add(`theme-${t}`);
+    append(`<div class="out ok">theme :: switched to <span class="val">${esc(t)}</span></div>`);
+  };
+
+  const cmd_date = () => {
+    const now = new Date();
+    append(`<div class="out"><span class="val">${esc(now.toString())}</span></div>`);
+  };
+
+  const cmd_echo = (rest) => {
+    append(`<div class="out"><span class="val">${esc(rest)}</span></div>`);
+  };
+
+  const cmd_sudo = (rest) => {
+    if (/rm\s+-rf/i.test(rest)) {
+      append(`<div class="out err">sudo: nice try. <span class="mute">// nothing here you'd want to delete anyway.</span></div>`);
+      return;
+    }
+    append(`<div class="out warn">[sudo] password for ${esc(PROFILE.handle)}: <span class="mute">****************</span></div>
+            <div class="out err">Sorry, user is not in the sudoers file. This incident will be reported. <span class="mute">(it won't.)</span></div>`);
+  };
+
+  const cmd_exit = () => {
+    append(`<div class="out warn">// you can check out any time you like, but you can never leave.</div>
+            <div class="out mute">// (close the tab if you mean it.)</div>`);
+  };
+
+  const cmd_clear = () => { out.replaceChildren(); };
+
+  const cmd_man = (arg) => {
+    if (!arg) { append(`<div class="out err">man: what manual page do you want?</div>`); return; }
+    append(`<div class="out">
+      <div class="line"><span class="accent">${esc(arg.toUpperCase())}(1)</span>  <span class="mute">User Commands</span></div>
+      <div class="line" style="margin-top:6px"><span class="key">NAME</span></div>
+      <div class="line">    ${esc(arg)} — see help</div>
+      <div class="line" style="margin-top:6px"><span class="key">SEE ALSO</span></div>
+      <div class="line">    <span class="ok">help</span>(1), <span class="ok">whoami</span>(1), <span class="ok">cat</span>(1)</div>
+    </div>`);
+  };
+
+  const cmd_unknown = (cmd) => {
+    append(`<div class="out err">zsh: command not found: <span class="val">${esc(cmd)}</span></div>
+            <div class="out mute">// did you mean <span class="ok">help</span>?</div>`);
+  };
+
+  // ─── command dispatch ─────────────────────────────────────────
+  const COMMANDS = {
+    help: cmd_help, "?": cmd_help, h: cmd_help,
+    whoami: cmd_whoami, about: cmd_whoami, "id": cmd_whoami,
+    skills: cmd_skills, stack: cmd_skills,
+    projects: cmd_projects, work: cmd_projects, ports: cmd_projects,
+    cat: cmd_cat, open: cmd_cat, less: cmd_cat, more: cmd_cat,
+    contact: cmd_contact, links: cmd_contact,
+    neofetch: cmd_neofetch, fetch: cmd_neofetch,
+    ls: cmd_ls, dir: cmd_ls, ll: cmd_ls,
+    theme: cmd_theme, color: cmd_theme,
+    clear: cmd_clear, cls: cmd_clear,
+    banner: cmd_banner, logo: cmd_banner,
+    date: cmd_date, time: cmd_date,
+    echo: cmd_echo,
+    sudo: cmd_sudo,
+    exit: cmd_exit, quit: cmd_exit, logout: cmd_exit,
+    man: cmd_man,
+    pwd: () => append(`<div class="out"><span class="val">/home/${esc(PROFILE.handle)}/cv</span></div>`),
+    uptime: () => append(`<div class="out"><span class="val">${(performance.now() / 1000).toFixed(1)}s</span> <span class="mute">(this session)</span></div>`),
+    history: () => {
+      const rows = history.map((c, i) =>
+        `<div class="line"><span class="mute">${String(i + 1).padStart(4, " ")}</span>  <span class="val">${esc(c)}</span></div>`
+      ).join("");
+      append(`<div class="out">${rows || `<div class="line mute">no history yet</div>`}</div>`);
+    },
+    coffee: () => append(`<div class="out"><span class="warn">☕ brewing… </span><span class="mute">(HTTP 418: I'm a teapot)</span></div>`),
+    matrix: () => cmd_theme("matrix"),
+    "rm": () => append(`<div class="out err">rm: this is a CV. there's nothing to delete here.</div>`)
+  };
+
+  function run(raw) {
+    const trimmed = raw.trim();
+    if (!trimmed) { echoCommand(""); return; }
+    echoCommand(trimmed);
+    const parts = trimmed.split(/\s+/);
+    const cmd = parts[0].toLowerCase();
+    const arg = parts.slice(1).join(" ");
+    const fn = COMMANDS[cmd];
+    if (fn) fn(arg);
+    else cmd_unknown(cmd);
+  }
+
+  // ─── history + completion ─────────────────────────────────────
+  const history = [];
+  let histIdx = -1;
+  let stash = "";
+
+  const COMMAND_NAMES = Object.keys(COMMANDS).filter(k => k.length > 1).sort();
+
+  function bestCompletion(prefix) {
+    if (!prefix) return "";
+    const matches = COMMAND_NAMES.filter(c => c.startsWith(prefix));
+    if (matches.length === 0) return "";
+    if (matches.length === 1) return matches[0];
+    let cp = matches[0];
+    for (const m of matches) {
+      while (!m.startsWith(cp)) cp = cp.slice(0, -1);
+    }
+    return cp;
+  }
+
+  function updateGhost() {
+    const v = input.value;
+    const parts = v.split(/\s+/);
+    if (parts.length > 1 || !v) { setHTML(ghost, ""); return; }
+    const c = bestCompletion(v.toLowerCase());
+    if (c && c !== v.toLowerCase()) {
+      const tail = c.slice(v.length);
+      setHTML(ghost, `<b style="opacity:0">${esc(v)}</b><span style="color:var(--fg-dim)">${esc(tail)}</span>`);
+    } else {
+      setHTML(ghost, "");
+    }
+  }
+
+  input.addEventListener("input", updateGhost);
+
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Tab") {
+      e.preventDefault();
+      const v = input.value;
+      const parts = v.split(/\s+/);
+      if (parts.length === 1 && v) {
+        const c = bestCompletion(v.toLowerCase());
+        if (c) input.value = c;
+      } else if (parts[0].toLowerCase() === "cat" || parts[0].toLowerCase() === "open") {
+        const tail = parts[parts.length - 1] || "";
+        const ids = PROJECTS.map(p => p.id);
+        const m = ids.filter(i => i.startsWith(tail.toLowerCase()));
+        if (m.length === 1) {
+          parts[parts.length - 1] = m[0];
+          input.value = parts.join(" ");
+        }
+      }
+      updateGhost();
+      return;
+    }
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      if (history.length === 0) return;
+      if (histIdx === -1) { stash = input.value; histIdx = history.length - 1; }
+      else if (histIdx > 0) histIdx--;
+      input.value = history[histIdx];
+      requestAnimationFrame(() => input.setSelectionRange(input.value.length, input.value.length));
+      updateGhost();
+      return;
+    }
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      if (histIdx === -1) return;
+      if (histIdx < history.length - 1) {
+        histIdx++;
+        input.value = history[histIdx];
+      } else {
+        histIdx = -1;
+        input.value = stash;
+      }
+      updateGhost();
+      return;
+    }
+    if (e.ctrlKey && (e.key === "l" || e.key === "L")) {
+      e.preventDefault();
+      cmd_clear();
+      return;
+    }
+    if (e.ctrlKey && (e.key === "c" || e.key === "C") && !window.getSelection().toString()) {
+      e.preventDefault();
+      echoCommand(input.value + "^C");
+      input.value = "";
+      updateGhost();
+      return;
+    }
+  });
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const v = input.value;
+    if (v.trim()) {
+      history.push(v);
+      if (history.length > 100) history.shift();
+    }
+    histIdx = -1; stash = "";
+    run(v);
+    input.value = "";
+    updateGhost();
+  });
+
+  term.addEventListener("click", (e) => {
+    if (window.getSelection().toString()) return;
+    if (e.target.tagName === "A") return;
+    input.focus();
+  });
+
+  function tick() {
+    const d = new Date();
+    const pad = (n) => String(n).padStart(2, "0");
+    clockEl.textContent = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+  }
+  tick(); setInterval(tick, 1000);
+
+  // ─── boot sequence ────────────────────────────────────────────
+  const BOOT = [
+    { d: 60,  cls: "ok",   t: "[  OK  ] ",  l: "Mounting /home/nerdy on tty1" },
+    { d: 80,  cls: "ok",   t: "[  OK  ] ",  l: "Loaded modules: typescript, go, python, kubernetes" },
+    { d: 70,  cls: "ok",   t: "[  OK  ] ",  l: "Started Vim, tmux, zsh in correct order" },
+    { d: 90,  cls: "info", t: "[ INFO ] ",  l: "Initialised LLM tooling — MCP gateway online" },
+    { d: 70,  cls: "ok",   t: "[  OK  ] ",  l: "Reconciled 5 clusters · 0 drift detected" },
+    { d: 80,  cls: "warn", t: "[ WARN ] ",  l: "Coffee level low — degraded mode possible" },
+    { d: 60,  cls: "ok",   t: "[  OK  ] ",  l: "Booted in record time. Welcome." }
+  ];
+
+  function bootBlock() {
+    const wrap = document.createElement("div");
+    wrap.className = "block boot";
+    out.append(wrap);
+    let i = 0;
+    function step() {
+      if (i >= BOOT.length) { afterBoot(); return; }
+      const b = BOOT[i++];
+      wrap.append(frag(`<div class="line"><span class="${b.cls}">${esc(b.t)}</span><span style="color:var(--fg-soft)">${esc(b.l)}</span></div>`));
+      term.scrollTop = term.scrollHeight;
+      setTimeout(step, b.d);
+    }
+    step();
+  }
+
+  function afterBoot() {
+    cmd_banner();
+    append(`
+      <div class="out">
+        <div class="line"><span class="mute">last login: ${esc(new Date().toUTCString())} on tty1</span></div>
+        <div class="line">welcome, visitor. this is an interactive cv. no slides, no parallax.</div>
+        <div class="line">try <span class="ok">whoami</span>, <span class="ok">skills</span>, <span class="ok">projects</span>, <span class="ok">neofetch</span>, or <span class="ok">help</span>.</div>
+      </div>`);
+    setTimeout(() => input.focus(), 80);
+  }
+
+  setTimeout(bootBlock, 120);
+
+})();
+</script>
+</body>
+</html>
