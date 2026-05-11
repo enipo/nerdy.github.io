@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>US 11,107,B2 — Nerdy Device and Method | nerdy.nl</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Special+Elite&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --paper: #f4ead2;
+    --paper-deep: #ecdfb8;
+    --paper-edge: #c9b48a;
+    --ink: #1d1408;
+    --ink-soft: #4a3a26;
+    --ink-faint: #8c7553;
+    --line: #2b1d0c;
+    --line-thin: #5c4528;
+    --stamp: #8a1c12;
+    --stamp-soft: #a8362b;
+    --highlight: #f6c947;
+    --highlight-glow: rgba(246, 201, 71, 0.55);
+    --shadow: rgba(60, 40, 20, 0.18);
+    --margin-w: clamp(18px, 4vw, 56px);
+    --col-gap: clamp(20px, 3.5vw, 48px);
+    --serif: "Cormorant Garamond", "Times New Roman", Times, serif;
+    --type: "Special Elite", "Courier New", monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body { margin: 0; padding: 0; }
+
+  body {
+    background:
+      radial-gradient(ellipse at 20% 10%, #fff7e0 0%, transparent 55%),
+      radial-gradient(ellipse at 90% 90%, #e6d4a7 0%, transparent 60%),
+      #d8c699;
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.45;
+    min-height: 100vh;
+    padding: clamp(16px, 3vw, 48px);
+  }
+
+  .sheet {
+    max-width: 1120px;
+    margin: 0 auto;
+    background: var(--paper);
+    background-image:
+      radial-gradient(circle at 12% 22%, rgba(140, 117, 83, 0.08) 0, transparent 60%),
+      radial-gradient(circle at 88% 76%, rgba(140, 117, 83, 0.10) 0, transparent 55%),
+      repeating-linear-gradient(
+        45deg,
+        transparent 0 8px,
+        rgba(140, 117, 83, 0.025) 8px 9px
+      );
+    border: 1px solid var(--paper-edge);
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.6) inset,
+      0 30px 60px var(--shadow),
+      0 6px 14px rgba(60, 40, 20, 0.12);
+    padding: var(--margin-w);
+    position: relative;
+  }
+
+  .sheet::before {
+    content: "";
+    position: absolute;
+    inset: 10px;
+    border: 1px solid var(--ink-faint);
+    pointer-events: none;
+  }
+  .sheet::after {
+    content: "";
+    position: absolute;
+    inset: 14px;
+    border: 1px solid var(--ink-faint);
+    pointer-events: none;
+  }
+
+  .corner-mark {
+    position: absolute;
+    font-family: var(--type);
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.15em;
+  }
+  .corner-mark.tl { top: 22px; left: 28px; }
+  .corner-mark.tr { top: 22px; right: 28px; }
+  .corner-mark.bl { bottom: 22px; left: 28px; }
+  .corner-mark.br { bottom: 22px; right: 28px; }
+
+  .topbar {
+    text-align: center;
+    border-bottom: 3px double var(--line);
+    padding-bottom: 18px;
+    margin-bottom: 22px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .topbar .seal {
+    font-family: var(--type);
+    letter-spacing: 0.35em;
+    font-size: clamp(10px, 1.4vw, 13px);
+    color: var(--ink-soft);
+  }
+
+  .topbar h1 {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: clamp(26px, 5vw, 44px);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin: 8px 0 6px;
+    line-height: 1.05;
+  }
+
+  .topbar .subtitle {
+    font-style: italic;
+    color: var(--ink-soft);
+    font-size: clamp(14px, 2vw, 19px);
+  }
+
+  .patent-number {
+    display: inline-block;
+    margin-top: 10px;
+    font-family: var(--type);
+    border: 1.5px solid var(--ink);
+    padding: 6px 14px;
+    letter-spacing: 0.18em;
+    font-size: 12px;
+  }
+
+  .stamp {
+    position: absolute;
+    font-family: var(--type);
+    color: var(--stamp);
+    border: 3px solid var(--stamp);
+    padding: 6px 14px;
+    letter-spacing: 0.22em;
+    font-size: clamp(11px, 1.4vw, 14px);
+    text-transform: uppercase;
+    transform: rotate(-8deg);
+    opacity: 0.78;
+    pointer-events: none;
+    z-index: 3;
+    background: rgba(244, 234, 210, 0.25);
+  }
+  .stamp.approved {
+    top: 78px;
+    right: clamp(40px, 7vw, 90px);
+    transform: rotate(-12deg);
+  }
+  .stamp.received {
+    top: 38px;
+    left: clamp(40px, 8vw, 100px);
+    transform: rotate(7deg);
+    color: var(--ink-soft);
+    border-color: var(--ink-soft);
+    font-size: clamp(9px, 1.1vw, 11px);
+  }
+
+  .meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px var(--col-gap);
+    padding: 14px 0 22px;
+    border-bottom: 1px solid var(--line-thin);
+    margin-bottom: 28px;
+    position: relative;
+    z-index: 1;
+  }
+  .meta .field {
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  .meta .field .label {
+    font-family: var(--type);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 10px;
+    color: var(--ink-faint);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .meta .field .value {
+    color: var(--ink);
+    font-size: 16px;
+  }
+
+  .section-h {
+    font-family: var(--serif);
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    display: inline-block;
+    padding: 2px 12px;
+    border: 1px solid var(--ink-soft);
+    background: var(--paper);
+    transform: translateY(-13px);
+  }
+
+  .section {
+    border-top: 1px solid var(--line-thin);
+    padding-top: 0;
+    margin-bottom: 36px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .abstract p {
+    margin: 0 0 10px;
+    text-align: justify;
+    text-indent: 1.6em;
+    font-size: clamp(15px, 1.8vw, 18px);
+  }
+  .abstract p:first-of-type::first-letter {
+    font-size: 2.4em;
+    line-height: 1;
+    float: left;
+    padding: 4px 8px 0 0;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .drawing-wrap {
+    display: grid;
+    grid-template-columns: minmax(0, 1.55fr) minmax(240px, 1fr);
+    gap: var(--col-gap);
+    align-items: start;
+  }
+  @media (max-width: 820px) {
+    .drawing-wrap { grid-template-columns: 1fr; }
+  }
+
+  .figure {
+    border: 2px solid var(--line);
+    background: var(--paper);
+    padding: 14px 14px 36px;
+    position: relative;
+    box-shadow: inset 0 0 0 1px var(--paper-edge);
+  }
+
+  .figure-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .figure-tabs button {
+    font-family: var(--type);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: transparent;
+    border: 1.5px solid var(--ink-soft);
+    color: var(--ink-soft);
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: background 120ms, color 120ms;
+  }
+  .figure-tabs button:hover {
+    background: var(--paper-deep);
+  }
+  .figure-tabs button[aria-pressed="true"] {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+
+  .figure-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    max-height: 70vh;
+  }
+
+  .figure-caption {
+    position: absolute;
+    bottom: 8px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-family: var(--type);
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+  }
+
+  .callout-leader {
+    stroke: var(--line);
+    stroke-width: 1.1;
+    fill: none;
+  }
+  .callout-dot {
+    fill: var(--line);
+  }
+  .callout-num-bg {
+    fill: var(--paper);
+    stroke: var(--line);
+    stroke-width: 1.4;
+    cursor: pointer;
+    transition: fill 140ms, stroke-width 140ms;
+  }
+  .callout-num-text {
+    font-family: var(--type);
+    font-size: 13px;
+    fill: var(--ink);
+    text-anchor: middle;
+    dominant-baseline: central;
+    pointer-events: none;
+    font-weight: 700;
+  }
+  g.callout { cursor: pointer; }
+  g.callout:hover .callout-num-bg,
+  g.callout.is-active .callout-num-bg {
+    fill: var(--highlight);
+    stroke-width: 2.2;
+    filter: drop-shadow(0 0 6px var(--highlight-glow));
+  }
+
+  .line { fill: none; stroke: var(--line); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .line-thin { fill: none; stroke: var(--line-thin); stroke-width: 1.0; }
+  .line-dashed { fill: none; stroke: var(--line); stroke-width: 1.2; stroke-dasharray: 5 3; }
+  .hatch { fill: url(#hatchPattern); stroke: var(--line); stroke-width: 1.5; }
+  .panel { fill: var(--paper-deep); stroke: var(--line); stroke-width: 1.6; }
+  .glass { fill: rgba(50, 30, 10, 0.04); stroke: var(--line); stroke-width: 1.4; }
+
+  .legend {
+    border: 2px solid var(--line);
+    background: var(--paper);
+    padding: 14px 14px 18px;
+  }
+  .legend-h {
+    font-family: var(--type);
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    border-bottom: 1px solid var(--line-thin);
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+  }
+  .legend-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 60vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--ink-soft) transparent;
+  }
+  .legend-list::-webkit-scrollbar { width: 6px; }
+  .legend-list::-webkit-scrollbar-thumb { background: var(--ink-soft); }
+
+  .legend-item {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 10px;
+    padding: 7px 6px;
+    border-bottom: 1px dotted var(--ink-faint);
+    cursor: pointer;
+    align-items: baseline;
+    transition: background 140ms;
+  }
+  .legend-item:hover { background: var(--paper-deep); }
+  .legend-item.is-active {
+    background: var(--highlight);
+    box-shadow: inset 4px 0 0 var(--stamp);
+  }
+  .legend-num {
+    font-family: var(--type);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .legend-body strong {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 16px;
+    display: block;
+    line-height: 1.15;
+  }
+  .legend-body span {
+    font-size: 13px;
+    color: var(--ink-soft);
+    font-style: italic;
+  }
+
+  .claims ol {
+    counter-reset: claim;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    column-count: 2;
+    column-gap: var(--col-gap);
+    column-rule: 1px solid var(--line-thin);
+  }
+  @media (max-width: 720px) {
+    .claims ol { column-count: 1; }
+  }
+  .claims li {
+    counter-increment: claim;
+    break-inside: avoid;
+    margin: 0 0 16px;
+    font-size: 15px;
+    text-align: justify;
+    padding-left: 2.2em;
+    position: relative;
+  }
+  .claims li::before {
+    content: counter(claim) ".";
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-family: var(--type);
+    font-weight: 700;
+    color: var(--ink-soft);
+  }
+
+  .signatures {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--col-gap);
+    padding-top: 18px;
+    border-top: 2px solid var(--line);
+    margin-top: 22px;
+  }
+  .sig-block {
+    text-align: center;
+    font-family: var(--type);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+  .sig-block .name {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 22px;
+    color: var(--stamp);
+    text-transform: none;
+    letter-spacing: normal;
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 4px;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .contact {
+    text-align: center;
+    margin-top: 22px;
+    padding: 12px;
+    border: 1px dashed var(--ink-soft);
+    font-size: 14px;
+  }
+  .contact a {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    margin: 0 8px;
+  }
+  .contact a:hover { color: var(--stamp); }
+
+  .hint {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--type);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    opacity: 0;
+    transition: opacity 200ms;
+    pointer-events: none;
+    z-index: 5;
+  }
+  .hint.show { opacity: 1; }
+
+  @media (max-width: 480px) {
+    body { padding: 8px; font-size: 15px; }
+    .sheet { padding: 22px 18px; }
+    .sheet::before { inset: 6px; }
+    .sheet::after { inset: 10px; }
+    .stamp.approved { right: 12px; top: 60px; }
+    .meta .field .value { font-size: 14px; }
+    .corner-mark { font-size: 9px; }
+  }
+
+  @media print {
+    body { background: white; }
+    .sheet { box-shadow: none; }
+    .stamp { opacity: 0.55; }
+  }
+</style>
+</head>
+<body>
+
+<article class="sheet" id="sheet">
+  <span class="corner-mark tl">FORM PTO-1390 (Rev. 12-26)</span>
+  <span class="corner-mark tr">SHEET <span id="sheet-num">1</span> OF 3</span>
+  <span class="corner-mark bl">DOCKET NO. NRD/107</span>
+  <span class="corner-mark br">CLASS 706 / SUBCLASS 14</span>
+
+  <div class="stamp received">RECEIVED — PATENT OFFICE — 11 MAY 2026</div>
+  <div class="stamp approved" id="approved-stamp">Approved</div>
+
+  <header class="topbar">
+    <div class="seal">&#9733; UNITED STATES PATENT AND TRADEMARK OFFICE &#9733;</div>
+    <h1>Nerdy Device and Method for<br />Distributed Software Tinkering</h1>
+    <div class="subtitle">A self-contained apparatus for the orchestration of mostly-functional ideas.</div>
+    <div class="patent-number">PATENT NO. US 11,107,B2</div>
+  </header>
+
+  <section class="meta">
+    <div class="field">
+      <span class="label">Inventor</span>
+      <span class="value">Gertjan Bazuin, of Nederland</span>
+    </div>
+    <div class="field">
+      <span class="label">Assignee</span>
+      <span class="value">nerdy.nl (sole proprietor)</span>
+    </div>
+    <div class="field">
+      <span class="label">Filed</span>
+      <span class="value">11 May 2026</span>
+    </div>
+    <div class="field">
+      <span class="label">Field of Invention</span>
+      <span class="value">Multi-agent systems &amp; recreational engineering</span>
+    </div>
+  </section>
+
+  <section class="section abstract" aria-labelledby="abstract-h">
+    <h2 class="section-h" id="abstract-h">Abstract</h2>
+    <p>The present invention relates to an apparatus and method, hereinafter referred to as the <em>Nerdy Device</em>, for the purpose of producing software, side-quests, and minor electrical occurrences in a domestic setting. The Device comprises a tinkerer (1 No., human, see Fig. 2 ref. 0), an orchestrating terminal, a plurality of containerised workloads, and at least one antenna of sufficient range to reach the kitchen.</p>
+    <p>The Method, when practised diligently, produces a continuous stream of commits, deployments, and occasionally a working feature. The invention notably improves upon prior art by accepting that side-projects are the point, not a distraction.</p>
+  </section>
+
+  <section class="section" aria-labelledby="fig-h">
+    <h2 class="section-h" id="fig-h">Drawings &amp; Reference Numerals</h2>
+    <div class="hint" id="hint">Tap a number to inspect the part</div>
+
+    <div class="drawing-wrap">
+      <div class="figure" id="figure">
+        <div class="figure-tabs" role="tablist" aria-label="Patent figures">
+          <button data-sheet="1" aria-pressed="true">Fig. 1 &mdash; Device</button>
+          <button data-sheet="2" aria-pressed="false">Fig. 2 &mdash; Architecture</button>
+          <button data-sheet="3" aria-pressed="false">Fig. 3 &mdash; Method</button>
+        </div>
+
+        <svg class="figure-svg" id="svg" viewBox="0 0 600 460" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Patent drawing">
+          <defs>
+            <pattern id="hatchPattern" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+              <line x1="0" y1="0" x2="0" y2="6" stroke="#2b1d0c" stroke-width="1" />
+            </pattern>
+          </defs>
+
+          <g id="fig-1">
+            <ellipse cx="300" cy="430" rx="200" ry="10" class="line-thin" />
+
+            <path d="M 180 380 L 180 200 L 280 170 L 280 350 Z" class="panel" />
+            <path d="M 280 350 L 380 320 L 380 140 L 280 170 Z" class="line" fill="#eddfbb" />
+            <path d="M 180 200 L 280 170 L 380 140" class="line" fill="none" />
+            <g stroke="#5c4528" stroke-width="1">
+              <line x1="200" y1="220" x2="265" y2="200" />
+              <line x1="200" y1="230" x2="265" y2="210" />
+              <line x1="200" y1="240" x2="265" y2="220" />
+              <line x1="200" y1="250" x2="265" y2="230" />
+              <line x1="200" y1="260" x2="265" y2="240" />
+            </g>
+            <circle cx="220" cy="340" r="3.5" fill="#8a1c12" stroke="#2b1d0c" stroke-width="1" />
+            <rect x="295" y="240" width="40" height="6" class="line" fill="#f4ead2" />
+            <rect x="295" y="252" width="40" height="6" class="line" fill="#f4ead2" />
+            <circle cx="305" cy="275" r="4" class="line" fill="#f4ead2" />
+            <circle cx="320" cy="275" r="4" class="line" fill="#f4ead2" />
+            <circle cx="335" cy="275" r="4" class="line" fill="#f4ead2" />
+
+            <path d="M 90 110 L 90 30 L 360 10 L 360 90 Z" class="panel" />
+            <rect x="100" y="22" width="252" height="74" fill="#1d1408" />
+            <g font-family="Special Elite, monospace" fill="#9ee493" font-size="8">
+              <text x="108" y="36">$ tm session create w21 --worktree</text>
+              <text x="108" y="48">&#8594; spawning agent&#8230;   ok</text>
+              <text x="108" y="60">$ kubectl get pods -n nerdy</text>
+              <text x="108" y="72">  patent-drawing-x9k   1/1   Running</text>
+              <text x="108" y="84">$ &#9646;</text>
+            </g>
+            <path d="M 200 105 L 210 130 L 250 125 L 240 100 Z" class="line" fill="#ecdfb8" />
+            <path d="M 175 132 L 280 122" class="line" />
+
+            <polyline points="290,30 285,22 295,18 287,12 297,8 290,2" class="line" />
+            <circle cx="290" cy="2" r="3" fill="#8a1c12" stroke="#2b1d0c" stroke-width="1" />
+            <path d="M 305 8 Q 320 18 305 28" class="line-thin" />
+            <path d="M 315 4 Q 335 18 315 32" class="line-thin" />
+
+            <path d="M 100 410 L 130 380 L 470 380 L 440 410 Z" class="panel" />
+            <g stroke="#5c4528" stroke-width="0.8" fill="none">
+              <line x1="140" y1="385" x2="450" y2="385" />
+              <line x1="138" y1="392" x2="448" y2="392" />
+              <line x1="136" y1="400" x2="446" y2="400" />
+              <line x1="170" y1="382" x2="160" y2="408" />
+              <line x1="210" y1="382" x2="200" y2="408" />
+              <line x1="250" y1="382" x2="240" y2="408" />
+              <line x1="290" y1="382" x2="280" y2="408" />
+              <line x1="330" y1="382" x2="320" y2="408" />
+              <line x1="370" y1="382" x2="360" y2="408" />
+              <line x1="410" y1="382" x2="400" y2="408" />
+            </g>
+
+            <g transform="translate(440,300)">
+              <path d="M 0 20 L 0 60 Q 0 70 12 70 L 36 70 Q 48 70 48 60 L 48 20 Z" class="line" fill="#ecdfb8" />
+              <path d="M 48 30 Q 64 30 64 45 Q 64 60 48 60" class="line" fill="none" />
+              <path d="M 6 14 Q 12 4 18 14 M 24 14 Q 30 4 36 14" class="line-thin" />
+              <text x="24" y="50" text-anchor="middle" font-family="Special Elite, monospace" font-size="9" fill="#4a3a26">JS</text>
+            </g>
+
+            <path d="M 260 380 Q 260 360 235 350" class="line-dashed" />
+
+            <g class="callout" data-num="1">
+              <line x1="226" y1="50" x2="60" y2="50" class="callout-leader" />
+              <circle cx="226" cy="50" r="2.5" class="callout-dot" />
+              <circle cx="48" cy="50" r="14" class="callout-num-bg" />
+              <text x="48" y="50" class="callout-num-text">1</text>
+            </g>
+            <g class="callout" data-num="2">
+              <line x1="232" y1="225" x2="60" y2="200" class="callout-leader" />
+              <circle cx="232" cy="225" r="2.5" class="callout-dot" />
+              <circle cx="48" cy="195" r="14" class="callout-num-bg" />
+              <text x="48" y="195" class="callout-num-text">2</text>
+            </g>
+            <g class="callout" data-num="3">
+              <line x1="315" y1="275" x2="455" y2="220" class="callout-leader" />
+              <circle cx="315" cy="275" r="2.5" class="callout-dot" />
+              <circle cx="470" cy="215" r="14" class="callout-num-bg" />
+              <text x="470" y="215" class="callout-num-text">3</text>
+            </g>
+            <g class="callout" data-num="4">
+              <line x1="280" y1="395" x2="535" y2="395" class="callout-leader" />
+              <circle cx="280" cy="395" r="2.5" class="callout-dot" />
+              <circle cx="550" cy="395" r="14" class="callout-num-bg" />
+              <text x="550" y="395" class="callout-num-text">4</text>
+            </g>
+            <g class="callout" data-num="5">
+              <line x1="220" y1="340" x2="80" y2="370" class="callout-leader" />
+              <circle cx="220" cy="340" r="2.5" class="callout-dot" />
+              <circle cx="60" cy="375" r="14" class="callout-num-bg" />
+              <text x="60" y="375" class="callout-num-text">5</text>
+            </g>
+            <g class="callout" data-num="6">
+              <line x1="290" y1="14" x2="420" y2="40" class="callout-leader" />
+              <circle cx="290" cy="14" r="2.5" class="callout-dot" />
+              <circle cx="438" cy="42" r="14" class="callout-num-bg" />
+              <text x="438" y="42" class="callout-num-text">6</text>
+            </g>
+            <g class="callout" data-num="7">
+              <line x1="464" y1="335" x2="540" y2="315" class="callout-leader" />
+              <circle cx="464" cy="335" r="2.5" class="callout-dot" />
+              <circle cx="556" cy="312" r="14" class="callout-num-bg" />
+              <text x="556" y="312" class="callout-num-text">7</text>
+            </g>
+            <g class="callout" data-num="8">
+              <line x1="335" y1="200" x2="540" y2="120" class="callout-leader" />
+              <circle cx="335" cy="200" r="2.5" class="callout-dot" />
+              <circle cx="556" cy="118" r="14" class="callout-num-bg" />
+              <text x="556" y="118" class="callout-num-text">8</text>
+            </g>
+          </g>
+
+          <g id="fig-2" style="display:none">
+            <g transform="translate(60,30)">
+              <rect x="0" y="0" width="120" height="70" class="panel" />
+              <text x="60" y="30" text-anchor="middle" font-family="Cormorant Garamond" font-size="14" font-weight="700">Tinkerer</text>
+              <text x="60" y="50" text-anchor="middle" font-family="Special Elite, monospace" font-size="10" fill="#4a3a26">human, ref. 0</text>
+            </g>
+
+            <g transform="translate(240,30)">
+              <rect x="0" y="0" width="160" height="70" class="line" fill="#f4ead2" />
+              <text x="80" y="28" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" font-weight="700">NERDY TERMINAL</text>
+              <text x="80" y="48" text-anchor="middle" font-family="Special Elite, monospace" font-size="9">tab-agents &#8594; workers</text>
+              <text x="80" y="60" text-anchor="middle" font-family="Special Elite, monospace" font-size="8" fill="#4a3a26">tmux + tm CLI</text>
+            </g>
+
+            <g transform="translate(450,30)">
+              <rect x="0" y="0" width="120" height="70" class="line" fill="#f4ead2" />
+              <text x="60" y="30" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" font-weight="700">EM MCP</text>
+              <text x="60" y="46" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" font-weight="700">Gateway</text>
+              <text x="60" y="60" text-anchor="middle" font-family="Special Elite, monospace" font-size="8" fill="#4a3a26">LLM tools</text>
+            </g>
+
+            <g transform="translate(60,170)">
+              <rect x="0" y="0" width="160" height="80" class="line" fill="#f4ead2" />
+              <text x="80" y="22" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" font-weight="700">K8s / GitOps</text>
+              <g transform="translate(14,30)">
+                <rect x="0" y="0" width="40" height="16" class="line-thin" fill="#ecdfb8" />
+                <text x="20" y="12" text-anchor="middle" font-size="8" font-family="Special Elite, monospace">k81wj</text>
+                <rect x="48" y="0" width="40" height="16" class="line-thin" fill="#ecdfb8" />
+                <text x="68" y="12" text-anchor="middle" font-size="8" font-family="Special Elite, monospace">k81xw</text>
+                <rect x="96" y="0" width="40" height="16" class="line-thin" fill="#ecdfb8" />
+                <text x="116" y="12" text-anchor="middle" font-size="8" font-family="Special Elite, monospace">k810l</text>
+              </g>
+              <text x="80" y="68" text-anchor="middle" font-family="Special Elite, monospace" font-size="8" fill="#4a3a26">ArgoCD &#183; Flux &#183; Tailscale</text>
+            </g>
+
+            <g transform="translate(260,170)">
+              <rect x="0" y="0" width="120" height="80" class="line" fill="#f4ead2" />
+              <text x="60" y="22" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" font-weight="700">Pixel Tanks</text>
+              <g transform="translate(40,32)" fill="#2b1d0c">
+                <rect x="0" y="8" width="4" height="4" /><rect x="4" y="8" width="4" height="4" />
+                <rect x="8" y="8" width="4" height="4" /><rect x="12" y="8" width="4" height="4" />
+                <rect x="16" y="8" width="4" height="4" /><rect x="20" y="8" width="4" height="4" />
+                <rect x="24" y="8" width="4" height="4" /><rect x="28" y="8" width="4" height="4" />
+                <rect x="32" y="8" width="4" height="4" />
+                <rect x="8" y="4" width="4" height="4" /><rect x="12" y="4" width="4" height="4" />
+                <rect x="16" y="4" width="4" height="4" /><rect x="20" y="4" width="4" height="4" />
+                <rect x="14" y="0" width="4" height="4" />
+                <rect x="0" y="12" width="36" height="4" />
+              </g>
+              <text x="60" y="68" text-anchor="middle" font-family="Special Elite, monospace" font-size="8" fill="#4a3a26">retro multiplayer</text>
+            </g>
+
+            <g transform="translate(420,170)">
+              <rect x="0" y="0" width="150" height="80" class="line" fill="#f4ead2" />
+              <text x="75" y="22" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" font-weight="700">Home Assistant</text>
+              <g transform="translate(56,30)" fill="none" stroke="#2b1d0c" stroke-width="1.2">
+                <path d="M 0 22 L 18 4 L 36 22 L 36 36 L 0 36 Z" />
+                <rect x="13" y="22" width="10" height="14" />
+              </g>
+              <text x="75" y="68" text-anchor="middle" font-family="Special Elite, monospace" font-size="8" fill="#4a3a26">200+ entities</text>
+            </g>
+
+            <g transform="translate(160,310)">
+              <rect x="0" y="0" width="120" height="60" class="line" fill="#f4ead2" />
+              <text x="60" y="22" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" font-weight="700">Vault</text>
+              <text x="60" y="44" text-anchor="middle" font-family="Special Elite, monospace" font-size="8" fill="#4a3a26">secrets module</text>
+            </g>
+
+            <g transform="translate(330,310)">
+              <rect x="0" y="0" width="160" height="60" class="line" fill="#f4ead2" />
+              <text x="80" y="22" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" font-weight="700">Open Source</text>
+              <text x="80" y="44" text-anchor="middle" font-family="Special Elite, monospace" font-size="8" fill="#4a3a26">drive-by contributions</text>
+            </g>
+
+            <g stroke="#2b1d0c" stroke-width="1.4" fill="none">
+              <line x1="180" y1="65" x2="240" y2="65" />
+              <polygon points="240,65 232,61 232,69" fill="#2b1d0c" />
+              <line x1="400" y1="65" x2="450" y2="65" />
+              <polygon points="450,65 442,61 442,69" fill="#2b1d0c" />
+              <line x1="320" y1="100" x2="140" y2="170" />
+              <line x1="320" y1="100" x2="320" y2="170" />
+              <line x1="320" y1="100" x2="495" y2="170" />
+              <line x1="220" y1="310" x2="140" y2="250" />
+              <line x1="410" y1="310" x2="495" y2="250" />
+            </g>
+
+            <g class="callout" data-num="9">
+              <line x1="320" y1="73" x2="320" y2="14" class="callout-leader" />
+              <circle cx="320" cy="73" r="2.5" class="callout-dot" />
+              <circle cx="320" cy="6" r="14" class="callout-num-bg" />
+              <text x="320" y="6" class="callout-num-text">9</text>
+            </g>
+            <g class="callout" data-num="10">
+              <line x1="120" y1="210" x2="14" y2="210" class="callout-leader" />
+              <circle cx="120" cy="210" r="2.5" class="callout-dot" />
+              <circle cx="14" cy="210" r="14" class="callout-num-bg" />
+              <text x="14" y="210" class="callout-num-text">10</text>
+            </g>
+            <g class="callout" data-num="11">
+              <line x1="510" y1="65" x2="580" y2="36" class="callout-leader" />
+              <circle cx="510" cy="65" r="2.5" class="callout-dot" />
+              <circle cx="580" cy="36" r="14" class="callout-num-bg" />
+              <text x="580" y="36" class="callout-num-text">11</text>
+            </g>
+            <g class="callout" data-num="12">
+              <line x1="320" y1="210" x2="320" y2="265" class="callout-leader" />
+              <circle cx="320" cy="210" r="2.5" class="callout-dot" />
+              <circle cx="320" cy="280" r="14" class="callout-num-bg" />
+              <text x="320" y="280" class="callout-num-text">12</text>
+            </g>
+            <g class="callout" data-num="13">
+              <line x1="494" y1="210" x2="585" y2="210" class="callout-leader" />
+              <circle cx="494" cy="210" r="2.5" class="callout-dot" />
+              <circle cx="585" cy="210" r="14" class="callout-num-bg" />
+              <text x="585" y="210" class="callout-num-text">13</text>
+            </g>
+            <g class="callout" data-num="14">
+              <line x1="220" y1="340" x2="60" y2="350" class="callout-leader" />
+              <circle cx="220" cy="340" r="2.5" class="callout-dot" />
+              <circle cx="44" cy="350" r="14" class="callout-num-bg" />
+              <text x="44" y="350" class="callout-num-text">14</text>
+            </g>
+            <g class="callout" data-num="15">
+              <line x1="410" y1="340" x2="555" y2="380" class="callout-leader" />
+              <circle cx="410" cy="340" r="2.5" class="callout-dot" />
+              <circle cx="570" cy="386" r="14" class="callout-num-bg" />
+              <text x="570" y="386" class="callout-num-text">15</text>
+            </g>
+            <g class="callout" data-num="0">
+              <line x1="120" y1="65" x2="30" y2="40" class="callout-leader" />
+              <circle cx="120" cy="65" r="2.5" class="callout-dot" />
+              <circle cx="20" cy="34" r="14" class="callout-num-bg" />
+              <text x="20" y="34" class="callout-num-text">0</text>
+            </g>
+          </g>
+
+          <g id="fig-3" style="display:none">
+            <g transform="translate(40,40)">
+              <rect x="0" y="0" width="140" height="56" rx="2" class="line" fill="#f4ead2" />
+              <text x="70" y="22" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" font-weight="700">RECEIVE</text>
+              <text x="70" y="40" text-anchor="middle" font-family="Special Elite, monospace" font-size="9">curious idea</text>
+            </g>
+            <g transform="translate(230,40)">
+              <rect x="0" y="0" width="140" height="56" rx="2" class="line" fill="#f4ead2" />
+              <text x="70" y="22" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" font-weight="700">PARSE</text>
+              <text x="70" y="40" text-anchor="middle" font-family="Special Elite, monospace" font-size="9">into git commits</text>
+            </g>
+            <g transform="translate(420,40)">
+              <rect x="0" y="0" width="140" height="56" rx="2" class="line" fill="#f4ead2" />
+              <text x="70" y="22" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" font-weight="700">DISPATCH</text>
+              <text x="70" y="40" text-anchor="middle" font-family="Special Elite, monospace" font-size="9">to worker agents</text>
+            </g>
+
+            <g stroke="#2b1d0c" stroke-width="1.6" fill="none">
+              <line x1="180" y1="68" x2="230" y2="68" />
+              <polygon points="230,68 222,64 222,72" fill="#2b1d0c" stroke="none" />
+              <line x1="370" y1="68" x2="420" y2="68" />
+              <polygon points="420,68 412,64 412,72" fill="#2b1d0c" stroke="none" />
+              <path d="M 490 96 L 490 130 L 70 130 L 70 160" />
+              <polygon points="70,160 66,152 74,152" fill="#2b1d0c" stroke="none" />
+            </g>
+
+            <g transform="translate(40,160)">
+              <rect x="0" y="0" width="140" height="56" rx="2" class="line" fill="#f4ead2" />
+              <text x="70" y="22" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" font-weight="700">TINKER</text>
+              <text x="70" y="40" text-anchor="middle" font-family="Special Elite, monospace" font-size="9">until 02:00</text>
+            </g>
+            <g transform="translate(230,160)">
+              <rect x="0" y="0" width="140" height="56" rx="2" class="hatch" />
+              <text x="70" y="22" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" font-weight="700" fill="#f4ead2">TEST</text>
+              <text x="70" y="40" text-anchor="middle" font-family="Special Elite, monospace" font-size="9" fill="#f4ead2">(occasionally)</text>
+            </g>
+            <g transform="translate(420,160)">
+              <rect x="0" y="0" width="140" height="56" rx="2" class="line" fill="#f4ead2" />
+              <text x="70" y="22" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" font-weight="700">SHIP</text>
+              <text x="70" y="40" text-anchor="middle" font-family="Special Elite, monospace" font-size="9">to production</text>
+            </g>
+
+            <g stroke="#2b1d0c" stroke-width="1.6" fill="none">
+              <line x1="180" y1="188" x2="230" y2="188" />
+              <polygon points="230,188 222,184 222,192" fill="#2b1d0c" stroke="none" />
+              <line x1="370" y1="188" x2="420" y2="188" />
+              <polygon points="420,188 412,184 412,192" fill="#2b1d0c" stroke="none" />
+              <path d="M 490 216 L 490 260 L 300 260 L 300 290" />
+              <polygon points="300,290 296,282 304,282" fill="#2b1d0c" stroke="none" />
+            </g>
+
+            <g transform="translate(230,290)">
+              <rect x="0" y="0" width="140" height="56" rx="2" class="line" fill="#f4ead2" />
+              <text x="70" y="22" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" font-weight="700">OBSERVE</text>
+              <text x="70" y="40" text-anchor="middle" font-family="Special Elite, monospace" font-size="9">grafana + vibes</text>
+            </g>
+
+            <g transform="translate(60,300)">
+              <polygon points="60,0 120,30 60,60 0,30" class="line" fill="#f4ead2" />
+              <text x="60" y="28" text-anchor="middle" font-family="Cormorant Garamond" font-size="11" font-weight="700">BROKE?</text>
+              <text x="60" y="42" text-anchor="middle" font-family="Special Elite, monospace" font-size="9">y/n</text>
+            </g>
+            <g transform="translate(440,300)">
+              <polygon points="60,0 120,30 60,60 0,30" class="line" fill="#f4ead2" />
+              <text x="60" y="28" text-anchor="middle" font-family="Cormorant Garamond" font-size="11" font-weight="700">SHIP?</text>
+              <text x="60" y="42" text-anchor="middle" font-family="Special Elite, monospace" font-size="9">y/n</text>
+            </g>
+
+            <g stroke="#2b1d0c" stroke-width="1.6" fill="none">
+              <line x1="230" y1="320" x2="180" y2="330" />
+              <polygon points="180,330 188,326 188,334" fill="#2b1d0c" stroke="none" />
+              <path d="M 120 320 L 120 188" stroke-dasharray="4 3" />
+              <text x="128" y="252" font-family="Special Elite, monospace" font-size="9" fill="#4a3a26">yes (always)</text>
+              <line x1="370" y1="320" x2="440" y2="330" />
+              <polygon points="440,330 432,326 432,334" fill="#2b1d0c" stroke="none" />
+              <path d="M 560 320 L 590 320 L 590 60 L 560 60" stroke-dasharray="4 3" />
+              <polygon points="560,60 568,56 568,64" fill="#2b1d0c" stroke="none" />
+              <text x="500" y="56" font-family="Special Elite, monospace" font-size="9" fill="#4a3a26">no &mdash; next idea</text>
+            </g>
+
+            <g class="callout" data-num="16">
+              <line x1="110" y1="40" x2="110" y2="14" class="callout-leader" />
+              <circle cx="110" cy="40" r="2.5" class="callout-dot" />
+              <circle cx="110" cy="14" r="14" class="callout-num-bg" />
+              <text x="110" y="14" class="callout-num-text">16</text>
+            </g>
+            <g class="callout" data-num="17">
+              <line x1="300" y1="40" x2="300" y2="14" class="callout-leader" />
+              <circle cx="300" cy="40" r="2.5" class="callout-dot" />
+              <circle cx="300" cy="14" r="14" class="callout-num-bg" />
+              <text x="300" y="14" class="callout-num-text">17</text>
+            </g>
+            <g class="callout" data-num="18">
+              <line x1="300" y1="160" x2="300" y2="120" class="callout-leader" />
+              <circle cx="300" cy="160" r="2.5" class="callout-dot" />
+              <circle cx="300" cy="116" r="14" class="callout-num-bg" />
+              <text x="300" y="116" class="callout-num-text">18</text>
+            </g>
+            <g class="callout" data-num="19">
+              <line x1="490" y1="160" x2="490" y2="120" class="callout-leader" />
+              <circle cx="490" cy="160" r="2.5" class="callout-dot" />
+              <circle cx="490" cy="116" r="14" class="callout-num-bg" />
+              <text x="490" y="116" class="callout-num-text">19</text>
+            </g>
+          </g>
+        </svg>
+
+        <div class="figure-caption" id="caption">FIG. 1 &mdash; Perspective view of the Nerdy Device</div>
+      </div>
+
+      <aside class="legend" aria-label="Reference numerals">
+        <div class="legend-h">Reference Numerals</div>
+        <ul class="legend-list" id="legend-list"></ul>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section claims" aria-labelledby="claims-h">
+    <h2 class="section-h" id="claims-h">Claims</h2>
+    <ol>
+      <li>An apparatus for distributed software tinkering, comprising: a display unit (1); at least one keyboard surface (4) operatively coupled thereto; a thermally over-engineered case (2) housing a plurality of containerised workloads; and an antenna (6) for receiving instructions from a kitchen-adjacent operator.</li>
+      <li>The apparatus of claim 1, wherein the display unit (1) renders an emerald-on-graphite terminal substantially conforming to the aesthetic conventions of pre-2005 hacker cinema.</li>
+      <li>The apparatus of claim 1, further comprising an orchestrating subsystem (9), known as the <em>Nerdy Terminal</em>, configured to spawn tab-agents and worker-agents in accordance with a multi-tier hierarchy, said agents communicating exclusively by means of a single command-line interface.</li>
+      <li>The apparatus of claim 3, wherein the orchestrating subsystem (9) is interoperable with at least three (3) production-grade Kubernetes clusters (10) of varying purposes, including a legacy production cluster, a freshly-provisioned production cluster, and a deliberately-neglected test cluster.</li>
+      <li>A method of practising the apparatus of claim 1, comprising the steps of: receiving a curious idea (16); parsing said idea into one or more atomic git commits (17); tinkering until approximately 02:00 (18); observing the result via dashboards and a general feeling of dread; and, if and only if said feeling subsides, shipping (19) the result to production.</li>
+      <li>The method of claim 5, wherein the testing step is performed occasionally and never in a manner that would meaningfully slow down a deployment.</li>
+      <li>The apparatus of claim 1, further comprising an LLM tool-use gateway (11) configured for the energy sector and at least one (1) cup of coffee (7) of approximately room temperature.</li>
+    </ol>
+  </section>
+
+  <section class="section">
+    <h2 class="section-h">Inventor's Hand</h2>
+    <div class="signatures">
+      <div class="sig-block">
+        <span class="name">Gertjan Bazuin</span>
+        Inventor &amp; Sole Tinkerer
+      </div>
+      <div class="sig-block">
+        <span class="name">Nederland</span>
+        Place of Filing
+      </div>
+      <div class="sig-block">
+        <span class="name">11 &middot; V &middot; 26</span>
+        Date Reduced to Practice
+      </div>
+    </div>
+
+    <div class="contact">
+      Correspondence may be directed to
+      <a href="mailto:hi@nerdy.nl">hi@nerdy.nl</a>
+      or via
+      <a href="https://github.com/nerdyk" rel="me">github.com/nerdyk</a>
+      &mdash; kindly include a self-addressed stamped envelope.
+    </div>
+  </section>
+</article>
+
+<script>
+(function () {
+  "use strict";
+
+  const PARTS = {
+    0:  { title: "The Tinkerer",            sub: "Operator, 1 No., human variety" },
+    1:  { title: "Display Unit",            sub: "Renders terminal output in approved phosphor green" },
+    2:  { title: "Thermal Dissipation Array", sub: "Vents heated opinions about YAML" },
+    3:  { title: "Tinker Ports",            sub: "USB-C, USB-A, audio jack of indeterminate purpose" },
+    4:  { title: "Bash Interface",          sub: "Mechanical keyboard, defensive shell scripting" },
+    5:  { title: "Status Indicator",        sub: "Glows red when commits exceed test coverage" },
+    6:  { title: "Tailscale Antenna",       sub: "Mesh VPN over softshell-polaris.ts.net" },
+    7:  { title: "Coolant Reservoir",       sub: "Coffee, occasionally JavaScript-flavoured" },
+    8:  { title: "Optional RGB Lights",     sub: "Performance-neutral, morale-positive" },
+    9:  { title: "Nerdy Terminal",          sub: "Multi-agent orchestration CLI. tmux-based." },
+    10: { title: "Kubernetes / GitOps Stack", sub: "ArgoCD, Flux, production clusters k81wj / k81xw / k810l" },
+    11: { title: "EM MCP Gateway",          sub: "LLM tool-use gateway for the energy sector" },
+    12: { title: "Pixel Tanks",             sub: "Retro multiplayer arcade game. WebSockets, pixel-perfect." },
+    13: { title: "Home Assistant Setup",    sub: "200+ entities, self-hosted automations" },
+    14: { title: "Vault Subsystem",         sub: "Secrets management. Never printenv | grep." },
+    15: { title: "Open Source Contributions", sub: "Drive-by patches, niche fixes, the occasional README" },
+    16: { title: "STEP — Receive",      sub: "Accept a curious idea from any input channel" },
+    17: { title: "STEP — Parse",        sub: "Decompose into atomic git commits" },
+    18: { title: "STEP — Tinker",       sub: "Iterate until satisfied or sunrise, whichever first" },
+    19: { title: "STEP — Ship",         sub: "Push to main only with explicit human approval" }
+  };
+
+  const SHEET_PARTS = {
+    1: [1, 2, 3, 4, 5, 6, 7, 8],
+    2: [0, 9, 10, 11, 12, 13, 14, 15],
+    3: [16, 17, 18, 19]
+  };
+
+  const CAPTIONS = {
+    1: "FIG. 1 — Perspective view of the Nerdy Device",
+    2: "FIG. 2 — Schematic of internal architecture",
+    3: "FIG. 3 — Flowchart of the Method of Tinkering"
+  };
+
+  const SHEET_VIEWBOXES = {
+    1: "0 0 600 460",
+    2: "0 -20 600 410",
+    3: "0 0 600 380"
+  };
+
+  const sheetNumEl    = document.getElementById("sheet-num");
+  const figs          = { 1: document.getElementById("fig-1"), 2: document.getElementById("fig-2"), 3: document.getElementById("fig-3") };
+  const tabs          = document.querySelectorAll(".figure-tabs button");
+  const legendListEl  = document.getElementById("legend-list");
+  const captionEl     = document.getElementById("caption");
+  const svgEl         = document.getElementById("svg");
+  const hintEl        = document.getElementById("hint");
+  const approvedStamp = document.getElementById("approved-stamp");
+
+  let currentSheet = 1;
+  let hintShown    = false;
+
+  function buildLegendItem(n, part) {
+    const li = document.createElement("li");
+    li.className = "legend-item";
+    li.dataset.num = String(n);
+
+    const numDiv = document.createElement("div");
+    numDiv.className = "legend-num";
+    numDiv.textContent = n + ".";
+
+    const bodyDiv = document.createElement("div");
+    bodyDiv.className = "legend-body";
+
+    const strong = document.createElement("strong");
+    strong.textContent = part.title;
+
+    const span = document.createElement("span");
+    span.textContent = part.sub;
+
+    bodyDiv.appendChild(strong);
+    bodyDiv.appendChild(span);
+
+    li.appendChild(numDiv);
+    li.appendChild(bodyDiv);
+
+    li.addEventListener("click", function () { setActive(n, "legend"); });
+    return li;
+  }
+
+  function renderLegend() {
+    const nums = SHEET_PARTS[currentSheet];
+    while (legendListEl.firstChild) legendListEl.removeChild(legendListEl.firstChild);
+    nums.forEach(function (n) {
+      const part = PARTS[n];
+      if (!part) return;
+      legendListEl.appendChild(buildLegendItem(n, part));
+    });
+  }
+
+  function setActive(num, source) {
+    svgEl.querySelectorAll("g.callout").forEach(function (g) {
+      g.classList.toggle("is-active", String(g.dataset.num) === String(num));
+    });
+    legendListEl.querySelectorAll(".legend-item").forEach(function (li) {
+      const on = String(li.dataset.num) === String(num);
+      li.classList.toggle("is-active", on);
+      if (on && source === "svg") {
+        li.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+    });
+    flashStamp();
+  }
+
+  function flashStamp() {
+    approvedStamp.textContent = "Inspected";
+    setTimeout(function () { approvedStamp.textContent = "Approved"; }, 900);
+  }
+
+  function showSheet(n) {
+    if (!SHEET_VIEWBOXES[n]) return;
+    currentSheet = n;
+    Object.keys(figs).forEach(function (k) {
+      figs[k].style.display = String(k) === String(n) ? "" : "none";
+    });
+    svgEl.setAttribute("viewBox", SHEET_VIEWBOXES[n]);
+    sheetNumEl.textContent = n;
+    captionEl.textContent = CAPTIONS[n];
+    tabs.forEach(function (b) {
+      b.setAttribute("aria-pressed", b.dataset.sheet === String(n) ? "true" : "false");
+    });
+    renderLegend();
+    if (!hintShown) {
+      hintEl.classList.add("show");
+      hintShown = true;
+      setTimeout(function () { hintEl.classList.remove("show"); }, 2600);
+    }
+  }
+
+  tabs.forEach(function (b) {
+    b.addEventListener("click", function () { showSheet(parseInt(b.dataset.sheet, 10)); });
+  });
+
+  svgEl.addEventListener("click", function (e) {
+    const g = e.target.closest("g.callout");
+    if (!g) return;
+    setActive(parseInt(g.dataset.num, 10), "svg");
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
+    if (e.key === "ArrowRight") {
+      showSheet(currentSheet === 3 ? 1 : currentSheet + 1);
+    } else if (e.key === "ArrowLeft") {
+      showSheet(currentSheet === 1 ? 3 : currentSheet - 1);
+    } else if (/^[0-9]$/.test(e.key)) {
+      const want = parseInt(e.key, 10);
+      const nums = SHEET_PARTS[currentSheet];
+      if (nums.indexOf(want) !== -1) setActive(want, "key");
+    }
+  });
+
+  let wobbleTimer = null;
+  const sheetEl = document.getElementById("sheet");
+  sheetEl.addEventListener("pointerdown", function () {
+    clearTimeout(wobbleTimer);
+    wobbleTimer = setTimeout(function () {
+      sheetEl.animate(
+        [{ transform: "rotate(0deg)" }, { transform: "rotate(0.25deg)" }, { transform: "rotate(0deg)" }],
+        { duration: 700, easing: "ease-in-out" }
+      );
+    }, 600);
+  });
+  sheetEl.addEventListener("pointerup", function () { clearTimeout(wobbleTimer); });
+
+  showSheet(1);
+})();
+</script>
+
+</body>
+</html>
