@@ -1,0 +1,951 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>NRD-105 · Oscilloscope · Nerdy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&family=Major+Mono+Display&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --color-bg:#0a0d0a;
+  --color-bezel:#1a1d1a;
+  --color-bezel-edge:#2a2e2a;
+  --color-screen:#031006;
+  --color-phosphor:#33ff77;
+  --color-phosphor-dim:#1a8044;
+  --color-phosphor-trace:#7dffb0;
+  --color-grid:#0e6633;
+  --color-grid-faint:#073f1e;
+  --color-knob:#3a3d3a;
+  --color-knob-edge:#5a5e5a;
+  --color-led-on:#ff3320;
+  --color-led-amber:#ffaa11;
+  --color-warning:#ffcc44;
+  --color-text:#c8e8d0;
+  --color-text-dim:#7faa8a;
+  --color-stripe:#cc2200;
+  --scope-glow:0 0 6px var(--color-phosphor),0 0 14px rgba(51,255,119,.5);
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:
+    radial-gradient(ellipse at top,#101510 0%,#06080a 60%,#000 100%);
+  color:var(--color-text);
+  font-family:'Share Tech Mono',monospace;
+  min-height:100vh;
+  padding:clamp(12px,3vw,28px);
+  overflow-x:hidden;
+}
+
+/* === SHELL === */
+.scope{
+  max-width:1180px;
+  margin:0 auto;
+  background:linear-gradient(180deg,#2a2e2a 0%,#1a1d1a 45%,#15181a 100%);
+  border-radius:18px;
+  padding:clamp(14px,2.5vw,28px);
+  box-shadow:
+    inset 0 1px 0 #4a4e4a,
+    inset 0 -2px 0 #0a0c0a,
+    0 24px 48px rgba(0,0,0,.6),
+    0 2px 0 #000;
+  position:relative;
+  border:1px solid #000;
+}
+.scope::before{
+  content:"";
+  position:absolute;inset:6px;
+  border-radius:14px;
+  pointer-events:none;
+  background:
+    repeating-linear-gradient(90deg,rgba(255,255,255,.015) 0 1px,transparent 1px 3px);
+}
+
+.scope-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  padding:6px 4px 18px;
+  flex-wrap:wrap;
+}
+.brand{
+  display:flex;
+  align-items:baseline;
+  gap:14px;
+  flex-wrap:wrap;
+}
+.brand-mark{
+  font-family:'Major Mono Display',monospace;
+  font-size:clamp(20px,3.2vw,32px);
+  letter-spacing:.06em;
+  color:#e6efe6;
+  text-shadow:0 2px 0 #000;
+}
+.brand-model{
+  font-family:'Share Tech Mono',monospace;
+  font-size:14px;
+  color:var(--color-text-dim);
+  border:1px solid #444;
+  padding:2px 8px;
+  border-radius:3px;
+  background:#0c0f0c;
+}
+.brand-tag{
+  font-family:'VT323',monospace;
+  font-size:20px;
+  color:var(--color-text-dim);
+}
+.status{
+  display:flex;align-items:center;gap:14px;
+  font-family:'VT323',monospace;
+  font-size:18px;
+}
+.led{
+  width:10px;height:10px;border-radius:50%;
+  background:#330;
+  box-shadow:inset 0 0 3px #000;
+}
+.led.on-power{background:var(--color-led-on);box-shadow:0 0 8px var(--color-led-on),inset 0 0 3px #200}
+.led.on-trig{background:var(--color-led-amber);box-shadow:0 0 8px var(--color-led-amber),inset 0 0 3px #200;animation:trig 1.4s infinite}
+@keyframes trig{50%{opacity:.25}}
+
+/* === MAIN LAYOUT === */
+.scope-body{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 260px;
+  gap:clamp(12px,2vw,22px);
+}
+@media(max-width:880px){
+  .scope-body{grid-template-columns:1fr}
+}
+
+/* === SCREEN === */
+.screen-wrap{
+  position:relative;
+  background:#000;
+  border-radius:14px;
+  padding:14px;
+  border:1px solid #000;
+  box-shadow:
+    inset 0 0 0 2px #1c2018,
+    inset 0 0 0 6px #0a0c0a,
+    inset 0 0 22px rgba(0,0,0,.9);
+}
+.screen{
+  position:relative;
+  aspect-ratio:4/3;
+  width:100%;
+  background:
+    radial-gradient(ellipse at center,#062013 0%,#031006 55%,#010604 100%);
+  border-radius:8px;
+  overflow:hidden;
+  box-shadow:
+    inset 0 0 60px rgba(0,0,0,.85),
+    inset 0 0 12px rgba(51,255,119,.05);
+}
+.screen::before{
+  content:"";
+  position:absolute;inset:0;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.18) 0 1px,transparent 1px 3px);
+  pointer-events:none;
+  z-index:5;
+}
+.screen::after{
+  content:"";
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.55) 100%);
+  pointer-events:none;
+  z-index:6;
+}
+.screen svg{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+}
+
+.osd{
+  position:absolute;
+  z-index:7;
+  font-family:'VT323',monospace;
+  color:var(--color-phosphor);
+  text-shadow:var(--scope-glow);
+  font-size:clamp(11px,1.6vw,16px);
+  letter-spacing:.04em;
+  pointer-events:none;
+}
+.osd.tl{top:8px;left:10px}
+.osd.tr{top:8px;right:10px;text-align:right}
+.osd.bl{bottom:8px;left:10px}
+.osd.br{bottom:8px;right:10px;text-align:right}
+.osd .row{display:flex;gap:10px;align-items:center}
+.osd-dot{width:8px;height:8px;border-radius:50%;background:var(--color-phosphor);box-shadow:var(--scope-glow);display:inline-block}
+.osd-dot.ch2{background:#ffaa44;box-shadow:0 0 6px #ffaa44}
+.osd-dot.ch3{background:#44aaff;box-shadow:0 0 6px #44aaff}
+.osd-dot.ch4{background:#ff66cc;box-shadow:0 0 6px #ff66cc}
+
+/* === PANEL === */
+.panel{
+  background:linear-gradient(180deg,#1c1f1c 0%,#101310 100%);
+  border-radius:10px;
+  padding:14px;
+  border:1px solid #000;
+  box-shadow:inset 0 1px 0 #3a3e3a;
+  display:flex;flex-direction:column;gap:14px;
+}
+.panel h4{
+  font-family:'Share Tech Mono',monospace;
+  font-size:11px;
+  letter-spacing:.18em;
+  color:var(--color-text-dim);
+  margin:0 0 6px;
+  text-transform:uppercase;
+}
+.channels{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px;
+}
+.ch-btn{
+  background:#0a0c0a;
+  border:1px solid #2a2e2a;
+  border-radius:4px;
+  padding:10px 8px;
+  font-family:'VT323',monospace;
+  font-size:18px;
+  color:var(--color-text-dim);
+  cursor:pointer;
+  display:flex;flex-direction:column;align-items:flex-start;gap:2px;
+  transition:all .15s;
+  text-align:left;
+  position:relative;
+}
+.ch-btn:hover{border-color:#444;color:var(--color-text)}
+.ch-btn .ch-num{font-size:11px;font-family:'Share Tech Mono',monospace;color:#777;letter-spacing:.1em}
+.ch-btn.active{
+  background:#0a1a10;
+  border-color:var(--color-phosphor);
+  color:var(--color-phosphor);
+  box-shadow:inset 0 0 8px rgba(51,255,119,.15);
+}
+.ch-btn.active .ch-num{color:var(--color-phosphor-dim)}
+.ch-btn.ch2.active{border-color:#ffaa44;color:#ffaa44;background:#1a1208}
+.ch-btn.ch3.active{border-color:#44aaff;color:#44aaff;background:#081218}
+.ch-btn.ch4.active{border-color:#ff66cc;color:#ff66cc;background:#180814}
+
+.knobs{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+.knob{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+}
+.knob-dial{
+  width:54px;height:54px;
+  border-radius:50%;
+  background:radial-gradient(circle at 30% 30%,#5a5e5a 0%,#2c302c 60%,#1a1d1a 100%);
+  border:2px solid #0a0c0a;
+  position:relative;
+  cursor:pointer;
+  box-shadow:
+    inset 0 -2px 4px rgba(0,0,0,.6),
+    inset 0 2px 2px rgba(255,255,255,.08),
+    0 2px 4px rgba(0,0,0,.6);
+  transition:transform .3s cubic-bezier(.5,1.6,.4,1);
+}
+.knob-dial::before{
+  content:"";
+  position:absolute;
+  top:6px;left:50%;
+  width:3px;height:14px;
+  background:var(--color-phosphor);
+  transform:translateX(-50%);
+  border-radius:1px;
+  box-shadow:0 0 4px var(--color-phosphor);
+}
+.knob-label{
+  font-size:10px;
+  letter-spacing:.12em;
+  color:var(--color-text-dim);
+  text-transform:uppercase;
+}
+.knob-val{
+  font-family:'VT323',monospace;
+  font-size:15px;
+  color:var(--color-phosphor);
+  text-shadow:0 0 4px rgba(51,255,119,.5);
+}
+
+.controls{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+.ctrl{
+  background:#1a1d1a;
+  border:1px solid #000;
+  border-radius:4px;
+  padding:8px;
+  font-family:'Share Tech Mono',monospace;
+  font-size:11px;
+  letter-spacing:.1em;
+  color:#bbb;
+  cursor:pointer;
+  text-transform:uppercase;
+  box-shadow:inset 0 1px 0 #3a3e3a,inset 0 -1px 0 #000;
+  transition:all .1s;
+}
+.ctrl:active{transform:translateY(1px);box-shadow:inset 0 1px 2px #000}
+.ctrl.run{color:var(--color-phosphor)}
+.ctrl.stop{color:var(--color-led-on)}
+
+/* === BELOW SCOPE === */
+.readout{
+  margin-top:18px;
+  background:#070a07;
+  border:1px solid #1a1d1a;
+  border-radius:10px;
+  padding:clamp(14px,2.4vw,22px);
+}
+
+.pane{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:clamp(16px,3vw,30px);
+}
+@media(max-width:720px){.pane{grid-template-columns:1fr}}
+.pane[hidden]{display:none}
+
+.readout h3{
+  font-family:'Major Mono Display',monospace;
+  font-size:clamp(14px,2vw,18px);
+  margin:0 0 14px;
+  color:var(--color-phosphor);
+  text-shadow:0 0 6px rgba(51,255,119,.35);
+  letter-spacing:.05em;
+}
+.readout h3 .tag{
+  font-family:'Share Tech Mono',monospace;
+  font-size:11px;
+  color:var(--color-text-dim);
+  margin-left:8px;
+  letter-spacing:.15em;
+}
+.ch2-color{color:#ffd28a;text-shadow:0 0 6px rgba(255,170,68,.35)}
+.ch3-color{color:#a8d8ff;text-shadow:0 0 6px rgba(68,170,255,.35)}
+.ch4-color{color:#ffb0e0;text-shadow:0 0 6px rgba(255,102,204,.35)}
+
+.item-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.item{
+  border-left:2px solid var(--color-phosphor-dim);
+  padding:6px 0 6px 12px;
+  display:flex;flex-direction:column;gap:3px;
+}
+.item .top{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}
+.item .name{
+  font-family:'VT323',monospace;
+  font-size:20px;
+  color:var(--color-phosphor-trace);
+}
+.item .meta{
+  font-size:11px;
+  color:var(--color-text-dim);
+  letter-spacing:.1em;
+}
+.item .desc{
+  font-size:13px;
+  color:var(--color-text);
+  line-height:1.45;
+}
+.item.hot{border-left-color:#ffaa44}
+.item.hot .name{color:#ffd28a}
+.item.cool{border-left-color:#44aaff}
+.item.cool .name{color:#a8d8ff}
+.item.pink{border-left-color:#ff66cc}
+.item.pink .name{color:#ffb0e0}
+
+.skills-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px 18px}
+.skill{display:flex;justify-content:space-between;align-items:center;gap:8px;font-family:'VT323',monospace;font-size:18px;color:var(--color-text)}
+.skill .bar{
+  flex:1;
+  height:6px;
+  background:#0a1410;
+  border:1px solid #102018;
+  position:relative;
+  overflow:hidden;
+}
+.skill .bar::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  width:var(--w,70%);
+  background:linear-gradient(90deg,var(--color-phosphor-dim),var(--color-phosphor));
+  box-shadow:0 0 4px var(--color-phosphor);
+}
+.skill .val{color:var(--color-phosphor);min-width:34px;text-align:right;font-size:14px}
+
+/* === FOOTER === */
+.foot{
+  margin-top:18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:18px;
+  flex-wrap:wrap;
+  font-family:'Share Tech Mono',monospace;
+  font-size:12px;
+  color:var(--color-text-dim);
+  letter-spacing:.1em;
+}
+.foot a{color:var(--color-phosphor);text-decoration:none;border-bottom:1px dotted var(--color-phosphor-dim)}
+.foot a:hover{color:var(--color-phosphor-trace)}
+.serial{font-family:'VT323',monospace;font-size:18px;color:var(--color-text)}
+
+.warn-stripe{
+  height:8px;
+  background:repeating-linear-gradient(45deg,var(--color-warning) 0 10px,#000 10px 20px);
+  border-radius:0 0 4px 4px;
+  margin:6px -8px -8px;
+  opacity:.7;
+}
+
+/* mobile tweaks */
+@media(max-width:520px){
+  .scope-header{justify-content:flex-start}
+  .channels{grid-template-columns:1fr}
+  .knobs{grid-template-columns:repeat(3,1fr);gap:6px}
+  .knob-dial{width:46px;height:46px}
+  .skills-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<main class="scope" role="main">
+
+  <header class="scope-header">
+    <div class="brand">
+      <span class="brand-mark">NRDY//SCOPE</span>
+      <span class="brand-model">NRD-105 · 4ch · 200MHz</span>
+      <span class="brand-tag">// software engineer · tinkerer · NL</span>
+    </div>
+    <div class="status">
+      <span class="row"><span class="led on-power"></span>PWR</span>
+      <span class="row"><span class="led on-trig"></span>TRIG</span>
+      <span id="clock">--:--:--</span>
+    </div>
+  </header>
+
+  <section class="scope-body">
+
+    <div class="screen-wrap">
+      <div class="screen" id="screen">
+        <svg viewBox="0 0 800 600" preserveAspectRatio="none" aria-hidden="true">
+          <g stroke="var(--color-grid-faint)" stroke-width="1">
+            <line x1="80"  y1="0" x2="80"  y2="600"/>
+            <line x1="160" y1="0" x2="160" y2="600"/>
+            <line x1="240" y1="0" x2="240" y2="600"/>
+            <line x1="320" y1="0" x2="320" y2="600"/>
+            <line x1="400" y1="0" x2="400" y2="600"/>
+            <line x1="480" y1="0" x2="480" y2="600"/>
+            <line x1="560" y1="0" x2="560" y2="600"/>
+            <line x1="640" y1="0" x2="640" y2="600"/>
+            <line x1="720" y1="0" x2="720" y2="600"/>
+            <line x1="0" y1="75"  x2="800" y2="75"/>
+            <line x1="0" y1="150" x2="800" y2="150"/>
+            <line x1="0" y1="225" x2="800" y2="225"/>
+            <line x1="0" y1="300" x2="800" y2="300"/>
+            <line x1="0" y1="375" x2="800" y2="375"/>
+            <line x1="0" y1="450" x2="800" y2="450"/>
+            <line x1="0" y1="525" x2="800" y2="525"/>
+          </g>
+          <g stroke="var(--color-grid)" stroke-width="1.2">
+            <line x1="0" y1="300" x2="800" y2="300"/>
+            <line x1="400" y1="0" x2="400" y2="600"/>
+          </g>
+          <g stroke="var(--color-grid)" stroke-width="1">
+            <g id="ticksH"></g>
+            <g id="ticksV"></g>
+          </g>
+
+          <polygon id="trigMark" points="795,295 805,300 795,305" fill="var(--color-led-amber)"/>
+          <text x="780" y="293" fill="var(--color-led-amber)" font-family="VT323" font-size="14" text-anchor="end">T</text>
+
+          <path id="traceTail"
+                fill="none"
+                stroke="var(--color-phosphor-dim)"
+                stroke-width="1.4"
+                opacity=".5"/>
+          <path id="traceGlow"
+                fill="none"
+                stroke="var(--color-phosphor)"
+                stroke-width="6"
+                stroke-linejoin="round"
+                opacity=".18"/>
+          <path id="trace"
+                fill="none"
+                stroke="var(--color-phosphor)"
+                stroke-width="2.2"
+                stroke-linejoin="round"
+                stroke-linecap="round"
+                style="filter:drop-shadow(0 0 4px rgba(51,255,119,.8))"/>
+        </svg>
+
+        <div class="osd tl">
+          <div class="row"><span class="osd-dot" id="dotIcon"></span><span id="oChan">CH1</span> · <span id="oLabel">SKILLS</span></div>
+          <div>V/DIV <span id="oVolt">500mV</span></div>
+        </div>
+        <div class="osd tr">
+          <div>T/DIV <span id="oTime">20µs</span></div>
+          <div>TRIG <span id="oTrig">AUTO</span></div>
+        </div>
+        <div class="osd bl"><span id="oCount">cycles 0</span></div>
+        <div class="osd br">nerdy.nl/v105</div>
+      </div>
+    </div>
+
+    <aside class="panel">
+      <div>
+        <h4>Channel select</h4>
+        <div class="channels" id="channels">
+          <button class="ch-btn ch1 active" data-ch="1"><span class="ch-num">CH 1</span>SKILLS</button>
+          <button class="ch-btn ch2" data-ch="2"><span class="ch-num">CH 2</span>PROJECTS</button>
+          <button class="ch-btn ch3" data-ch="3"><span class="ch-num">CH 3</span>STACK</button>
+          <button class="ch-btn ch4" data-ch="4"><span class="ch-num">CH 4</span>CONTACT</button>
+        </div>
+      </div>
+
+      <div>
+        <h4>Controls</h4>
+        <div class="knobs">
+          <div class="knob">
+            <div class="knob-dial" data-knob="volts" data-step="60"></div>
+            <span class="knob-label">V/Div</span>
+            <span class="knob-val" id="kVolt">500m</span>
+          </div>
+          <div class="knob">
+            <div class="knob-dial" data-knob="time" data-step="60"></div>
+            <span class="knob-label">T/Div</span>
+            <span class="knob-val" id="kTime">20µ</span>
+          </div>
+          <div class="knob">
+            <div class="knob-dial" data-knob="trig" data-step="45"></div>
+            <span class="knob-label">Level</span>
+            <span class="knob-val" id="kTrig">0.0V</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h4>Run mode</h4>
+        <div class="controls">
+          <button class="ctrl run" id="btnRun">▶ Run</button>
+          <button class="ctrl stop" id="btnStop">■ Stop</button>
+          <button class="ctrl" id="btnSingle">Single</button>
+          <button class="ctrl" id="btnTrig">Force trig</button>
+        </div>
+      </div>
+
+      <div class="warn-stripe" aria-hidden="true"></div>
+    </aside>
+
+  </section>
+
+  <!-- READOUT PANELS — one per channel, toggle hidden -->
+  <section class="readout">
+
+    <div class="pane" data-pane="1">
+      <div>
+        <h3>CH1 · Skills <span class="tag">// signal capture</span></h3>
+        <div class="skills-grid">
+          <div class="skill"><span>TypeScript</span><span class="bar" style="--w:92%"></span><span class="val">92</span></div>
+          <div class="skill"><span>Python</span><span class="bar" style="--w:88%"></span><span class="val">88</span></div>
+          <div class="skill"><span>Go</span><span class="bar" style="--w:74%"></span><span class="val">74</span></div>
+          <div class="skill"><span>Kubernetes</span><span class="bar" style="--w:90%"></span><span class="val">90</span></div>
+          <div class="skill"><span>PostgreSQL</span><span class="bar" style="--w:82%"></span><span class="val">82</span></div>
+          <div class="skill"><span>Bash</span><span class="bar" style="--w:86%"></span><span class="val">86</span></div>
+          <div class="skill"><span>Vue / React</span><span class="bar" style="--w:78%"></span><span class="val">78</span></div>
+          <div class="skill"><span>Linux / systemd</span><span class="bar" style="--w:84%"></span><span class="val">84</span></div>
+        </div>
+      </div>
+      <div>
+        <h3 class="ch2-color">CH2 · Projects <span class="tag">// pulse train preview</span></h3>
+        <ul class="item-list">
+          <li class="item hot">
+            <div class="top"><span class="name">Nerdy Terminal</span><span class="meta">multi-agent · CLI</span></div>
+            <span class="desc">Tab-agents en workers in een tmux-gebaseerde hiërarchie. Routing, taken, supervisorlaag — alles via één klein binair.</span>
+          </li>
+          <li class="item hot">
+            <div class="top"><span class="name">EM MCP Gateway</span><span class="meta">LLM · energy sector</span></div>
+            <span class="desc">Tool-use gateway die meet- en netwerkdata veilig aan agents aanbiedt. Code-mode JS sandbox, audit logging, scoped credentials.</span>
+          </li>
+          <li class="item hot">
+            <div class="top"><span class="name">Pixel Tanks</span><span class="meta">retro · multiplayer</span></div>
+            <span class="desc">Top-down arcade tanks met websockets en server-side authoritative physics. CRT-filter ingebouwd.</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pane" data-pane="2" hidden>
+      <div>
+        <h3 class="ch2-color">CH2 · Projects <span class="tag">// pulse train</span></h3>
+        <ul class="item-list">
+          <li class="item hot">
+            <div class="top"><span class="name">Nerdy Terminal</span><span class="meta">multi-agent · CLI</span></div>
+            <span class="desc">Tab-agents en workers in een tmux-gebaseerde hiërarchie met taakqueue, peek/ask en activity feed. Alles via één klein binair.</span>
+          </li>
+          <li class="item hot">
+            <div class="top"><span class="name">EM MCP Gateway</span><span class="meta">LLM · energy sector</span></div>
+            <span class="desc">Tool-use gateway die meet- en netwerkdata veilig aan agents aanbiedt. Code-mode JS sandbox, audit logging, scoped credentials.</span>
+          </li>
+          <li class="item hot">
+            <div class="top"><span class="name">K8s · GitOps Stack</span><span class="meta">ArgoCD · Flux · Tailscale</span></div>
+            <span class="desc">Vijf productieclusters met declaratieve releases, mesh-VPN tussen on-prem en cloud. Geen handmatige kubectl in prod.</span>
+          </li>
+          <li class="item hot">
+            <div class="top"><span class="name">Pixel Tanks</span><span class="meta">retro · multiplayer</span></div>
+            <span class="desc">Top-down arcade tanks met websockets en server-side authoritative physics. CRT-filter ingebouwd.</span>
+          </li>
+          <li class="item hot">
+            <div class="top"><span class="name">Home Assistant lab</span><span class="meta">200+ entities</span></div>
+            <span class="desc">Energy monitoring, lokale automations, MQTT bridges, ESPHome-sensoren. Geen cloud-vendor lock-in.</span>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <h3>CH1 · Skills <span class="tag">// reference trace</span></h3>
+        <div class="skills-grid">
+          <div class="skill"><span>TypeScript</span><span class="bar" style="--w:92%"></span><span class="val">92</span></div>
+          <div class="skill"><span>Python</span><span class="bar" style="--w:88%"></span><span class="val">88</span></div>
+          <div class="skill"><span>Go</span><span class="bar" style="--w:74%"></span><span class="val">74</span></div>
+          <div class="skill"><span>Kubernetes</span><span class="bar" style="--w:90%"></span><span class="val">90</span></div>
+          <div class="skill"><span>PostgreSQL</span><span class="bar" style="--w:82%"></span><span class="val">82</span></div>
+          <div class="skill"><span>Bash</span><span class="bar" style="--w:86%"></span><span class="val">86</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pane" data-pane="3" hidden>
+      <div>
+        <h3 class="ch3-color">CH3 · Stack <span class="tag">// composite signal</span></h3>
+        <ul class="item-list">
+          <li class="item cool">
+            <div class="top"><span class="name">Languages</span><span class="meta">// daily driver</span></div>
+            <span class="desc">TypeScript, Python, Go, Bash, een vleugje Rust voor scherpere randen. SQL als tweede moedertaal.</span>
+          </li>
+          <li class="item cool">
+            <div class="top"><span class="name">Orchestration</span><span class="meta">// production</span></div>
+            <span class="desc">Kubernetes (eigen multi-cluster), ArgoCD, Flux, Helm, Cilium, Tailscale mesh tussen nodes.</span>
+          </li>
+          <li class="item cool">
+            <div class="top"><span class="name">Data</span><span class="meta">// storage layer</span></div>
+            <span class="desc">PostgreSQL voor alles wat er toe doet, Redis voor wat snel moet, ClickHouse voor wat groot moet.</span>
+          </li>
+          <li class="item cool">
+            <div class="top"><span class="name">Web</span><span class="meta">// surface</span></div>
+            <span class="desc">Vue, React, Vite, gewoon HTML als het kan. Liefst geen 80KB voor een knop.</span>
+          </li>
+          <li class="item cool">
+            <div class="top"><span class="name">Tooling</span><span class="meta">// glue</span></div>
+            <span class="desc">tmux, ripgrep, fzf, just, mise, een eigen CLI voor agent-orchestratie (tm).</span>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="ch3-color">CH3 · Methode <span class="tag">// workflow</span></h3>
+        <ul class="item-list">
+          <li class="item cool">
+            <div class="top"><span class="name">GitOps eerst</span><span class="meta">// declarative</span></div>
+            <span class="desc">Niets in prod waar geen git-commit voor is. Pull requests zijn de audit trail.</span>
+          </li>
+          <li class="item cool">
+            <div class="top"><span class="name">Observability vroeg</span><span class="meta">// metrics first</span></div>
+            <span class="desc">Prometheus + Grafana + Loki vanaf dag één. Alerts die slapen — niet alerts die roepen.</span>
+          </li>
+          <li class="item cool">
+            <div class="top"><span class="name">Klein en saai</span><span class="meta">// boring tech</span></div>
+            <span class="desc">Geen nieuwe framework om indruk te maken. Wel iets dat over drie jaar nog draait zonder onderhoud.</span>
+          </li>
+          <li class="item cool">
+            <div class="top"><span class="name">Automatiseer</span><span class="meta">// don't repeat</span></div>
+            <span class="desc">Tweede keer is een script. Derde keer is een tool. Vierde keer is een service.</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pane" data-pane="4" hidden>
+      <div>
+        <h3 class="ch4-color">CH4 · Contact <span class="tag">// channel status</span></h3>
+        <div class="skills-grid">
+          <div class="skill"><span>e-mail</span><span class="bar" style="--w:100%"></span><span class="val">on</span></div>
+          <div class="skill"><span>github</span><span class="bar" style="--w:100%"></span><span class="val">on</span></div>
+          <div class="skill"><span>cv pdf</span><span class="bar" style="--w:65%"></span><span class="val">req</span></div>
+          <div class="skill"><span>locatie</span><span class="bar" style="--w:90%"></span><span class="val">NL</span></div>
+          <div class="skill"><span>response</span><span class="bar" style="--w:85%"></span><span class="val">1d</span></div>
+          <div class="skill"><span>remote</span><span class="bar" style="--w:100%"></span><span class="val">yes</span></div>
+        </div>
+      </div>
+      <div>
+        <h3 class="ch4-color">CH4 · Pulses <span class="tag">// reach</span></h3>
+        <ul class="item-list">
+          <li class="item pink">
+            <div class="top"><span class="name">hi@nerdy.nl</span><span class="meta">// preferred</span></div>
+            <span class="desc">Antwoord meestal binnen een werkdag. Voor recruiters: één paragraaf met rol, stack en werkvorm graag.</span>
+          </li>
+          <li class="item pink">
+            <div class="top"><span class="name">github.com/nerdyk</span><span class="meta">// open source</span></div>
+            <span class="desc">Losse repo's, scripts, soms een gist. Diverse open source bijdragen, geen zelf-promotie.</span>
+          </li>
+          <li class="item pink">
+            <div class="top"><span class="name">basis</span><span class="meta">// Nederland</span></div>
+            <span class="desc">Remote-first. On-site of hybride in Randstad bespreekbaar voor het juiste project.</span>
+          </li>
+          <li class="item pink">
+            <div class="top"><span class="name">no-cold-pitch</span><span class="meta">// please</span></div>
+            <span class="desc">Geen generieke outreach. Wel: korte, concrete vraag — en ik beantwoord die ook.</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </section>
+
+  <footer class="foot">
+    <span class="serial">SN-105 · build 2026.05 · cal-ok</span>
+    <span>contact <a href="mailto:hi@nerdy.nl">hi@nerdy.nl</a> · <a href="https://github.com/nerdyk" target="_blank" rel="noopener">github.com/nerdyk</a></span>
+  </footer>
+
+</main>
+
+<script>
+(function(){
+  // build tick marks on center axes via DOM creation (no innerHTML)
+  (function ticks(){
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+    const h = document.getElementById('ticksH');
+    const v = document.getElementById('ticksV');
+    if(!h||!v) return;
+    for(let x=40;x<=760;x+=20){
+      const l = document.createElementNS(SVG_NS,'line');
+      l.setAttribute('x1',x); l.setAttribute('y1',296);
+      l.setAttribute('x2',x); l.setAttribute('y2',304);
+      h.appendChild(l);
+    }
+    for(let y=40;y<=560;y+=20){
+      const l = document.createElementNS(SVG_NS,'line');
+      l.setAttribute('x1',396); l.setAttribute('y1',y);
+      l.setAttribute('x2',404); l.setAttribute('y2',y);
+      v.appendChild(l);
+    }
+  })();
+
+  function pad(n){return n<10?'0'+n:''+n}
+  function tick(){
+    const d = new Date();
+    const el = document.getElementById('clock');
+    if(el) el.textContent = pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());
+  }
+  tick(); setInterval(tick,1000);
+
+  const W = 800, H = 600, Y0 = 300;
+  function build(points){
+    if(!points.length) return '';
+    let d = 'M '+points[0][0]+' '+points[0][1];
+    for(let i=1;i<points.length;i++) d += ' L '+points[i][0]+' '+points[i][1];
+    return d;
+  }
+
+  const skillVals = [92,88,74,90,82,86,78,84];
+  function waveSkills(phase){
+    const pts = [];
+    const segW = W / skillVals.length;
+    pts.push([0, Y0]);
+    for(let i=0;i<skillVals.length;i++){
+      const v = skillVals[i];
+      const amp = (v/100) * 200;
+      const yTop = Y0 - amp + Math.sin(phase*2 + i)*4;
+      const x0 = i*segW + 6;
+      const x1 = (i+1)*segW - 6;
+      pts.push([x0, Y0]);
+      pts.push([x0, yTop]);
+      pts.push([x1, yTop]);
+      pts.push([x1, Y0]);
+    }
+    pts.push([W, Y0]);
+    return build(pts);
+  }
+
+  const pulses = [
+    {w:.10,h:.78},{w:.14,h:.62},{w:.08,h:.84},{w:.16,h:.55},{w:.11,h:.7}
+  ];
+  function waveProjects(phase){
+    const pts = [];
+    let x = 0;
+    pts.push([0, Y0+50]);
+    let gap = (1 - pulses.reduce((s,p)=>s+p.w,0)) / (pulses.length+1) * W;
+    for(let i=0;i<pulses.length;i++){
+      x += gap;
+      const w = pulses[i].w * W;
+      const h = pulses[i].h * 220;
+      pts.push([x, Y0+50]);
+      pts.push([x + 6, Y0 - h]);
+      pts.push([x + w - 6 + Math.sin(phase+i)*2, Y0 - h]);
+      pts.push([x + w, Y0+50]);
+      x += w;
+    }
+    pts.push([W, Y0+50]);
+    return build(pts);
+  }
+
+  function waveStack(phase){
+    const pts = [];
+    for(let x=0;x<=W;x+=4){
+      const t = x/W * Math.PI*2;
+      const y = Y0
+        + Math.sin(t*3 + phase)*70
+        + Math.sin(t*7 + phase*1.3)*32
+        + Math.sin(t*13 + phase*2.1)*14;
+      pts.push([x, y]);
+    }
+    return build(pts);
+  }
+
+  function waveContact(phase){
+    const pts = [];
+    const beat = [
+      [0,0],[40,0],[50,-10],[55,-5],[60,-25],[65,80],[70,-180],[75,40],[82,-10],[100,0],[140,0]
+    ];
+    let x = -((phase*30) % 140);
+    while(x < W){
+      for(let i=0;i<beat.length;i++){
+        const px = x + beat[i][0];
+        const py = Y0 + beat[i][1];
+        if(px>=0 && px<=W) pts.push([px,py]);
+      }
+      x += 140;
+    }
+    if(pts.length===0) pts.push([0,Y0],[W,Y0]);
+    return build(pts);
+  }
+
+  const channels = {
+    1:{wave:waveSkills,   color:'#33ff77', dim:'#1a8044', label:'SKILLS'},
+    2:{wave:waveProjects, color:'#ffaa44', dim:'#7f5510', label:'PROJECTS'},
+    3:{wave:waveStack,    color:'#44aaff', dim:'#10487f', label:'STACK'},
+    4:{wave:waveContact,  color:'#ff66cc', dim:'#7f1058', label:'CONTACT'}
+  };
+
+  let currentCh = 1;
+  let running = true;
+  let phase = 0;
+  let cycles = 0;
+  const cyclesEl = document.getElementById('oCount');
+  const tracePath = document.getElementById('trace');
+  const traceGlow = document.getElementById('traceGlow');
+  const traceTail = document.getElementById('traceTail');
+  const dotIcon   = document.getElementById('dotIcon');
+  let lastFrameTrace = '';
+
+  function setOSD(){
+    document.getElementById('oChan').textContent = 'CH'+currentCh;
+    document.getElementById('oLabel').textContent = channels[currentCh].label;
+    dotIcon.className = 'osd-dot' + (currentCh===1?'':' ch'+currentCh);
+  }
+
+  function render(){
+    if(running){
+      phase += 0.06;
+      cycles++;
+      if(cyclesEl && cycles % 8 === 0) cyclesEl.textContent = 'cycles '+cycles;
+    }
+    const ch = channels[currentCh];
+    const d  = ch.wave(phase);
+    tracePath.setAttribute('d', d);
+    tracePath.setAttribute('stroke', ch.color);
+    traceGlow.setAttribute('d', d);
+    traceGlow.setAttribute('stroke', ch.color);
+    if(lastFrameTrace){
+      traceTail.setAttribute('d', lastFrameTrace);
+      traceTail.setAttribute('stroke', ch.dim);
+    }
+    lastFrameTrace = d;
+    requestAnimationFrame(render);
+  }
+  setOSD(); render();
+
+  const panes = document.querySelectorAll('.pane');
+  function setChannel(n){
+    currentCh = n;
+    document.querySelectorAll('.ch-btn').forEach(function(b){
+      b.classList.toggle('active', Number(b.dataset.ch)===n);
+    });
+    panes.forEach(function(p){
+      p.hidden = Number(p.dataset.pane) !== n;
+    });
+    setOSD();
+  }
+  document.querySelectorAll('.ch-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){ setChannel(Number(btn.dataset.ch)); });
+  });
+
+  const voltSteps = ['100m','200m','500m','1.0','2.0','5.0'];
+  const timeSteps = ['1µ','5µ','20µ','100µ','500µ','2m'];
+  const trigSteps = ['-2.0V','-1.0V','0.0V','+1.0V','+2.0V'];
+  const knobState = {volts:2,time:2,trig:2,angle:{volts:0,time:0,trig:0}};
+
+  function updateKnob(id){
+    const el = document.querySelector('[data-knob="'+id+'"]');
+    knobState.angle[id] += parseInt(el.dataset.step,10);
+    el.style.transform = 'rotate('+knobState.angle[id]+'deg)';
+    if(id==='volts'){
+      knobState.volts = (knobState.volts+1) % voltSteps.length;
+      document.getElementById('kVolt').textContent = voltSteps[knobState.volts];
+      document.getElementById('oVolt').textContent = voltSteps[knobState.volts]+'V';
+    } else if(id==='time'){
+      knobState.time = (knobState.time+1) % timeSteps.length;
+      document.getElementById('kTime').textContent = timeSteps[knobState.time];
+      document.getElementById('oTime').textContent = timeSteps[knobState.time]+'s';
+    } else if(id==='trig'){
+      knobState.trig = (knobState.trig+1) % trigSteps.length;
+      document.getElementById('kTrig').textContent = trigSteps[knobState.trig];
+    }
+  }
+  document.querySelectorAll('.knob-dial').forEach(function(k){
+    k.addEventListener('click', function(){ updateKnob(k.dataset.knob); });
+  });
+
+  const btnRun = document.getElementById('btnRun');
+  const btnStop = document.getElementById('btnStop');
+  const btnSingle = document.getElementById('btnSingle');
+  const btnTrig = document.getElementById('btnTrig');
+  const trigStatus = document.getElementById('oTrig');
+
+  btnRun.addEventListener('click', function(){ running = true; trigStatus.textContent='AUTO'; });
+  btnStop.addEventListener('click',function(){ running = false; trigStatus.textContent='STOP'; });
+  btnSingle.addEventListener('click', function(){
+    trigStatus.textContent='SINGLE';
+    running = true;
+    let n = 0;
+    const stopAfter = setInterval(function(){
+      n++; if(n>30){ running=false; trigStatus.textContent='STOP'; clearInterval(stopAfter); }
+    }, 16);
+  });
+  btnTrig.addEventListener('click', function(){
+    trigStatus.textContent='FORCED';
+    phase += Math.PI;
+    setTimeout(function(){ if(running) trigStatus.textContent='AUTO'; }, 800);
+  });
+
+  window.addEventListener('keydown', function(e){
+    if(e.key>='1' && e.key<='4') setChannel(parseInt(e.key,10));
+  });
+})();
+</script>
+</body>
+</html>
