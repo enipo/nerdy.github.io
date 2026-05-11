@@ -1,0 +1,991 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NERDY — VHS Edition · vol. 108</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Monoton&family=VT323&family=Special+Elite&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --neon-pink:   #ff2ad1;
+    --neon-cyan:   #1de9ff;
+    --neon-yellow: #ffe24a;
+    --neon-purple: #8a2bff;
+    --neon-orange: #ff7a1a;
+    --neon-lime:   #b6ff3c;
+    --vhs-black:   #0a0512;
+    --vhs-deep:    #15082b;
+    --vhs-shadow:  #04020a;
+    --label-cream: #efe6c8;
+    --label-ink:   #1a1208;
+    --sticker-red: #c8102e;
+    --sticker-bg:  #fff6da;
+    --plastic:     #2a1a3a;
+  }
+
+  *,*::before,*::after { box-sizing: border-box; }
+  html,body { margin:0; padding:0; }
+  body {
+    background:
+      radial-gradient(circle at 20% 10%, rgba(138,43,255,0.35), transparent 55%),
+      radial-gradient(circle at 80% 90%, rgba(29,233,255,0.25), transparent 50%),
+      linear-gradient(180deg, var(--vhs-black) 0%, #1a0530 50%, var(--vhs-black) 100%);
+    color: var(--label-cream);
+    font-family: 'VT323', 'Courier New', monospace;
+    min-height: 100vh;
+    padding: clamp(12px, 3vw, 40px);
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  body::before {
+    content:"";
+    position: fixed; inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,0.04) 0 1px,
+      transparent 1px 3px
+    );
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    z-index: 100;
+  }
+  body::after {
+    content:"";
+    position: fixed; left: 0; right: 0; top: -10%; height: 18%;
+    background: linear-gradient(180deg,
+      transparent 0%,
+      rgba(255,255,255,0.07) 45%,
+      rgba(29,233,255,0.18) 50%,
+      rgba(255,255,255,0.07) 55%,
+      transparent 100%);
+    pointer-events: none;
+    z-index: 99;
+    animation: tracking-roll 7s linear infinite;
+    filter: blur(0.4px);
+  }
+  @keyframes tracking-roll {
+    0%   { transform: translateY(0); }
+    100% { transform: translateY(140vh); }
+  }
+
+  body { --tracking: 0; }
+
+  .crt-jitter {
+    animation: jitter 0.18s steps(1) infinite;
+  }
+  @keyframes jitter {
+    0%,100% { transform: translateX(0); }
+    25%     { transform: translateX(calc(var(--tracking) * 1.2px)); }
+    50%     { transform: translateX(calc(var(--tracking) * -0.8px)); }
+    75%     { transform: translateX(calc(var(--tracking) * 0.4px)); }
+  }
+
+  .topbar {
+    display:flex; justify-content:space-between; align-items:center;
+    max-width: 1200px; margin: 0 auto 18px;
+    font-family: 'VT323', monospace;
+    font-size: clamp(14px, 1.6vw, 18px);
+    color: var(--neon-cyan);
+    letter-spacing: 0.08em;
+    text-shadow: 0 0 8px rgba(29,233,255,0.55);
+  }
+  .topbar .ch  { color: var(--neon-yellow); }
+  .topbar .rec { color: var(--neon-pink); }
+  .topbar .rec::before {
+    content:"●"; margin-right: 4px;
+    animation: blink 1.2s infinite;
+  }
+  @keyframes blink { 50% { opacity: 0.25; } }
+
+  .jacket {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 38px 1fr;
+    gap: 0;
+    background: var(--plastic);
+    border-radius: 6px;
+    padding: clamp(10px, 1.2vw, 16px);
+    box-shadow:
+      0 0 0 2px #000,
+      0 0 0 6px #2a1a3a,
+      0 30px 80px rgba(0,0,0,0.7),
+      0 0 90px rgba(138,43,255,0.25);
+    position: relative;
+  }
+
+  .panel {
+    position: relative;
+    overflow: hidden;
+    border-radius: 4px;
+    min-height: clamp(420px, 60vw, 620px);
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.6);
+  }
+
+  .back {
+    background:
+      linear-gradient(135deg, #1a0030 0%, #2d0050 35%, #4a0070 100%);
+    color: var(--label-cream);
+    padding: clamp(16px, 2.6vw, 32px);
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  .back::before {
+    content:"";
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 80% 0%, rgba(255,42,209,0.25), transparent 55%),
+      radial-gradient(ellipse at 0% 100%, rgba(29,233,255,0.18), transparent 55%);
+    pointer-events: none;
+  }
+  .back > * { position: relative; z-index: 1; }
+
+  .back .meta {
+    font-family: 'VT323', monospace;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    color: var(--neon-yellow);
+    text-transform: uppercase;
+  }
+  .back h2 {
+    margin: 0;
+    font-family: 'Bungee', sans-serif;
+    font-size: clamp(20px, 2.8vw, 30px);
+    color: var(--neon-cyan);
+    text-shadow:
+      2px 0 0 var(--neon-pink),
+      -2px 0 0 var(--neon-yellow);
+    letter-spacing: 0.04em;
+  }
+  .synopsis {
+    font-family: 'Special Elite', 'Courier New', monospace;
+    color: var(--label-cream);
+    font-size: clamp(13px, 1.4vw, 15px);
+    line-height: 1.55;
+    background: rgba(0,0,0,0.35);
+    padding: 12px 14px;
+    border-left: 3px solid var(--neon-pink);
+  }
+
+  .badge-row {
+    display:flex; gap:8px; align-items:center; flex-wrap:wrap;
+    font-family:'Bungee',sans-serif;
+    font-size:11px; letter-spacing:0.12em;
+  }
+  .badge-row span { padding: 2px 8px; border: 1px solid; }
+  .badge-runtime { border-color: var(--neon-cyan); color: var(--neon-cyan); }
+  .badge-genre   { border-color: var(--neon-pink); color: var(--neon-pink); }
+  .badge-region  { border-color: var(--neon-yellow); color: var(--neon-yellow); }
+
+  .chapters-header {
+    font-family:'Bungee',sans-serif;
+    font-size:12px;
+    letter-spacing:0.18em;
+    color:var(--neon-pink);
+    margin: 4px 0 6px;
+  }
+
+  .chapters {
+    list-style: none;
+    margin: 0; padding: 0;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .chapters li {
+    display: grid;
+    grid-template-columns: 60px 1fr auto;
+    gap: 10px;
+    align-items: baseline;
+    padding: 6px 0;
+    border-bottom: 1px dashed rgba(239,230,200,0.25);
+    cursor: pointer;
+    transition: background 0.18s, transform 0.18s;
+  }
+  .chapters li:hover { background: rgba(29,233,255,0.08); transform: translateX(3px); }
+  .chapters .tc {
+    font-family: 'VT323', monospace;
+    color: var(--neon-cyan);
+    font-size: 17px;
+    letter-spacing: 0.05em;
+  }
+  .chapters .title {
+    font-family: 'Bungee', sans-serif;
+    font-size: clamp(12px, 1.3vw, 14px);
+    color: var(--label-cream);
+    letter-spacing: 0.02em;
+  }
+  .chapters .ep {
+    font-family: 'VT323', monospace;
+    color: var(--neon-yellow);
+    font-size: 15px;
+  }
+  .chapters li.active {
+    background: linear-gradient(90deg, rgba(255,42,209,0.18), transparent);
+    border-left: 3px solid var(--neon-pink);
+    padding-left: 8px;
+  }
+
+  .specs {
+    margin-top: auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px 14px;
+    font-family: 'VT323', monospace;
+    font-size: 15px;
+    color: var(--label-cream);
+    border-top: 1px solid rgba(239,230,200,0.3);
+    padding-top: 10px;
+  }
+  .specs b {
+    color: var(--neon-cyan);
+    font-weight: normal;
+    text-shadow: 0 0 6px rgba(29,233,255,0.45);
+  }
+
+  .barcode {
+    background: var(--label-cream);
+    color: var(--label-ink);
+    padding: 8px 10px;
+    border-radius: 2px;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    font-family: 'VT323', monospace;
+    align-self: flex-start;
+  }
+  .barcode svg { display: block; }
+  .barcode small { font-size: 11px; letter-spacing: 0.18em; }
+
+  .sticker {
+    position: absolute;
+    top: clamp(14px, 2vw, 22px);
+    right: clamp(14px, 2vw, 22px);
+    width: clamp(120px, 13vw, 158px);
+    height: clamp(120px, 13vw, 158px);
+    background: var(--sticker-bg);
+    color: var(--sticker-red);
+    border: 2px solid var(--sticker-red);
+    border-radius: 50%;
+    transform: rotate(-9deg);
+    box-shadow:
+      0 4px 0 rgba(0,0,0,0.3),
+      0 0 0 4px var(--sticker-bg),
+      0 0 0 6px var(--sticker-red);
+    display: grid; place-items: center;
+    text-align: center;
+    font-family: 'Special Elite', monospace;
+    z-index: 3;
+    line-height: 1.05;
+  }
+  .sticker .store {
+    font-size: clamp(10px, 1vw, 12px);
+    letter-spacing: 0.18em;
+    color: var(--sticker-red);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .sticker .price {
+    font-family: 'Bungee', sans-serif;
+    font-size: clamp(20px, 2.6vw, 30px);
+    color: #111;
+    line-height: 1;
+  }
+  .sticker .pernight {
+    font-size: clamp(9px, 0.9vw, 11px);
+    color: #111;
+    letter-spacing: 0.1em;
+    margin-top: 4px;
+    display: block;
+  }
+  .sticker .dewey {
+    font-family: 'VT323', monospace;
+    font-size: 13px;
+    color: var(--label-ink);
+    margin-top: 4px;
+  }
+
+  .spine {
+    background: linear-gradient(180deg, #0a0512 0%, #1a0a2e 50%, #0a0512 100%);
+    border-left: 1px solid #000;
+    border-right: 1px solid #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100%;
+  }
+  .spine span {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-family: 'Bungee', sans-serif;
+    font-size: clamp(13px, 1.5vw, 16px);
+    color: var(--neon-pink);
+    letter-spacing: 0.4em;
+    text-shadow: 0 0 8px rgba(255,42,209,0.6);
+    white-space: nowrap;
+  }
+
+  .front {
+    background:
+      radial-gradient(circle at 30% 30%, rgba(255,42,209,0.35), transparent 55%),
+      radial-gradient(circle at 70% 80%, rgba(29,233,255,0.4), transparent 55%),
+      linear-gradient(160deg, #20003a 0%, #3a006b 60%, #06001a 100%);
+    padding: clamp(20px, 3vw, 36px);
+    display: flex; flex-direction: column; justify-content: space-between;
+    gap: 16px;
+  }
+
+  .front::before {
+    content:"";
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(0deg, transparent 0%, transparent 55%,
+        rgba(29,233,255,0.18) 56%, transparent 57%,
+        rgba(29,233,255,0.12) 60%, transparent 61%,
+        rgba(29,233,255,0.10) 64%, transparent 65%,
+        rgba(29,233,255,0.08) 70%, transparent 71%,
+        rgba(29,233,255,0.06) 78%, transparent 79%,
+        rgba(29,233,255,0.04) 88%, transparent 89%),
+      repeating-linear-gradient(90deg,
+        transparent 0 4%,
+        rgba(255,42,209,0.07) 4% 4.4%,
+        transparent 4.4% 8%);
+    mask: linear-gradient(180deg, transparent 0%, black 55%, black 100%);
+    -webkit-mask: linear-gradient(180deg, transparent 0%, black 55%, black 100%);
+    pointer-events: none;
+  }
+  .front > * { position: relative; z-index: 1; }
+
+  .label-top {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    gap: 12px;
+  }
+  .vol-badge {
+    background: var(--neon-yellow);
+    color: var(--label-ink);
+    font-family: 'Bungee', sans-serif;
+    padding: 4px 10px;
+    font-size: clamp(11px, 1.2vw, 14px);
+    letter-spacing: 0.06em;
+    transform: rotate(-3deg);
+    box-shadow: 3px 3px 0 var(--vhs-black);
+  }
+  .cert {
+    background: rgba(0,0,0,0.5);
+    border: 1.5px solid var(--label-cream);
+    color: var(--label-cream);
+    font-family: 'Special Elite', monospace;
+    font-size: 12px;
+    padding: 4px 8px;
+    letter-spacing: 0.1em;
+    text-align: center;
+    line-height: 1.2;
+  }
+  .cert b { display: block; font-size: 18px; font-family: 'Bungee', sans-serif; }
+
+  .front-title {
+    font-family: 'Monoton', 'Bungee', sans-serif;
+    font-weight: normal;
+    color: var(--neon-cyan);
+    font-size: clamp(58px, 12vw, 132px);
+    line-height: 0.85;
+    letter-spacing: 0.02em;
+    margin: 4px 0 0 0;
+    text-shadow:
+      4px 0 0 var(--neon-pink),
+      -4px 0 0 var(--neon-yellow),
+      0 0 22px rgba(29,233,255,0.55);
+  }
+  .front-tagline {
+    font-family: 'Bungee', sans-serif;
+    color: var(--label-cream);
+    font-size: clamp(13px, 1.6vw, 18px);
+    letter-spacing: 0.08em;
+    margin: 6px 0 0 0;
+    text-transform: uppercase;
+    line-height: 1.2;
+  }
+  .front-tagline span {
+    background: var(--neon-pink);
+    color: var(--vhs-black);
+    padding: 2px 8px;
+    margin: 0 2px;
+    display: inline-block;
+  }
+
+  .hero-card {
+    margin-top: 8px;
+    background: linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.25));
+    border: 2px solid var(--neon-pink);
+    box-shadow: 0 0 18px rgba(255,42,209,0.45), inset 0 0 30px rgba(138,43,255,0.35);
+    padding: 14px 16px;
+    font-family: 'VT323', monospace;
+    color: var(--label-cream);
+    font-size: clamp(14px, 1.6vw, 17px);
+    line-height: 1.35;
+    position: relative;
+  }
+  .hero-card::before {
+    content:"NOW PLAYING";
+    position: absolute;
+    top: -10px; left: 12px;
+    background: var(--neon-pink);
+    color: var(--vhs-black);
+    font-family: 'Bungee', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    padding: 2px 8px;
+  }
+  .hero-card .now-title {
+    font-family: 'Bungee', sans-serif;
+    font-size: clamp(16px, 2vw, 22px);
+    color: var(--neon-yellow);
+    text-shadow: 0 0 8px rgba(255,226,74,0.55);
+    margin-bottom: 6px;
+    letter-spacing: 0.02em;
+  }
+  .hero-card .now-tags {
+    margin-top: 8px;
+    display: flex; flex-wrap: wrap; gap: 6px;
+    font-size: 13px;
+  }
+  .hero-card .now-tags em {
+    font-style: normal;
+    background: rgba(29,233,255,0.15);
+    border: 1px solid var(--neon-cyan);
+    color: var(--neon-cyan);
+    padding: 1px 6px;
+  }
+
+  .footer-row {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    gap: 12px;
+    font-family: 'VT323', monospace;
+    color: var(--label-cream);
+    font-size: 14px;
+  }
+  .studio {
+    font-family: 'Bungee', sans-serif;
+    color: var(--neon-yellow);
+    font-size: clamp(13px, 1.4vw, 16px);
+    letter-spacing: 0.18em;
+    text-shadow: 0 0 8px rgba(255,226,74,0.5);
+  }
+  .runtime {
+    border: 1px solid var(--label-cream);
+    padding: 3px 8px;
+    letter-spacing: 0.1em;
+    font-size: 14px;
+  }
+
+  .vcr {
+    max-width: 1200px;
+    margin: 18px auto 0;
+    background: linear-gradient(180deg, #d6cdb3 0%, #b8ad8b 100%);
+    border: 2px solid #2a1a0a;
+    border-radius: 8px;
+    padding: 14px 18px;
+    color: #1a1208;
+    font-family: 'VT323', monospace;
+    box-shadow:
+      0 8px 0 #5a4a30,
+      0 14px 30px rgba(0,0,0,0.5),
+      inset 0 1px 0 rgba(255,255,255,0.4);
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 18px;
+    align-items: center;
+  }
+  .vcr-screen {
+    background: #061a06;
+    color: #5fff5f;
+    padding: 8px 14px;
+    font-family: 'VT323', monospace;
+    font-size: clamp(15px, 1.8vw, 20px);
+    letter-spacing: 0.12em;
+    border-radius: 3px;
+    box-shadow: inset 0 0 14px rgba(0,255,0,0.35), inset 0 0 0 2px #000;
+    min-width: 170px;
+    text-shadow: 0 0 6px #5fff5f;
+  }
+  .vcr-screen .small {
+    font-size:14px; color:#9fff9f; display:block;
+  }
+  .vcr-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+  .vcr-btn {
+    appearance: none;
+    border: none;
+    background: linear-gradient(180deg, #3a3a3a 0%, #1a1a1a 100%);
+    color: var(--label-cream);
+    width: clamp(46px, 6vw, 56px);
+    height: clamp(38px, 5vw, 46px);
+    border-radius: 4px;
+    font-family: 'Bungee', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow:
+      0 3px 0 #000,
+      inset 0 1px 0 rgba(255,255,255,0.18);
+    transition: transform 0.08s, box-shadow 0.08s;
+    display: grid; place-items: center;
+  }
+  .vcr-btn:hover { color: var(--neon-cyan); }
+  .vcr-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 #000, inset 0 1px 0 rgba(255,255,255,0.18);
+  }
+  .vcr-btn.rec { color: var(--neon-pink); }
+
+  .vcr-track {
+    display: flex; flex-direction: column; gap: 4px;
+    min-width: 160px;
+  }
+  .vcr-track label {
+    font-family: 'Bungee', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: #1a1208;
+  }
+  .vcr-track input[type=range] {
+    width: 100%;
+    accent-color: #6b2bff;
+  }
+
+  .legal {
+    max-width: 1200px;
+    margin: 26px auto 8px;
+    font-family: 'VT323', monospace;
+    color: rgba(239,230,200,0.55);
+    font-size: 13px;
+    line-height: 1.5;
+    text-align: center;
+  }
+  .legal a { color: var(--neon-cyan); text-decoration: none; }
+  .legal a:hover { color: var(--neon-pink); }
+
+  @media (max-width: 760px) {
+    .jacket {
+      grid-template-columns: 1fr;
+    }
+    .spine {
+      min-height: 36px;
+      order: 2;
+      writing-mode: horizontal-tb;
+    }
+    .spine span {
+      writing-mode: horizontal-tb;
+      transform: none;
+      letter-spacing: 0.3em;
+    }
+    .front { order: 1; }
+    .back { order: 3; }
+    .front-title { font-size: clamp(56px, 18vw, 96px); }
+    .vcr { grid-template-columns: 1fr; gap: 12px; }
+    .vcr-screen { text-align: center; min-width: 0; }
+    .sticker { width: 110px; height: 110px; top: 10px; right: 10px; }
+    .chapters li { grid-template-columns: 52px 1fr; }
+    .chapters .ep { grid-column: 2 / 3; color: var(--neon-cyan); font-size: 13px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    body::after, .vcr-screen, .topbar .rec::before, .crt-jitter {
+      animation: none !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div><span class="ch">CH 03</span> &nbsp;·&nbsp; SP/LP &nbsp;·&nbsp; STEREO HiFi</div>
+  <div class="rec">REC · 00:1<span id="topClock">8:42</span></div>
+</header>
+
+<main class="jacket crt-jitter" id="jacket">
+
+  <section class="panel back" aria-label="VHS back cover">
+    <div class="sticker" aria-hidden="true">
+      <div>
+        <span class="store">★ NERDY VIDEO ★</span>
+        <span class="price">&euro;2,50</span>
+        <span class="pernight">/ NACHT</span>
+        <span class="dewey">NL · 005.1 / NRD</span>
+      </div>
+    </div>
+
+    <div class="meta">VOL. 108 · SIDE B · NTSC · NL · 1996—∞</div>
+
+    <h2 id="backTitle">SOFTWARE ENGINEER. TINKERER. NEDERLAND.</h2>
+
+    <p class="synopsis" id="synopsis">
+      Een onafhankelijke productie uit Nederland over één maker die liever
+      systemen bouwt dan systemen volgt. Verwacht multi-agent CLI's, retro
+      arcade games, een eigenwijze GitOps stack, een MCP gateway voor de
+      energiesector en een smart home met ruim 200 entities. Geen jumpscares,
+      wel veel terminal-glow.
+    </p>
+
+    <div class="badge-row">
+      <span class="badge-runtime">RUNTIME ∞</span>
+      <span class="badge-genre">GENRE · CYBER-DOC</span>
+      <span class="badge-region">REGION · PAL</span>
+    </div>
+
+    <div>
+      <div class="chapters-header">CHAPTER SELECT</div>
+      <ul class="chapters" id="chapters">
+        <li data-i="0">
+          <span class="tc">00:00</span>
+          <span class="title">Nerdy Terminal</span>
+          <span class="ep">EP 01</span>
+        </li>
+        <li data-i="1">
+          <span class="tc">00:12</span>
+          <span class="title">Pixel Tanks</span>
+          <span class="ep">EP 02</span>
+        </li>
+        <li data-i="2">
+          <span class="tc">00:24</span>
+          <span class="title">K8s / GitOps Stack</span>
+          <span class="ep">EP 03</span>
+        </li>
+        <li data-i="3">
+          <span class="tc">00:38</span>
+          <span class="title">EM MCP Gateway</span>
+          <span class="ep">EP 04</span>
+        </li>
+        <li data-i="4">
+          <span class="tc">00:51</span>
+          <span class="title">Home Assistant Setup</span>
+          <span class="ep">EP 05</span>
+        </li>
+        <li data-i="5">
+          <span class="tc">01:04</span>
+          <span class="title">Open Source Bijdragen</span>
+          <span class="ep">EP 06</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="specs">
+      <div><b>STACK·A</b> TypeScript / Python / Go</div>
+      <div><b>STACK·B</b> Kubernetes · PostgreSQL</div>
+      <div><b>STACK·C</b> Vue · React · Bash</div>
+      <div><b>FORMAT</b> VHS / SP · HiFi STEREO</div>
+      <div><b>DURATION</b> 240 MIN</div>
+      <div><b>RATING</b> NL · 12+ (mild jargon)</div>
+    </div>
+
+    <div class="barcode" aria-label="barcode">
+      <svg width="140" height="38" viewBox="0 0 140 38" aria-hidden="true">
+        <rect x="0"   y="0" width="2" height="38" fill="#111"/>
+        <rect x="4"   y="0" width="1" height="38" fill="#111"/>
+        <rect x="7"   y="0" width="3" height="38" fill="#111"/>
+        <rect x="12"  y="0" width="1" height="38" fill="#111"/>
+        <rect x="15"  y="0" width="2" height="38" fill="#111"/>
+        <rect x="20"  y="0" width="1" height="38" fill="#111"/>
+        <rect x="23"  y="0" width="4" height="38" fill="#111"/>
+        <rect x="29"  y="0" width="1" height="38" fill="#111"/>
+        <rect x="33"  y="0" width="2" height="38" fill="#111"/>
+        <rect x="37"  y="0" width="3" height="38" fill="#111"/>
+        <rect x="42"  y="0" width="1" height="38" fill="#111"/>
+        <rect x="46"  y="0" width="2" height="38" fill="#111"/>
+        <rect x="50"  y="0" width="1" height="38" fill="#111"/>
+        <rect x="53"  y="0" width="3" height="38" fill="#111"/>
+        <rect x="58"  y="0" width="2" height="38" fill="#111"/>
+        <rect x="62"  y="0" width="1" height="38" fill="#111"/>
+        <rect x="65"  y="0" width="4" height="38" fill="#111"/>
+        <rect x="71"  y="0" width="1" height="38" fill="#111"/>
+        <rect x="74"  y="0" width="2" height="38" fill="#111"/>
+        <rect x="78"  y="0" width="3" height="38" fill="#111"/>
+        <rect x="83"  y="0" width="1" height="38" fill="#111"/>
+        <rect x="86"  y="0" width="2" height="38" fill="#111"/>
+        <rect x="90"  y="0" width="1" height="38" fill="#111"/>
+        <rect x="93"  y="0" width="3" height="38" fill="#111"/>
+        <rect x="98"  y="0" width="2" height="38" fill="#111"/>
+        <rect x="102" y="0" width="1" height="38" fill="#111"/>
+        <rect x="105" y="0" width="4" height="38" fill="#111"/>
+        <rect x="111" y="0" width="1" height="38" fill="#111"/>
+        <rect x="114" y="0" width="2" height="38" fill="#111"/>
+        <rect x="118" y="0" width="3" height="38" fill="#111"/>
+        <rect x="123" y="0" width="1" height="38" fill="#111"/>
+        <rect x="126" y="0" width="2" height="38" fill="#111"/>
+        <rect x="130" y="0" width="1" height="38" fill="#111"/>
+        <rect x="133" y="0" width="3" height="38" fill="#111"/>
+      </svg>
+      <small>9 78108 NERDY 108</small>
+    </div>
+  </section>
+
+  <aside class="spine" aria-hidden="true">
+    <span>NERDY · VOL. 108 · VHS</span>
+  </aside>
+
+  <section class="panel front" aria-label="VHS front cover">
+
+    <div class="label-top">
+      <div class="vol-badge">VOL. 108</div>
+      <div class="cert">
+        <b>NL · 12</b>
+        ALL AGES OK<br/>MILD JARGON
+      </div>
+    </div>
+
+    <div>
+      <h1 class="front-title" id="frontTitle">NERDY</h1>
+      <p class="front-tagline" id="frontTag">
+        He builds <span>systems</span> that build <span>systems</span>.
+      </p>
+    </div>
+
+    <div class="hero-card" id="heroCard">
+      <div class="now-title" id="nowTitle">Nerdy Terminal</div>
+      <div id="nowDesc">
+        Multi-agent orchestration CLI op tmux. Tab-agents besturen workers,
+        workers leveren resultaten. Eén CLI om je hele dev-flotille te dirigeren.
+      </div>
+      <div class="now-tags" id="nowTags"></div>
+    </div>
+
+    <div class="footer-row">
+      <div class="studio">★ NERDY PICTURES ★</div>
+      <div class="runtime" id="runtime">RT · 240 MIN</div>
+    </div>
+  </section>
+</main>
+
+<section class="vcr" aria-label="VCR controls">
+  <div class="vcr-screen">
+    <span id="vcrLabel">PLAY ▸ EP 01</span>
+    <span class="small" id="vcrTime">00:00:00</span>
+  </div>
+  <div class="vcr-buttons">
+    <button class="vcr-btn" data-act="prev" title="Vorige episode">◂◂</button>
+    <button class="vcr-btn" data-act="play" title="Play / Pause">▸</button>
+    <button class="vcr-btn" data-act="stop" title="Stop">■</button>
+    <button class="vcr-btn" data-act="next" title="Volgende episode">▸▸</button>
+    <button class="vcr-btn rec" data-act="rec" title="Glitch boost">●</button>
+  </div>
+  <div class="vcr-track">
+    <label for="tracking">TRACKING</label>
+    <input id="tracking" type="range" min="0" max="10" value="2" />
+    <label style="color:#444; font-size:10px;" id="trackVal">LEVEL 2 · CLEAN</label>
+  </div>
+</section>
+
+<p class="legal">
+  © NERDY PICTURES · Heel Nederland · Geen kopiëren, wel forken.<br/>
+  <a href="https://github.com/nerdyk">github.com/nerdyk</a>
+  &nbsp;·&nbsp;
+  <a href="mailto:hi@nerdy.nl">hi@nerdy.nl</a>
+</p>
+
+<script>
+(() => {
+  const episodes = [
+    {
+      title: "Nerdy Terminal",
+      desc: "Multi-agent orchestration CLI op tmux. Tab-agents besturen workers, workers leveren resultaten. Eén CLI om je hele dev-flotille te dirigeren.",
+      tags: ["TypeScript", "tmux", "multi-agent", "CLI"],
+      runtime: "42 min",
+      tagParts: ["He builds ", "systems", " that build ", "systems", "."],
+      genre: "CYBER-DOC"
+    },
+    {
+      title: "Pixel Tanks",
+      desc: "Retro multiplayer arcade. WebSocket netcode, 8-bit sprites, en een lobby waar collega's elkaar verslaan tijdens de koffiepauze.",
+      tags: ["WebSocket", "Canvas", "Multiplayer", "Retro"],
+      runtime: "28 min",
+      tagParts: ["Pixels ", "fly", " further ", "in stereo", "."],
+      genre: "ARCADE"
+    },
+    {
+      title: "K8s / GitOps Stack",
+      desc: "Productie clusters met ArgoCD en Flux, Tailscale onderhuids, en een complete platform-as-code waar deploys saai en herhaalbaar zijn.",
+      tags: ["Kubernetes", "ArgoCD", "Flux", "Tailscale"],
+      runtime: "55 min",
+      tagParts: ["Production ", "is", " a ", "feature", "."],
+      genre: "INFRA-THRILLER"
+    },
+    {
+      title: "EM MCP Gateway",
+      desc: "LLM tool-use gateway voor de energiesector. Veilige tools, strikte boundaries, code-mode JavaScript en een audit trail die accountants blij maakt.",
+      tags: ["LLM", "MCP", "energy", "Go"],
+      runtime: "37 min",
+      tagParts: ["Tools ", "tot nut", " van ", "energie", "."],
+      genre: "TECH-DRAMA"
+    },
+    {
+      title: "Home Assistant Setup",
+      desc: "200+ entities, eigen automations, lokaal-eerst, en geen cloud die op een dag wakker wordt en bedacht heeft jou geen licht meer te gunnen.",
+      tags: ["IoT", "Python", "Zigbee", "Local-first"],
+      runtime: "33 min",
+      tagParts: ["Mijn huis ", "luistert", " alleen naar ", "mij", "."],
+      genre: "DOMESTIC SCI-FI"
+    },
+    {
+      title: "Open Source Bijdragen",
+      desc: "Patches, tools, fixes en kleine libraries die anderen op weg helpen. Geen sterren chasen, gewoon stukjes verbeteren waar het schuurt.",
+      tags: ["PRs", "OSS", "Maintainer", "Community"],
+      runtime: "45 min",
+      tagParts: ["Patches ", "welkom", ", kritiek ", "ook", "."],
+      genre: "FOUND FOOTAGE"
+    }
+  ];
+
+  let idx = 0;
+  let playing = false;
+  let tickTimer = null;
+  let elapsed = 0;
+
+  const $ = (id) => document.getElementById(id);
+  const els = {
+    chapters: document.querySelectorAll('#chapters li'),
+    nowTitle: $('nowTitle'),
+    nowDesc:  $('nowDesc'),
+    nowTags:  $('nowTags'),
+    runtime:  $('runtime'),
+    frontTag: $('frontTag'),
+    vcrLabel: $('vcrLabel'),
+    vcrTime:  $('vcrTime'),
+    tracking: $('tracking'),
+    trackVal: $('trackVal'),
+    jacket:   $('jacket'),
+    topClock: $('topClock'),
+    backTitle: $('backTitle'),
+  };
+
+  const pad = (n, w = 2) => String(n).padStart(w, '0');
+
+  const clearNode = (node) => {
+    while (node.firstChild) node.removeChild(node.firstChild);
+  };
+
+  const renderTags = (tags) => {
+    clearNode(els.nowTags);
+    tags.forEach(t => {
+      const em = document.createElement('em');
+      em.textContent = t;
+      els.nowTags.appendChild(em);
+    });
+  };
+
+  const renderTagline = (parts) => {
+    clearNode(els.frontTag);
+    parts.forEach((part, i) => {
+      if (i % 2 === 1) {
+        const span = document.createElement('span');
+        span.textContent = part;
+        els.frontTag.appendChild(span);
+      } else {
+        els.frontTag.appendChild(document.createTextNode(part));
+      }
+    });
+  };
+
+  function render() {
+    const ep = episodes[idx];
+    els.nowTitle.textContent = ep.title;
+    els.nowDesc.textContent  = ep.desc;
+    renderTags(ep.tags);
+    els.runtime.textContent = 'RT · ' + ep.runtime.toUpperCase();
+    renderTagline(ep.tagParts);
+    els.vcrLabel.textContent = (playing ? 'PLAY ▸ EP ' : 'PAUSE ❚❚ EP ') + pad(idx + 1);
+    els.backTitle.textContent = ep.title.toUpperCase() + ' · GENRE: ' + ep.genre;
+
+    els.chapters.forEach(li => {
+      li.classList.toggle('active', Number(li.dataset.i) === idx);
+    });
+  }
+
+  function setTracking(level) {
+    document.body.style.setProperty('--tracking', level);
+    const labels = ['CLEAN','CLEAN','CLEAN','FAINT','SOFT','NORMAL','HISS','GLITCH','WARP','CHAOS','LOST'];
+    els.trackVal.textContent = 'LEVEL ' + level + ' · ' + labels[level];
+  }
+
+  function startClock() {
+    stopClock();
+    tickTimer = setInterval(() => {
+      elapsed++;
+      const h = Math.floor(elapsed / 3600);
+      const m = Math.floor((elapsed % 3600) / 60);
+      const s = elapsed % 60;
+      els.vcrTime.textContent = pad(h) + ':' + pad(m) + ':' + pad(s);
+    }, 1000);
+  }
+  function stopClock() {
+    if (tickTimer) { clearInterval(tickTimer); tickTimer = null; }
+  }
+
+  function togglePlay(force) {
+    playing = (typeof force === 'boolean') ? force : !playing;
+    if (playing) startClock(); else stopClock();
+    render();
+  }
+
+  function recBoostFlash() {
+    const oldVal = els.tracking.value;
+    els.tracking.value = 9;
+    setTracking(9);
+    setTimeout(() => {
+      els.tracking.value = oldVal;
+      setTracking(Number(oldVal));
+    }, 1200);
+  }
+
+  const rewind = () => { idx = (idx - 1 + episodes.length) % episodes.length; render(); };
+  const forward = () => { idx = (idx + 1) % episodes.length; render(); };
+  const stop = () => {
+    togglePlay(false);
+    elapsed = 0;
+    els.vcrTime.textContent = '00:00:00';
+    render();
+  };
+
+  document.querySelectorAll('.vcr-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const a = btn.dataset.act;
+      if (a === 'prev') rewind();
+      else if (a === 'next') forward();
+      else if (a === 'play') togglePlay();
+      else if (a === 'stop') stop();
+      else if (a === 'rec')  recBoostFlash();
+    });
+  });
+
+  els.chapters.forEach(li => {
+    li.addEventListener('click', () => {
+      idx = Number(li.dataset.i);
+      togglePlay(true);
+    });
+  });
+
+  els.tracking.addEventListener('input', (e) => setTracking(Number(e.target.value)));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'INPUT') return;
+    if (e.key === 'ArrowLeft')  rewind();
+    if (e.key === 'ArrowRight') forward();
+    if (e.key === ' ')          { e.preventDefault(); togglePlay(); }
+    if (e.key.toLowerCase() === 'r') recBoostFlash();
+  });
+
+  setInterval(() => {
+    const r = Math.floor(Math.random() * 60);
+    els.topClock.textContent = '8:' + pad(r);
+  }, 4000);
+
+  setTracking(2);
+  render();
+  togglePlay(true);
+})();
+</script>
+</body>
+</html>
