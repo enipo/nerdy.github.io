@@ -1,0 +1,1031 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nerdy Vend-O-Matic 9000 — Gertjan Bazuin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Bungee+Inline&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-room: #c8e7d8;
+    --color-room-deep: #9bc8b3;
+    --color-steel-light: #f1f3f6;
+    --color-steel: #d4d6db;
+    --color-steel-dark: #8b8f97;
+    --color-steel-shadow: #5a5d63;
+    --color-rivet: #6e7178;
+    --color-glass: rgba(180, 220, 255, 0.08);
+    --color-glass-edge: rgba(255, 255, 255, 0.45);
+    --color-candy-pink: #ffb3cc;
+    --color-candy-yellow: #ffe5a0;
+    --color-candy-mint: #b3f0d4;
+    --color-candy-lilac: #d9c6ff;
+    --color-candy-peach: #ffcfb0;
+    --color-accent: #ff5b8a;
+    --color-accent-deep: #c43768;
+    --color-display-bg: #1a0f2e;
+    --color-display-glow: #6cf5b0;
+    --color-display-dim: #2f7a55;
+    --color-led-red: #ff3050;
+    --color-tag: #fff8d2;
+    --shadow-hard: 0 6px 0 rgba(0,0,0,0.18);
+    --font-display: 'Bungee', system-ui, sans-serif;
+    --font-inline: 'Bungee Inline', system-ui, sans-serif;
+    --font-mono: 'Share Tech Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    min-height: 100vh;
+    font-family: var(--font-mono);
+    color: #222;
+    background:
+      radial-gradient(ellipse at top, #e6f5ec 0%, var(--color-room) 50%, var(--color-room-deep) 100%),
+      var(--color-room);
+    padding: clamp(1rem, 3vw, 3rem) clamp(0.5rem, 2vw, 2rem);
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 18vh;
+    background: repeating-linear-gradient(90deg, #b7d8c6 0 60px, #a8ccba 60px 120px);
+    border-top: 4px solid #7ba894;
+    z-index: -1;
+  }
+
+  .floor-shine {
+    position: fixed;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: clamp(320px, 80vw, 760px);
+    height: 12vh;
+    background: radial-gradient(ellipse at center top, rgba(255,255,255,0.35), transparent 70%);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .machine {
+    max-width: 760px;
+    margin: 0 auto;
+    background: linear-gradient(180deg, var(--color-steel-light) 0%, var(--color-steel) 100%);
+    border-radius: 18px 18px 10px 10px;
+    padding: clamp(0.8rem, 2vw, 1.4rem);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.8) inset,
+      0 -6px 0 var(--color-steel-shadow) inset,
+      0 24px 50px rgba(0,0,0,0.25),
+      0 6px 0 var(--color-steel-dark);
+    position: relative;
+  }
+
+  .machine::before, .machine::after {
+    content: "";
+    position: absolute;
+    top: 18px;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #fff, var(--color-rivet) 60%, #2c2e33);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.4);
+  }
+  .machine::before { left: 14px; }
+  .machine::after { right: 14px; }
+
+  .header {
+    background: linear-gradient(180deg, var(--color-accent) 0%, var(--color-accent-deep) 100%);
+    color: #fff8d2;
+    padding: 0.8rem 1rem 1rem;
+    border-radius: 10px;
+    border: 3px solid #5a1a32;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 4px 0 #5a1a32, 0 1px 0 rgba(255,255,255,0.4) inset;
+  }
+  .brand {
+    font-family: var(--font-inline);
+    font-size: clamp(1.4rem, 5vw, 2.4rem);
+    letter-spacing: 0.05em;
+    line-height: 1;
+    text-shadow: 0 2px 0 #5a1a32, 0 4px 8px rgba(0,0,0,0.3);
+  }
+  .brand .nine {
+    color: var(--color-candy-yellow);
+    -webkit-text-stroke: 2px #5a1a32;
+  }
+  .tagline {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    margin-top: 0.4rem;
+    opacity: 0.9;
+  }
+
+  .sticker {
+    position: absolute;
+    top: -14px; right: -12px;
+    background: var(--color-candy-yellow);
+    color: #5a1a32;
+    font-family: var(--font-display);
+    font-size: 0.65rem;
+    padding: 0.5rem 0.6rem;
+    border-radius: 50%;
+    width: 78px; height: 78px;
+    display: grid;
+    place-items: center;
+    line-height: 1;
+    transform: rotate(-14deg);
+    border: 3px dashed #5a1a32;
+    text-align: center;
+    box-shadow: 0 3px 0 rgba(0,0,0,0.2);
+    z-index: 5;
+  }
+
+  .display-window {
+    margin-top: 1rem;
+    background:
+      linear-gradient(160deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.02) 35%, rgba(0,0,0,0.04) 100%),
+      linear-gradient(180deg, #2a3548 0%, #1e2738 100%);
+    border: 6px solid var(--color-steel-light);
+    border-radius: 10px;
+    padding: 0.8rem;
+    box-shadow:
+      0 0 0 3px var(--color-steel-dark),
+      inset 0 0 60px rgba(0,0,0,0.4),
+      inset 0 0 0 1px var(--color-glass-edge);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .display-window::after {
+    content: "";
+    position: absolute;
+    top: 0; left: -20%;
+    width: 40%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+    transform: skewX(-20deg);
+    pointer-events: none;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.5rem;
+  }
+
+  .slot {
+    background: var(--slot-bg, var(--color-candy-mint));
+    border-radius: 6px;
+    padding: 0.55rem 0.4rem 0.4rem;
+    aspect-ratio: 3 / 4;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    border: 2px solid rgba(0,0,0,0.15);
+    box-shadow:
+      inset 0 -3px 0 rgba(0,0,0,0.12),
+      inset 0 2px 0 rgba(255,255,255,0.5),
+      0 2px 4px rgba(0,0,0,0.2);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .slot:focus-visible {
+    outline: 3px solid var(--color-display-glow);
+    outline-offset: 2px;
+  }
+  .slot:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      inset 0 -3px 0 rgba(0,0,0,0.12),
+      inset 0 2px 0 rgba(255,255,255,0.6),
+      0 6px 10px rgba(0,0,0,0.25);
+  }
+
+  .slot.dispensed {
+    animation: drop 0.6s ease-in forwards;
+  }
+  @keyframes drop {
+    0% { transform: translateY(0); opacity: 1; }
+    40% { transform: translateY(20px) rotate(6deg); opacity: 1; }
+    100% { transform: translateY(140%) rotate(20deg); opacity: 0; }
+  }
+
+  .slot-icon {
+    font-family: var(--font-display);
+    font-size: clamp(0.9rem, 2.4vw, 1.4rem);
+    text-align: center;
+    line-height: 1;
+    color: #2a1f3a;
+    letter-spacing: 0.02em;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+  }
+  .slot-name {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #1f1530;
+    margin-top: 0.2rem;
+  }
+  .pricetag {
+    align-self: flex-end;
+    background: var(--color-tag);
+    border: 1.5px solid #5a1a32;
+    color: #5a1a32;
+    font-family: var(--font-display);
+    font-size: 0.55rem;
+    padding: 0.12rem 0.3rem;
+    border-radius: 3px;
+    transform: rotate(-4deg);
+    box-shadow: 0 1px 0 #5a1a32;
+    line-height: 1.2;
+  }
+  .code {
+    position: absolute;
+    top: 4px; left: 4px;
+    background: #1a0f2e;
+    color: var(--color-display-glow);
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    padding: 0.05rem 0.3rem;
+    border-radius: 2px;
+    letter-spacing: 0.1em;
+  }
+
+  .coil {
+    height: 6px;
+    margin-top: 0.3rem;
+    background: repeating-linear-gradient(90deg, #888 0 3px, #ccc 3px 6px);
+    border-radius: 3px;
+    opacity: 0.6;
+  }
+
+  .slot[data-color="pink"]   { --slot-bg: var(--color-candy-pink); }
+  .slot[data-color="yellow"] { --slot-bg: var(--color-candy-yellow); }
+  .slot[data-color="mint"]   { --slot-bg: var(--color-candy-mint); }
+  .slot[data-color="lilac"]  { --slot-bg: var(--color-candy-lilac); }
+  .slot[data-color="peach"]  { --slot-bg: var(--color-candy-peach); }
+
+  .controls {
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 0.8rem;
+  }
+
+  .display-led {
+    background: var(--color-display-bg);
+    border: 4px solid var(--color-steel-shadow);
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    box-shadow:
+      inset 0 0 20px rgba(108, 245, 176, 0.15),
+      inset 0 0 0 2px #000;
+    font-family: var(--font-mono);
+    color: var(--color-display-glow);
+    text-shadow: 0 0 4px var(--color-display-glow), 0 0 12px rgba(108, 245, 176, 0.4);
+    position: relative;
+    overflow: hidden;
+  }
+  .display-led::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, rgba(0,0,0,0.18) 0 2px, transparent 2px 4px);
+    pointer-events: none;
+  }
+  .display-led .label {
+    font-size: 0.6rem;
+    color: var(--color-display-dim);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .display-led .code-readout {
+    font-size: clamp(1.8rem, 6vw, 2.6rem);
+    line-height: 1;
+    margin: 0.3rem 0 0.5rem;
+    min-height: 1em;
+    letter-spacing: 0.1em;
+  }
+  .display-led .price-line,
+  .display-led .status-line {
+    font-size: 0.85rem;
+    color: var(--color-display-glow);
+    min-height: 1em;
+  }
+  .display-led .status-line.warn {
+    color: var(--color-led-red);
+    text-shadow: 0 0 4px var(--color-led-red);
+  }
+
+  .keypad {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.35rem;
+  }
+  .keypad button {
+    aspect-ratio: 1;
+    font-family: var(--font-display);
+    font-size: clamp(0.7rem, 2.2vw, 1rem);
+    border: none;
+    background: linear-gradient(180deg, #f4f5f8 0%, #c2c5cc 100%);
+    color: #1f1530;
+    border-radius: 6px;
+    box-shadow:
+      inset 0 2px 0 rgba(255,255,255,0.7),
+      inset 0 -3px 0 rgba(0,0,0,0.18),
+      0 2px 3px rgba(0,0,0,0.3);
+    cursor: pointer;
+    transition: transform 0.05s ease, box-shadow 0.05s ease;
+  }
+  .keypad button:active,
+  .keypad button.pressed {
+    transform: translateY(2px);
+    box-shadow:
+      inset 0 2px 0 rgba(0,0,0,0.2),
+      inset 0 -1px 0 rgba(255,255,255,0.4);
+  }
+  .keypad button.row-letter {
+    background: linear-gradient(180deg, var(--color-candy-lilac) 0%, #a087d8 100%);
+  }
+  .keypad button.special {
+    background: linear-gradient(180deg, var(--color-candy-yellow) 0%, #e8b94c 100%);
+  }
+  .keypad button.cancel {
+    background: linear-gradient(180deg, #ffb0b8 0%, #d44a5a 100%);
+    color: #fff;
+  }
+  .keypad button.select {
+    grid-column: span 2;
+    aspect-ratio: auto;
+    background: linear-gradient(180deg, #7ef5b0 0%, #2c9e63 100%);
+    color: #0f3622;
+    font-size: 0.85rem;
+  }
+
+  .coin-row {
+    margin-top: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    background: linear-gradient(180deg, #e3e5ea 0%, #b8bbc2 100%);
+    padding: 0.5rem 0.8rem;
+    border-radius: 6px;
+    border: 2px solid var(--color-steel-shadow);
+    box-shadow: inset 0 -3px 0 rgba(0,0,0,0.15);
+  }
+  .coin-slot {
+    width: 56px;
+    height: 10px;
+    background: #0a0a0f;
+    border-radius: 2px;
+    box-shadow:
+      inset 0 2px 4px rgba(0,0,0,0.9),
+      0 1px 0 rgba(255,255,255,0.6);
+  }
+  .coin-label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: #1f1530;
+    letter-spacing: 0.15em;
+  }
+  .credit-display {
+    margin-left: auto;
+    background: #1a0f2e;
+    color: var(--color-display-glow);
+    font-family: var(--font-mono);
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    border: 2px solid #000;
+    box-shadow: inset 0 0 8px rgba(108,245,176,0.2);
+    font-size: 0.85rem;
+    text-shadow: 0 0 4px var(--color-display-glow);
+  }
+  .coin-btn {
+    background: radial-gradient(circle at 30% 30%, #ffd96b 0%, #c98c1f 70%, #6e4910 100%);
+    border: 2px solid #5a3c0a;
+    color: #5a3c0a;
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 0 #5a3c0a, inset 0 1px 0 rgba(255,255,255,0.6);
+    line-height: 1;
+  }
+  .coin-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 0 0 #5a3c0a;
+  }
+
+  .dispense-tray {
+    margin-top: 1rem;
+    background: linear-gradient(180deg, #0f0f15 0%, #2a2a35 100%);
+    border: 4px solid var(--color-steel-shadow);
+    border-radius: 8px 8px 14px 14px;
+    padding: 1rem;
+    min-height: 130px;
+    position: relative;
+    box-shadow: inset 0 8px 16px rgba(0,0,0,0.6);
+  }
+  .dispense-tray .flap {
+    position: absolute;
+    top: -4px; left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 14px;
+    background: linear-gradient(180deg, var(--color-steel) 0%, var(--color-steel-dark) 100%);
+    border-radius: 3px;
+    border: 2px solid var(--color-steel-shadow);
+    border-top: none;
+  }
+  .dispense-tray .empty-msg {
+    color: #777;
+    font-family: var(--font-mono);
+    text-align: center;
+    padding-top: 1.6rem;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+  }
+  .product-detail {
+    background: linear-gradient(160deg, var(--detail-bg, var(--color-candy-mint)) 0%, rgba(255,255,255,0.4) 100%);
+    color: #1f1530;
+    border-radius: 6px;
+    padding: 0.9rem 1rem;
+    border: 2px solid rgba(0,0,0,0.2);
+    animation: drop-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+  }
+  @keyframes drop-in {
+    0% { transform: translateY(-40px) rotate(-2deg); opacity: 0; }
+    60% { transform: translateY(6px) rotate(1deg); opacity: 1; }
+    100% { transform: translateY(0) rotate(0); }
+  }
+  .product-detail h3 {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    margin-bottom: 0.3rem;
+  }
+  .product-detail .meta {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    opacity: 0.7;
+  }
+  .product-detail p {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+  .product-detail .tags {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+  .product-detail .tag {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    background: rgba(0,0,0,0.15);
+    padding: 0.15rem 0.45rem;
+    border-radius: 10px;
+    letter-spacing: 0.05em;
+  }
+
+  .placard {
+    max-width: 760px;
+    margin: 1.5rem auto 0;
+    background: var(--color-tag);
+    border: 3px solid #5a1a32;
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    color: #2a1a35;
+    box-shadow: 0 4px 0 #5a1a32, 0 8px 14px rgba(0,0,0,0.2);
+    position: relative;
+  }
+  .placard::before {
+    content: "ABOUT THE OPERATOR";
+    position: absolute;
+    top: -12px; left: 16px;
+    background: var(--color-accent);
+    color: #fff;
+    font-family: var(--font-display);
+    font-size: 0.65rem;
+    padding: 0.15rem 0.6rem;
+    border-radius: 3px;
+    letter-spacing: 0.2em;
+  }
+  .placard p {
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+    line-height: 1.55;
+  }
+  .placard p + p { margin-top: 0.6rem; }
+  .placard .sig {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    margin-top: 0.6rem;
+    color: var(--color-accent-deep);
+  }
+  .placard a {
+    color: var(--color-accent-deep);
+    font-weight: bold;
+    text-decoration: underline wavy var(--color-accent);
+    text-underline-offset: 3px;
+  }
+
+  .footer-strip {
+    max-width: 760px;
+    margin: 1rem auto 2rem;
+    text-align: center;
+    color: #2a3548;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  @media (max-width: 600px) {
+    .grid { grid-template-columns: repeat(3, 1fr); }
+    .controls { grid-template-columns: 1fr; }
+    .keypad { grid-template-columns: repeat(5, 1fr); }
+    .sticker { width: 64px; height: 64px; font-size: 0.55rem; }
+  }
+
+  @media (max-width: 380px) {
+    .keypad button { font-size: 0.7rem; }
+    .slot-name { font-size: 0.55rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .slot, .product-detail, .display-window::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="floor-shine" aria-hidden="true"></div>
+
+<main class="machine" aria-label="Nerdy Vend-O-Matic 9000">
+
+  <div class="header">
+    <div class="sticker" aria-hidden="true">SINCE<br>2014<br>★</div>
+    <div class="brand">NERDY <span class="nine">VEND-O-MATIC</span> 9000</div>
+    <div class="tagline">FRESH ENGINEERING — DROP A COIN, PICK A CODE</div>
+  </div>
+
+  <section class="display-window" aria-label="Productdisplay">
+    <div class="grid" id="grid">
+      <button class="slot" data-code="A1" data-color="mint">
+        <span class="code">A1</span>
+        <div>
+          <div class="slot-icon">{ /TM/ }</div>
+          <div class="slot-name">Nerdy Terminal</div>
+        </div>
+        <div class="coil"></div>
+        <span class="pricetag">€ 2,50</span>
+      </button>
+      <button class="slot" data-code="A2" data-color="pink">
+        <span class="code">A2</span>
+        <div>
+          <div class="slot-icon">▲▼◀▶</div>
+          <div class="slot-name">Pixel Tanks</div>
+        </div>
+        <div class="coil"></div>
+        <span class="pricetag">€ 1,75</span>
+      </button>
+      <button class="slot" data-code="A3" data-color="lilac">
+        <span class="code">A3</span>
+        <div>
+          <div class="slot-icon">⎈ K8s</div>
+          <div class="slot-name">GitOps Stack</div>
+        </div>
+        <div class="coil"></div>
+        <span class="pricetag">€ 3,00</span>
+      </button>
+      <button class="slot" data-code="A4" data-color="yellow">
+        <span class="code">A4</span>
+        <div>
+          <div class="slot-icon">≋MCP≋</div>
+          <div class="slot-name">EM Gateway</div>
+        </div>
+        <div class="coil"></div>
+        <span class="pricetag">€ 2,25</span>
+      </button>
+      <button class="slot" data-code="A5" data-color="peach">
+        <span class="code">A5</span>
+        <div>
+          <div class="slot-icon">⌂ HA</div>
+          <div class="slot-name">Home Assistant</div>
+        </div>
+        <div class="coil"></div>
+        <span class="pricetag">€ 1,50</span>
+      </button>
+
+      <button class="slot" data-code="B1" data-color="pink">
+        <span class="code">B1</span>
+        <div>
+          <div class="slot-icon">TS</div>
+          <div class="slot-name">TypeScript</div>
+        </div>
+        <div class="coil"></div>
+        <span class="pricetag">€ 0,75</span>
+      </button>
+      <button class="slot" data-code="B2" data-color="yellow">
+        <span class="code">B2</span>
+        <div>
+          <div class="slot-icon">PY</div>
+          <div class="slot-name">Python</div>
+        </div>
+        <div class="coil"></div>
+        <span class="pricetag">€ 0,75</span>
+      </button>
+      <button class="slot" data-code="B3" data-color="mint">
+        <span class="code">B3</span>
+        <div>
+          <div class="slot-icon">Go</div>
+          <div class="slot-name">Golang</div>
+        </div>
+        <div class="coil"></div>
+        <span class="pricetag">€ 0,75</span>
+      </button>
+      <button class="slot" data-code="B4" data-color="lilac">
+        <span class="code">B4</span>
+        <div>
+          <div class="slot-icon">⎈</div>
+          <div class="slot-name">Kubernetes</div>
+        </div>
+        <div class="coil"></div>
+        <span class="pricetag">€ 1,00</span>
+      </button>
+      <button class="slot" data-code="B5" data-color="peach">
+        <span class="code">B5</span>
+        <div>
+          <div class="slot-icon">SQL</div>
+          <div class="slot-name">PostgreSQL</div>
+        </div>
+        <div class="coil"></div>
+        <span class="pricetag">€ 0,75</span>
+      </button>
+
+      <button class="slot" data-code="C1" data-color="mint">
+        <span class="code">C1</span>
+        <div>
+          <div class="slot-icon">V3</div>
+          <div class="slot-name">Vue</div>
+        </div>
+        <div class="coil"></div>
+        <span class="pricetag">€ 0,75</span>
+      </button>
+      <button class="slot" data-code="C2" data-color="pink">
+        <span class="code">C2</span>
+        <div>
+          <div class="slot-icon">⚛</div>
+          <div class="slot-name">React</div>
+        </div>
+        <div class="coil"></div>
+        <span class="pricetag">€ 0,75</span>
+      </button>
+      <button class="slot" data-code="C3" data-color="yellow">
+        <span class="code">C3</span>
+        <div>
+          <div class="slot-icon">$_</div>
+          <div class="slot-name">Bash</div>
+        </div>
+        <div class="coil"></div>
+        <span class="pricetag">€ 0,50</span>
+      </button>
+      <button class="slot" data-code="C4" data-color="lilac">
+        <span class="code">C4</span>
+        <div>
+          <div class="slot-icon">＜/＞</div>
+          <div class="slot-name">Open Source</div>
+        </div>
+        <div class="coil"></div>
+        <span class="pricetag">€ 0,00</span>
+      </button>
+      <button class="slot" data-code="C5" data-color="peach">
+        <span class="code">C5</span>
+        <div>
+          <div class="slot-icon">@</div>
+          <div class="slot-name">Contact</div>
+        </div>
+        <div class="coil"></div>
+        <span class="pricetag">FREE</span>
+      </button>
+    </div>
+  </section>
+
+  <section class="controls" aria-label="Bedieningspaneel">
+    <div class="display-led" aria-live="polite">
+      <div class="label">SELECT CODE</div>
+      <div class="code-readout" id="readout">__</div>
+      <div class="price-line" id="priceLine">PRICE: --,--</div>
+      <div class="status-line" id="statusLine">INSERT COIN ▸</div>
+    </div>
+
+    <div class="keypad" id="keypad" role="group" aria-label="Keypad">
+      <button data-key="A" class="row-letter">A</button>
+      <button data-key="B" class="row-letter">B</button>
+      <button data-key="C" class="row-letter">C</button>
+      <button data-key="CLR" class="cancel">CLR</button>
+      <button data-key="REF" class="special">REF</button>
+      <button data-key="1">1</button>
+      <button data-key="2">2</button>
+      <button data-key="3">3</button>
+      <button data-key="4">4</button>
+      <button data-key="5">5</button>
+      <button data-key="OK" class="select">SELECT ▸</button>
+      <button data-key="?" class="special">?</button>
+      <button data-key="EJ" class="cancel">EJECT</button>
+    </div>
+  </section>
+
+  <div class="coin-row" aria-label="Munt invoer">
+    <button class="coin-btn" id="coin" aria-label="Werp munt in">€1</button>
+    <div class="coin-slot" aria-hidden="true"></div>
+    <span class="coin-label">INSERT COIN</span>
+    <span class="credit-display">CREDIT <span id="credit">0,00</span></span>
+  </div>
+
+  <section class="dispense-tray" aria-live="polite" aria-label="Uitgifte bak">
+    <div class="flap" aria-hidden="true"></div>
+    <div id="dispense" class="empty-msg">▼ TRAY IS EMPTY — PICK SOMETHING ▼</div>
+  </section>
+
+</main>
+
+<aside class="placard" aria-label="Over de operator">
+  <p><strong>Gertjan Bazuin</strong> — Software Engineer / Tinkerer, opererend vanuit Nederland. Eigenaar van deze automaat en alles wat erin zit. Bouwt overdag platformen, draait 's avonds eigen distributiekanaal voor pet projects.</p>
+  <p>Alles in dit ding is met de hand geassembleerd: agent-CLIs, GitOps-pipelines, retro arcade-binaries en LLM-gateways. Gooi een muntje in, druk een code, of mail direct naar <a href="mailto:hi@nerdy.nl">hi@nerdy.nl</a> — sluier valt af, geen prijslabels.</p>
+  <p>Broncode &amp; bewijsstukken: <a href="https://github.com/nerdyk" target="_blank" rel="noopener">github.com/nerdyk</a>. Garantie tot aan de deur, refunds via knop <strong>REF</strong>.</p>
+  <div class="sig">— signed, the operator</div>
+</aside>
+
+<div class="footer-strip">Model 9000 · Serial #NRDY-106-VND · Refrigeration not required · Best served warm</div>
+
+<script>
+(() => {
+  const PRODUCTS = {
+    A1: { name: "Nerdy Terminal", price: 2.50, color: "mint",
+          meta: "MULTI-AGENT CLI · TMUX · ORCHESTRATION",
+          desc: "Een eigen tab-agent → worker hiërarchie bovenop tmux. Sessies kunnen elkaar berichten sturen, vragen stellen, worktrees aanmaken en taken delegeren. Draait elke dag in deze terminal.",
+          tags: ["TypeScript", "Bash", "tmux", "IPC"] },
+    A2: { name: "Pixel Tanks", price: 1.75, color: "pink",
+          meta: "RETRO MULTIPLAYER · ARCADE",
+          desc: "Top-down tank arcade in moderne browser. WebSocket netcode, sprite art met de hand getekend, scoreboard met persistente high-scores. Coin-op nostalgie zonder de muntinworp.",
+          tags: ["TypeScript", "Canvas", "WebSocket"] },
+    A3: { name: "K8s / GitOps Stack", price: 3.00, color: "lilac",
+          meta: "PRODUCTION CLUSTERS · ARGOCD · FLUX",
+          desc: "Vijf clusters, Tailscale mesh, ArgoCD voor app delivery, Flux voor infra, sealed-secrets, cert-manager. Alles gedeclareerd in git. Reproduceerbaar vanaf nul.",
+          tags: ["Kubernetes", "Helm", "Terraform", "Tailscale"] },
+    A4: { name: "EM MCP Gateway", price: 2.25, color: "yellow",
+          meta: "LLM TOOL-USE GATEWAY · ENERGY SECTOR",
+          desc: "Centrale gateway die LLM-agents veilig laat praten met legacy energiesystemen. Code-mode executie, audit logs, scoped credentials. Bridges modern AI met sector-data.",
+          tags: ["Python", "FastAPI", "MCP", "PostgreSQL"] },
+    A5: { name: "Home Assistant", price: 1.50, color: "peach",
+          meta: "SMART HOME · 200+ ENTITIES",
+          desc: "Eigen instance met sensors, zigbee, energie-monitoring en dashboards. Automations geschreven in YAML én Python. Geen cloud-dependency, alles lokaal.",
+          tags: ["YAML", "Python", "Zigbee2MQTT", "ESPHome"] },
+    B1: { name: "TypeScript", price: 0.75, color: "pink",
+          meta: "LANGUAGE PACK · STRICT MODE",
+          desc: "Dagelijks brood. Strict mode altijd aan, types als documentatie, generics waar het loont, any als rode vlag.",
+          tags: ["Node", "Bun", "Deno"] },
+    B2: { name: "Python", price: 0.75, color: "yellow",
+          meta: "LANGUAGE PACK · 3.12+",
+          desc: "Voor data-pipelines, scripting en de MCP gateway. uv + ruff + pyright. Async waar het zinvol is, sync waar het simpeler is.",
+          tags: ["FastAPI", "asyncio", "uv"] },
+    B3: { name: "Golang", price: 0.75, color: "mint",
+          meta: "LANGUAGE PACK · GO 1.22+",
+          desc: "Voor CLIs en services die snel, statisch gelinkt en klein moeten zijn. Houden van de simpele toolchain en de duidelijke error-paths.",
+          tags: ["CLI", "gRPC", "k8s operators"] },
+    B4: { name: "Kubernetes", price: 1.00, color: "lilac",
+          meta: "ORCHESTRATION · 5 CLUSTERS",
+          desc: "Productie, test, monitoring, AI en legacy — elk een eigen cluster, allemaal via dezelfde GitOps-paden. Operators waar nodig, controllers waar nuttig.",
+          tags: ["EKS", "k3s", "ArgoCD"] },
+    B5: { name: "PostgreSQL", price: 0.75, color: "peach",
+          meta: "DATABASE · BORING TECH",
+          desc: "Eerste keuze voor opslag. Materialized views, RLS, logical replication, jsonb voor de halfgestructureerde dingen. Saai en betrouwbaar.",
+          tags: ["PL/pgSQL", "TimescaleDB", "pgvector"] },
+    C1: { name: "Vue", price: 0.75, color: "mint",
+          meta: "FRONTEND · COMPOSITION API",
+          desc: "Voor interne tools en dashboards. Composition API, Pinia voor state, Vite voor builds. Pragmatisch en stil.",
+          tags: ["Vite", "Pinia", "Nuxt"] },
+    C2: { name: "React", price: 0.75, color: "pink",
+          meta: "FRONTEND · SERVER COMPONENTS",
+          desc: "Wanneer ecosysteem en libraries de doorslag geven. Server components voor data-heavy schermen, hooks waar het werkt.",
+          tags: ["Next.js", "RSC", "Tailwind"] },
+    C3: { name: "Bash", price: 0.50, color: "yellow",
+          meta: "GLUE LANGUAGE · set -euo pipefail",
+          desc: "Voor de kleine dingen tussen de grote dingen. Strict-mode, shellcheck schoon, of het vervangen door iets robuusters.",
+          tags: ["GNU", "POSIX", "shellcheck"] },
+    C4: { name: "Open Source", price: 0.00, color: "lilac",
+          meta: "CONTRIBUTIONS · DRIVE-BY FIXES",
+          desc: "Bug-reports, kleine PRs, README-fixes en af en toe een feature in libraries die ik gebruik. Best-effort, no SLA, pure liefde.",
+          tags: ["GitHub", "PRs", "patches"] },
+    C5: { name: "Contact", price: 0.00, color: "peach",
+          meta: "REACH OUT · HUMAN FREQUENCY",
+          desc: "Mail: hi@nerdy.nl. GitHub: github.com/nerdyk. Berichten worden gelezen, ook als de gateway aanstaat. Soms binnen een uur, soms binnen een dag.",
+          tags: ["email", "github", "irl"] },
+  };
+
+  const grid = document.getElementById("grid");
+  const readout = document.getElementById("readout");
+  const priceLine = document.getElementById("priceLine");
+  const statusLine = document.getElementById("statusLine");
+  const dispense = document.getElementById("dispense");
+  const creditEl = document.getElementById("credit");
+  const coinBtn = document.getElementById("coin");
+  const keypad = document.getElementById("keypad");
+
+  let buffer = "";
+  let credit = 0;
+
+  const fmt = (n) => n.toFixed(2).replace(".", ",");
+  const setStatus = (msg, warn=false) => {
+    statusLine.textContent = msg;
+    statusLine.classList.toggle("warn", warn);
+  };
+
+  const setReadout = () => {
+    readout.textContent = buffer.padEnd(2, "_");
+    const product = PRODUCTS[buffer];
+    if (buffer.length === 2 && product) {
+      priceLine.textContent = `PRICE: € ${fmt(product.price)}`;
+      const needsMore = credit < product.price && product.price > 0;
+      let msg = "READY — PRESS SELECT";
+      if (product.price === 0) msg = "FREE — PRESS SELECT";
+      else if (needsMore) msg = "MORE CREDIT NEEDED ▸";
+      setStatus(msg, needsMore);
+    } else if (buffer.length === 2) {
+      priceLine.textContent = "PRICE: --,--";
+      setStatus("INVALID CODE", true);
+    } else {
+      priceLine.textContent = "PRICE: --,--";
+      setStatus(credit > 0 ? "ENTER CODE ▸" : "INSERT COIN ▸");
+    }
+  };
+
+  const updateCredit = (delta) => {
+    credit = Math.max(0, Math.round((credit + delta) * 100) / 100);
+    creditEl.textContent = fmt(credit);
+  };
+
+  const buildDetail = (code) => {
+    const p = PRODUCTS[code];
+    const card = document.createElement("div");
+    card.className = "product-detail";
+    card.style.setProperty("--detail-bg", `var(--color-candy-${p.color})`);
+
+    const h = document.createElement("h3");
+    h.textContent = p.name;
+    card.appendChild(h);
+
+    const meta = document.createElement("div");
+    meta.className = "meta";
+    meta.textContent = `[${code}] · ${p.meta}`;
+    card.appendChild(meta);
+
+    const desc = document.createElement("p");
+    desc.textContent = p.desc;
+    card.appendChild(desc);
+
+    const tagWrap = document.createElement("div");
+    tagWrap.className = "tags";
+    p.tags.forEach(t => {
+      const tag = document.createElement("span");
+      tag.className = "tag";
+      tag.textContent = `#${t}`;
+      tagWrap.appendChild(tag);
+    });
+    card.appendChild(tagWrap);
+    return card;
+  };
+
+  const renderDetail = (code) => {
+    while (dispense.firstChild) dispense.removeChild(dispense.firstChild);
+    dispense.classList.remove("empty-msg");
+    dispense.appendChild(buildDetail(code));
+  };
+
+  const showEmptyTray = () => {
+    while (dispense.firstChild) dispense.removeChild(dispense.firstChild);
+    dispense.classList.add("empty-msg");
+    dispense.textContent = "▼ TRAY IS EMPTY — PICK SOMETHING ▼";
+  };
+
+  const flashSlot = (code) => {
+    const slot = grid.querySelector(`.slot[data-code="${code}"]`);
+    if (!slot) return;
+    slot.classList.add("dispensed");
+    setTimeout(() => slot.classList.remove("dispensed"), 650);
+  };
+
+  const dispenseCode = (code) => {
+    const p = PRODUCTS[code];
+    if (!p) {
+      setStatus("UNKNOWN CODE", true);
+      return;
+    }
+    if (p.price > credit) {
+      setStatus(`NEED € ${fmt(p.price - credit)} MORE`, true);
+      return;
+    }
+    updateCredit(-p.price);
+    flashSlot(code);
+    setTimeout(() => renderDetail(code), 350);
+    buffer = "";
+    setReadout();
+    setStatus("THANK YOU — ENJOY ▸");
+  };
+
+  const refund = () => {
+    if (credit === 0) {
+      setStatus("NOTHING TO REFUND", true);
+      return;
+    }
+    setStatus(`REFUND: € ${fmt(credit)} ▸ TRAY`);
+    credit = 0;
+    creditEl.textContent = "0,00";
+  };
+
+  const pressKey = (key) => {
+    if (key === "CLR") {
+      buffer = "";
+      setReadout();
+      return;
+    }
+    if (key === "REF") { refund(); return; }
+    if (key === "EJ") {
+      showEmptyTray();
+      setStatus("TRAY CLEARED");
+      return;
+    }
+    if (key === "?") {
+      const codes = Object.keys(PRODUCTS);
+      buffer = codes[Math.floor(Math.random() * codes.length)];
+      setReadout();
+      setStatus("RANDOM PICK ▸ PRESS SELECT");
+      return;
+    }
+    if (key === "OK") {
+      if (buffer.length === 2) dispenseCode(buffer);
+      else setStatus("ENTER 2-CHAR CODE", true);
+      return;
+    }
+    if (/^[A-C]$/.test(key)) { buffer = key; setReadout(); return; }
+    if (/^[1-5]$/.test(key)) {
+      if (buffer.length === 0) { setStatus("ROW FIRST (A/B/C)", true); return; }
+      buffer = buffer[0] + key;
+      setReadout();
+    }
+  };
+
+  keypad.addEventListener("click", (e) => {
+    const btn = e.target.closest("button[data-key]");
+    if (!btn) return;
+    btn.classList.add("pressed");
+    setTimeout(() => btn.classList.remove("pressed"), 120);
+    pressKey(btn.dataset.key);
+  });
+
+  grid.addEventListener("click", (e) => {
+    const slot = e.target.closest(".slot");
+    if (!slot) return;
+    buffer = slot.dataset.code;
+    setReadout();
+    if (credit >= PRODUCTS[buffer].price) dispenseCode(buffer);
+    else setStatus("INSERT MORE COIN ▸", true);
+  });
+
+  coinBtn.addEventListener("click", () => {
+    updateCredit(1.00);
+    setStatus("COIN ACCEPTED ▸ €1,00", false);
+    coinBtn.style.transform = "translateY(2px) rotate(20deg)";
+    setTimeout(() => coinBtn.style.transform = "", 200);
+  });
+
+  document.addEventListener("keydown", (e) => {
+    const k = e.key.toUpperCase();
+    if (/^[A-C]$/.test(k)) pressKey(k);
+    else if (/^[1-5]$/.test(k)) pressKey(k);
+    else if (k === "ENTER") pressKey("OK");
+    else if (k === "BACKSPACE" || k === "ESCAPE") pressKey("CLR");
+    else if (k === " ") { e.preventDefault(); coinBtn.click(); }
+  });
+
+  setReadout();
+})();
+</script>
+</body>
+</html>
