@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chez Nerdy — Carte du Jour</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Allura&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-cream: #f3e8cf;
+    --color-cream-light: #faf3e2;
+    --color-paper-edge: #d9c69a;
+    --color-leather: #3b2412;
+    --color-burgundy: #6b2030;
+    --color-burgundy-deep: #4a1521;
+    --color-gold: #b8860b;
+    --color-gold-bright: #d4a017;
+    --color-ink: #2a1810;
+    --color-faded: #7a5c3a;
+    --color-shadow: rgba(40, 20, 5, 0.35);
+    --color-stain: rgba(107, 32, 48, 0.08);
+    --font-display: 'Playfair Display', 'Times New Roman', serif;
+    --font-body: 'Cormorant Garamond', Georgia, serif;
+    --font-script: 'Allura', cursive;
+    --pad: clamp(1rem, 4vw, 2.5rem);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    font-size: clamp(15px, 1.6vw, 18px);
+    color: var(--color-ink);
+    background:
+      radial-gradient(ellipse at 20% 10%, rgba(184, 134, 11, 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(107, 32, 48, 0.12) 0%, transparent 55%),
+      linear-gradient(135deg, var(--color-leather) 0%, #2a1808 100%);
+    min-height: 100vh;
+    padding: var(--pad);
+    line-height: 1.55;
+  }
+
+  .menu {
+    max-width: 880px;
+    margin: 0 auto;
+    background:
+      radial-gradient(ellipse at 30% 20%, var(--color-stain) 0%, transparent 40%),
+      radial-gradient(ellipse at 75% 70%, var(--color-stain) 0%, transparent 35%),
+      repeating-linear-gradient(
+        0deg,
+        transparent 0px,
+        transparent 28px,
+        rgba(122, 92, 58, 0.04) 28px,
+        rgba(122, 92, 58, 0.04) 29px
+      ),
+      linear-gradient(180deg, var(--color-cream-light) 0%, var(--color-cream) 100%);
+    border: 1px solid var(--color-paper-edge);
+    box-shadow:
+      0 0 0 10px var(--color-leather),
+      0 0 0 12px var(--color-gold),
+      0 0 0 22px var(--color-leather),
+      0 30px 80px var(--color-shadow),
+      inset 0 0 60px rgba(122, 92, 58, 0.15);
+    padding: clamp(1.5rem, 5vw, 3.5rem);
+    position: relative;
+  }
+
+  .menu::before, .menu::after {
+    content: '';
+    position: absolute;
+    top: 8px;
+    bottom: 8px;
+    width: 1px;
+    background: var(--color-gold);
+    opacity: 0.5;
+  }
+  .menu::before { left: 8px; }
+  .menu::after { right: 8px; }
+
+  .header {
+    text-align: center;
+    padding-bottom: 1.5rem;
+    margin-bottom: 2.5rem;
+    border-bottom: 1px solid var(--color-paper-edge);
+    position: relative;
+  }
+
+  .header::after {
+    content: '✦';
+    position: absolute;
+    bottom: -0.7rem;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--color-gold);
+    background: var(--color-cream-light);
+    padding: 0 1rem;
+    font-size: 1rem;
+  }
+
+  .establishment {
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--color-faded);
+    margin-bottom: 0.5rem;
+  }
+
+  .name {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(2.5rem, 8vw, 4.8rem);
+    color: var(--color-burgundy-deep);
+    line-height: 1;
+    margin-bottom: 0.3rem;
+    letter-spacing: -0.01em;
+  }
+
+  .name em {
+    font-family: var(--font-script);
+    font-weight: 400;
+    color: var(--color-gold);
+    font-size: 0.55em;
+    display: block;
+    margin-top: -0.4em;
+    margin-bottom: 0.2em;
+  }
+
+  .tagline {
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--color-faded);
+    max-width: 38ch;
+    margin: 0.8rem auto 0;
+  }
+
+  .location {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-leather);
+    margin-top: 1.2rem;
+  }
+
+  .location span { color: var(--color-gold); margin: 0 0.4em; }
+
+  .course {
+    margin-bottom: 3rem;
+  }
+
+  .course-head {
+    text-align: center;
+    margin-bottom: 1.8rem;
+    position: relative;
+  }
+
+  .course-label {
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--color-faded);
+    margin-bottom: 0.4rem;
+  }
+
+  .course-title {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(1.6rem, 4vw, 2.3rem);
+    color: var(--color-burgundy);
+    position: relative;
+    display: inline-block;
+  }
+
+  .course-title::before,
+  .course-title::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: clamp(1.5rem, 6vw, 3rem);
+    height: 1px;
+    background: var(--color-gold);
+  }
+  .course-title::before { right: calc(100% + 0.8rem); }
+  .course-title::after  { left:  calc(100% + 0.8rem); }
+
+  .course-flourish {
+    color: var(--color-gold);
+    font-size: 1rem;
+    margin-top: 0.4rem;
+  }
+
+  .dish {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "name price"
+      "desc desc"
+      "extra extra";
+    gap: 0.15rem 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px dotted var(--color-paper-edge);
+    cursor: pointer;
+    transition: background 0.25s ease, padding 0.25s ease;
+  }
+
+  .dish:last-child { border-bottom: none; }
+
+  .dish:hover {
+    background: linear-gradient(90deg, transparent, var(--color-stain), transparent);
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .dish.ordered {
+    background: linear-gradient(90deg, rgba(184, 134, 11, 0.05), rgba(184, 134, 11, 0.12), rgba(184, 134, 11, 0.05));
+  }
+
+  .dish-name {
+    grid-area: name;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.1rem, 2.4vw, 1.35rem);
+    color: var(--color-ink);
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+
+  .dish-name .code {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-style: italic;
+    color: var(--color-gold);
+    font-size: 0.78em;
+  }
+
+  .dish-price {
+    grid-area: price;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--color-burgundy);
+    white-space: nowrap;
+    align-self: baseline;
+  }
+
+  .dish-desc {
+    grid-area: desc;
+    font-style: italic;
+    color: var(--color-faded);
+    font-size: 1rem;
+    max-width: 60ch;
+  }
+
+  .dish-extra {
+    grid-area: extra;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, margin-top 0.3s ease;
+    color: var(--color-leather);
+  }
+
+  .dish.open .dish-extra {
+    max-height: 400px;
+    margin-top: 0.7rem;
+  }
+
+  .tasting-notes {
+    font-family: var(--font-body);
+    background: rgba(184, 134, 11, 0.08);
+    border-left: 2px solid var(--color-gold);
+    padding: 0.6rem 0.9rem;
+    margin-top: 0.4rem;
+    font-size: 0.95rem;
+  }
+
+  .tasting-notes::before {
+    content: '— Tasting notes —';
+    display: block;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+    margin-bottom: 0.3rem;
+  }
+
+  .pairings {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.7rem;
+  }
+
+  .pairing {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.65rem;
+    border: 1px solid var(--color-paper-edge);
+    border-radius: 999px;
+    color: var(--color-leather);
+    background: var(--color-cream-light);
+  }
+
+  .dietary {
+    margin-left: 0.4rem;
+    font-size: 0.7rem;
+    color: var(--color-gold);
+    letter-spacing: 0.1em;
+  }
+
+  .order-section {
+    margin: 3.5rem 0 2rem;
+    padding: 2rem;
+    background:
+      repeating-linear-gradient(
+        180deg,
+        var(--color-cream-light) 0px,
+        var(--color-cream-light) 28px,
+        rgba(107, 32, 48, 0.12) 28px,
+        rgba(107, 32, 48, 0.12) 29px
+      );
+    border: 1px solid var(--color-burgundy);
+    box-shadow:
+      inset 0 0 0 4px var(--color-cream-light),
+      inset 0 0 0 5px var(--color-burgundy),
+      0 8px 20px var(--color-shadow);
+    position: relative;
+  }
+
+  .order-stamp {
+    position: absolute;
+    top: -1rem;
+    right: 1.5rem;
+    background: var(--color-burgundy);
+    color: var(--color-cream-light);
+    padding: 0.4rem 1rem;
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    transform: rotate(1deg);
+    box-shadow: 0 3px 6px var(--color-shadow);
+  }
+
+  .order-title {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    color: var(--color-burgundy-deep);
+    margin-bottom: 0.3rem;
+  }
+
+  .order-sub {
+    font-style: italic;
+    color: var(--color-faded);
+    font-size: 0.95rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .order-list {
+    min-height: 4rem;
+    list-style: none;
+    padding: 0;
+    margin-bottom: 1rem;
+  }
+
+  .order-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.4rem 0;
+    border-bottom: 1px dashed var(--color-paper-edge);
+    font-family: var(--font-display);
+    animation: slideIn 0.3s ease;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-8px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .order-list .empty {
+    border: none;
+    color: var(--color-faded);
+    font-style: italic;
+    font-family: var(--font-body);
+    text-align: center;
+    padding: 1rem 0;
+    justify-content: center;
+  }
+
+  .order-row-right {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+  }
+
+  .order-row-right em {
+    color: var(--color-faded);
+    font-family: var(--font-body);
+    font-size: 0.95em;
+    font-style: italic;
+  }
+
+  .order-list .remove {
+    background: none;
+    border: none;
+    color: var(--color-burgundy);
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    line-height: 1;
+    padding: 0 0.3rem;
+  }
+
+  .order-list .remove:hover { color: var(--color-burgundy-deep); }
+
+  .order-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-top: 0.8rem;
+    border-top: 2px solid var(--color-burgundy);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--color-burgundy-deep);
+  }
+
+  .chef-note {
+    margin-top: 1.2rem;
+    padding: 1rem 1.2rem;
+    background: linear-gradient(135deg, rgba(184, 134, 11, 0.12), rgba(212, 160, 23, 0.05));
+    border-left: 3px solid var(--color-gold);
+    font-style: italic;
+    color: var(--color-leather);
+    min-height: 3rem;
+    transition: opacity 0.35s ease;
+  }
+
+  .chef-note::before {
+    content: 'Note du chef';
+    display: block;
+    font-family: var(--font-script);
+    font-style: normal;
+    font-size: 1.4rem;
+    color: var(--color-gold);
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+
+  .wine-card {
+    margin: 2.5rem 0;
+    padding: 1.5rem;
+    background: var(--color-burgundy-deep);
+    color: var(--color-cream-light);
+    text-align: center;
+    border: 1px solid var(--color-gold);
+    box-shadow: inset 0 0 0 4px var(--color-burgundy-deep), inset 0 0 0 5px var(--color-gold);
+    position: relative;
+  }
+
+  .wine-card h3 {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.4rem;
+    margin-bottom: 0.8rem;
+    color: var(--color-gold-bright);
+  }
+
+  .wine-intro {
+    font-family: var(--font-body);
+    font-style: italic;
+    opacity: 0.85;
+  }
+
+  .wine-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.8rem 1.5rem;
+    text-align: left;
+    margin-top: 1rem;
+  }
+
+  .wine-item {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    border-bottom: 1px dotted rgba(212, 160, 23, 0.4);
+    padding: 0.3rem 0;
+  }
+
+  .wine-item strong {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--color-gold-bright);
+  }
+
+  .wine-item .vintage {
+    float: right;
+    font-style: italic;
+    color: var(--color-cream);
+  }
+
+  .footer {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-paper-edge);
+    text-align: center;
+    color: var(--color-faded);
+  }
+
+  .footer .seal {
+    font-family: var(--font-script);
+    font-size: 2rem;
+    color: var(--color-gold);
+    margin-bottom: 0.4rem;
+  }
+
+  .footer-merci {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--color-burgundy);
+  }
+
+  .footer-contact {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin: 0.8rem 0;
+    font-size: 0.95rem;
+  }
+
+  .footer-contact a {
+    color: var(--color-burgundy);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--color-burgundy);
+    transition: color 0.2s;
+  }
+
+  .footer-contact a:hover { color: var(--color-burgundy-deep); }
+
+  .reservation {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 0.85rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-top: 1rem;
+    color: var(--color-leather);
+  }
+
+  @media (max-width: 540px) {
+    .menu { padding: 1.5rem 1rem; }
+    .dish {
+      grid-template-columns: 1fr;
+      grid-template-areas: "name" "price" "desc" "extra";
+    }
+    .dish-price { justify-self: start; font-size: 1rem; }
+    .course-title::before, .course-title::after { display: none; }
+    .order-section { padding: 1.2rem; }
+    .order-stamp { right: 0.8rem; font-size: 0.7rem; padding: 0.3rem 0.7rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<main class="menu" role="main">
+
+  <header class="header">
+    <p class="establishment">Établi sous Linux · MMXII</p>
+    <h1 class="name"><em>Chez</em>Nerdy</h1>
+    <p class="tagline">Une maison d'ingénierie logicielle &mdash; serveuse de systèmes distribués, sauce maison.</p>
+    <p class="location">Nederland <span>·</span> Table 1 <span>·</span> Open daily</p>
+  </header>
+
+  <section class="course" id="aperitifs">
+    <div class="course-head">
+      <p class="course-label">Premier service</p>
+      <h2 class="course-title">Apéritifs</h2>
+      <div class="course-flourish">❦</div>
+    </div>
+
+    <article class="dish" data-name="The House Greeting" data-price="amuse-bouche">
+      <div class="dish-name">The House Greeting <span class="code">no. 01</span></div>
+      <div class="dish-price">amuse-bouche</div>
+      <div class="dish-desc">Gertjan Bazuin &mdash; Software Engineer &amp; Tinkerer. Nederlandse keuken, internationale technieken.</div>
+      <div class="dish-extra">
+        <div class="tasting-notes">
+          Bouwt vanuit nieuwsgierigheid: van metalen op blackboards tot productie Kubernetes clusters. Specialiteit: systemen die anderen lui maken zonder dat ze het merken. Houdt van scherp gereedschap en doorlopend leren.
+          <div class="pairings">
+            <span class="pairing">Curious</span>
+            <span class="pairing">Pragmatic</span>
+            <span class="pairing">Self-hosted</span>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="dish" data-name="Maison Philosophy" data-price="gratuit">
+      <div class="dish-name">Maison Philosophy <span class="code">no. 02</span></div>
+      <div class="dish-price">gratuit</div>
+      <div class="dish-desc">Bouw het zelf, automatiseer alles wat tweemaal voorkomt, schrijf de docs alvorens je het vergeet.</div>
+      <div class="dish-extra">
+        <div class="tasting-notes">
+          Voor elke handmatige handeling die ik twee keer doe komt er een script. Voor elk script dat ik drie keer aanroep komt er een dashboard. Dat is het hele recept.
+          <div class="pairings">
+            <span class="pairing">IaC</span>
+            <span class="pairing">GitOps</span>
+            <span class="pairing">DRY</span>
+          </div>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section class="course" id="entrees">
+    <div class="course-head">
+      <p class="course-label">Deuxième service</p>
+      <h2 class="course-title">Entrées</h2>
+      <div class="course-flourish">❧</div>
+    </div>
+
+    <article class="dish" data-name="Crudités de Code" data-price="quotidien">
+      <div class="dish-name">Crudités de Code <span class="code">no. 03</span></div>
+      <div class="dish-price">quotidien</div>
+      <div class="dish-desc">Een verse selectie talen: TypeScript, Python, Go en Bash &mdash; geserveerd met seizoens­frameworks.<span class="dietary">[ V ]</span></div>
+      <div class="dish-extra">
+        <div class="tasting-notes">
+          Hoofdgangen op TypeScript (Vue, React, Node), bijgerechten op Python (FastAPI, scripts) en Go (kleine tools, CLIs). Bash voor de saus die alles bij elkaar bindt.
+          <div class="pairings">
+            <span class="pairing">TypeScript</span>
+            <span class="pairing">Python</span>
+            <span class="pairing">Go</span>
+            <span class="pairing">Bash</span>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="dish" data-name="Soupe à la Postgres" data-price="locale">
+      <div class="dish-name">Soupe à la Postgres <span class="code">no. 04</span></div>
+      <div class="dish-price">locale</div>
+      <div class="dish-desc">Een diepe bouillon van PostgreSQL, langzaam getrokken &mdash; met scherpe indexes en honingzoete CTE's.</div>
+      <div class="dish-extra">
+        <div class="tasting-notes">
+          Schema-design, query-tuning, replicatie, partitioning, materialized views. Heeft jaren in de pan staan pruttelen en dat proef je.
+          <div class="pairings">
+            <span class="pairing">PostgreSQL</span>
+            <span class="pairing">Indexing</span>
+            <span class="pairing">Replication</span>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="dish" data-name="Carpaccio de Containers" data-price="à la carte">
+      <div class="dish-name">Carpaccio de Containers <span class="code">no. 05</span></div>
+      <div class="dish-price">à la carte</div>
+      <div class="dish-desc">Dunne plakjes Docker, opgemaakt op een bedje van Kubernetes, afgemaakt met een fijne ArgoCD-vinaigrette.</div>
+      <div class="dish-extra">
+        <div class="tasting-notes">
+          Manifests die je niet hoeven aan te raken om bij te werken. Helm charts die hergebruikbaar blijven. Pod security defaults op-by-default.
+          <div class="pairings">
+            <span class="pairing">Docker</span>
+            <span class="pairing">Kubernetes</span>
+            <span class="pairing">ArgoCD</span>
+            <span class="pairing">Flux</span>
+          </div>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section class="course" id="plats">
+    <div class="course-head">
+      <p class="course-label">Troisième service · spécialité de la maison</p>
+      <h2 class="course-title">Plats Principaux</h2>
+      <div class="course-flourish">✦ ❦ ✦</div>
+    </div>
+
+    <article class="dish" data-name="Nerdy Terminal" data-price="MMXXIV">
+      <div class="dish-name">Nerdy Terminal <span class="code">no. 06</span></div>
+      <div class="dish-price">MMXXIV</div>
+      <div class="dish-desc">Een multi-agent orchestration CLI &mdash; tab-agents en workers gerangschikt rond een tmux-tafel, ieder met eigen messroom en inbox.</div>
+      <div class="dish-extra">
+        <div class="tasting-notes">
+          Drie-lagen hiërarchie (supervisor → tab-agents → workers), inter-agent berichtenbus, takenqueue, activity feed en babysit-modus voor lange runs. Geserveerd in eigen jus van shell scripts.
+          <div class="pairings">
+            <span class="pairing">TypeScript</span>
+            <span class="pairing">tmux</span>
+            <span class="pairing">CLI</span>
+            <span class="pairing">Multi-agent</span>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="dish" data-name="EM MCP Gateway" data-price="prod-grade">
+      <div class="dish-name">EM MCP Gateway <span class="code">no. 07</span></div>
+      <div class="dish-price">prod-grade</div>
+      <div class="dish-desc">Een LLM tool-use gateway voor de energie­sector &mdash; klassieke API's, gegratineerd met moderne agent-protocollen.</div>
+      <div class="dish-extra">
+        <div class="tasting-notes">
+          Brengt legacy SOAP, REST en SQL bronnen samen achter één MCP interface zodat LLMs er fatsoenlijk mee kunnen praten. Authenticatie, rate limits en code-mode JavaScript runner inbegrepen.
+          <div class="pairings">
+            <span class="pairing">MCP</span>
+            <span class="pairing">Python</span>
+            <span class="pairing">LLM</span>
+            <span class="pairing">Gateway</span>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="dish" data-name="K8s &amp; GitOps Stack" data-price="house special">
+      <div class="dish-name">K8s &amp; GitOps Stack <span class="code">no. 08</span></div>
+      <div class="dish-price">house special</div>
+      <div class="dish-desc">Productie­clusters op laag vuur, gegaard met ArgoCD, Flux en Tailscale &mdash; geserveerd met een rijke cert-manager saus.</div>
+      <div class="dish-extra">
+        <div class="tasting-notes">
+          Meerdere clusters (prod, test, monitoring, AI) onder één declarative paraplu. Alles wat een mens normaal twee keer doet, doet de cluster nu zelf.
+          <div class="pairings">
+            <span class="pairing">Kubernetes</span>
+            <span class="pairing">ArgoCD</span>
+            <span class="pairing">Flux</span>
+            <span class="pairing">Tailscale</span>
+            <span class="pairing">cert-manager</span>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="dish" data-name="Pixel Tanks" data-price="multiplayer">
+      <div class="dish-name">Pixel Tanks <span class="code">no. 09</span></div>
+      <div class="dish-price">multiplayer</div>
+      <div class="dish-desc">Een retro arcade-spel &mdash; gepocheerde tanks op een vintage raster, met een snufje WebSocket-vuurwerk.</div>
+      <div class="dish-extra">
+        <div class="tasting-notes">
+          Pure pixelart sprites, voorspelbare physics, lag-compensated multiplayer. Het soort spel waar je een avond aan kwijt bent zonder dat je het door hebt.
+          <div class="pairings">
+            <span class="pairing">Canvas</span>
+            <span class="pairing">WebSockets</span>
+            <span class="pairing">Game loop</span>
+            <span class="pairing">Pixel art</span>
+          </div>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <aside class="wine-card" aria-label="Wine pairings">
+    <h3>Cave du Sommelier</h3>
+    <p class="wine-intro">Toolchain pairings, geselecteerd door huis sommelier &mdash; iedere wijn afgestemd op een gang.</p>
+    <div class="wine-list">
+      <div class="wine-item"><strong>Neovim</strong> <span class="vintage">millésime quotidien</span></div>
+      <div class="wine-item"><strong>tmux</strong> <span class="vintage">grand cru</span></div>
+      <div class="wine-item"><strong>fish shell</strong> <span class="vintage">cuvée</span></div>
+      <div class="wine-item"><strong>Linux</strong> <span class="vintage">premier cru</span></div>
+      <div class="wine-item"><strong>git</strong> <span class="vintage">vieille réserve</span></div>
+      <div class="wine-item"><strong>Claude</strong> <span class="vintage">millésime 2025</span></div>
+    </div>
+  </aside>
+
+  <section class="course" id="desserts">
+    <div class="course-head">
+      <p class="course-label">Quatrième service</p>
+      <h2 class="course-title">Desserts</h2>
+      <div class="course-flourish">❦</div>
+    </div>
+
+    <article class="dish" data-name="Home Assistant Soufflé" data-price="200+ ent.">
+      <div class="dish-name">Home Assistant Soufflé <span class="code">no. 10</span></div>
+      <div class="dish-price">200+ ent.</div>
+      <div class="dish-desc">Een smart home opgeklopt tot meer dan 200 entiteiten, voorzichtig gerezen op YAML, geserveerd met een coulis van automations.</div>
+      <div class="dish-extra">
+        <div class="tasting-notes">
+          Verlichting, klimaat, energie, aanwezigheid, presence-detection en een handvol nodemcu's. Doet het ook als de wifi down is &mdash; want lokaal first.
+          <div class="pairings">
+            <span class="pairing">Home Assistant</span>
+            <span class="pairing">MQTT</span>
+            <span class="pairing">Zigbee</span>
+            <span class="pairing">YAML</span>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="dish" data-name="Open Source Petits Fours" data-price="various">
+      <div class="dish-name">Open Source Petits Fours <span class="code">no. 11</span></div>
+      <div class="dish-price">various</div>
+      <div class="dish-desc">Een assortiment kleine bijdragen aan diverse projecten &mdash; bugfixes, patches en documentatie­vernis.<span class="dietary">[ ♥ ]</span></div>
+      <div class="dish-extra">
+        <div class="tasting-notes">
+          Geen sterren­jacht, wel het soort PR's die je een week later vergeet maar die de maintainer dankbaar accepteert. Doc fixes, edge case patches, kleine features.
+          <div class="pairings">
+            <span class="pairing">GitHub</span>
+            <span class="pairing">Maintainer-friendly</span>
+            <span class="pairing">No drama</span>
+          </div>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section class="order-section" id="order-pad">
+    <div class="order-stamp">Table d'hôte</div>
+    <h2 class="order-title">Stel je eigen menu samen</h2>
+    <p class="order-sub">Tik op een gerecht hierboven om het op je <em>addition</em> te zetten. De chef rekent in projecten, niet in euro's.</p>
+
+    <ul class="order-list" id="orderList" aria-live="polite">
+      <li class="empty">— Nog geen gangen besteld —</li>
+    </ul>
+
+    <div class="order-total">
+      <span>Total des plats</span>
+      <span><span id="orderCount">0</span> gangen</span>
+    </div>
+
+    <div class="chef-note" id="chefNote">
+      <span id="chefMessage">De chef wacht op uw bestelling. Tik op een gerecht om te beginnen.</span>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="seal">~ N ~</div>
+    <p class="footer-merci">Merci de votre visite</p>
+    <div class="footer-contact">
+      <a href="mailto:hi@nerdy.nl">hi@nerdy.nl</a>
+      <a href="https://github.com/nerdyk" target="_blank" rel="noopener">github.com/nerdyk</a>
+    </div>
+    <p class="reservation">Reserveringen op afspraak · Service compris · Tip your CI/CD</p>
+  </footer>
+
+</main>
+
+<script>
+(function() {
+  'use strict';
+
+  const dishes = Array.from(document.querySelectorAll('.dish'));
+  const orderList = document.getElementById('orderList');
+  const orderCount = document.getElementById('orderCount');
+  const chefMsg = document.getElementById('chefMessage');
+  const chefNote = document.getElementById('chefNote');
+  const order = new Map();
+
+  const chefNotes = [
+    'De chef wacht op uw bestelling. Tik op een gerecht om te beginnen.',
+    'Een uitstekend begin. Voegt u nog een gang toe?',
+    'Een mooie combinatie aan het ontstaan. De sommelier glimlacht.',
+    'Trois plats — een serieus diner. De chef knikt goedkeurend.',
+    'Quatre plats. Dit is meer dan een maaltijd; dit is een avond.',
+    'Vijf gangen. Houdt u alstublieft nog ruimte voor het dessert.',
+    'Bon appétit — u eet als een ingenieur op vrijdagavond.',
+    'Zeven gangen. De keuken werkt overuren. Wij vinden het prachtig.',
+    'Een tasting menu van formaat. Service compris.',
+    'Negen platen. Wij raden een digestief en een uur stilte aan.',
+    'Het volledige huis. De chef komt zelf met de rekening.',
+    'Onze gehele carte. U bent voortaan onze stamgast.'
+  ];
+
+  function buildOrderRow(key, entry) {
+    const li = document.createElement('li');
+
+    const nameSpan = document.createElement('span');
+    nameSpan.textContent = entry.name;
+
+    const rightSpan = document.createElement('span');
+    rightSpan.className = 'order-row-right';
+
+    const priceEm = document.createElement('em');
+    priceEm.textContent = entry.price;
+    rightSpan.appendChild(priceEm);
+
+    const btn = document.createElement('button');
+    btn.className = 'remove';
+    btn.type = 'button';
+    btn.setAttribute('aria-label', 'Verwijder ' + entry.name);
+    btn.textContent = '×';
+    btn.addEventListener('click', function(ev) {
+      ev.stopPropagation();
+      const dish = document.querySelector('.dish[data-key="' + key + '"]');
+      if (dish) {
+        dish.classList.remove('ordered');
+      }
+      order.delete(key);
+      render();
+    });
+    rightSpan.appendChild(btn);
+
+    li.appendChild(nameSpan);
+    li.appendChild(rightSpan);
+    return li;
+  }
+
+  function render() {
+    while (orderList.firstChild) {
+      orderList.removeChild(orderList.firstChild);
+    }
+    if (order.size === 0) {
+      const li = document.createElement('li');
+      li.className = 'empty';
+      li.textContent = '— Nog geen gangen besteld —';
+      orderList.appendChild(li);
+    } else {
+      for (const [key, entry] of order) {
+        orderList.appendChild(buildOrderRow(key, entry));
+      }
+    }
+    orderCount.textContent = String(order.size);
+    const noteIndex = Math.min(order.size, chefNotes.length - 1);
+    chefNote.style.opacity = '0';
+    setTimeout(function() {
+      chefMsg.textContent = chefNotes[noteIndex];
+      chefNote.style.opacity = '1';
+    }, 180);
+  }
+
+  dishes.forEach(function(dish, idx) {
+    const key = 'd' + idx;
+    dish.dataset.key = key;
+    dish.setAttribute('role', 'button');
+    dish.setAttribute('tabindex', '0');
+    dish.setAttribute('aria-expanded', 'false');
+
+    function activate(ev) {
+      const target = ev.target;
+      if (target && target.closest && target.closest('.remove')) return;
+      const wasOpen = dish.classList.contains('open');
+      dish.classList.toggle('open');
+      dish.setAttribute('aria-expanded', String(!wasOpen));
+
+      if (!wasOpen && !order.has(key)) {
+        const name = dish.dataset.name || '';
+        const price = dish.dataset.price || '';
+        order.set(key, { name: name, price: price });
+        dish.classList.add('ordered');
+        render();
+      }
+    }
+
+    dish.addEventListener('click', activate);
+    dish.addEventListener('keydown', function(ev) {
+      if (ev.key === 'Enter' || ev.key === ' ') {
+        ev.preventDefault();
+        activate(ev);
+      }
+    });
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
