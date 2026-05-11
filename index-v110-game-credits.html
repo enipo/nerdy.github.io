@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NERDY.EXE — End Credits</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --color-void: #050018;
+    --color-deep: #0a0828;
+    --color-star: #c8d4ff;
+    --color-gold: #ffd24a;
+    --color-cyan: #5ce5ff;
+    --color-magenta: #ff5cb4;
+    --color-green: #7cff7a;
+    --color-amber: #ffb04a;
+    --color-text: #e6ebff;
+    --color-dim: #6b7aa8;
+    --color-shadow: #000814;
+    --pixel: 'Press Start 2P', monospace;
+    --crt: 'VT323', monospace;
+    --mono: 'Share Tech Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    background: var(--color-void);
+    color: var(--color-text);
+    font-family: var(--crt);
+    overflow: hidden;
+    image-rendering: pixelated;
+  }
+
+  body {
+    position: relative;
+    min-height: 100vh;
+  }
+
+  .stars {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background:
+      radial-gradient(2px 2px at 20% 30%, var(--color-star) 50%, transparent 51%),
+      radial-gradient(1px 1px at 40% 70%, var(--color-star) 50%, transparent 51%),
+      radial-gradient(2px 2px at 65% 20%, var(--color-cyan) 50%, transparent 51%),
+      radial-gradient(1px 1px at 80% 50%, var(--color-star) 50%, transparent 51%),
+      radial-gradient(1.5px 1.5px at 10% 85%, var(--color-gold) 50%, transparent 51%),
+      radial-gradient(1px 1px at 55% 90%, var(--color-star) 50%, transparent 51%),
+      radial-gradient(1px 1px at 90% 15%, var(--color-magenta) 50%, transparent 51%),
+      radial-gradient(2px 2px at 30% 55%, var(--color-star) 50%, transparent 51%),
+      linear-gradient(180deg, var(--color-void) 0%, var(--color-deep) 100%);
+    background-size: 100% 100%;
+    animation: drift 80s linear infinite;
+  }
+  .stars::after {
+    content: ''; position: absolute; inset: 0;
+    background:
+      radial-gradient(1px 1px at 25% 10%, var(--color-cyan) 50%, transparent 51%),
+      radial-gradient(1px 1px at 75% 80%, var(--color-amber) 50%, transparent 51%),
+      radial-gradient(2px 2px at 50% 40%, var(--color-star) 50%, transparent 51%),
+      radial-gradient(1px 1px at 5% 60%, var(--color-magenta) 50%, transparent 51%),
+      radial-gradient(1px 1px at 95% 35%, var(--color-green) 50%, transparent 51%);
+    background-size: 100% 100%;
+    animation: drift 120s linear infinite reverse;
+  }
+  @keyframes drift { from { background-position: 0 0; } to { background-position: 0 -800px; } }
+
+  .scanlines {
+    position: fixed; inset: 0; pointer-events: none; z-index: 50;
+    background: repeating-linear-gradient(0deg, rgba(0,0,0,0.18) 0, rgba(0,0,0,0.18) 1px, transparent 1px, transparent 3px);
+    mix-blend-mode: multiply;
+  }
+  .vignette {
+    position: fixed; inset: 0; pointer-events: none; z-index: 51;
+    background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.55) 100%);
+  }
+
+  .intro {
+    position: fixed; inset: 0; z-index: 40;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: clamp(1.2rem, 3vw, 2.4rem);
+    background: var(--color-void);
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+    padding: 1.5rem; text-align: center;
+  }
+  .intro.hidden { opacity: 0; visibility: hidden; }
+  .intro h1 {
+    font-family: var(--pixel);
+    font-size: clamp(1.4rem, 5vw, 3rem);
+    color: var(--color-gold); letter-spacing: 0.1em; line-height: 1.4;
+    text-shadow: 0 0 12px var(--color-gold), 4px 4px 0 var(--color-shadow);
+  }
+  .intro .sub {
+    font-family: var(--pixel); font-size: clamp(0.55rem, 1.6vw, 0.85rem);
+    color: var(--color-cyan); letter-spacing: 0.2em;
+    animation: blink 1.2s steps(2, end) infinite;
+  }
+  .intro .stats {
+    font-family: var(--mono); color: var(--color-text);
+    font-size: clamp(0.85rem, 2vw, 1.1rem); line-height: 1.9;
+    border: 2px solid var(--color-cyan); padding: 1rem 1.4rem;
+    background: rgba(5, 0, 24, 0.7);
+    box-shadow: 0 0 24px rgba(92, 229, 255, 0.25), inset 0 0 12px rgba(92, 229, 255, 0.1);
+    max-width: min(440px, 90vw); text-align: left;
+  }
+  .intro .stats .row { display: flex; justify-content: space-between; gap: 1rem; }
+  .intro .stats .row strong { color: var(--color-text); font-weight: normal; }
+  .intro .stats .row span { color: var(--color-gold); }
+
+  .start-btn {
+    font-family: var(--pixel); background: transparent; color: var(--color-green);
+    border: 3px solid var(--color-green); padding: 0.9rem 1.6rem;
+    font-size: clamp(0.6rem, 1.6vw, 0.85rem); letter-spacing: 0.15em; cursor: pointer;
+    box-shadow: 0 0 18px rgba(124, 255, 122, 0.35), inset 0 0 10px rgba(124, 255, 122, 0.15);
+    transition: transform 0.1s ease, background 0.15s ease;
+  }
+  .start-btn:hover, .start-btn:focus-visible {
+    background: rgba(124, 255, 122, 0.15); outline: none; transform: translateY(-2px);
+  }
+  .start-btn:active { transform: translateY(1px); }
+  @keyframes blink { 50% { opacity: 0.2; } }
+
+  .stage { position: fixed; inset: 0; z-index: 10; overflow: hidden; perspective: 700px; }
+  .credits {
+    position: absolute; left: 0; right: 0; top: 100vh;
+    padding: 0 1.5rem 50vh;
+    transform-origin: 50% 0%; transform: rotateX(8deg); will-change: transform;
+  }
+  .credits-inner { max-width: 760px; margin: 0 auto; text-align: center; }
+  .block { margin: clamp(2.6rem, 7vw, 4.5rem) auto; }
+
+  .block .role {
+    font-family: var(--pixel);
+    font-size: clamp(0.5rem, 1.2vw, 0.7rem);
+    color: var(--color-cyan);
+    letter-spacing: 0.25em;
+    margin-bottom: 0.6rem;
+    text-shadow: 0 0 6px rgba(92, 229, 255, 0.55);
+  }
+  .block .name {
+    font-family: var(--mono);
+    font-size: clamp(1.3rem, 3.5vw, 2.1rem);
+    color: var(--color-text);
+    letter-spacing: 0.04em;
+    line-height: 1.3;
+  }
+  .block .desc {
+    margin-top: 0.6rem;
+    font-family: var(--crt);
+    font-size: clamp(1rem, 2.4vw, 1.35rem);
+    color: var(--color-dim);
+    line-height: 1.4;
+    max-width: 540px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* big section header */
+  .section-title {
+    margin: clamp(5rem, 12vw, 8rem) auto clamp(2rem, 5vw, 3rem);
+    font-family: var(--pixel);
+    font-size: clamp(1rem, 3vw, 1.7rem);
+    color: var(--color-gold);
+    letter-spacing: 0.18em;
+    text-shadow:
+      0 0 14px rgba(255, 210, 74, 0.6),
+      3px 3px 0 var(--color-shadow);
+    line-height: 1.5;
+  }
+
+  .divider {
+    width: clamp(120px, 30vw, 220px);
+    height: 4px;
+    margin: 1.4rem auto;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--color-gold) 0 8px,
+      transparent 8px 16px
+    );
+  }
+
+  /* "level cleared" project card */
+  .level {
+    margin: clamp(3rem, 7vw, 5rem) auto;
+    border: 3px solid var(--color-magenta);
+    background: rgba(10, 8, 40, 0.78);
+    padding: 1.4rem 1.4rem 1.6rem;
+    max-width: 640px;
+    box-shadow:
+      0 0 24px rgba(255, 92, 180, 0.35),
+      inset 0 0 18px rgba(255, 92, 180, 0.08);
+    text-align: left;
+    position: relative;
+  }
+  .level::before {
+    content: '';
+    position: absolute;
+    top: -3px; left: -3px; right: -3px; bottom: -3px;
+    border: 1px solid rgba(255, 92, 180, 0.45);
+    pointer-events: none;
+  }
+
+  .level .stage-tag {
+    font-family: var(--pixel);
+    font-size: clamp(0.5rem, 1.2vw, 0.65rem);
+    color: var(--color-magenta);
+    letter-spacing: 0.2em;
+    margin-bottom: 0.4rem;
+  }
+  .level h2 {
+    font-family: var(--pixel);
+    font-size: clamp(0.85rem, 2.2vw, 1.15rem);
+    color: var(--color-gold);
+    letter-spacing: 0.08em;
+    margin-bottom: 0.9rem;
+    line-height: 1.4;
+  }
+  .level p {
+    font-family: var(--crt);
+    font-size: clamp(1.05rem, 2.3vw, 1.3rem);
+    color: var(--color-text);
+    line-height: 1.45;
+    margin-bottom: 0.8rem;
+  }
+  .level .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.2rem;
+    font-family: var(--mono);
+    font-size: clamp(0.85rem, 1.8vw, 1rem);
+    color: var(--color-cyan);
+    letter-spacing: 0.05em;
+    border-top: 2px dashed rgba(92, 229, 255, 0.35);
+    padding-top: 0.7rem;
+    margin-top: 0.4rem;
+  }
+  .level .meta span strong { color: var(--color-amber); font-weight: normal; }
+
+  /* skills as ability bars */
+  .ability {
+    margin: 0.9rem auto;
+    max-width: 520px;
+    text-align: left;
+    font-family: var(--mono);
+  }
+  .ability .label {
+    display: flex;
+    justify-content: space-between;
+    font-size: clamp(0.95rem, 2vw, 1.1rem);
+    color: var(--color-text);
+    margin-bottom: 0.35rem;
+    letter-spacing: 0.05em;
+  }
+  .ability .label span:last-child { color: var(--color-gold); }
+  .bar {
+    position: relative;
+    height: 14px;
+    background: rgba(10, 8, 40, 0.85);
+    border: 2px solid var(--color-cyan);
+    padding: 2px;
+  }
+  .bar i {
+    display: block;
+    height: 100%;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--color-green) 0 8px,
+      var(--color-cyan) 8px 10px
+    );
+    box-shadow: 0 0 10px rgba(124, 255, 122, 0.5);
+  }
+
+  /* boss / contact */
+  .boss {
+    margin: clamp(4rem, 10vw, 7rem) auto clamp(3rem, 6vw, 4rem);
+    border: 4px double var(--color-gold);
+    padding: 1.4rem 1.4rem 1.6rem;
+    background: rgba(5, 0, 24, 0.85);
+    max-width: 540px;
+  }
+  .boss .label {
+    font-family: var(--pixel);
+    color: var(--color-gold);
+    font-size: clamp(0.55rem, 1.4vw, 0.75rem);
+    letter-spacing: 0.25em;
+    margin-bottom: 0.8rem;
+  }
+  .boss .line {
+    font-family: var(--mono);
+    font-size: clamp(1rem, 2.3vw, 1.25rem);
+    color: var(--color-cyan);
+    margin: 0.4rem 0;
+  }
+  .boss .line a { color: var(--color-cyan); text-decoration: none; border-bottom: 1px dashed var(--color-cyan); }
+  .boss .line a:hover { color: var(--color-gold); border-color: var(--color-gold); }
+
+  /* THE END */
+  .the-end {
+    margin: clamp(4rem, 10vw, 8rem) auto clamp(2rem, 5vw, 4rem);
+    font-family: var(--pixel);
+    font-size: clamp(2rem, 7vw, 4rem);
+    color: var(--color-gold);
+    letter-spacing: 0.2em;
+    text-shadow:
+      0 0 24px var(--color-gold),
+      6px 6px 0 var(--color-shadow);
+  }
+
+  .insert-coin {
+    margin-top: 1.4rem;
+    font-family: var(--pixel);
+    font-size: clamp(0.55rem, 1.5vw, 0.8rem);
+    color: var(--color-cyan);
+    letter-spacing: 0.2em;
+    animation: blink 1s steps(2, end) infinite;
+  }
+
+  /* ---------- HUD controls ---------- */
+  .hud {
+    position: fixed;
+    z-index: 60;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    background: rgba(5, 0, 24, 0.85);
+    border: 2px solid var(--color-cyan);
+    padding: 0.55rem 0.7rem;
+    box-shadow: 0 0 18px rgba(92, 229, 255, 0.25);
+    align-items: center;
+  }
+
+  .hud button {
+    font-family: var(--pixel);
+    font-size: 0.55rem;
+    background: transparent;
+    color: var(--color-cyan);
+    border: 2px solid var(--color-cyan);
+    padding: 0.4rem 0.55rem;
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    transition: background 0.1s ease, color 0.1s ease;
+  }
+  .hud button:hover, .hud button:focus-visible {
+    background: var(--color-cyan);
+    color: var(--color-void);
+    outline: none;
+  }
+  .hud button.active {
+    background: var(--color-gold);
+    color: var(--color-void);
+    border-color: var(--color-gold);
+    box-shadow: 0 0 10px rgba(255, 210, 74, 0.5);
+  }
+
+  .hud .speed {
+    font-family: var(--pixel);
+    font-size: 0.55rem;
+    color: var(--color-amber);
+    padding: 0 0.3rem;
+    letter-spacing: 0.1em;
+  }
+
+  .progress {
+    position: fixed;
+    z-index: 59;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0%;
+    background: linear-gradient(90deg, var(--color-cyan), var(--color-gold), var(--color-magenta));
+    box-shadow: 0 0 8px var(--color-cyan);
+    transition: width 0.1s linear;
+  }
+
+  /* corner HUD label */
+  .hud-corner {
+    position: fixed;
+    z-index: 58;
+    top: 0.8rem;
+    left: 0.9rem;
+    font-family: var(--pixel);
+    font-size: 0.55rem;
+    color: var(--color-gold);
+    letter-spacing: 0.18em;
+    text-shadow: 0 0 8px rgba(255, 210, 74, 0.6);
+    pointer-events: none;
+  }
+  .hud-corner-r {
+    position: fixed;
+    z-index: 58;
+    top: 0.8rem;
+    right: 0.9rem;
+    font-family: var(--pixel);
+    font-size: 0.55rem;
+    color: var(--color-cyan);
+    letter-spacing: 0.18em;
+    text-align: right;
+    pointer-events: none;
+  }
+
+  /* "PAUSED" overlay */
+  .paused-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 55;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(5, 0, 24, 0.55);
+    pointer-events: none;
+  }
+  .paused-overlay.show { display: flex; }
+  .paused-overlay span {
+    font-family: var(--pixel);
+    font-size: clamp(1.4rem, 5vw, 2.5rem);
+    color: var(--color-amber);
+    letter-spacing: 0.25em;
+    text-shadow: 0 0 18px var(--color-amber), 4px 4px 0 var(--color-shadow);
+    animation: blink 0.8s steps(2, end) infinite;
+  }
+
+  /* mobile: fewer scanlines, smaller HUD */
+  @media (max-width: 540px) {
+    .scanlines { background-size: 100% 4px; }
+    .hud { gap: 0.3rem; padding: 0.4rem 0.5rem; }
+    .hud button { font-size: 0.5rem; padding: 0.35rem 0.45rem; }
+    .credits { transform: rotateX(4deg); padding: 0 1rem 50vh; }
+    .level { padding: 1.1rem; }
+    .hud-corner, .hud-corner-r { font-size: 0.5rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .stars, .stars::after { animation: none; }
+    .intro .sub, .insert-coin, .paused-overlay span { animation: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="stars" aria-hidden="true"></div>
+
+  <div class="hud-corner">NERDY.EXE v1.0</div>
+  <div class="hud-corner-r">PLAYER 1<br/>COMPLETE</div>
+
+  <div class="progress" id="progress"></div>
+
+  <!-- intro -->
+  <section class="intro" id="intro" role="dialog" aria-labelledby="intro-title">
+    <h1 id="intro-title">QUEST<br/>COMPLETE</h1>
+    <div class="stats" aria-label="Final stats">
+      <div class="row"><strong>PLAYER</strong><span>GERTJAN BAZUIN</span></div>
+      <div class="row"><strong>CLASS</strong><span>TINKERER / SE</span></div>
+      <div class="row"><strong>REGION</strong><span>NETHERLANDS</span></div>
+      <div class="row"><strong>PLAYTIME</strong><span>∞ HOURS</span></div>
+      <div class="row"><strong>COMMITS</strong><span>14,302</span></div>
+      <div class="row"><strong>BUGS SLAIN</strong><span>9,001+</span></div>
+    </div>
+    <button class="start-btn" id="startBtn" type="button">▶  ROLL CREDITS</button>
+    <div class="sub">PRESS START</div>
+  </section>
+
+  <!-- credits -->
+  <main class="stage" aria-label="Credits scroll">
+    <div class="credits" id="credits">
+      <div class="credits-inner">
+
+        <div class="section-title">— A NERDY.NL PRODUCTION —</div>
+        <div class="divider"></div>
+
+        <div class="block"><div class="role">DIRECTED BY</div><div class="name">GERTJAN BAZUIN</div></div>
+        <div class="block"><div class="role">EXECUTIVE PRODUCER</div><div class="name">NERDY.NL</div><div class="desc">An indie studio of one. Located somewhere in the Netherlands, fueled by espresso and reasonable ambition.</div></div>
+        <div class="block"><div class="role">LEAD SOFTWARE ENGINEER</div><div class="name">GERTJAN BAZUIN</div></div>
+        <div class="block"><div class="role">SYSTEMS ARCHITECT · TINKERER</div><div class="name">GERTJAN BAZUIN</div><div class="desc">Also handled QA, devops, build engineering, the kettle, and the cat (in spirit).</div></div>
+
+        <div class="section-title">★ LEVELS CLEARED ★</div>
+        <div class="divider"></div>
+
+        <div class="level">
+          <div class="stage-tag">STAGE 1-1</div>
+          <h2>NERDY TERMINAL</h2>
+          <p>Multi-agent orchestration CLI. A hierarchy of supervisor → tab-agents → workers, all conducted over tmux. Dispatches tasks, peeks sessions, routes inboxes — basically a Saturday-morning RPG party for LLMs.</p>
+          <div class="meta">
+            <span>STACK · <strong>TypeScript / Bash / tmux</strong></span>
+            <span>STATUS · <strong>SHIPPED</strong></span>
+          </div>
+        </div>
+
+        <div class="level">
+          <div class="stage-tag">STAGE 1-2</div>
+          <h2>PIXEL TANKS</h2>
+          <p>A retro multiplayer arcade game. Two-stick movement, chunky pixels, websocket netcode, and an unhealthy amount of explosion frames. Built because the world clearly needed one more tank game.</p>
+          <div class="meta">
+            <span>STACK · <strong>TypeScript / Canvas / WS</strong></span>
+            <span>STATUS · <strong>PLAYABLE</strong></span>
+          </div>
+        </div>
+
+        <div class="level">
+          <div class="stage-tag">STAGE 2-1</div>
+          <h2>K8S / GITOPS STACK</h2>
+          <p>Production Kubernetes clusters glued together with ArgoCD, Flux, and Tailscale. Declarative everything. Pets renamed to cattle and politely escorted off-prem.</p>
+          <div class="meta">
+            <span>STACK · <strong>K8s / Argo / Flux / TS</strong></span>
+            <span>STATUS · <strong>RUNNING 24/7</strong></span>
+          </div>
+        </div>
+
+        <div class="level">
+          <div class="stage-tag">STAGE 2-2</div>
+          <h2>EM MCP GATEWAY</h2>
+          <p>A tool-use gateway that lets LLMs safely poke at the Dutch energy sector. Strict scopes, read-only by default, audited per call. It says no, a lot. That's the feature.</p>
+          <div class="meta">
+            <span>STACK · <strong>Python / MCP / PG</strong></span>
+            <span>STATUS · <strong>IN PROD</strong></span>
+          </div>
+        </div>
+
+        <div class="level">
+          <div class="stage-tag">STAGE 3-1</div>
+          <h2>HOME ASSISTANT FORTRESS</h2>
+          <p>A smart home with 200+ entities, automations that mostly fire correctly, and a dashboard that nobody else understands. Lights respond to vibes. Heating responds to weather APIs.</p>
+          <div class="meta">
+            <span>STACK · <strong>HASS / YAML / Zigbee</strong></span>
+            <span>STATUS · <strong>SENTIENT-ISH</strong></span>
+          </div>
+        </div>
+
+        <div class="level">
+          <div class="stage-tag">BONUS STAGE</div>
+          <h2>OPEN SOURCE SIDE QUESTS</h2>
+          <p>A trail of pull requests across small but useful repos: CLI tools, dev experience patches, the occasional README rescue. No headline projects — just keeping the commons tidy.</p>
+          <div class="meta">
+            <span>STACK · <strong>whatever shipped</strong></span>
+            <span>STATUS · <strong>ONGOING</strong></span>
+          </div>
+        </div>
+
+        <div class="section-title">⚔ ABILITIES UNLOCKED ⚔</div>
+        <div class="divider"></div>
+
+        <div class="ability"><div class="label"><span>TypeScript</span><span>LV 92</span></div><div class="bar"><i style="width:92%"></i></div></div>
+        <div class="ability"><div class="label"><span>Python</span><span>LV 88</span></div><div class="bar"><i style="width:88%"></i></div></div>
+        <div class="ability"><div class="label"><span>Go</span><span>LV 74</span></div><div class="bar"><i style="width:74%"></i></div></div>
+        <div class="ability"><div class="label"><span>Kubernetes</span><span>LV 86</span></div><div class="bar"><i style="width:86%"></i></div></div>
+        <div class="ability"><div class="label"><span>PostgreSQL</span><span>LV 81</span></div><div class="bar"><i style="width:81%"></i></div></div>
+        <div class="ability"><div class="label"><span>Vue / React</span><span>LV 78</span></div><div class="bar"><i style="width:78%"></i></div></div>
+        <div class="ability"><div class="label"><span>Bash &amp; the Pipe</span><span>LV 90</span></div><div class="bar"><i style="width:90%"></i></div></div>
+
+        <div class="section-title">PRODUCTION CREW</div>
+        <div class="divider"></div>
+
+        <div class="block"><div class="role">SYSTEMS DESIGN · PROTOCOL ENG</div><div class="name">GERTJAN BAZUIN</div></div>
+        <div class="block"><div class="role">SOUND DESIGN</div><div class="name">A MECHANICAL KEYBOARD</div><div class="desc">Clicky switches, lubed stabilizers, no apologies.</div></div>
+        <div class="block"><div class="role">PIXEL ART · UI · UX · QA · DEVOPS</div><div class="name">GERTJAN BAZUIN</div><div class="desc">…and one extremely patient staging environment.</div></div>
+        <div class="block"><div class="role">DOCUMENTATION</div><div class="name">FUTURE GERTJAN</div><div class="desc">Always promised. Sometimes delivered.</div></div>
+        <div class="block"><div class="role">CONTINUITY · CASTING</div><div class="name">GIT &amp; SEMVER</div></div>
+
+        <div class="section-title">SPECIAL THANKS</div>
+        <div class="divider"></div>
+
+        <div class="block"><div class="role">TO</div><div class="name">EVERY MAINTAINER<br/>OF EVERY README</div></div>
+        <div class="block"><div class="role">TO</div><div class="name">THE STACK OVERFLOW<br/>ANSWER FROM 2014</div><div class="desc">You know the one.</div></div>
+        <div class="block"><div class="role">TO</div><div class="name">CAFFEINE &amp; RUBBER DUCKS</div></div>
+
+        <div class="section-title">FILMED ON LOCATION IN<br/>THE NETHERLANDS</div>
+        <div class="divider"></div>
+
+        <div class="section-title">⚑ FINAL BOSS ⚑</div>
+        <div class="divider"></div>
+
+        <div class="boss">
+          <div class="label">CONTACT THE PROTAGONIST</div>
+          <div class="line">EMAIL · <a href="mailto:hi@nerdy.nl">hi@nerdy.nl</a></div>
+          <div class="line">CODE · <a href="https://github.com/nerdyk" rel="noopener">github.com/nerdyk</a></div>
+          <div class="line">DOMAIN · nerdy.nl</div>
+          <div class="line">CLASS · Software Engineer / Tinkerer</div>
+          <div class="line">PARTY SIZE · 1 (looking for guildmates)</div>
+        </div>
+
+        <div class="section-title">NO BUGS WERE HARMED<br/>IN THE MAKING<br/>OF THIS PRODUCTION</div>
+        <div class="divider"></div>
+        <div class="block"><div class="desc">Several were respectfully relocated to a different repository.</div></div>
+
+        <div class="section-title">©  NERDY.NL — ALL RIGHTS RESERVED</div>
+
+        <div class="the-end" id="theEnd">THE END</div>
+        <div class="insert-coin">INSERT COIN TO CONTINUE</div>
+
+      </div>
+    </div>
+  </main>
+
+  <div class="paused-overlay" id="pausedOverlay" aria-hidden="true"><span>‖ PAUSED</span></div>
+
+  <!-- HUD -->
+  <div class="hud" role="toolbar" aria-label="Credits controls">
+    <button id="btnPlay" type="button" aria-label="Play / Pause">‖ PAUSE</button>
+    <button id="btnSlower" type="button" aria-label="Slower">«</button>
+    <span class="speed" id="speedLabel">x1.0</span>
+    <button id="btnFaster" type="button" aria-label="Faster">»</button>
+    <button id="btnRestart" type="button" aria-label="Restart">↺ REPLAY</button>
+    <button id="btnEnd" type="button" aria-label="Skip to end">▶▶ END</button>
+  </div>
+
+  <div class="scanlines" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+<script>
+(() => {
+  const intro      = document.getElementById('intro');
+  const startBtn   = document.getElementById('startBtn');
+  const credits    = document.getElementById('credits');
+  const stage      = document.querySelector('.stage');
+  const btnPlay    = document.getElementById('btnPlay');
+  const btnSlower  = document.getElementById('btnSlower');
+  const btnFaster  = document.getElementById('btnFaster');
+  const btnRestart = document.getElementById('btnRestart');
+  const btnEnd     = document.getElementById('btnEnd');
+  const speedLabel = document.getElementById('speedLabel');
+  const pausedOv   = document.getElementById('pausedOverlay');
+  const progress   = document.getElementById('progress');
+
+  const SPEEDS = [0.5, 1.0, 1.5, 2.0, 4.0];
+  let speedIdx  = 1;             // 1.0x
+  let basePxPerSec = 38;         // base scroll speed
+  let position  = 0;             // px from start (top:100vh translated up by `position`)
+  let playing   = false;
+  let lastTs    = 0;
+  let totalDist = 0;             // total scroll length needed
+  let rafId     = null;
+
+  function computeTotal() {
+    const stageH = stage.clientHeight;
+    const credH  = credits.scrollHeight;
+    // We start with credits.top = 100vh (translateY 0). End when credits bottom passes ~0vh.
+    // Distance to travel = credits height + a bit of viewport so "THE END" lands centered.
+    totalDist = credH + stageH * 0.4;
+  }
+
+  function applyTransform() {
+    credits.style.transform = `rotateX(8deg) translateY(${-position}px)`;
+    const pct = totalDist > 0 ? Math.min(100, (position / totalDist) * 100) : 0;
+    progress.style.width = pct + '%';
+  }
+
+  function tick(ts) {
+    if (!playing) { rafId = null; return; }
+    if (!lastTs) lastTs = ts;
+    const dt = (ts - lastTs) / 1000;
+    lastTs = ts;
+    position += basePxPerSec * SPEEDS[speedIdx] * dt;
+    if (position >= totalDist) {
+      position = totalDist;
+      playing = false;
+      btnPlay.textContent = '▶ PLAY';
+      pausedOv.classList.remove('show');
+      applyTransform();
+      return;
+    }
+    applyTransform();
+    rafId = requestAnimationFrame(tick);
+  }
+
+  function play() {
+    if (playing) return;
+    if (position >= totalDist) position = 0;
+    playing = true;
+    lastTs = 0;
+    btnPlay.textContent = '‖ PAUSE';
+    pausedOv.classList.remove('show');
+    rafId = requestAnimationFrame(tick);
+  }
+
+  function pause() {
+    if (!playing) return;
+    playing = false;
+    btnPlay.textContent = '▶ PLAY';
+    pausedOv.classList.add('show');
+    if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+  }
+
+  function togglePlay() { playing ? pause() : play(); }
+
+  function setSpeed(idx) {
+    speedIdx = Math.max(0, Math.min(SPEEDS.length - 1, idx));
+    speedLabel.textContent = 'x' + SPEEDS[speedIdx].toFixed(1);
+  }
+
+  function restart() {
+    position = 0;
+    applyTransform();
+    play();
+  }
+
+  function skipToEnd() {
+    position = totalDist;
+    applyTransform();
+    pause();
+    pausedOv.classList.remove('show');
+    btnPlay.textContent = '▶ PLAY';
+  }
+
+  function startCredits() {
+    intro.classList.add('hidden');
+    setTimeout(() => { intro.style.display = 'none'; }, 800);
+    computeTotal();
+    play();
+  }
+
+  // events
+  startBtn.addEventListener('click', startCredits);
+  btnPlay.addEventListener('click', togglePlay);
+  btnSlower.addEventListener('click', () => setSpeed(speedIdx - 1));
+  btnFaster.addEventListener('click', () => setSpeed(speedIdx + 1));
+  btnRestart.addEventListener('click', restart);
+  btnEnd.addEventListener('click', skipToEnd);
+
+  // keyboard
+  document.addEventListener('keydown', (e) => {
+    if (intro.style.display !== 'none' && !intro.classList.contains('hidden')) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        startCredits();
+      }
+      return;
+    }
+    switch (e.key) {
+      case ' ': e.preventDefault(); togglePlay(); break;
+      case 'ArrowUp':
+      case 'ArrowRight': setSpeed(speedIdx + 1); break;
+      case 'ArrowDown':
+      case 'ArrowLeft':  setSpeed(speedIdx - 1); break;
+      case 'r': case 'R': restart(); break;
+      case 'e': case 'E': skipToEnd(); break;
+    }
+  });
+
+  // touch / wheel scrubbing
+  let dragStartY = null;
+  let dragStartPos = 0;
+  stage.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    position = Math.max(0, Math.min(totalDist, position + e.deltaY * 0.6));
+    applyTransform();
+  }, { passive: false });
+
+  stage.addEventListener('touchstart', (e) => {
+    if (e.touches.length !== 1) return;
+    dragStartY = e.touches[0].clientY;
+    dragStartPos = position;
+  }, { passive: true });
+
+  stage.addEventListener('touchmove', (e) => {
+    if (dragStartY === null) return;
+    const dy = dragStartY - e.touches[0].clientY;
+    position = Math.max(0, Math.min(totalDist, dragStartPos + dy));
+    applyTransform();
+  }, { passive: true });
+
+  stage.addEventListener('touchend', () => { dragStartY = null; });
+
+  // recompute on resize / fontload
+  window.addEventListener('resize', computeTotal);
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(computeTotal);
+  }
+
+  // initial state
+  setSpeed(1);
+  applyTransform();
+})();
+</script>
+</body>
+</html>
