@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Nerdy</title>
+<meta name="description" content="Notities, experimenten en losse gedachten." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Monoton&family=VT323&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/site.css" />
+</head>
+<body>
+
+<nav class="top">
+  <div class="container row">
+    <div class="nav-links nav-left">
+      <a href="./" aria-current="page">Notes</a>
+      <a href="#categories">Categories</a>
+    </div>
+    <a class="brand" href="./">NERDY</a>
+    <div class="nav-links nav-right">
+      <a href="about.html">About</a>
+      <a href="rss.xml">RSS</a>
+    </div>
+  </div>
+</nav>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="container">
+      <span class="eyebrow"><span class="dot"></span>Notes from the workshop</span>
+      <h1 class="hero-headline">
+        Losse <span class="grad">notities</span>, kleine experimenten <br/>en gedachten die <span class="under">net</span> de moeite waard zijn.
+      </h1>
+      <p class="tagline">
+        Geen biografie, geen socials. Alleen het werk en wat eromheen blijft hangen.
+      </p>
+      <div class="hero-ctas">
+        <a class="btn btn-primary" href="#featured">Lees de laatste →</a>
+        <a class="btn btn-ghost" href="#categories">Categorieën ↓</a>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><div class="num" data-target="1">0</div><div class="label">Notitie tot nu toe</div></div>
+        <div class="stat"><div class="num" data-noanim="1">∞</div><div class="label">Ideeën in concept</div></div>
+        <div class="stat"><div class="num" data-target="0">0</div><div class="label">Trackers actief</div></div>
+        <div class="stat"><div class="num" data-target="2026">0</div><div class="label">Sinds</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="featured">
+    <div class="container">
+      <div class="section-head">
+        <p class="kicker">— Featured</p>
+        <h2 class="section-title">De meest recente <b>notitie</b>.</h2>
+      </div>
+
+      <a class="featured-card" href="posts/hello/">
+        <div class="featured-meta">
+          <span class="featured-pin">★ pinned</span>
+          <time datetime="2026-05-11">11 mei 2026</time>
+          <span class="dot-sep">·</span>
+          <span>1 min lezen</span>
+        </div>
+        <h3 class="featured-title">Hello, <span>nerdy.</span></h3>
+        <p class="featured-excerpt">
+          Een eerste notitie. Geen biografie, geen socials — alleen losse gedachten en wat code-aantekeningen.
+          Een rustige start voor wat de komende tijd hier verschijnt.
+        </p>
+        <div class="featured-cta">
+          <span>Lees de notitie</span>
+          <span class="arrow">→</span>
+        </div>
+        <div class="featured-glow" aria-hidden="true"></div>
+      </a>
+    </div>
+  </section>
+
+  <section class="block" id="notes">
+    <div class="container">
+      <div class="section-head">
+        <p class="kicker">— Alle notities</p>
+        <h2 class="section-title">Het hele <b>archief</b>.</h2>
+        <p class="section-sub">Chronologisch. Nieuwste boven. Niet meer, niet minder.</p>
+      </div>
+
+      <div class="post-list" id="postList"></div>
+    </div>
+  </section>
+
+  <section class="block" id="categories">
+    <div class="container">
+      <div class="section-head">
+        <p class="kicker">— Categories</p>
+        <h2 class="section-title">Waar het hier <b>meestal</b> over gaat.</h2>
+        <p class="section-sub">Tags zijn richtingaanwijzers, geen beloftes — sommige rubrieken zijn nog leeg.</p>
+      </div>
+
+      <div class="cat-grid" id="catGrid"></div>
+    </div>
+  </section>
+
+  <section class="block manifest">
+    <div class="container">
+      <div class="quote-card">
+        <p class="quote-mark" aria-hidden="true">"</p>
+        <p class="quote-body">
+          Het web heeft geen tekort aan <em>meningen</em>; het heeft tekort aan <em>notities</em>.
+        </p>
+        <p class="quote-foot">— Een gedachte die hier ergens vandaan komt.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="bottom">
+  <div class="container row">
+    <div>© <span id="year">2026</span> Nerdy</div>
+    <div class="foot-links">
+      <a href="rss.xml" title="RSS feed">RSS</a>
+      <span class="foot-sep">·</span>
+      <a href="about.html">About</a>
+      <span class="foot-sep">·</span>
+      <a href="#top">↑ top</a>
+    </div>
+  </div>
+</footer>
+
+<script src="js/posts.js"></script>
+<script>
+(() => {
+  const list = document.getElementById("postList");
+
+  const fmtDate = (iso) => {
+    const d = new Date(iso);
+    return d.toLocaleDateString("nl-NL", { year: "numeric", month: "long", day: "numeric" });
+  };
+
+  for (const p of (window.NERDY_POSTS || [])) {
+    const a = document.createElement("a");
+    a.className = "post-item";
+    a.href = p.href;
+
+    const meta = document.createElement("div");
+    meta.className = "post-meta";
+    const t = document.createElement("time");
+    t.dateTime = p.date;
+    t.textContent = fmtDate(p.date);
+    const sep = document.createElement("span");
+    sep.className = "dot-sep";
+    sep.textContent = "·";
+    const rt = document.createElement("span");
+    rt.textContent = p.readingTime;
+    meta.appendChild(t);
+    meta.appendChild(sep);
+    meta.appendChild(rt);
+
+    const h = document.createElement("h2");
+    h.className = "post-title";
+    h.textContent = p.title;
+
+    const ex = document.createElement("p");
+    ex.className = "post-excerpt";
+    ex.textContent = p.excerpt;
+
+    const arr = document.createElement("span");
+    arr.className = "post-arrow";
+    arr.textContent = "lees verder →";
+
+    a.appendChild(meta);
+    a.appendChild(h);
+    a.appendChild(ex);
+    a.appendChild(arr);
+    list.appendChild(a);
+  }
+
+  /* Categories */
+  const cats = [
+    { name: "Tinkering",   count: 0, color: "var(--neon-cyan)",   desc: "Hardware-stoeien, kleine breakdowns, schroefdraad-rampen." },
+    { name: "Code-notes",  count: 1, color: "var(--neon-pink)",   desc: "Korte bevindingen uit het werk — fragmenten, gotchas, patterns." },
+    { name: "Long-form",   count: 0, color: "var(--neon-yellow)", desc: "Voor zelden, maar als het hoort." },
+    { name: "Tools",       count: 0, color: "var(--neon-lime)",   desc: "Wat ik gebruik en waarom. Of waarom niet." },
+    { name: "Off-topic",   count: 0, color: "var(--neon-purple)", desc: "Niet-technisch, weinig overtuiging." },
+    { name: "Workshop",    count: 0, color: "#ff7a1a",            desc: "Werk in uitvoering, half-af, soms onaf voor altijd." },
+  ];
+
+  const grid = document.getElementById("catGrid");
+  for (const c of cats) {
+    const card = document.createElement("div");
+    card.className = "cat-card";
+    card.style.setProperty("--accent", c.color);
+
+    const top = document.createElement("div");
+    top.className = "cat-top";
+    const tag = document.createElement("span");
+    tag.className = "cat-tag";
+    tag.textContent = c.name;
+    const cnt = document.createElement("span");
+    cnt.className = "cat-count";
+    cnt.textContent = c.count;
+    top.appendChild(tag);
+    top.appendChild(cnt);
+
+    const desc = document.createElement("p");
+    desc.className = "cat-desc";
+    desc.textContent = c.desc;
+
+    card.appendChild(top);
+    card.appendChild(desc);
+    grid.appendChild(card);
+  }
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  /* count-up stats */
+  const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+  function animateNum(el) {
+    if (el.dataset.noanim) return;
+    const target = parseInt(el.dataset.target, 10);
+    if (isNaN(target)) return;
+    const duration = 1200;
+    const start = performance.now();
+    function step(now) {
+      const p = Math.min(1, (now - start) / duration);
+      el.textContent = Math.floor(easeOutCubic(p) * target);
+      if (p < 1) requestAnimationFrame(step);
+      else el.textContent = target;
+    }
+    requestAnimationFrame(step);
+  }
+  if ("IntersectionObserver" in window) {
+    const obs = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) {
+          animateNum(e.target);
+          obs.unobserve(e.target);
+        }
+      }
+    }, { threshold: 0.4 });
+    document.querySelectorAll(".stat .num").forEach((n) => obs.observe(n));
+  } else {
+    document.querySelectorAll(".stat .num").forEach(animateNum);
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Hello, nerdy. · Nerdy</title>
+<meta name="description" content="Een eerste notitie." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Monoton&family=VT323&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../../css/site.css" />
+</head>
+<body>
+
+<nav class="top">
+  <div class="container row">
+    <div class="nav-links nav-left">
+      <a href="../../">Notes</a>
+      <a href="../../#categories">Categories</a>
+    </div>
+    <a class="brand" href="../../">NERDY</a>
+    <div class="nav-links nav-right">
+      <a href="../../about.html">About</a>
+      <a href="../../rss.xml">RSS</a>
+    </div>
+  </div>
+</nav>
+
+<article class="post">
+  <a class="post-back" href="../../">← terug</a>
+
+  <div class="post-meta">
+    <time datetime="2026-05-11">11 mei 2026</time>
+    <span class="dot-sep">·</span>
+    <span>1 min</span>
+  </div>
+
+  <h1>Hello, <span>nerdy.</span></h1>
+
+  <p>Welkom. Dit is de eerste notitie. Geen introductie van mezelf — er is hier expliciet geen 'ik' — alleen een plek om gedachten neer te zetten.</p>
+
+  <p>De vorm is bewust schraal: een lijst, een paginalange tekst, soms wat <code>code</code>. Geen comments, geen tags, geen socials. Wie iets wil zeggen mag het denken; dat is voldoende.</p>
+
+  <h2>Wat hier kan verschijnen</h2>
+
+  <p>Korte aantekeningen over dingen die ik bouw of stuk maak. Soms een vraag waar ik antwoord op zocht en niet kon vinden — opgeschreven om mezelf later eraan te herinneren. Soms een opmerking die nergens anders thuishoort.</p>
+
+  <pre><code>$ git log --oneline | head -1
+abc1234 hello, world</code></pre>
+
+  <blockquote>Het web heeft geen tekort aan meningen; het heeft tekort aan notities.</blockquote>
+
+  <p>Tot de volgende.</p>
+
+  <hr/>
+
+  <p style="text-align:center; color: var(--ink-dim); font-family: 'VT323', monospace; letter-spacing: 0.18em;">— FIN —</p>
+</article>
+
+<footer class="bottom">
+  <div class="container row">
+    <div>© <span id="year">2026</span> Nerdy</div>
+    <div class="foot-links">
+      <a href="../../rss.xml" title="RSS feed">RSS</a>
+      <span class="foot-sep">·</span>
+      <a href="../../">Home</a>
+      <span class="foot-sep">·</span>
+      <a href="#top">↑ top</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
