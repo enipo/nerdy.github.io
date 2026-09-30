@@ -4,8 +4,8 @@
 <!-- ontwerp: NERDY (04) — projectpagina-sjabloon: de opbouw van Mission Control (landschap met opkomende planeet, echte schermopnames en screenshot-tour, features, architectuurschema) in de Hologram-stijl van de homepage; alle projectcontent staat in één datablok bovenin <body>. -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Nerdy Terminal 2 · NERDY</title>
-<meta name="description" content="Nerdy Terminal 2: a Mac app for directing AI coding agents. Claude and Codex in one conversation, with workers you can follow.">
+<title>Mier · NERDY</title>
+<meta name="description" content="Mier: a Mac app for directing AI coding agents. Claude and Codex in one conversation, with workers you can follow.">
 <meta name="theme-color" content="#05050a" media="(prefers-color-scheme: dark)">
 <meta name="theme-color" content="#eeebf3" media="(prefers-color-scheme: light)">
 <link rel="icon" href="assets/nt-icon.png">
@@ -408,12 +408,11 @@
 <script type="application/json" id="project-data">
 {
   "number": "01",
-  "name": "Nerdy Terminal",
-  "nameTail": "2",
+  "name": "Mier",
   "kind": "Mac app",
   "status": "Coming soon",
   "accent": { "dark": "#ff9a3c", "light": "#c45c00" },
-  "icon": { "src": "assets/nt-icon.png", "alt": "Nerdy Terminal 2 app icon" },
+  "icon": { "src": "assets/nt-icon.png", "alt": "Mier app icon" },
   "tagline": "One calm place for your AI coding agents.",
   "lede": "A Mac app that turns Claude and Codex into one team. Projects are tabs, each task is a conversation, and for every message you choose which model picks it up. The conversation belongs to the app, not to the agent.",
   "primaryCta": { "label": "Request early access", "toast": "Early access opens soon. There's no sign-up form yet, so check back here." },
@@ -426,9 +425,9 @@
   ],
   "media": {
     "path": "assets/app/",
-    "window": "Nerdy Terminal 2",
+    "window": "Mier",
     "screens": {
-      "overview": "Project overview in Nerdy Terminal 2: a composer, cards for conversations that need you, today's timeline and weekly stats",
+      "overview": "Project overview in Mier: a composer, cards for conversations that need you, today's timeline and weekly stats",
       "model-switch": "A conversation that moves between Codex and Claude, with 'Continuing with Claude' and 'Continuing with Codex' markers between the messages",
       "model-picker": "The model picker: Claude models and Codex models side by side, with effort and permission settings",
       "workers": "An agent that started two workers; the workers sit nested under it in the conversation list",
@@ -448,10 +447,10 @@
   "demo": {
     "label": "Screen recordings",
     "title": "Watch it work.",
-    "text": "Real recordings of Nerdy Terminal 2, with real agents doing small jobs in demo projects. Nothing here is staged in HTML.",
+    "text": "Real recordings of Mier, with real agents doing small jobs in demo projects. Nothing here is staged in HTML.",
     "note": "Real recordings<br>demo projects",
     "clips": [
-      { "id": "workers", "tag": "Agents", "title": "An agent starts two workers", "text": "Claude splits a task with <code>nt new</code>, and the workers show up under it in the list. Played at 3× speed.", "label": "Claude starts two workers with nt new. They appear nested under the conversation in the list while they work." },
+      { "id": "workers", "tag": "Agents", "title": "An agent starts two workers", "text": "Claude splits a task with <code>mier new</code>, and the workers show up under it in the list. Played at 3× speed.", "label": "Claude starts two workers with nt new. They appear nested under the conversation in the list while they work." },
       { "id": "model-switch", "tag": "Models", "title": "From Codex to Claude, mid-chat", "text": "Pick another model for the next message. Claude picks up the whole conversation Codex had.", "label": "In a conversation that was running on Codex, the model picker switches to Claude Sonnet 5, a message is sent and Claude answers with the full context." },
       { "id": "streaming", "tag": "Chat", "title": "Start a task, watch it stream", "text": "Type in the project composer and the answer streams in as a new conversation.", "label": "A task typed in the project overview becomes a new conversation, and Claude's answer streams in." }
     ]
@@ -465,7 +464,7 @@
       { "shot": "overview", "tag": "Projects", "title": "Every project is a tab", "text": "Open a project and start a task from its overview. Conversations that need you sit on top, next to a timeline of what happened today." },
       { "shot": "model-switch", "tag": "Models", "title": "A model per message", "text": "One conversation, several models. The app hands over the context, so Claude can review what Codex just wrote." },
       { "shot": "model-picker", "tag": "Picker", "title": "Model, effort and permissions", "text": "Choose Claude or Codex, how hard it should think, and how much it may do without asking. Per message, with <code>⌘/</code>." },
-      { "shot": "workers", "tag": "Agents", "title": "Agents that delegate", "text": "An agent starts workers with <code>nt new</code> and waits for them with <code>nt wait</code>. The workers hang under their parent in the list." },
+      { "shot": "workers", "tag": "Agents", "title": "Agents that delegate", "text": "An agent starts workers with <code>mier new</code> and waits for them with <code>mier wait</code>. The workers hang under their parent in the list." },
       { "shot": "permission", "tag": "Permissions", "title": "You stay in charge", "text": "When an agent wants to write or run something, it asks. Allow once, always, or deny." },
       { "shot": "question", "tag": "Questions", "title": "Questions with choices", "text": "Agents can ask you a multiple-choice question instead of guessing. Pick an answer or type your own." },
       { "shot": "artifact", "tag": "Artifacts", "title": "Interactive artifacts", "text": "Agents show forms as HTML right in the chat. Tick, submit, and the agent gets your answer back as JSON." },
@@ -487,7 +486,7 @@
     "items": [
       { "tag": "Models", "shot": "model-switch", "glyph": "switch", "title": "A model per message", "text": "Pick Claude or Codex for every message, in the middle of the same conversation. Switching hands over the context by itself." },
       { "tag": "History", "shot": "model-switch", "glyph": "log", "title": "The conversation is yours", "text": "The app keeps the log. Each agent session remembers how far it has read and only catches up on what it missed." },
-      { "tag": "Agents", "shot": "workers", "glyph": "tree", "title": "Agents that delegate", "text": "Agents start workers with <code>nt new</code>, follow them with <code>nt wait</code> and approve their permission requests. Supervisor, agent, workers." },
+      { "tag": "Agents", "shot": "workers", "glyph": "tree", "title": "Agents that delegate", "text": "Agents start workers with <code>mier new</code>, follow them with <code>mier wait</code> and approve their permission requests. Supervisor, agent, workers." },
       { "tag": "Status", "shot": "dashboard", "glyph": "status", "title": "Status at a glance", "text": "Every conversation is idle, working, needs you, error or completed. You see at once where you are needed." },
       { "tag": "Terminal", "shot": "terminal", "glyph": "term", "title": "The terminal button", "text": "Jump from the chat into the real CLI session, running in tmux and shown with xterm.js. Come back and the new lines are in the chat." },
       { "tag": "Mobile", "shot": "phones", "glyph": "phone", "title": "In your pocket", "text": "The same UI on your phone, over Tailscale. Only devices on your own Tailscale account get in." },
@@ -503,9 +502,9 @@
     "clients": [
       { "k": "Client", "title": "Mac app", "text": "Tauri + Vue" },
       { "k": "Client", "title": "Mobile", "text": "Web UI via Tailscale" },
-      { "k": "Client", "title": "nt CLI", "text": "For the agents" }
+      { "k": "Client", "title": "mier CLI", "text": "For the agents" }
     ],
-    "core": { "k": "Daemon", "title": "ntd", "text": "Rust · owns all state", "tags": ["HTTP + WebSocket", "SQLite log", "Model switch + sync"] },
+    "core": { "k": "Daemon", "title": "mierd", "text": "Rust · owns all state", "tags": ["HTTP + WebSocket", "SQLite log", "Model switch + sync"] },
     "backends": [
       { "k": "Agent", "title": "claude", "text": "stream-json" },
       { "k": "Agent", "title": "codex", "text": "app-server" },
@@ -520,7 +519,7 @@
   "cta": {
     "label": "Release",
     "big": "Coming soon",
-    "text": "Nerdy Terminal 2 is almost ready. There is no release date yet. Early access comes first."
+    "text": "Mier is almost ready. There is no release date yet. Early access comes first."
   }
 }
 </script>
@@ -539,7 +538,7 @@
   <a class="brand" href="index.html" aria-label="NERDY home"><span class="brand-orb"></span>NERDY</a>
   <nav class="nav-links" aria-label="Main">
     <a href="index.html#projects">Projects</a>
-    <a href="nerdy-terminal.html" aria-current="page">Nerdy Terminal 2</a>
+    <a href="mier.html" aria-current="page">Mier</a>
     <a href="index.html#studio">Studio</a>
     <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark theme">
       <svg class="sun"><use href="#i-sun"/></svg><svg class="moon"><use href="#i-moon"/></svg><span class="knob"></span>
@@ -778,7 +777,7 @@
     <p class="foot-mark" id="footMark" aria-hidden="true">NERDY</p>
     <div class="foot-row">
       <span>© 2026 NERDY · nerdy.nl</span>
-      <nav aria-label="Footer"><a href="index.html#projects">Projects</a><a href="nerdy-terminal.html">Nerdy Terminal 2</a><a href="tankeretank.html">Tankeretank</a><a href="you-cook.html">You Cook</a><a href="#top">Back to top</a></nav>
+      <nav aria-label="Footer"><a href="index.html#projects">Projects</a><a href="mier.html">Mier</a><a href="tankeretank.html">Tankeretank</a><a href="you-cook.html">You Cook</a><a href="drift.html">Drift</a><a href="#top">Back to top</a></nav>
     </div>
   </div>
 </footer>
