@@ -413,8 +413,8 @@
   "status": "Coming soon",
   "accent": { "dark": "#ff9a3c", "light": "#c45c00" },
   "icon": { "src": "assets/nt-icon.png", "alt": "Mier app icon" },
-  "tagline": "One calm place for your AI coding agents.",
-  "lede": "A Mac app that turns Claude and Codex into one team. Projects are tabs, each task is a conversation, and for every message you choose which model picks it up. The conversation belongs to the app, not to the agent.",
+  "tagline": "A Mac app for running Claude and Codex.",
+  "lede": "A Mac app for working with Claude and Codex side by side. Projects are tabs, each task is a conversation, and for every message you choose which model picks it up. The app keeps the conversation, not the agent.",
   "primaryCta": { "label": "Request early access", "toast": "Early access opens soon. There's no sign-up form yet, so check back here." },
   "secondaryCta": { "label": "Watch the demo", "href": "#demo" },
   "facts": [
@@ -446,8 +446,8 @@
   },
   "demo": {
     "label": "Screen recordings",
-    "title": "Watch it work.",
-    "text": "Real recordings of Mier, with real agents doing small jobs in demo projects. Nothing here is staged in HTML.",
+    "title": "Screen recordings.",
+    "text": "Recordings of Mier with agents doing small jobs in demo projects.",
     "note": "Real recordings<br>demo projects",
     "clips": [
       { "id": "workers", "tag": "Agents", "title": "An agent starts two workers", "text": "Claude splits a task with <code>mier new</code>, and the workers show up under it in the list. Played at 3× speed.", "label": "Claude starts two workers with nt new. They appear nested under the conversation in the list while they work." },
@@ -457,15 +457,15 @@
   },
   "tour": {
     "label": "A closer look",
-    "title": "Every screen is real.",
-    "text": "Scroll through the app. Screenshots taken in the running app, in light and dark, following the theme of this site.",
+    "title": "Screenshots.",
+    "text": "Taken in the running app, in light and dark to match the theme of this site.",
     "note": "10 screens<br>click to enlarge",
     "steps": [
       { "shot": "overview", "tag": "Projects", "title": "Every project is a tab", "text": "Open a project and start a task from its overview. Conversations that need you sit on top, next to a timeline of what happened today." },
       { "shot": "model-switch", "tag": "Models", "title": "A model per message", "text": "One conversation, several models. The app hands over the context, so Claude can review what Codex just wrote." },
       { "shot": "model-picker", "tag": "Picker", "title": "Model, effort and permissions", "text": "Choose Claude or Codex, how hard it should think, and how much it may do without asking. Per message, with <code>⌘/</code>." },
       { "shot": "workers", "tag": "Agents", "title": "Agents that delegate", "text": "An agent starts workers with <code>mier new</code> and waits for them with <code>mier wait</code>. The workers hang under their parent in the list." },
-      { "shot": "permission", "tag": "Permissions", "title": "You stay in charge", "text": "When an agent wants to write or run something, it asks. Allow once, always, or deny." },
+      { "shot": "permission", "tag": "Permissions", "title": "Permission requests", "text": "When an agent wants to write or run something, it asks. Allow once, always, or deny." },
       { "shot": "question", "tag": "Questions", "title": "Questions with choices", "text": "Agents can ask you a multiple-choice question instead of guessing. Pick an answer or type your own." },
       { "shot": "artifact", "tag": "Artifacts", "title": "Interactive artifacts", "text": "Agents show forms as HTML right in the chat. Tick, submit, and the agent gets your answer back as JSON." },
       { "shot": "terminal", "tag": "Terminal", "title": "The real terminal, one click away", "text": "Jump into the live Claude Code or Codex session in tmux. Go back to the chat and the new lines come along." },
@@ -474,14 +474,14 @@
     ],
     "phones": {
       "label": "Mobile",
-      "title": "The same app in your pocket.",
+      "title": "On a phone.",
       "text": "The UI is responsive. Open it on your phone over Tailscale to approve a request or send a follow-up.",
       "shots": ["list", "chat", "permission"]
     }
   },
   "features": {
     "label": "Features",
-    "title": "Everything your agents need.",
+    "title": "Features.",
     "note": "9 features",
     "items": [
       { "tag": "Models", "shot": "model-switch", "glyph": "switch", "title": "A model per message", "text": "Pick Claude or Codex for every message, in the middle of the same conversation. Switching hands over the context by itself." },
@@ -489,7 +489,7 @@
       { "tag": "Agents", "shot": "workers", "glyph": "tree", "title": "Agents that delegate", "text": "Agents start workers with <code>mier new</code>, follow them with <code>mier wait</code> and approve their permission requests. Supervisor, agent, workers." },
       { "tag": "Status", "shot": "dashboard", "glyph": "status", "title": "Status at a glance", "text": "Every conversation is idle, working, needs you, error or completed. You see at once where you are needed." },
       { "tag": "Terminal", "shot": "terminal", "glyph": "term", "title": "The terminal button", "text": "Jump from the chat into the real CLI session, running in tmux and shown with xterm.js. Come back and the new lines are in the chat." },
-      { "tag": "Mobile", "shot": "phones", "glyph": "phone", "title": "In your pocket", "text": "The same UI on your phone, over Tailscale. Only devices on your own Tailscale account get in." },
+      { "tag": "Mobile", "shot": "phones", "glyph": "phone", "title": "On your phone", "text": "The same UI on your phone, over Tailscale. Only devices on your own Tailscale account get in." },
       { "tag": "Daemon", "glyph": "beat", "title": "Always on", "text": "A Rust daemon owns all state and keeps running when you close the app. Your agents keep working." },
       { "tag": "Artifacts", "shot": "artifact", "glyph": "form", "title": "Interactive artifacts", "text": "Agents show forms and choices as HTML right inside the chat. You click, the agent gets structured input back." },
       { "tag": "Updates", "glyph": "ring", "title": "Updates itself", "text": "Signed auto-updates. Agents still busy? The daemon waits until everything is idle before it restarts." }
@@ -497,7 +497,7 @@
   },
   "how": {
     "label": "How it works",
-    "title": "One daemon. Many screens.",
+    "title": "One daemon, several clients.",
     "text": "The app, your phone and the agents themselves all talk to one daemon. The daemon drives Claude and Codex and opens tmux when you want the real terminal.",
     "clients": [
       { "k": "Client", "title": "Mac app", "text": "Tauri + Vue" },
@@ -519,7 +519,7 @@
   "cta": {
     "label": "Release",
     "big": "Coming soon",
-    "text": "Mier is almost ready. There is no release date yet. Early access comes first."
+    "text": "Mier is not released yet and there is no date."
   }
 }
 </script>
@@ -539,7 +539,6 @@
   <nav class="nav-links" aria-label="Main">
     <a href="index.html#projects">Projects</a>
     <a href="mier.html" aria-current="page">Mier</a>
-    <a href="index.html#studio">Studio</a>
     <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark theme">
       <svg class="sun"><use href="#i-sun"/></svg><svg class="moon"><use href="#i-moon"/></svg><span class="knob"></span>
     </button>
@@ -777,7 +776,7 @@
     <p class="foot-mark" id="footMark" aria-hidden="true">NERDY</p>
     <div class="foot-row">
       <span>© 2026 NERDY · nerdy.nl</span>
-      <nav aria-label="Footer"><a href="index.html#projects">Projects</a><a href="mier.html">Mier</a><a href="tankeretank.html">Tankeretank</a><a href="you-cook.html">You Cook</a><a href="drift.html">Drift</a><a href="#top">Back to top</a></nav>
+      <nav aria-label="Footer"><a href="index.html#projects">Projects</a><a href="mier.html">Mier</a><a href="tankeretank.html">Tankeretank</a><a href="you-cook.html">You Cook</a><a href="drift.html">Drift</a><a href="tbd.html">TBD</a><a href="#top">Back to top</a></nav>
     </div>
   </div>
 </footer>
@@ -801,6 +800,13 @@
     var stored = null; try { stored = localStorage.getItem('nerdy-theme'); } catch (_) {}
     if (!stored) setTheme(e.matches ? 'dark' : 'light', false);
   });
+  // Back/forward cache and other tabs: pick up a theme chosen on another page.
+  function syncTheme() {
+    var stored = null; try { stored = localStorage.getItem('nerdy-theme'); } catch (_) {}
+    if ((stored === 'light' || stored === 'dark') && stored !== root.dataset.theme) setTheme(stored, false);
+  }
+  addEventListener('pageshow', syncTheme);
+  addEventListener('storage', function (e) { if (e.key === 'nerdy-theme') syncTheme(); });
   var nav = document.getElementById('nav');
   var onScroll = function () { nav.classList.toggle('scrolled', scrollY > 40); };
   addEventListener('scroll', onScroll, { passive: true }); onScroll();

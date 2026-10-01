@@ -511,7 +511,7 @@
   },
   "demo": {
     "label": "Gameplay",
-    "title": "Watch it cook.",
+    "title": "Gameplay.",
     "text": "A real recording of the game in the browser: one chef, day one, a pot of tomato soup from crate to counter.",
     "note": "Real gameplay<br>the game is in Dutch",
     "head": "Clips",
@@ -528,7 +528,7 @@
   },
   "tour": {
     "label": "A closer look",
-    "title": "From calm to chaos.",
+    "title": "Screenshots.",
     "text": "Screenshots from the game itself. Each day brings new recipes and a little more trouble.",
     "note": "7 screens<br>click to enlarge",
     "steps": [
@@ -578,7 +578,7 @@
   },
   "features": {
     "label": "Features",
-    "title": "Everything a kitchen needs.",
+    "title": "Features.",
     "note": "9 features",
     "linkLabel": "See it in the game",
     "items": [
@@ -634,7 +634,7 @@
       {
         "tag": "Feel",
         "glyph": "beat",
-        "title": "You feel it",
+        "title": "Shake and rumble",
         "text": "Camera shake, phone vibration and controller rumble for every serve, combo, fire and bump."
       },
       {
@@ -799,7 +799,7 @@
     <a href="tankeretank.html">Tankeretank</a>
     <a href="you-cook.html" aria-current="page">You Cook</a>
     <a href="drift.html">Drift</a>
-    <a href="index.html#studio">Studio</a>
+    <a href="tbd.html">TBD</a>
     <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark theme">
       <svg class="sun"><use href="#i-sun"/></svg><svg class="moon"><use href="#i-moon"/></svg><span class="knob"></span>
     </button>
@@ -1084,7 +1084,7 @@
     <p class="foot-mark" id="footMark" aria-hidden="true">NERDY</p>
     <div class="foot-row">
       <span>© 2026 NERDY · nerdy.nl</span>
-      <nav aria-label="Footer"><a href="index.html#projects">Projects</a><a href="mier.html">Mier</a><a href="tankeretank.html">Tankeretank</a><a href="you-cook.html">You Cook</a><a href="drift.html">Drift</a><a href="#top">Back to top</a></nav>
+      <nav aria-label="Footer"><a href="index.html#projects">Projects</a><a href="mier.html">Mier</a><a href="tankeretank.html">Tankeretank</a><a href="you-cook.html">You Cook</a><a href="drift.html">Drift</a><a href="tbd.html">TBD</a><a href="#top">Back to top</a></nav>
     </div>
   </div>
 </footer>
@@ -1108,6 +1108,13 @@
     var stored = null; try { stored = localStorage.getItem('nerdy-theme'); } catch (_) {}
     if (!stored) setTheme(e.matches ? 'dark' : 'light', false);
   });
+  // Back/forward cache and other tabs: pick up a theme chosen on another page.
+  function syncTheme() {
+    var stored = null; try { stored = localStorage.getItem('nerdy-theme'); } catch (_) {}
+    if ((stored === 'light' || stored === 'dark') && stored !== root.dataset.theme) setTheme(stored, false);
+  }
+  addEventListener('pageshow', syncTheme);
+  addEventListener('storage', function (e) { if (e.key === 'nerdy-theme') syncTheme(); });
   var nav = document.getElementById('nav');
   var onScroll = function () { nav.classList.toggle('scrolled', scrollY > 40); };
   addEventListener('scroll', onScroll, { passive: true }); onScroll();

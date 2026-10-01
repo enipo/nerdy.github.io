@@ -4,8 +4,8 @@
 <!-- ontwerp: NERDY (04) — Hologram-homepage: live iriserende WebGL-vorm, kinetische typografie en uitschuivende projectpanelen; projectpagina's delen nav, footer, thema en stijl. -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>NERDY — independent maker studio</title>
-<meta name="description" content="NERDY is an independent maker studio building tools, interfaces and experiments.">
+<title>NERDY</title>
+<meta name="description" content="NERDY: apps and games. A Mac app for AI coding agents, two games, a sleep sounds app and a life management app.">
 <meta name="theme-color" content="#05050a" media="(prefers-color-scheme: dark)">
 <meta name="theme-color" content="#eeebf3" media="(prefers-color-scheme: light)">
 <link rel="icon" href="assets/nt-icon.png">
@@ -148,9 +148,6 @@
   .hero canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; background: var(--bg); }
   .hero::after { content: ''; position: absolute; inset: auto 0 0 0; height: 28vh; background: linear-gradient(to bottom, transparent, var(--bg)); pointer-events: none; }
   .hero-copy { position: relative; z-index: 2; width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 var(--pad) clamp(56px, 11vh, 120px); }
-  .eyebrow { display: inline-flex; align-items: center; gap: 10px; font: 500 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
-  .eyebrow .pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 0 var(--ok); animation: pulse 2s infinite; }
-  @keyframes pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ok) 60%, transparent); } 100% { box-shadow: 0 0 0 10px transparent; } }
   .mega {
     margin: 14px 0 0; font-family: var(--display); font-weight: 400;
     font-size: clamp(76px, 19vw, 300px); line-height: .82; letter-spacing: -.035em;
@@ -188,8 +185,6 @@
   .btn-ghost:hover { background: var(--glass-2); transform: translateY(-2px); }
 
   .hud { position: absolute; z-index: 2; font: 500 10px/1.5 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--faint); pointer-events: none; }
-  .hud-tr { top: 84px; right: var(--pad); text-align: right; }
-  .hud-tr b { color: var(--muted); font-weight: 500; }
   .hud-scroll { right: var(--pad); bottom: 40px; display: flex; align-items: center; gap: 10px; writing-mode: vertical-rl; }
   .hud-scroll i { display: block; width: 1px; height: 54px; background: linear-gradient(var(--faint), transparent); position: relative; overflow: hidden; }
   .hud-scroll i::after { content: ''; position: absolute; left: 0; top: -40%; width: 1px; height: 40%; background: var(--text); animation: drip 2.2s var(--ease) infinite; }
@@ -263,15 +258,6 @@
   .t-go svg { width: 16px; height: 16px; }
   .pn:focus-visible { outline: 2px solid var(--violet); outline-offset: 3px; }
 
-  /* ---------- statement ---------- */
-  .statement { font: 500 clamp(34px, 6vw, 88px)/1.04 var(--display); letter-spacing: -.035em; margin: 0; max-width: 16ch; }
-  .statement .sw { --lit: 0; color: color-mix(in srgb, var(--text) calc(var(--lit) * 100%), var(--muted)); }
-  .statement.static .sw { --lit: 1; }
-  .principles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: clamp(56px, 8vw, 100px); }
-  .pr { padding: 28px 26px 30px; }
-  .pr svg { width: 44px; height: 44px; }
-  .pr h4 { margin: 22px 0 8px; font: 600 19px/1.2 var(--display); letter-spacing: -.01em; }
-  .pr p { margin: 0; color: var(--muted); font-size: 15.5px; }
 
   /* ---------- footer ---------- */
   footer { position: relative; padding: 40px 0 36px; overflow: hidden; border-top: 1px solid var(--line); }
@@ -293,18 +279,16 @@
 
   /* ---------- responsive ---------- */
   @media (max-width: 900px) {
-    .principles { grid-template-columns: 1fr; }
     .nav-links a:not(.keep) { display: none; }
   }
   @media (max-width: 600px) {
     body { font-size: 16px; }
     .hero { align-items: flex-end; }
     .hero-copy { padding-bottom: 64px; }
-    .hud-tr { display: none; }
     .hud-scroll { display: none; }
     .hero-row { margin-top: 20px; }
     .btn { height: 46px; padding: 0 18px; font-size: 14.5px; }
-    .panels { flex-direction: column; height: 720px; gap: 10px; }
+    .panels { flex-direction: column; height: 780px; gap: 10px; }
     .pn-label { writing-mode: horizontal-tb; transform: translate(-50%, -50%); bottom: auto; top: 50%; font-size: 20px; }
     .pn-num { top: 50%; transform: translateY(-50%); }
     .pn-body { padding: 120px 20px 20px; }
@@ -333,7 +317,6 @@
   <a class="brand" href="index.html" aria-label="NERDY home"><span class="brand-orb"></span>NERDY</a>
   <nav class="nav-links" aria-label="Main">
     <a href="index.html#projects">Projects</a>
-    <a href="index.html#studio">Studio</a>
     <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark theme">
       <svg class="sun"><use href="#i-sun"/></svg><svg class="moon"><use href="#i-moon"/></svg><span class="knob"></span>
     </button>
@@ -343,18 +326,16 @@
 <main>
   <section class="hero" id="top">
     <canvas id="gl" aria-hidden="true"></canvas>
-    <div class="hud hud-tr" aria-hidden="true">nerdy.nl<br><b>Live shader</b> · <span id="fps">— fps</span><br>Move to tilt · scroll to morph</div>
     <div class="hud hud-scroll" aria-hidden="true">Scroll<i></i></div>
     <div class="hero-copy">
-      <p class="eyebrow up" style="animation-delay:.4s"><span class="pulse"></span>Independent maker studio</p>
       <h1 class="mega" id="mega" aria-label="NERDY"><span aria-hidden="true">N</span><span aria-hidden="true">E</span><span aria-hidden="true">R</span><span aria-hidden="true">D</span><span aria-hidden="true">Y</span></h1>
       <div class="hero-row">
         <div class="hero-lead">
-          <h2 class="up" style="animation-delay:.6s">Software that feels like the future we were promised.</h2>
-          <p class="up" style="animation-delay:.75s">NERDY builds tools, interfaces and experiments. Engineered seriously, played with on purpose.</p>
+          <h2 class="up" style="animation-delay:.6s">Apps and games.</h2>
+          <p class="up" style="animation-delay:.75s">A Mac app for AI coding agents, two games, a sleep sounds app and a life management app.</p>
         </div>
         <div class="hero-cta up" style="animation-delay:.9s">
-          <a class="btn btn-primary" href="#projects">Browse projects <svg><use href="#i-arrow"/></svg></a>
+          <a class="btn btn-primary" href="#projects">See projects <svg><use href="#i-arrow"/></svg></a>
         </div>
       </div>
     </div>
@@ -363,7 +344,7 @@
   <section class="sec" id="projects" aria-label="Projects">
     <div class="wrap">
       <span class="label rv">Projects</span>
-      <h2 class="h-sec split">A peek into the workshop.</h2>
+      <h2 class="h-sec split">Current projects.</h2>
       <div class="panels rv" id="panels">
         <a class="pn open" href="mier.html">
           <img class="th-dark" src="assets/app/nt-workers-dark-1440.webp" alt="" loading="lazy">
@@ -406,33 +387,20 @@
             <span class="t-go">View project <svg><use href="#i-arrow"/></svg></span>
           </div>
         </a>
+        <a class="pn pn-phone" href="tbd.html">
+          <img src="assets/tbd/tbd-dashboard-1440.webp" alt="" loading="lazy">
+          <span class="pn-num">05</span><span class="pn-label" aria-hidden="true">TBD</span>
+          <div class="pn-body">
+            <div class="pn-meta"><span>Project 05 · Web + Android app</span><span class="chip">Invite only</span></div>
+            <h3>TBD</h3>
+            <p>A personal command center: capture a thought by text, voice or photo, let AI find the tasks, and keep projects and documents in one place.</p>
+            <span class="t-go">View project <svg><use href="#i-arrow"/></svg></span>
+          </div>
+        </a>
       </div>
     </div>
   </section>
 
-  <section class="sec" id="studio">
-    <div class="wrap">
-      <span class="label rv">Studio</span>
-      <p class="statement" id="statement" style="margin-top:22px">Build the tools you wish existed. Then make them a joy to use.</p>
-      <div class="principles">
-        <div class="glass foil pr rv">
-          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><defs><linearGradient id="g1" x1="0" y1="0" x2="48" y2="48"><stop stop-color="var(--cyan)"/><stop offset=".5" stop-color="var(--violet)"/><stop offset="1" stop-color="var(--rose)"/></linearGradient></defs><rect x="6" y="10" width="36" height="28" rx="7" stroke="url(#g1)" stroke-width="2.2"/><path d="m14 21 5 4-5 4M23 29h9" stroke="url(#g1)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <h4>Useful first</h4>
-          <p>Every project starts from a real problem in day-to-day work, not from a trend.</p>
-        </div>
-        <div class="glass foil pr rv">
-          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 6 40 15v18L24 42 8 33V15z" stroke="url(#g1)" stroke-width="2.2" stroke-linejoin="round"/><path d="M8 15l16 9 16-9M24 24v18" stroke="url(#g1)" stroke-width="2.2" stroke-linejoin="round"/></svg>
-          <h4>Serious underneath</h4>
-          <p>Solid engineering and careful maintenance. Tools you rely on should be boring in the right places.</p>
-        </div>
-        <div class="glass foil pr rv">
-          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><circle cx="24" cy="24" r="10" stroke="url(#g1)" stroke-width="2.2"/><ellipse cx="24" cy="24" rx="19" ry="6.5" transform="rotate(-24 24 24)" stroke="url(#g1)" stroke-width="2.2"/></svg>
-          <h4>Playful on the surface</h4>
-          <p>Interfaces with a bit of wonder. The fun lives in the details and never gets in your way.</p>
-        </div>
-      </div>
-    </div>
-  </section>
 </main>
 
 <footer>
@@ -440,7 +408,7 @@
     <p class="foot-mark" id="footMark" aria-hidden="true">NERDY</p>
     <div class="foot-row">
       <span>© 2026 NERDY · nerdy.nl</span>
-      <nav aria-label="Footer"><a href="index.html#projects">Projects</a><a href="mier.html">Mier</a><a href="tankeretank.html">Tankeretank</a><a href="you-cook.html">You Cook</a><a href="drift.html">Drift</a><a href="#top">Back to top</a></nav>
+      <nav aria-label="Footer"><a href="index.html#projects">Projects</a><a href="mier.html">Mier</a><a href="tankeretank.html">Tankeretank</a><a href="you-cook.html">You Cook</a><a href="drift.html">Drift</a><a href="tbd.html">TBD</a><a href="#top">Back to top</a></nav>
     </div>
   </div>
 </footer>
@@ -468,6 +436,13 @@
     let stored = null; try { stored = localStorage.getItem('nerdy-theme'); } catch (_) {}
     if (!stored) setTheme(e.matches ? 'dark' : 'light', false);
   });
+  // Back/forward cache and other tabs: pick up a theme chosen on another page.
+  function syncTheme() {
+    var stored = null; try { stored = localStorage.getItem('nerdy-theme'); } catch (_) {}
+    if ((stored === 'light' || stored === 'dark') && stored !== root.dataset.theme) setTheme(stored, false);
+  }
+  addEventListener('pageshow', syncTheme);
+  addEventListener('storage', function (e) { if (e.key === 'nerdy-theme') syncTheme(); });
 
   /* ---------- nav ---------- */
   const nav = document.getElementById('nav');
@@ -610,7 +585,6 @@ void main(){
     // The render loop only exists while the hero is on screen and the tab is visible. Paused,
     // it costs nothing: no rAF callbacks, no GPU work. Time is accumulated from frame deltas,
     // so the blob resumes exactly where it stopped instead of jumping ahead.
-    const fpsEl = document.getElementById('fps');
     let raf = 0, frames = 0, acc = 0, last = 0;
     // Touch devices and laptops running low on battery get 30 fps: the blob moves slowly
     // enough that it looks the same, at half the GPU work.
@@ -642,7 +616,6 @@ void main(){
       if (frames >= 40 || (acc > 600 && frames >= 3)) {
         const avg = acc / frames, budget = interval || 1000 / 60;
         if (avg > 150 && st.scale <= minScale * 1.01) { st.still = true; st.scale = .22; sync(); resize(); draw(14); return; }
-        if (fpsEl) fpsEl.textContent = Math.round(1000 / avg) + ' fps';
         if (avg > budget * 1.32 && st.scale > minScale) { st.scale = Math.max(minScale, st.scale * (avg > 60 ? .6 : .8)); resize(); }
         else if (!interval && avg < 14 && st.scale < maxScale) { st.scale = Math.min(maxScale, st.scale * 1.25); resize(); }
         frames = 0; acc = 0;
@@ -657,7 +630,7 @@ void main(){
       gl.viewport(0, 0, canvas.width, canvas.height);
       draw(st.still ? 14 : st.time); sync();
     });
-    if (st.still) { draw(14); if (fpsEl) fpsEl.textContent = 'still'; }
+    if (st.still) draw(14);
     else sync();
     return st;
   }
@@ -717,10 +690,7 @@ void main(){
     p.addEventListener('click', e => { if (!p.classList.contains('open')) { e.preventDefault(); open(); } });
   });
 
-  if (!hasGsap || reduced) {
-    document.getElementById('statement').classList.add('static');
-    return;
-  }
+  if (!hasGsap || reduced) return;
 
   gsap.registerPlugin(ScrollTrigger);
   gsap.ticker.lagSmoothing(0); // follow real time, even when the shader makes frames slow
@@ -744,12 +714,6 @@ void main(){
   gsap.utils.toArray('.sec .rv').forEach(el => {
     gsap.from(el, { y: 28, duration: 1.1, ease: 'expo.out', scrollTrigger: { trigger: el, start: 'top 88%' } });
   });
-
-  // statement: word-by-word light-up
-  const stEl = document.getElementById('statement');
-  stEl.innerHTML = stEl.textContent.trim().split(/\s+/).map(w => '<span class="sw">' + w + '</span>').join(' ');
-  const sws = stEl.querySelectorAll('.sw');
-  gsap.to(sws, { '--lit': 1, stagger: .1, ease: 'none', scrollTrigger: { trigger: stEl, start: 'top 80%', end: 'bottom 45%', scrub: true } });
 })();
 </script>
 </body>

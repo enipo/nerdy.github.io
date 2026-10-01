@@ -508,7 +508,7 @@
   },
   "demo": {
     "label": "Gameplay",
-    "title": "Watch it play.",
+    "title": "Gameplay.",
     "text": "Real footage from the game: matches on the summer map, with bots filling the empty seats.",
     "note": "Real gameplay<br>summer map",
     "head": "Clips",
@@ -532,7 +532,7 @@
   },
   "tour": {
     "label": "A closer look",
-    "title": "Every frame is real.",
+    "title": "Screenshots.",
     "text": "Screenshots from real matches. The concept art comes later on this page, and it is labeled as such.",
     "note": "4 screens<br>click to enlarge",
     "steps": [
@@ -551,20 +551,20 @@
       {
         "shot": "field",
         "tag": "Terrain",
-        "title": "The land fights back",
+        "title": "Terrain you can break",
         "text": "Drive over bushes and young trees. Shoot big trees and farmhouses to pieces. Rocks stay put, so use them as cover."
       },
       {
         "shot": "boom",
         "tag": "Effects",
-        "title": "Make it count",
+        "title": "Kills",
         "text": "A hit knocks a tank back. A kill ends in a shock wave, sparks, a crater and a turret flying off the wreck."
       }
     ]
   },
   "features": {
     "label": "Features",
-    "title": "Small game, big bang.",
+    "title": "Features.",
     "note": "9 features",
     "linkLabel": "See it in the game",
     "items": [
@@ -751,7 +751,7 @@
     <a href="tankeretank.html" aria-current="page">Tankeretank</a>
     <a href="you-cook.html">You Cook</a>
     <a href="drift.html">Drift</a>
-    <a href="index.html#studio">Studio</a>
+    <a href="tbd.html">TBD</a>
     <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark theme">
       <svg class="sun"><use href="#i-sun"/></svg><svg class="moon"><use href="#i-moon"/></svg><span class="knob"></span>
     </button>
@@ -1036,7 +1036,7 @@
     <p class="foot-mark" id="footMark" aria-hidden="true">NERDY</p>
     <div class="foot-row">
       <span>© 2026 NERDY · nerdy.nl</span>
-      <nav aria-label="Footer"><a href="index.html#projects">Projects</a><a href="mier.html">Mier</a><a href="tankeretank.html">Tankeretank</a><a href="you-cook.html">You Cook</a><a href="drift.html">Drift</a><a href="#top">Back to top</a></nav>
+      <nav aria-label="Footer"><a href="index.html#projects">Projects</a><a href="mier.html">Mier</a><a href="tankeretank.html">Tankeretank</a><a href="you-cook.html">You Cook</a><a href="drift.html">Drift</a><a href="tbd.html">TBD</a><a href="#top">Back to top</a></nav>
     </div>
   </div>
 </footer>
@@ -1060,6 +1060,13 @@
     var stored = null; try { stored = localStorage.getItem('nerdy-theme'); } catch (_) {}
     if (!stored) setTheme(e.matches ? 'dark' : 'light', false);
   });
+  // Back/forward cache and other tabs: pick up a theme chosen on another page.
+  function syncTheme() {
+    var stored = null; try { stored = localStorage.getItem('nerdy-theme'); } catch (_) {}
+    if ((stored === 'light' || stored === 'dark') && stored !== root.dataset.theme) setTheme(stored, false);
+  }
+  addEventListener('pageshow', syncTheme);
+  addEventListener('storage', function (e) { if (e.key === 'nerdy-theme') syncTheme(); });
   var nav = document.getElementById('nav');
   var onScroll = function () { nav.classList.toggle('scrolled', scrollY > 40); };
   addEventListener('scroll', onScroll, { passive: true }); onScroll();

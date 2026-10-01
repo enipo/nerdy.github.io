@@ -552,7 +552,7 @@
   },
   "tour": {
     "label": "A closer look",
-    "title": "Built for the last ten minutes of the day.",
+    "title": "Screenshots.",
     "text": "Screenshots from the app on Android. Big touch targets, dark colours and no clutter, because you use it half asleep.",
     "note": "5 screens<br>click to enlarge",
     "steps": [
@@ -565,13 +565,13 @@
       {
         "shot": "playing",
         "tag": "Layers",
-        "title": "Stack sounds like a mixer",
+        "title": "Layers",
         "text": "Every layer has its own volume. A loop plays forever, a playlist plays episodes top to bottom. Pause a single layer without stopping the rest."
       },
       {
         "shot": "timer",
         "tag": "Timer",
-        "title": "A timer that fades, not cuts",
+        "title": "A timer that fades out",
         "text": "Pick 15 minutes to 90, or stop at the end of the episode. The last minutes fade out on a curve, so the silence does not wake you."
       },
       {
@@ -590,7 +590,7 @@
   },
   "features": {
     "label": "Features",
-    "title": "Everything you need to fall asleep.",
+    "title": "Features.",
     "note": "9 features",
     "linkLabel": "See it in the app",
     "items": [
@@ -660,7 +660,7 @@
   },
   "gallery": {
     "label": "Making of",
-    "title": "Five looks, one pick.",
+    "title": "Five designs.",
     "text": "Before a single line of Kotlin, the main screen was designed five times as clickable HTML mockups. Everything in them works: play, sliders, timer presets. The playful Blobs design won.",
     "note": "Design mockups<br>click to enlarge",
     "cols": 5,
@@ -757,7 +757,7 @@
     ],
     "steps": [
       {
-        "title": "A curve, not a line",
+        "title": "A curved fade",
         "text": "Volume drops with the square of the time left. It sounds like a slow, even fade to the ear, instead of a sudden drop at the end."
       },
       {
@@ -795,7 +795,7 @@
     <a href="tankeretank.html">Tankeretank</a>
     <a href="you-cook.html">You Cook</a>
     <a href="drift.html" aria-current="page">Drift</a>
-    <a href="index.html#studio">Studio</a>
+    <a href="tbd.html">TBD</a>
     <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark theme">
       <svg class="sun"><use href="#i-sun"/></svg><svg class="moon"><use href="#i-moon"/></svg><span class="knob"></span>
     </button>
@@ -1086,7 +1086,7 @@
     <p class="foot-mark" id="footMark" aria-hidden="true">NERDY</p>
     <div class="foot-row">
       <span>© 2026 NERDY · nerdy.nl</span>
-      <nav aria-label="Footer"><a href="index.html#projects">Projects</a><a href="mier.html">Mier</a><a href="tankeretank.html">Tankeretank</a><a href="you-cook.html">You Cook</a><a href="drift.html">Drift</a><a href="#top">Back to top</a></nav>
+      <nav aria-label="Footer"><a href="index.html#projects">Projects</a><a href="mier.html">Mier</a><a href="tankeretank.html">Tankeretank</a><a href="you-cook.html">You Cook</a><a href="drift.html">Drift</a><a href="tbd.html">TBD</a><a href="#top">Back to top</a></nav>
     </div>
   </div>
 </footer>
@@ -1110,6 +1110,13 @@
     var stored = null; try { stored = localStorage.getItem('nerdy-theme'); } catch (_) {}
     if (!stored) setTheme(e.matches ? 'dark' : 'light', false);
   });
+  // Back/forward cache and other tabs: pick up a theme chosen on another page.
+  function syncTheme() {
+    var stored = null; try { stored = localStorage.getItem('nerdy-theme'); } catch (_) {}
+    if ((stored === 'light' || stored === 'dark') && stored !== root.dataset.theme) setTheme(stored, false);
+  }
+  addEventListener('pageshow', syncTheme);
+  addEventListener('storage', function (e) { if (e.key === 'nerdy-theme') syncTheme(); });
   var nav = document.getElementById('nav');
   var onScroll = function () { nav.classList.toggle('scrolled', scrollY > 40); };
   addEventListener('scroll', onScroll, { passive: true }); onScroll();
