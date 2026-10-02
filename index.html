@@ -234,7 +234,11 @@
   @keyframes ring { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--c) 50%, transparent); } 100% { box-shadow: 0 0 0 7px transparent; } }
 
   /* ---------- project panels ---------- */
-  .panels { display: flex; gap: 12px; height: clamp(440px, 62vh, 580px); margin-top: 48px; }
+  .grp { margin-top: 56px; scroll-margin-top: 90px; }
+  .grp + .grp { margin-top: 72px; }
+  .grp-h { margin: 0; font: 500 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 12px; }
+  .grp-h::before { content: ''; width: 28px; height: 1px; background: var(--holo); }
+  .panels { display: flex; gap: 12px; height: clamp(440px, 62vh, 580px); margin-top: 20px; }
   .pn { position: relative; flex: 1; min-width: 0; overflow: hidden; border-radius: var(--r); border: 1px solid var(--line); background: var(--bg-2); color: var(--text); box-shadow: var(--shadow); transition: flex 1s var(--ease); isolation: isolate; }
   .pn.open { flex: 5; }
   .pn::after { content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1.5px; background: var(--holo); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); opacity: 0; transition: opacity .6s; pointer-events: none; z-index: 3; }
@@ -288,7 +292,7 @@
     .hud-scroll { display: none; }
     .hero-row { margin-top: 20px; }
     .btn { height: 46px; padding: 0 18px; font-size: 14.5px; }
-    .panels { flex-direction: column; height: 780px; gap: 10px; }
+    .panels { flex-direction: column; height: 620px; gap: 10px; }
     .pn-label { writing-mode: horizontal-tb; transform: translate(-50%, -50%); bottom: auto; top: 50%; font-size: 20px; }
     .pn-num { top: 50%; transform: translateY(-50%); }
     .pn-body { padding: 120px 20px 20px; }
@@ -345,7 +349,9 @@
     <div class="wrap">
       <span class="label rv">Projects</span>
       <h2 class="h-sec split">Current projects.</h2>
-      <div class="panels rv" id="panels">
+      <div class="grp rv" id="grp-projects">
+        <h3 class="grp-h">Projects</h3>
+        <div class="panels">
         <a class="pn open" href="mier.html">
           <img class="th-dark" src="assets/app/nt-workers-dark-1440.webp" alt="" loading="lazy">
         <img class="th-light" src="assets/app/nt-workers-light-1440.webp" alt="" loading="lazy">
@@ -357,31 +363,11 @@
             <span class="t-go">View project <svg><use href="#i-arrow"/></svg></span>
           </div>
         </a>
-        <a class="pn" href="tankeretank.html">
-          <img src="assets/tankeretank/tt-fight-1440.webp" alt="" loading="lazy">
-          <span class="pn-num">02</span><span class="pn-label" aria-hidden="true">Tankeretank</span>
-          <div class="pn-body">
-            <div class="pn-meta"><span>Project 02 · Game</span><span class="chip">Invite only</span></div>
-            <h3>Tankeretank</h3>
-            <p>A top-down tank game for the family. Blue against red, online or against bots, in a landscape you can shoot to pieces.</p>
-            <span class="t-go">View project <svg><use href="#i-arrow"/></svg></span>
-          </div>
-        </a>
-        <a class="pn" href="you-cook.html">
-          <img src="assets/you-cook/yc-fire-1440.webp" alt="" loading="lazy">
-          <span class="pn-num">03</span><span class="pn-label" aria-hidden="true">You Cook</span>
-          <div class="pn-body">
-            <div class="pn-meta"><span>Project 03 · Game</span><span class="chip">Played at home</span></div>
-            <h3>You Cook</h3>
-            <p>A cooking game with one chef, hungry customers, fires, breakdowns and a kitchen cat in the way.</p>
-            <span class="t-go">View project <svg><use href="#i-arrow"/></svg></span>
-          </div>
-        </a>
         <a class="pn pn-phone" href="drift.html">
           <img src="assets/drift/dr-playing-1440.webp" alt="" loading="lazy">
-          <span class="pn-num">04</span><span class="pn-label" aria-hidden="true">Drift</span>
+          <span class="pn-num">02</span><span class="pn-label" aria-hidden="true">Drift</span>
           <div class="pn-body">
-            <div class="pn-meta"><span>Project 04 · Android app</span><span class="chip">Used at home</span></div>
+            <div class="pn-meta"><span>Project 02 · Android app</span><span class="chip">Used at home</span></div>
             <h3>Drift</h3>
             <p>A sleep sounds app that mixes rain with podcast episodes, fades out on a timer and picks up where you drifted off.</p>
             <span class="t-go">View project <svg><use href="#i-arrow"/></svg></span>
@@ -389,19 +375,24 @@
         </a>
         <a class="pn pn-phone" href="tbd.html">
           <img src="assets/tbd/tbd-dashboard-1440.webp" alt="" loading="lazy">
-          <span class="pn-num">05</span><span class="pn-label" aria-hidden="true">TBD</span>
+          <span class="pn-num">03</span><span class="pn-label" aria-hidden="true">TBD</span>
           <div class="pn-body">
-            <div class="pn-meta"><span>Project 05 · Web + Android app</span><span class="chip">Invite only</span></div>
+            <div class="pn-meta"><span>Project 03 · Web + Android app</span><span class="chip">Invite only</span></div>
             <h3>TBD</h3>
             <p>A personal command center: capture a thought by text, voice or photo, let AI find the tasks, and keep projects and documents in one place.</p>
             <span class="t-go">View project <svg><use href="#i-arrow"/></svg></span>
           </div>
         </a>
-        <a class="pn pn-phone" href="tonek.html">
+        </div>
+      </div>
+      <div class="grp rv" id="grp-music">
+        <h3 class="grp-h">Music</h3>
+        <div class="panels">
+        <a class="pn open pn-phone" href="tonek.html">
           <img src="assets/tonek/tonek-synth-1440.webp" alt="" loading="lazy">
-          <span class="pn-num">06</span><span class="pn-label" aria-hidden="true">Tonek</span>
+          <span class="pn-num">01</span><span class="pn-label" aria-hidden="true">Tonek</span>
           <div class="pn-body">
-            <div class="pn-meta"><span>Project 06 · Android app</span><span class="chip">Used at home</span></div>
+            <div class="pn-meta"><span>Music 01 · Android app</span><span class="chip">Used at home</span></div>
             <h3>Tonek</h3>
             <p>A synth and drum machine for the phone: tap in beats, play the keys, or beatbox and sing and let the app write the notes.</p>
             <span class="t-go">View project <svg><use href="#i-arrow"/></svg></span>
@@ -409,14 +400,40 @@
         </a>
         <a class="pn pn-phone" href="itp.html">
           <img src="assets/itp/itp-recorder-1440.webp" alt="" loading="lazy">
-          <span class="pn-num">07</span><span class="pn-label" aria-hidden="true">In the Pocket</span>
+          <span class="pn-num">02</span><span class="pn-label" aria-hidden="true">In the Pocket</span>
           <div class="pn-body">
-            <div class="pn-meta"><span>Project 07 · Android app</span><span class="chip">Used at home</span></div>
+            <div class="pn-meta"><span>Music 02 · Android app</span><span class="chip">Used at home</span></div>
             <h3>In the Pocket</h3>
             <p>An eight-track recording studio with a VU meter, faders and an effects chain per track. Export the mix or the stems.</p>
             <span class="t-go">View project <svg><use href="#i-arrow"/></svg></span>
           </div>
         </a>
+        </div>
+      </div>
+      <div class="grp rv" id="grp-games">
+        <h3 class="grp-h">Games</h3>
+        <div class="panels">
+        <a class="pn open" href="tankeretank.html">
+          <img src="assets/tankeretank/tt-fight-1440.webp" alt="" loading="lazy">
+          <span class="pn-num">01</span><span class="pn-label" aria-hidden="true">Tankeretank</span>
+          <div class="pn-body">
+            <div class="pn-meta"><span>Game 01</span><span class="chip">Invite only</span></div>
+            <h3>Tankeretank</h3>
+            <p>A top-down tank game for the family. Blue against red, online or against bots, in a landscape you can shoot to pieces.</p>
+            <span class="t-go">View project <svg><use href="#i-arrow"/></svg></span>
+          </div>
+        </a>
+        <a class="pn" href="you-cook.html">
+          <img src="assets/you-cook/yc-fire-1440.webp" alt="" loading="lazy">
+          <span class="pn-num">02</span><span class="pn-label" aria-hidden="true">You Cook</span>
+          <div class="pn-body">
+            <div class="pn-meta"><span>Game 02</span><span class="chip">Played at home</span></div>
+            <h3>You Cook</h3>
+            <p>A cooking game with one chef, hungry customers, fires, breakdowns and a kitchen cat in the way.</p>
+            <span class="t-go">View project <svg><use href="#i-arrow"/></svg></span>
+          </div>
+        </a>
+        </div>
       </div>
     </div>
   </section>
@@ -701,13 +718,15 @@ void main(){
   addEventListener('pointermove', e => { foot.style.setProperty('--fx', (e.clientX / innerWidth * 100) + '%'); }, { passive: true });
 
   /* ---------- project panels ---------- */
-  const panels = [...document.querySelectorAll('#panels .pn')];
+  document.querySelectorAll('.panels').forEach(group => {
+  const panels = [...group.querySelectorAll('.pn')];
   panels.forEach(p => {
     const open = () => panels.forEach(q => q.classList.toggle('open', q === p));
     p.addEventListener('mouseenter', open);
     p.addEventListener('focus', open);
     // touch: first tap opens the panel, second tap follows the link
     p.addEventListener('click', e => { if (!p.classList.contains('open')) { e.preventDefault(); open(); } });
+  });
   });
 
   if (!hasGsap || reduced) return;

@@ -490,7 +490,8 @@
      ═══════════════════════════════════════════════════════════════════════════ -->
 <script type="application/json" id="project-data">
 {
-  "number": "04",
+  "number": "02",
+  "group": "Project",
   "name": "Drift",
   "nameTail": "",
   "kind": "Android app",
@@ -962,7 +963,7 @@
     var full = P.name + (P.nameTail ? ' ' + P.nameTail : '');
     document.title = full + ' · NERDY';
     $('p-icon').src = P.icon.src; $('p-icon').alt = P.icon.alt;
-    set('p-eyebrow', 'Project ' + P.number + ' · ' + P.kind);
+    set('p-eyebrow', P.group + ' ' + P.number + (P.kind ? ' · ' + P.kind : ''));
     set('p-status', P.status);
     var chars = function (s) { return s.split(' ').map(function (w) { return '<span class="word">' + w.split('').map(function (c) { return '<span class="ch">' + c + '</span>'; }).join('') + '</span>'; }).join(' '); };
     set('p-title', chars(P.name).replace(/<\/span>$/, '') + (P.nameTail ? '&nbsp;<span class="tail ch">' + P.nameTail + '</span>' : '') + '</span>');

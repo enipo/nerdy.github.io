@@ -490,7 +490,8 @@
      ═══════════════════════════════════════════════════════════════════════════ -->
 <script type="application/json" id="project-data">
 {
-  "number": "06",
+  "number": "01",
+  "group": "Music",
   "name": "Tonek",
   "nameTail": "",
   "kind": "Android app",
@@ -759,7 +760,7 @@
     <div class="wrap hero-inner">
       <div class="hero-icon"><img id="p-icon" src="" alt="" width="132" height="132"></div>
       <div>
-        <a class="crumb" href="index.html#projects"><svg><use href="#i-back"/></svg>All projects</a>
+        <a class="crumb" href="index.html#grp-music"><svg><use href="#i-back"/></svg>All music</a>
         <p class="eyebrow"><span id="p-eyebrow"></span><span class="chip" id="p-status"></span></p>
         <h1 id="p-title"></h1>
         <span class="tagline" id="p-tagline"></span>
@@ -893,7 +894,7 @@
       <p id="p-cta-text"></p>
       <div class="ctas">
         <button class="btn btn-primary" type="button" data-early><span></span><svg><use href="#i-arrow"/></svg></button>
-        <a class="btn btn-ghost" href="index.html#projects">See all projects</a>
+        <a class="btn btn-ghost" href="index.html#grp-music">See all music</a>
       </div>
       <p class="toast" role="status" aria-live="polite"></p>
     </div>
@@ -910,7 +911,7 @@
     var full = P.name + (P.nameTail ? ' ' + P.nameTail : '');
     document.title = full + ' · NERDY';
     $('p-icon').src = P.icon.src; $('p-icon').alt = P.icon.alt;
-    set('p-eyebrow', 'Project ' + P.number + ' · ' + P.kind);
+    set('p-eyebrow', P.group + ' ' + P.number + (P.kind ? ' · ' + P.kind : ''));
     set('p-status', P.status);
     var chars = function (s) { return s.split(' ').map(function (w) { return '<span class="word">' + w.split('').map(function (c) { return '<span class="ch">' + c + '</span>'; }).join('') + '</span>'; }).join(' '); };
     set('p-title', chars(P.name).replace(/<\/span>$/, '') + (P.nameTail ? '&nbsp;<span class="tail ch">' + P.nameTail + '</span>' : '') + '</span>');
