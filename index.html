@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<!-- ontwerp: NERDY (04) — Hologram-homepage: live iriserende WebGL-vorm, kinetische typografie en uitschuivende projectpanelen; projectpagina's delen nav, footer, thema en stijl. -->
+<!-- ontwerp: NERDY (04) — Hologram-homepage: live iriserende WebGL-vorm, kinetische typografie en projecten als magazine-hoofdstukken (Projects, Music, Games); projectpagina's delen nav, footer, thema en stijl. -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>NERDY</title>
@@ -233,35 +233,31 @@
   @keyframes wave { 25% { transform: rotate(-14deg); } 75% { transform: rotate(10deg); } }
   @keyframes ring { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--c) 50%, transparent); } 100% { box-shadow: 0 0 0 7px transparent; } }
 
-  /* ---------- project panels ---------- */
-  .grp { margin-top: 56px; scroll-margin-top: 90px; }
-  .grp + .grp { margin-top: 72px; }
-  .grp-h { margin: 0; font: 500 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 12px; }
-  .grp-h::before { content: ''; width: 28px; height: 1px; background: var(--holo); }
-  .panels { display: flex; gap: 12px; height: clamp(440px, 62vh, 580px); margin-top: 20px; }
-  .pn { position: relative; flex: 1; min-width: 0; overflow: hidden; border-radius: var(--r); border: 1px solid var(--line); background: var(--bg-2); color: var(--text); box-shadow: var(--shadow); transition: flex 1s var(--ease); isolation: isolate; }
-  .pn.open { flex: 5; }
-  .pn::after { content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1.5px; background: var(--holo); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); opacity: 0; transition: opacity .6s; pointer-events: none; z-index: 3; }
-  .pn.open::after { opacity: .75; }
-  .pn > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: saturate(.2); transform: scale(1.06); transition: filter .8s, transform 1.4s var(--ease); }
-  .pn.open > img { filter: none; transform: none; }
-  .pn::before { content: ''; position: absolute; inset: 0; background: var(--bg); opacity: .6; transition: opacity .8s; z-index: 1; pointer-events: none; }
-  .pn.open::before { opacity: 0; }
-  .pn-phone { background: radial-gradient(circle at 50% 35%, color-mix(in srgb, var(--violet) 30%, var(--bg-2)), var(--bg-2) 70%); }
-  .pn-phone > img { object-fit: contain; padding: 22px 0 0; }
-  .pn-num { position: absolute; top: 20px; left: 22px; font: 500 12px/1 var(--mono); letter-spacing: .1em; color: var(--muted); z-index: 2; transition: opacity .4s; }
-  .pn-label { position: absolute; left: 50%; bottom: 28px; transform: translateX(-50%) rotate(180deg); writing-mode: vertical-rl; font: 600 22px/1 var(--display); letter-spacing: -.02em; white-space: nowrap; transition: opacity .4s; z-index: 2; }
-  .pn.open .pn-label, .pn.open .pn-num { opacity: 0; }
-  .pn-body { position: absolute; inset: auto 0 0 0; padding: 160px 30px 28px; background: linear-gradient(transparent, color-mix(in srgb, var(--bg) 82%, transparent) 38%, var(--bg) 70%); opacity: 0; transform: translateY(20px); transition: opacity .35s, transform .7s var(--ease); z-index: 2; pointer-events: none; }
-  .pn.open .pn-body { opacity: 1; transform: none; transition-delay: .25s; }
-  .pn-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; font: 500 10.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
-  .pn-body h3 { margin: 14px 0 6px; font: 600 clamp(26px, 3vw, 38px)/1.05 var(--display); letter-spacing: -.03em; }
-  .pn-meta .chip { white-space: nowrap; }
-  .pn-body p { margin: 0; max-width: 48ch; color: var(--muted); font-size: 15.5px; }
-  .t-go { display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; font-weight: 600; font-size: 15px; }
-  .t-go svg { width: 16px; height: 16px; }
-  .pn:focus-visible { outline: 2px solid var(--violet); outline-offset: 3px; }
-
+  /* ---------- projects: magazine ---------- */
+  .ch { display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: 40px; padding: 44px 0 52px; border-top: 1px solid var(--line-2); scroll-margin-top: 90px; }
+  .ch:first-of-type { margin-top: 56px; border-top: 0; background: linear-gradient(var(--holo)) top / 100% 1.5px no-repeat; }
+  .ch-h { display: grid; align-content: start; gap: 10px; }
+  .ch-n { font: 300 clamp(72px, 8vw, 116px)/.8 var(--display); letter-spacing: -.06em; color: color-mix(in srgb, var(--text) 14%, transparent); }
+  .ch-h h3 { margin: 6px 0 0; font: 700 clamp(26px, 2.4vw, 34px)/1 var(--font); letter-spacing: -.035em; }
+  .ch-h p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.45; max-width: 18ch; }
+  .ch-b { display: grid; gap: 28px; --h: clamp(240px, 24vw, 340px); }
+  .c-3 { grid-template-columns: 2fr 1fr 1fr; } .c-2 { grid-template-columns: 1fr 1fr; }
+  .it { display: grid; grid-template-rows: auto auto 1fr; gap: 14px; text-decoration: none; color: inherit; min-width: 0; }
+  .it-t { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .it-i { width: 48px; height: 48px; border-radius: 12px; flex: none; box-shadow: 0 6px 16px -8px rgba(0,0,0,.5), inset 0 0 0 1px var(--line-2); }
+  .it h4 { margin: 0; font: 700 clamp(28px, 3.2vw, 46px)/.95 var(--font); letter-spacing: -.045em; white-space: nowrap; transition: color .3s; }
+  .it:hover h4, .it:focus-visible h4 { color: var(--c); }
+  .it-s { position: relative; height: var(--h); border-radius: 14px; overflow: hidden; background: var(--bg-2); box-shadow: inset 0 0 0 1px var(--line); }
+  .it-s img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 0; transition: transform 1.2s var(--ease); }
+  .it-s.land img { object-position: 0 0; } .it-s.crop img { object-position: 50% 5%; } .it-s.game img { object-position: 50% 50%; }
+  .it:hover .it-s img { transform: scale(1.03); }
+  .it-c { display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; }
+  .it-c p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.45; }
+  .it-m { display: inline-flex; align-items: center; gap: 10px; flex: none; font: 500 10px/1.6 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+  .it-m::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--c); }
+  .it-m svg { width: 16px; height: 16px; color: var(--text); transition: transform .3s var(--ease); }
+  .it:hover .it-m svg { transform: translateX(4px); }
+  .c-3 .it:not(:first-child) .it-c { flex-direction: column; gap: 10px; }
 
   /* ---------- footer ---------- */
   footer { position: relative; padding: 40px 0 36px; overflow: hidden; border-top: 1px solid var(--line); }
@@ -284,6 +280,10 @@
   /* ---------- responsive ---------- */
   @media (max-width: 900px) {
     .nav-links a:not(.keep) { display: none; }
+    .ch { grid-template-columns: 1fr; gap: 22px; padding: 34px 0 40px; }
+    .ch-h { grid-template-columns: auto 1fr; align-items: end; column-gap: 16px; }
+    .ch-n { grid-row: span 2; font-size: 72px; } .ch-h p { max-width: none; }
+    .c-3 { grid-template-columns: 1fr 1fr; } .c-3 .it:first-child { grid-column: 1 / -1; }
   }
   @media (max-width: 600px) {
     body { font-size: 16px; }
@@ -292,11 +292,8 @@
     .hud-scroll { display: none; }
     .hero-row { margin-top: 20px; }
     .btn { height: 46px; padding: 0 18px; font-size: 14.5px; }
-    .panels { flex-direction: column; height: 620px; gap: 10px; }
-    .pn-label { writing-mode: horizontal-tb; transform: translate(-50%, -50%); bottom: auto; top: 50%; font-size: 20px; }
-    .pn-num { top: 50%; transform: translateY(-50%); }
-    .pn-body { padding: 120px 20px 20px; }
-    .pn-body p { font-size: 14.5px; }
+    .c-3, .c-2 { grid-template-columns: 1fr; } .c-3 .it:not(:first-child) .it-c { flex-direction: row; }
+    .ch-b { --h: 220px; }
   }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .001s !important; animation-iteration-count: 1 !important; transition-duration: .001s !important; }
@@ -349,90 +346,54 @@
     <div class="wrap">
       <span class="label rv">Projects</span>
       <h2 class="h-sec split">Current projects.</h2>
-      <div class="grp rv" id="grp-projects">
-        <h3 class="grp-h">Projects</h3>
-        <div class="panels">
-        <a class="pn open" href="mier.html">
-          <img class="th-dark" src="assets/app/nt-workers-dark-1440.webp" alt="" loading="lazy">
-        <img class="th-light" src="assets/app/nt-workers-light-1440.webp" alt="" loading="lazy">
-          <span class="pn-num">01</span><span class="pn-label" aria-hidden="true">Mier</span>
-          <div class="pn-body">
-            <div class="pn-meta"><span>Project 01 · Mac app</span><span class="chip">Coming soon</span></div>
-            <h3>Mier</h3>
-            <p>Direct Claude and Codex from one app: conversations as chats, workers you can follow, and the real terminal one click away.</p>
-            <span class="t-go">View project <svg><use href="#i-arrow"/></svg></span>
-          </div>
-        </a>
-        <a class="pn pn-phone" href="drift.html">
-          <img src="assets/drift/dr-playing-1440.webp" alt="" loading="lazy">
-          <span class="pn-num">02</span><span class="pn-label" aria-hidden="true">Drift</span>
-          <div class="pn-body">
-            <div class="pn-meta"><span>Project 02 · Android app</span><span class="chip">Used at home</span></div>
-            <h3>Drift</h3>
-            <p>A sleep sounds app that mixes rain with podcast episodes, fades out on a timer and picks up where you drifted off.</p>
-            <span class="t-go">View project <svg><use href="#i-arrow"/></svg></span>
-          </div>
-        </a>
-        <a class="pn pn-phone" href="tbd.html">
-          <img src="assets/tbd/tbd-dashboard-1440.webp" alt="" loading="lazy">
-          <span class="pn-num">03</span><span class="pn-label" aria-hidden="true">TBD</span>
-          <div class="pn-body">
-            <div class="pn-meta"><span>Project 03 · Web + Android app</span><span class="chip">Invite only</span></div>
-            <h3>TBD</h3>
-            <p>A personal command center: capture a thought by text, voice or photo, let AI find the tasks, and keep projects and documents in one place.</p>
-            <span class="t-go">View project <svg><use href="#i-arrow"/></svg></span>
-          </div>
-        </a>
+      <div class="ch rv" id="grp-projects">
+        <header class="ch-h"><span class="ch-n" aria-hidden="true">01</span><h3>Projects</h3><p>Apps for work and everyday life.</p></header>
+        <div class="ch-b c-3">
+          <a class="it" href="mier.html" style="--c:var(--violet)">
+            <div class="it-t"><img class="it-i" src="assets/nt-icon.png" alt=""><h4>Mier</h4></div>
+            <div class="it-s land"><img class="th-dark" src="assets/app/nt-workers-dark-1440.webp" alt="" loading="lazy"><img class="th-light" src="assets/app/nt-workers-light-1440.webp" alt="" loading="lazy"></div>
+            <div class="it-c"><p>Direct Claude and Codex from one app.</p><span class="it-m">Coming soon<svg aria-hidden="true"><use href="#i-arrow"/></svg></span></div>
+          </a>
+          <a class="it" href="drift.html" style="--c:var(--cyan)">
+            <div class="it-t"><img class="it-i" src="assets/drift/dr-icon.webp" alt=""><h4>Drift</h4></div>
+            <div class="it-s "><img src="assets/drift/dr-playing-1440.webp" alt="" loading="lazy"></div>
+            <div class="it-c"><p>Sleep sounds that fade out on a timer.</p><span class="it-m">Used at home<svg aria-hidden="true"><use href="#i-arrow"/></svg></span></div>
+          </a>
+          <a class="it" href="tbd.html" style="--c:var(--gold)">
+            <div class="it-t"><img class="it-i" src="assets/tbd/tbd-icon.webp" alt=""><h4>TBD</h4></div>
+            <div class="it-s "><img src="assets/tbd/tbd-dashboard-1440.webp" alt="" loading="lazy"></div>
+            <div class="it-c"><p>A personal command center.</p><span class="it-m">Invite only<svg aria-hidden="true"><use href="#i-arrow"/></svg></span></div>
+          </a>
         </div>
       </div>
-      <div class="grp rv" id="grp-music">
-        <h3 class="grp-h">Music</h3>
-        <div class="panels">
-        <a class="pn open pn-phone" href="tonek.html">
-          <img src="assets/tonek/tonek-synth-1440.webp" alt="" loading="lazy">
-          <span class="pn-num">01</span><span class="pn-label" aria-hidden="true">Tonek</span>
-          <div class="pn-body">
-            <div class="pn-meta"><span>Music 01 · Android app</span><span class="chip">Used at home</span></div>
-            <h3>Tonek</h3>
-            <p>A synth and drum machine for the phone: tap in beats, play the keys, or beatbox and sing and let the app write the notes.</p>
-            <span class="t-go">View project <svg><use href="#i-arrow"/></svg></span>
-          </div>
-        </a>
-        <a class="pn pn-phone" href="itp.html">
-          <img src="assets/itp/itp-recorder-1440.webp" alt="" loading="lazy">
-          <span class="pn-num">02</span><span class="pn-label" aria-hidden="true">In the Pocket</span>
-          <div class="pn-body">
-            <div class="pn-meta"><span>Music 02 · Android app</span><span class="chip">Used at home</span></div>
-            <h3>In the Pocket</h3>
-            <p>An eight-track recording studio with a VU meter, faders and an effects chain per track. Export the mix or the stems.</p>
-            <span class="t-go">View project <svg><use href="#i-arrow"/></svg></span>
-          </div>
-        </a>
+      <div class="ch rv" id="grp-music">
+        <header class="ch-h"><span class="ch-n" aria-hidden="true">02</span><h3>Music</h3><p>An instrument and a studio for the phone.</p></header>
+        <div class="ch-b c-2">
+          <a class="it" href="tonek.html" style="--c:var(--rose)">
+            <div class="it-t"><img class="it-i" src="assets/tonek/tonek-icon.webp" alt=""><h4>Tonek</h4></div>
+            <div class="it-s crop"><img src="assets/tonek/tonek-synth-1440.webp" alt="" loading="lazy"></div>
+            <div class="it-c"><p>A synth and drum machine. Tap, play or beatbox.</p><span class="it-m">Used at home<svg aria-hidden="true"><use href="#i-arrow"/></svg></span></div>
+          </a>
+          <a class="it" href="itp.html" style="--c:var(--orange)">
+            <div class="it-t"><img class="it-i" src="assets/itp/itp-icon.webp" alt=""><h4>In the Pocket</h4></div>
+            <div class="it-s crop"><img src="assets/itp/itp-recorder-1440.webp" alt="" loading="lazy"></div>
+            <div class="it-c"><p>An eight-track recording studio.</p><span class="it-m">Used at home<svg aria-hidden="true"><use href="#i-arrow"/></svg></span></div>
+          </a>
         </div>
       </div>
-      <div class="grp rv" id="grp-games">
-        <h3 class="grp-h">Games</h3>
-        <div class="panels">
-        <a class="pn open" href="tankeretank.html">
-          <img src="assets/tankeretank/tt-fight-1440.webp" alt="" loading="lazy">
-          <span class="pn-num">01</span><span class="pn-label" aria-hidden="true">Tankeretank</span>
-          <div class="pn-body">
-            <div class="pn-meta"><span>Game 01</span><span class="chip">Invite only</span></div>
-            <h3>Tankeretank</h3>
-            <p>A top-down tank game for the family. Blue against red, online or against bots, in a landscape you can shoot to pieces.</p>
-            <span class="t-go">View project <svg><use href="#i-arrow"/></svg></span>
-          </div>
-        </a>
-        <a class="pn" href="you-cook.html">
-          <img src="assets/you-cook/yc-fire-1440.webp" alt="" loading="lazy">
-          <span class="pn-num">02</span><span class="pn-label" aria-hidden="true">You Cook</span>
-          <div class="pn-body">
-            <div class="pn-meta"><span>Game 02</span><span class="chip">Played at home</span></div>
-            <h3>You Cook</h3>
-            <p>A cooking game with one chef, hungry customers, fires, breakdowns and a kitchen cat in the way.</p>
-            <span class="t-go">View project <svg><use href="#i-arrow"/></svg></span>
-          </div>
-        </a>
+      <div class="ch rv" id="grp-games">
+        <header class="ch-h"><span class="ch-n" aria-hidden="true">03</span><h3>Games</h3><p>Made for the family.</p></header>
+        <div class="ch-b c-2">
+          <a class="it" href="tankeretank.html" style="--c:var(--ok)">
+            <div class="it-t"><img class="it-i" src="assets/tankeretank/tt-icon.webp" alt=""><h4>Tankeretank</h4></div>
+            <div class="it-s game"><img src="assets/tankeretank/tt-fight-1440.webp" alt="" loading="lazy"></div>
+            <div class="it-c"><p>Blue against red, online or against bots.</p><span class="it-m">Invite only<svg aria-hidden="true"><use href="#i-arrow"/></svg></span></div>
+          </a>
+          <a class="it" href="you-cook.html" style="--c:var(--orange)">
+            <div class="it-t"><img class="it-i" src="assets/you-cook/yc-icon.webp" alt=""><h4>You Cook</h4></div>
+            <div class="it-s game"><img src="assets/you-cook/yc-fire-1440.webp" alt="" loading="lazy"></div>
+            <div class="it-c"><p>One chef, hungry customers, a kitchen cat.</p><span class="it-m">Played at home<svg aria-hidden="true"><use href="#i-arrow"/></svg></span></div>
+          </a>
         </div>
       </div>
     </div>
@@ -716,18 +677,6 @@ void main(){
   /* ---------- footer sheen ---------- */
   const foot = document.getElementById('footMark');
   addEventListener('pointermove', e => { foot.style.setProperty('--fx', (e.clientX / innerWidth * 100) + '%'); }, { passive: true });
-
-  /* ---------- project panels ---------- */
-  document.querySelectorAll('.panels').forEach(group => {
-  const panels = [...group.querySelectorAll('.pn')];
-  panels.forEach(p => {
-    const open = () => panels.forEach(q => q.classList.toggle('open', q === p));
-    p.addEventListener('mouseenter', open);
-    p.addEventListener('focus', open);
-    // touch: first tap opens the panel, second tap follows the link
-    p.addEventListener('click', e => { if (!p.classList.contains('open')) { e.preventDefault(); open(); } });
-  });
-  });
 
   if (!hasGsap || reduced) return;
 
