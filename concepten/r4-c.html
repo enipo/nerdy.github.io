@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NERDY — concept C Tiles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&family=Schibsted+Grotesk:wght@400..700&family=Martian+Mono:wdth,wght@75..112.5,300..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css"><script src="data.js"></script>
+<style>
+.grp { margin-top: 52px; }
+.grp-h { display: flex; align-items: baseline; justify-content: space-between; padding-bottom: 14px; margin-bottom: 18px; border-bottom: 1px solid var(--line-2); }
+.grp-h h3 { margin: 0; font: 500 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); } .grp-h span { font: 500 11px/1 var(--mono); color: var(--faint); }
+.tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.tl { position: relative; display: grid; grid-template-rows: auto auto 1fr auto; gap: 8px; padding: 24px; border-radius: 22px; border: 1px solid var(--line); background: var(--glass); box-shadow: inset 0 1px 0 var(--edge); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); transition: transform .4s var(--ease), border-color .3s, box-shadow .4s; }
+.tl:hover, .tl:focus-visible { transform: translateY(-4px); border-color: color-mix(in srgb, var(--c) 55%, var(--line)); box-shadow: 0 24px 50px -28px var(--c), inset 0 1px 0 var(--edge); }
+.tl .icon { width: 60px; height: 60px; border-radius: 15px; margin-bottom: 12px; }
+.tl .nm { font: 600 21px/1.15 var(--display); letter-spacing: -.02em; }
+.tl .tg { color: var(--muted); font-size: 15.5px; line-height: 1.45; }
+.tl .ft { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); font: 500 10.5px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.tl .ft b { display: inline-flex; align-items: center; gap: 8px; font-weight: 500; } .tl .ft b::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--c); }
+@media (max-width: 960px) { .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .tiles { grid-template-columns: 1fr; } }
+</style></head><body>
+<header class="nav"><a class="brand" href="../index.html"><span class="brand-orb"></span>NERDY</a><div class="nav-r"><a class="back" href="index.html">&larr; All concepts</a><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch theme"><span class="knob"></span></button></div></header>
+<main><section class="sec"><div class="wrap">
+  <span class="label">Projects</span><h2 class="h-sec">Current projects.</h2>
+  <div id="g"></div>
+</div></section></main>
+<footer class="stub"><div class="wrap">NERDY · concept preview, not live</div></footer>
+<script>
+document.getElementById('g').innerHTML = GROUPS.map(g => { const ps = PROJECTS.filter(p => p.group === g);
+  return `<div class="grp"><div class="grp-h"><h3>${g}</h3><span>${ps.length}</span></div><div class="tiles">` + ps.map(p => `<a class="tl" href="${p.href}" style="--c:${p.color}">
+    <span class="icon"><img src="${p.icon}" alt=""></span><span class="nm">${p.name}</span><span class="tg">${p.tag}</span>
+    <span class="ft"><span>${p.kind}</span><b>${p.status}</b></span></a>`).join('') + '</div></div>'; }).join('');
+</script></body></html>

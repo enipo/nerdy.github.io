@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NERDY — concept D List + preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&family=Schibsted+Grotesk:wght@400..700&family=Martian+Mono:wdth,wght@75..112.5,300..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css"><script src="data.js"></script>
+<link rel="stylesheet" href="list.css"><script src="rows.js"></script>
+<style>
+.split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .85fr); gap: clamp(32px, 5vw, 72px); align-items: start; }
+.split .row { grid-template-columns: 44px minmax(0, 1fr) 18px; gap: 2px 16px; padding: 14px 14px; }
+.split .row .icon { width: 44px; height: 44px; border-radius: 11px; grid-row: span 2; }
+.split .row .nm { font-size: 18px; } .split .row .tg { font-size: 14.5px; grid-column: 2; } .split .row .st { display: none; } .split .row .ar { grid-column: 3; grid-row: 1 / span 2; }
+.split .row.on { background: color-mix(in srgb, var(--c) 11%, transparent); } .split .row.on::before, .split .row.on + .row::before { opacity: 0; }
+.pv { position: sticky; top: 96px; margin-top: 56px; }
+.pv .stage { position: relative; display: grid; place-items: center; aspect-ratio: 4 / 4.2; border-radius: 28px; overflow: hidden; border: 1px solid var(--line-2); background: radial-gradient(80% 70% at 50% 20%, color-mix(in srgb, var(--c) 30%, transparent), transparent 75%), var(--bg-2); transition: background .5s; }
+.pv .screen { opacity: 0; transform: translateY(12px) scale(.98); transition: opacity .35s, transform .5s var(--ease); position: absolute; }
+.pv .screen.in { opacity: 1; transform: none; }
+.pv .screen.ph { width: 46%; aspect-ratio: 9 / 20; } .pv .screen.land { width: 86%; aspect-ratio: 16 / 10; }
+.pv .cap { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 18px; }
+.pv .cap p { margin: 0; color: var(--muted); font-size: 15px; max-width: 42ch; }
+.pv .cap .chip { flex: none; }
+@media (max-width: 900px) { .split { grid-template-columns: 1fr; } .pv { display: none; } }
+</style></head><body>
+<header class="nav"><a class="brand" href="../index.html"><span class="brand-orb"></span>NERDY</a><div class="nav-r"><a class="back" href="index.html">&larr; All concepts</a><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch theme"><span class="knob"></span></button></div></header>
+<main><section class="sec"><div class="wrap">
+  <span class="label">Projects</span><h2 class="h-sec">Current projects.</h2>
+  <div class="split"><div id="lst"></div><aside class="pv" id="pv" aria-hidden="true"><div class="stage" id="stage"></div><div class="cap" id="cap"></div></aside></div>
+</div></section></main>
+<footer class="stub"><div class="wrap">NERDY · concept preview, not live</div></footer>
+<script>
+document.getElementById('lst').innerHTML = groups(PROJECTS, row);
+const stage = document.getElementById('stage'), cap = document.getElementById('cap'), pv = document.getElementById('pv');
+stage.innerHTML = PROJECTS.map(p => `<div class="screen ${p.phone ? 'ph' : 'land'}" data-id="${p.id}">${shot(p)}</div>`).join('');
+const rows = [...document.querySelectorAll('.row')];
+function show(id) {
+  const p = PROJECTS.find(x => x.id === id); pv.style.setProperty('--c', p.color);
+  stage.querySelectorAll('.screen').forEach(s => s.classList.toggle('in', s.dataset.id === id));
+  rows.forEach(r => r.classList.toggle('on', r.dataset.id === id));
+  cap.innerHTML = `<p>${p.desc}</p><span class="chip">${p.status}</span>`;
+}
+rows.forEach(r => { r.addEventListener('mouseenter', () => show(r.dataset.id)); r.addEventListener('focus', () => show(r.dataset.id)); });
+show(PROJECTS[0].id);
+</script></body></html>

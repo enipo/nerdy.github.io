@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NERDY — concept 3 Carousel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&family=Schibsted+Grotesk:wght@400..700&family=Martian+Mono:wdth,wght@75..112.5,300..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css"><script src="data.js"></script>
+<style>
+.top { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
+.pills { display: flex; gap: 8px; flex-wrap: wrap; }
+.pill { font: 600 14px/1 var(--font); padding: 12px 18px; border-radius: 999px; border: 1px solid var(--line-2); background: var(--glass); color: var(--muted); cursor: pointer; transition: all .3s var(--ease); }
+.pill:hover { color: var(--text); background: var(--glass-2); }
+.pill.on { background: var(--btn-bg); color: var(--btn-fg); border-color: transparent; }
+.pill small { font: 500 10px/1 var(--mono); opacity: .6; margin-left: 6px; }
+.rail { display: flex; gap: 18px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 56px var(--pad) 40px; scroll-padding: 0 var(--pad); scrollbar-width: none; margin-top: 8px; cursor: grab; }
+.rail::-webkit-scrollbar { display: none; }
+.card { position: relative; flex: none; scroll-snap-align: start; width: clamp(280px, 30vw, 380px); height: clamp(500px, 66vh, 620px); border-radius: 30px; overflow: hidden; border: 1px solid var(--line); background: var(--bg-2); box-shadow: var(--shadow); isolation: isolate; display: flex; flex-direction: column; justify-content: flex-end; padding: 26px; transition: transform .5s var(--ease), opacity .4s, width .5s var(--ease); }
+.card.land { width: clamp(320px, 44vw, 560px); }
+.card.hide { display: none; }
+.card:hover { transform: translateY(-8px); }
+.card::before { content: ''; position: absolute; inset: 0; z-index: -2; background: radial-gradient(100% 70% at 50% 0%, color-mix(in srgb, var(--c) 40%, transparent), transparent 75%); }
+.card .shot { position: absolute; z-index: -1; transition: transform .8s var(--ease); }
+.card.ph .shot { left: 50%; top: 26px; width: 68%; transform: translateX(-50%); border-radius: 26px; border: 1px solid var(--line-2); box-shadow: var(--shadow); }
+.card.ph:hover .shot { transform: translateX(-50%) translateY(-8px) scale(1.02); }
+.card.land .shot { inset: 0 0 auto 0; width: 100%; height: 62%; object-fit: cover; object-position: top left; }
+.card::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(transparent 38%, var(--bg-2) 82%); pointer-events: none; }
+.card.land::after { background: linear-gradient(transparent 28%, var(--bg-2) 66%); }
+.card .top2 { position: absolute; top: 20px; left: 20px; right: 20px; display: flex; justify-content: space-between; align-items: center; }
+.card .icon { width: 46px; height: 46px; }
+.card h3 { margin: 12px 0 6px; font: 600 30px/1.05 var(--display); letter-spacing: -.03em; }
+.card p { margin: 0 0 16px; color: var(--muted); font-size: 15px; }
+.card .kind { font: 500 10.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--c); }
+.ctrl { display: flex; gap: 10px; }
+.ctrl button { width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--line-2); background: var(--glass); color: var(--text); cursor: pointer; display: grid; place-items: center; }
+.ctrl button:hover { background: var(--glass-2); } .ctrl svg { width: 18px; height: 18px; }
+.ctrl button:first-child svg { transform: rotate(180deg); }
+@media (max-width: 700px) { .card, .card.land { width: 82vw; } .ctrl { display: none; } }
+</style></head><body>
+<header class="nav"><a class="brand" href="../index.html"><span class="brand-orb"></span>NERDY</a><div class="nav-r"><a class="back" href="index.html">&larr; All concepts</a><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch theme"><span class="knob"></span></button></div></header>
+<main><section class="sec" style="padding-bottom: 60px"><div class="wrap top">
+  <div><span class="label">Projects</span><h2 class="h-sec">Current projects.</h2></div>
+  <div class="pills" id="pills"></div>
+</div>
+<div class="rail" id="rail"></div>
+<div class="wrap"><div class="ctrl"><button id="prev" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button><button id="next" aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div></div>
+</section></main>
+<footer class="stub"><div class="wrap">NERDY · concept preview, not live</div></footer>
+<script>
+const rail = document.getElementById('rail');
+rail.innerHTML = PROJECTS.map(p => `
+<a class="card ${p.phone ? 'ph' : 'land'}" data-g="${p.group}" href="${p.href}" style="--c:${p.color}">
+  ${shot(p, 'shot')}
+  <div class="top2"><span class="icon" style="width:46px;height:46px"><img src="${p.icon}" alt=""></span><span class="chip">${p.status}</span></div>
+  <span class="kind">${p.group} · ${p.kind}</span>
+  <h3>${p.name}</h3><p>${p.tag}</p>
+  <span class="go">View project ${ARROW}</span>
+</a>`).join('');
+const pills = document.getElementById('pills');
+const tabs = ['All', ...GROUPS];
+pills.innerHTML = tabs.map((t, i) => `<button class="pill${i ? '' : ' on'}" data-t="${t}">${t}<small>${t === 'All' ? PROJECTS.length : PROJECTS.filter(p => p.group === t).length}</small></button>`).join('');
+pills.addEventListener('click', e => {
+  const b = e.target.closest('.pill'); if (!b) return;
+  pills.querySelectorAll('.pill').forEach(x => x.classList.toggle('on', x === b));
+  rail.querySelectorAll('.card').forEach(c => c.classList.toggle('hide', b.dataset.t !== 'All' && c.dataset.g !== b.dataset.t));
+  rail.scrollTo({ left: 0, behavior: 'smooth' });
+});
+const step = () => rail.querySelector('.card:not(.hide)').offsetWidth + 18;
+document.getElementById('next').onclick = () => rail.scrollBy({ left: step(), behavior: 'smooth' });
+document.getElementById('prev').onclick = () => rail.scrollBy({ left: -step(), behavior: 'smooth' });
+/* slepen met muis */
+let down = false, sx = 0, sl = 0, moved = false;
+rail.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse') return; down = true; moved = false; sx = e.clientX; sl = rail.scrollLeft; });
+addEventListener('pointermove', e => { if (!down) return; const dx = e.clientX - sx; if (Math.abs(dx) > 4) moved = true; rail.style.scrollSnapType = 'none'; rail.scrollLeft = sl - dx; });
+addEventListener('pointerup', () => { down = false; rail.style.scrollSnapType = ''; });
+rail.addEventListener('click', e => { if (moved) e.preventDefault(); }, true);
+</script></body></html>

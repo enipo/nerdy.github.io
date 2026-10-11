@@ -1,0 +1,28 @@
+<!doctype html><html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+body{margin:0;font:15px/1.5 system-ui,-apple-system,sans-serif;background:#0b0a12;color:#eeedf6;padding:18px}
+h1{font-size:18px;margin:0 0 4px}p.s{margin:0 0 16px;color:#a3a1b8}
+.o{margin:0 0 22px;border:1px solid #2a2838;border-radius:14px;overflow:hidden;background:#13121c}
+.o img{display:block;width:100%;cursor:zoom-in}.o.big img{cursor:zoom-out}
+.b{display:flex;align-items:center;gap:12px;padding:12px 14px;flex-wrap:wrap}
+.b b{font-size:15px}.b span{color:#a3a1b8;flex:1;min-width:200px}
+label{display:inline-flex;gap:8px;align-items:center;padding:8px 14px;border-radius:999px;border:1px solid #3a3850;cursor:pointer}
+input:checked+i{color:#7cf4ff}label:has(input:checked){border-color:#7cf4ff;background:#7cf4ff14}i{font-style:normal}
+textarea{width:100%;box-sizing:border-box;min-height:70px;border-radius:12px;border:1px solid #3a3850;background:#13121c;color:inherit;padding:10px;font:inherit}
+button{margin-top:10px;padding:12px 22px;border-radius:999px;border:0;background:#eeedf6;color:#0b0a12;font-weight:600;cursor:pointer}
+</style></head><body>
+<h1>Projecten-sectie: 5 ontwerpen</h1><p class="s">Klik een beeld om te vergroten. Vink aan wat je mooi vindt (meerdere mag) en schrijf eventueel wat je wil mixen.</p>
+<form id="f">
+<div id="list"></div>
+<textarea name="opmerking" placeholder="Bijv. 'lineup van 1, maar donker zoals 4'"></textarea>
+<button type="submit">Stuur keuze</button>
+</form>
+<script>
+const O=[["Product lineup","Alle projecten als echte apparaten op een rij: MacBook, telefoons, handhelds. Licht studio-gevoel."],
+["Magazine","Strak typografisch raster als een gedrukt jaarboek; grote namen, grote screenshots, 01/02/03 per groep."],
+["Drie werelden","Drie grote kaarten, één per groep, elk met eigen sfeer en collage; de apps als lijstje onderin."],
+["Hologram-galerij","Glazen panelen in een gebogen rij in de donkere hologram-ruimte van de hero, met reflecties."],
+["Verzamelkaarten","Elk project een holografische trading card, netjes 3+2+2 neergelegd."]];
+document.getElementById('list').innerHTML=O.map((o,i)=>`<div class="o"><img src="ontwerp-${i+1}.jpg" alt="Ontwerp ${i+1}" onclick="this.parentNode.classList.toggle('big')"><div class="b"><b>${i+1}. ${o[0]}</b><span>${o[1]}</span><label><input type="checkbox" name="mooi" value="${i+1}"><i>Mooi</i></label></div></div>`).join('');
+document.getElementById('f').onsubmit=e=>{e.preventDefault();const fd=new FormData(e.target);tm.submit({mooi:fd.getAll('mooi'),opmerking:fd.get('opmerking')})};
+</script></body></html>

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NERDY — concept 7 Type fill</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&family=Schibsted+Grotesk:wght@400..700&family=Martian+Mono:wdth,wght@75..112.5,300..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css"><script src="data.js"></script>
+<style>
+.cap { margin: 34px 0 0; min-height: 3.2em; font: 500 13px/1.6 var(--mono); letter-spacing: .04em; color: var(--muted); max-width: 70ch; }
+.cap b { color: var(--text); font-weight: 600; } .cap i { font-style: normal; color: var(--c, var(--violet)); }
+.rows { margin-top: 20px; border-block: 1px solid var(--line); }
+.m { position: relative; display: block; overflow: hidden; border-bottom: 1px solid var(--line); }
+.m:last-child { border-bottom: 0; }
+.track { display: flex; width: max-content; animation: run var(--dur) linear infinite; animation-direction: var(--dir); will-change: transform; }
+.m:hover .track, .m:focus-visible .track { animation-play-state: paused; }
+@keyframes run { to { transform: translateX(-50%); } }
+.half { display: flex; align-items: center; flex: none; }
+.word { padding: 0 .12em; font: 800 clamp(72px, 12.5vw, 188px)/1.12 var(--display); letter-spacing: -.045em; white-space: nowrap; color: color-mix(in srgb, var(--text) 14%, transparent); transition: color .3s; }
+.m:hover .word, .m:focus-visible .word { background-image: var(--img); background-size: cover; background-position: 50% 30%; -webkit-background-clip: text; background-clip: text; color: transparent; }
+[data-theme='dark'] .m { --img: var(--img-d); } [data-theme='light'] .m { --img: var(--img-l); }
+.sep { flex: none; width: clamp(44px, 6.5vw, 92px); height: clamp(44px, 6.5vw, 92px); border-radius: 22%; margin: 0 .3em; filter: grayscale(1) contrast(.9); opacity: .55; transition: filter .4s, opacity .4s, transform .6s var(--ease); }
+.m:hover .sep { filter: none; opacity: 1; transform: rotate(-8deg) scale(1.1); }
+.m .g { position: absolute; left: var(--pad); top: 10px; z-index: 2; font: 500 10px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); background: color-mix(in srgb, var(--bg) 80%, transparent); padding: 6px 10px; border-radius: 999px; pointer-events: none; }
+@media (prefers-reduced-motion: reduce) { .track { animation: none !important; } .rows .m { overflow-x: auto; } }
+</style></head><body>
+<header class="nav"><a class="brand" href="../index.html"><span class="brand-orb"></span>NERDY</a><div class="nav-r"><a class="back" href="index.html">&larr; All concepts</a><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch theme"><span class="knob"></span></button></div></header>
+<main><section class="sec" style="padding-bottom:0"><div class="wrap">
+  <span class="label">Projects</span><h2 class="h-sec">Current projects.</h2>
+  <p class="cap" id="cap">Hover a name. It fills with the app.</p>
+</div>
+<div class="rows" id="rows"></div></section></main>
+<footer class="stub"><div class="wrap">NERDY · concept preview, not live</div></footer>
+<script>
+const rows = document.getElementById('rows'), cap = document.getElementById('cap');
+rows.innerHTML = PROJECTS.map((p, i) => `<a class="m" href="${p.href}" data-id="${p.id}" style="--c:${p.color};--dur:${46 + (i % 4) * 9}s;--dir:${i % 2 ? 'reverse' : 'normal'};--img-d:url('${p.img || p.dark}');--img-l:url('${p.img || p.light}')">
+  <span class="g">${p.group}</span><div class="track"><div class="half"></div><div class="half"></div></div></a>`).join('');
+function unit(p) { return `<span class="word">${p.name}</span><img class="sep" src="${p.icon}" alt="">`; }
+document.fonts.ready.then(() => {
+  rows.querySelectorAll('.m').forEach(m => {
+    const p = PROJECTS.find(x => x.id === m.dataset.id), halves = m.querySelectorAll('.half');
+    halves[0].innerHTML = unit(p);
+    const w = halves[0].offsetWidth || 600, k = Math.min(14, Math.ceil(Math.max(innerWidth, 1500) * 1.1 / w));
+    halves.forEach(h => h.innerHTML = unit(p).repeat(k));
+    halves[1].setAttribute('aria-hidden', 'true');
+    m.addEventListener('mouseenter', () => { cap.style.setProperty('--c', p.color); cap.innerHTML = `<i>${p.group}</i> · ${p.kind} · ${p.status}<br><b>${p.name}</b> — ${p.desc}`; });
+    m.addEventListener('mouseleave', () => { cap.textContent = 'Hover a name. It fills with the app.'; });
+  });
+});
+</script></body></html>

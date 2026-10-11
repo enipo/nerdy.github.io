@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NERDY — concept overzicht</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&family=Schibsted+Grotesk:wght@400..700&family=Martian+Mono:wdth,wght@75..112.5,300..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css"><script src="data.js"></script>
+<style>
+.g { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; margin-top: 44px; }
+.g a { display: grid; gap: 8px; padding: 26px; border-radius: var(--r); border: 1px solid var(--line); background: var(--glass); box-shadow: var(--shadow); transition: transform .4s var(--ease), border-color .3s; }
+.g a:hover { transform: translateY(-4px); border-color: var(--violet); }
+.g b { font: 500 11px/1 var(--mono); letter-spacing: .14em; color: var(--violet); } .g h3 { margin: 0; font: 600 28px/1.1 var(--display); letter-spacing: -.03em; } .g p { margin: 0; color: var(--muted); font-size: 15px; }
+</style></head><body>
+<header class="nav"><a class="brand" href="../index.html"><span class="brand-orb"></span>NERDY</a><div class="nav-r"><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch theme"><span class="knob"></span></button></div></header>
+<main><section class="sec"><div class="wrap">
+  <span class="label">Round 4 · simple</span>
+  <div class="g" style="margin-bottom:72px">
+    <a href="r4-a.html"><b>A</b><h3>List</h3><p>All seven at a glance, grouped. Icon, name, one line, status. The whole row is the link.</p></a>
+    <a href="r4-b.html"><b>B</b><h3>Featured + list</h3><p>Mier large up top with a screenshot, the other six in the same calm list below.</p></a>
+    <a href="r4-c.html"><b>C</b><h3>Tiles</h3><p>Seven identical tiles in a three-column grid, grouped. Same idea as the list, more room per project.</p></a>
+    <a href="r4-d.html"><b>D</b><h3>List + preview</h3><p>The list on the left, a screenshot of the project you point at on the right.</p></a>
+  </div>
+  <span class="label">Concepts · Round 1</span><h2 class="h-sec">Projects, 16 ways.</h2>
+  <div class="g">
+    <a href="1-bento.html"><b>01</b><h3>Bento</h3><p>Asymmetrical tile grid. Big landscape tiles for the Mac app and games, phones peeking out of the app tiles.</p></a>
+    <a href="2-index.html"><b>02</b><h3>Index</h3><p>Editorial list with huge type. Hover and a screenshot follows your cursor. Pure typography.</p></a>
+    <a href="3-carousel.html"><b>03</b><h3>Carousel</h3><p>Swipeable card rail with filter pills for Projects, Music and Games. Drag, swipe or use the arrows.</p></a>
+    <a href="4-terminal.html"><b>04</b><h3>Terminal</h3><p>The nerdy one: an <code>ls</code> window with a live README preview. Works with arrow keys and enter.</p></a>
+    <a href="5-stack.html"><b>05</b><h3>Stack</h3><p>Full-width cards that stack while you scroll. One project at a time, lots of room for the screenshot.</p></a>
+  </div>
+  <span class="label" style="margin-top:64px">Round 2</span>
+  <div class="g">
+    <a href="6-launcher.html"><b>06</b><h3>Launcher</h3><p>A phone home screen. Apps in folders by group; tap one and a sheet opens with the screenshot.</p></a>
+    <a href="7-marquee.html"><b>07</b><h3>Type fill</h3><p>Full-bleed marquees of outlined names. Hover one and the letters fill with the app itself.</p></a>
+    <a href="8-contact.html"><b>08</b><h3>Contact sheet</h3><p>Film strips, one roll per group. Hover a frame and it gets circled in grease pencil.</p></a>
+    <a href="9-orbit.html"><b>09</b><h3>Orbit</h3><p>App icons circling the holo orb. Hover to freeze the ring and read the project in the core.</p></a>
+    <a href="10-stickers.html"><b>10</b><h3>Sticker table</h3><p>Die-cut stickers on a desk. Drag them around, tidy up or shuffle.</p></a>
+  </div>
+  <span class="label" style="margin-top:64px">Round 3 · the wow round</span>
+  <div class="g">
+    <a href="11-pile.html"><b>11</b><h3>Pile</h3><p>Real physics. Holographic foil stickers drop onto a desk and pile up. Throw them, shake them, switch off gravity, rattle them by scrolling.</p></a>
+    <a href="12-laptop.html"><b>12</b><h3>Laptop</h3><p>Scroll and the projects get slapped onto a laptop lid one by one. The lid tilts with your cursor and the foil catches the light.</p></a>
+  </div>
+</div></section></main>
+<footer class="stub"><div class="wrap">NERDY · concept preview, not live</div></footer>
+</body></html>

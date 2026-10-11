@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NERDY — concept 12 Laptop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&family=Schibsted+Grotesk:wght@400..700&family=Martian+Mono:wdth,wght@75..112.5,300..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css"><script src="data.js"></script>
+<style>
+.track { position: relative; height: 560vh; }
+.pin { position: sticky; top: 62px; height: calc(100svh - 62px); display: grid; grid-template-columns: minmax(300px, .8fr) minmax(0, 1.5fr); gap: clamp(20px, 4vw, 64px); align-items: center; }
+.info { display: grid; gap: 30px; align-content: center; }
+.now { position: relative; min-height: 270px; }
+.cardn { display: grid; gap: 14px; justify-items: start; transition: opacity .3s, transform .5s var(--ease); }
+.cardn.out { opacity: 0; transform: translateY(14px); }
+.cardn .top { display: flex; align-items: center; gap: 14px; } .cardn .icon { width: 56px; height: 56px; }
+.cardn .kind { font: 500 10.5px/1.4 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.cardn h3 { margin: 0; font: 600 clamp(34px, 4.4vw, 58px)/1 var(--display); letter-spacing: -.04em; }
+.cardn p { margin: 0; color: var(--muted); max-width: 38ch; font-size: 16.5px; }
+.btn { display: inline-flex; align-items: center; gap: 10px; height: 48px; padding: 0 22px; border-radius: 999px; background: var(--btn-bg); color: var(--btn-fg); font: 600 15px/1 var(--font); box-shadow: 0 10px 30px -10px var(--c, var(--violet)); }
+.btn svg { width: 18px; height: 18px; transition: transform .3s var(--ease); } .btn:hover svg { transform: translateX(3px); }
+.prog { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.prog b { font: 600 13px/1 var(--mono); letter-spacing: .1em; margin-right: 8px; }
+.prog i { width: 30px; height: 30px; border-radius: 9px; overflow: hidden; opacity: .22; filter: grayscale(1); transition: opacity .4s, filter .4s, transform .5s cubic-bezier(.3,1.6,.5,1); } .prog i.on { opacity: 1; filter: none; transform: scale(1.08); } .prog i img { width: 100%; height: 100%; object-fit: cover; }
+.scene { perspective: 1800px; display: grid; place-items: center; }
+.lid { --k: 1; position: relative; width: min(100%, 800px); aspect-ratio: 16 / 10; container-type: inline-size; border-radius: 22px; overflow: hidden; transform: rotateX(var(--rx, 5deg)) rotateY(var(--ry, -10deg)); transition: transform .35s var(--ease); transform-style: preserve-3d;
+  background: repeating-linear-gradient(90deg, rgba(255,255,255,.012) 0 1px, transparent 1px 3px), linear-gradient(150deg, #34343f 0%, #17171d 46%, #2a2a33 100%); box-shadow: 0 60px 90px -40px rgba(0,0,0,.8), 0 0 0 1px rgba(255,255,255,.1), inset 0 1px 0 rgba(255,255,255,.18), inset 0 -3px 8px rgba(0,0,0,.5); }
+[data-theme='light'] .lid { background: repeating-linear-gradient(90deg, rgba(255,255,255,.2) 0 1px, transparent 1px 3px), linear-gradient(150deg, #e4e4ee 0%, #b3b4c2 46%, #d6d6e2 100%); box-shadow: 0 50px 80px -34px rgba(70,50,140,.5), 0 0 0 1px rgba(0,0,0,.1), inset 0 1px 0 #fff, inset 0 -3px 8px rgba(0,0,0,.15); }
+.lid.bump { animation: bump .32s var(--ease); } @keyframes bump { 30% { transform: rotateX(calc(var(--rx, 5deg) + 1.6deg)) rotateY(var(--ry, -10deg)) translateY(5px) scale(.992); } }
+.lid::after { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 30; background: linear-gradient(115deg, transparent 35%, rgba(255,255,255,.12) 47%, transparent 60%); background-size: 260% 100%; background-position: var(--sh, 0%) 0; }
+.logo { position: absolute; left: 50%; top: 50%; width: 11%; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; background: conic-gradient(var(--cyan), var(--violet), var(--rose), var(--gold), var(--cyan)); opacity: .5; filter: blur(.5px); box-shadow: 0 0 60px 6px color-mix(in srgb, var(--violet) 50%, transparent); }
+.base { width: min(112%, 900px); height: 16px; margin-top: -1px; border-radius: 0 0 22px 22px; background: linear-gradient(#3b3b46, #1a1a20); box-shadow: 0 30px 40px -10px rgba(0,0,0,.6); transform: rotateX(var(--rx, 5deg)); }
+[data-theme='light'] .base { background: linear-gradient(#cfd0dc, #9fa0b0); }
+.st { position: absolute; left: var(--x); top: var(--y); display: block; width: var(--w); padding: 7px; border-radius: 20px; background: #fff; color: #15131e; z-index: var(--z); pointer-events: none; opacity: 0; transform-origin: 50% 50%;
+  transform: translate(-50%, -50%) rotate(calc(var(--r) * 1deg + 22deg)) scale(calc(var(--k) * 2.6)); filter: drop-shadow(0 50px 40px rgba(0,0,0,.55));
+  transition: transform .55s cubic-bezier(.22, 1.55, .38, 1), opacity .1s, filter .55s; box-shadow: 0 0 0 1px rgba(0,0,0,.1), 0 3px 6px rgba(0,0,0,.35); }
+.st.on { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) rotate(calc(var(--r) * 1deg)) scale(var(--k)); filter: none; }
+.st.on:hover { transform: translate(-50%, -50%) rotate(calc(var(--r) * 1deg)) scale(calc(var(--k) * 1.07)); z-index: 40; transition-duration: .3s; }
+.st .pic { position: relative; border-radius: 14px; overflow: hidden; background: color-mix(in srgb, var(--c) 30%, #111); } .st .pic img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.st .cp { display: flex; align-items: center; gap: 10px; padding: 10px 6px 4px; } .st .cp .icon { width: 32px; height: 32px; border-radius: 9px; box-shadow: none; }
+.st .cp b { display: block; font: 700 15px/1.1 var(--display); letter-spacing: -.02em; } .st .cp small { display: block; margin-top: 3px; font: 500 9.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: #6b6880; }
+.foil, .glare { position: absolute; inset: 0; border-radius: inherit; pointer-events: none; }
+.foil { mix-blend-mode: multiply; opacity: .38; background: linear-gradient(115deg, #7cf4ff, #a98bff, #ff8fd8, #ffd89a, #7cf4ff, #a98bff, #ff8fd8, #ffd89a); background-size: 260% 100%; background-position: var(--fp, 0%) 0; }
+.glare { background: radial-gradient(circle at var(--gx, 30%) var(--gy, 10%), rgba(255,255,255,.85), transparent 48%); opacity: .45; mix-blend-mode: soft-light; } .st:hover .glare { opacity: .95; }
+.cue { font: 500 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--faint); display: flex; align-items: center; gap: 10px; } .cue::after { content: ''; width: 1px; height: 28px; background: linear-gradient(var(--faint), transparent); }
+@media (max-width: 860px) { .pin { grid-template-columns: 1fr; grid-template-rows: auto 1fr; gap: 10px; align-items: start; padding-top: 8px; } .now { min-height: 0; } .cardn p, .cardn .kind { display: none; } .cardn h3 { font-size: 34px; } .cardn .icon { width: 44px; height: 44px; } .info { gap: 10px; } .scene { align-self: center; } .info .label, .info .h-sec { display: none; } .base { display: none; } }
+@media (prefers-reduced-motion: reduce) { .track { height: auto; } .pin { position: relative; height: auto; padding: 50px 0; } }
+</style></head><body>
+<header class="nav"><a class="brand" href="../index.html"><span class="brand-orb"></span>NERDY</a><div class="nav-r"><a class="back" href="index.html">&larr; All concepts</a><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch theme"><span class="knob"></span></button></div></header>
+<main><section class="track" id="track"><div class="pin wrap-wide" style="padding-left:var(--pad);padding-right:var(--pad)">
+  <div class="info">
+    <div><span class="label">Projects</span><h2 class="h-sec" style="font-size:clamp(34px,4.4vw,60px)">Current projects.</h2></div>
+    <div class="now" id="now"></div>
+    <div class="prog" id="prog"></div>
+  </div>
+  <div class="scene" id="scene"><div class="lid" id="lid"><div class="logo"></div></div><div class="base"></div></div>
+</div></section></main>
+<footer class="stub"><div class="wrap">NERDY · concept preview, not live</div></footer>
+<script>
+/* positie (x%, y% van het deksel), draaiing en breedte per sticker */
+const POS = { mier: [26, 29, -6], drift: [51, 36, 5], tbd: [76, 33, -4], tonek: [14, 71, 7], itp: [38, 70, -5], tankeretank: [62, 73, 4], youcook: [86, 69, -8] };
+const SZ = p => p.phone ? { w: 196, ph: 250 } : { w: 288, ph: 178 };
+const lid = document.getElementById('lid'), track = document.getElementById('track'), now = document.getElementById('now'), prog = document.getElementById('prog');
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const els = PROJECTS.map((p, i) => {
+  const z = SZ(p), [x, y, r] = POS[p.id], a = document.createElement('a'); a.className = 'st'; a.href = p.href;
+  a.style.cssText = '--x:' + x + '%;--y:' + y + '%;--r:' + r + ';--z:' + (i + 2) + ';--c:' + p.color + ';width:' + z.w + 'px';
+  a.innerHTML = '<div class="pic" style="height:' + z.ph + 'px">' + shot(p) + '</div><div class="cp"><span class="icon"><img src="' + p.icon + '" alt=""></span><span><b>' + p.name + '</b><small>' + p.kind + '</small></span></div><i class="foil"></i><i class="glare"></i>';
+  a.addEventListener('pointermove', e => { const b = a.getBoundingClientRect(); a.style.setProperty('--gx', ((e.clientX - b.left) / b.width * 100) + '%'); a.style.setProperty('--gy', ((e.clientY - b.top) / b.height * 100) + '%'); a.style.setProperty('--fp', ((e.clientX - b.left) / b.width * 220) + '%'); });
+  lid.appendChild(a); return a;
+});
+prog.innerHTML = '<b id="cnt">0 / ' + PROJECTS.length + '</b>' + PROJECTS.map(p => '<i><img src="' + p.icon + '" alt="' + p.name + '"></i>').join('');
+const dots = [...prog.querySelectorAll('i')], cnt = document.getElementById('cnt');
+/* de stickers schalen mee met de breedte van het deksel (ontworpen op 800px) */
+new ResizeObserver(() => lid.style.setProperty('--k', lid.clientWidth / 800 * .66)).observe(lid);
+const cue = '<div class="cue">Scroll to start stickering</div>';
+let shown = -2;
+function setNow(n) {
+  const html = n === 0 ? cue : (() => { const p = PROJECTS[n - 1]; return '<div class="cardn" style="--c:' + p.color + '"><div class="top"><span class="icon"><img src="' + p.icon + '" alt=""></span><span class="kind">' + p.group + ' · ' + p.kind + '</span></div><h3>' + p.name + '</h3><span class="chip">' + p.status + '</span><p>' + p.desc + '</p><a class="btn" href="' + p.href + '">View project ' + ARROW + '</a></div>'; })();
+  const old = now.firstElementChild; if (old && old.classList) old.classList.add('out');
+  setTimeout(() => { now.innerHTML = html; }, old ? 140 : 0);
+}
+const q = new URLSearchParams(location.search).get('p');
+function update() {
+  let p;
+  if (reduced) p = 1; else if (q !== null) p = +q; else { const r = track.getBoundingClientRect(); p = Math.max(0, Math.min(1, -r.top / (r.height - innerHeight + 62))); }
+  const n = Math.min(PROJECTS.length, Math.floor(p * (PROJECTS.length + 1)));
+  lid.style.setProperty('--sh', (p * 300) + '%');
+  els.forEach((el, i) => { el.style.setProperty('--fp', (p * 260 + i * 40) + '%'); });
+  if (n === shown) return;
+  const up = n > shown; shown = n;
+  els.forEach((el, i) => el.classList.toggle('on', i < n));
+  dots.forEach((d, i) => d.classList.toggle('on', i < n)); cnt.textContent = n + ' / ' + PROJECTS.length;
+  setNow(n);
+  if (up && !reduced) { setTimeout(() => { lid.classList.remove('bump'); void lid.offsetWidth; lid.classList.add('bump'); }, 330); }
+}
+addEventListener('scroll', () => requestAnimationFrame(update), { passive: true }); addEventListener('resize', update); update();
+/* het deksel kantelt mee met de muis */
+if (matchMedia('(hover: hover)').matches) addEventListener('pointermove', e => {
+  lid.style.setProperty('--rx', (5 + (.5 - e.clientY / innerHeight) * 9) + 'deg'); lid.style.setProperty('--ry', (-10 + (e.clientX / innerWidth - .5) * 18) + 'deg');
+}, { passive: true });
+</script></body></html>

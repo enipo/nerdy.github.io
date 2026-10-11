@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NERDY — concept 9 Orbit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&family=Schibsted+Grotesk:wght@400..700&family=Martian+Mono:wdth,wght@75..112.5,300..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css"><script src="data.js"></script>
+<style>
+.stage { position: relative; width: min(100%, 760px); aspect-ratio: 1; margin: 30px auto 0; }
+.rg { position: absolute; border-radius: 50%; border: 1px dashed var(--line-2); inset: 7%; } .rg.b { inset: 21%; border-style: solid; border-color: var(--line); } .rg.c { inset: -2%; border-color: var(--line); border-style: solid; }
+.orb { position: absolute; inset: 27%; border-radius: 50%; background: conic-gradient(var(--cyan), var(--violet), var(--rose), var(--gold), var(--cyan)); filter: blur(38px); opacity: .6; animation: spin 16s linear infinite; }
+.disc { position: absolute; inset: 29%; border-radius: 50%; overflow: hidden; display: grid; place-items: center; text-align: center; border: 1px solid var(--line-2); background: color-mix(in srgb, var(--bg) 72%, transparent); backdrop-filter: blur(26px) saturate(1.5); -webkit-backdrop-filter: blur(26px) saturate(1.5); box-shadow: var(--shadow), inset 0 1px 0 var(--edge); isolation: isolate; }
+.disc .bgi { position: absolute; inset: 0; z-index: -1; background-size: cover; background-position: 50% 25%; opacity: 0; transition: opacity .5s; filter: saturate(1.1); }
+.disc.on .bgi { opacity: .16; }
+.disc .in { padding: 12% 11%; display: grid; gap: 14px; justify-items: center; }
+.disc .e { font: 500 10px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.disc h3 { margin: 0; font: 600 clamp(24px, 4.4vw, 44px)/1 var(--display); letter-spacing: -.035em; }
+.disc p { margin: 0; color: var(--muted); font-size: clamp(13px, 1.6vw, 16px); line-height: 1.45; max-width: 24ch; }
+.disc .go { margin-top: 4px; padding: 10px 16px; border-radius: 999px; background: var(--btn-bg); color: var(--btn-fg); font-size: 14px; }
+.disc .big { font: 800 clamp(40px, 8vw, 76px)/1 var(--display); letter-spacing: -.05em; background: var(--holo); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.nd { position: absolute; left: 0; top: 0; width: var(--s); display: grid; justify-items: center; gap: 8px; will-change: transform; --s: clamp(58px, 11vw, 88px); }
+.nd .icon { width: var(--s); height: var(--s); border-radius: 24%; transition: box-shadow .4s, transform .4s var(--ease); }
+.nd:hover .icon, .nd.on .icon { box-shadow: 0 0 0 2px var(--c), 0 0 34px -2px var(--c); transform: scale(1.12); }
+.nd .l { font: 500 10px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); white-space: nowrap; transition: color .3s; }
+.nd.on .l, .nd:hover .l { color: var(--text); }
+@media (max-width: 560px) { .nd .l { display: none; } .disc .e { display: none; } }
+</style></head><body>
+<header class="nav"><a class="brand" href="../index.html"><span class="brand-orb"></span>NERDY</a><div class="nav-r"><a class="back" href="index.html">&larr; All concepts</a><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch theme"><span class="knob"></span></button></div></header>
+<main><section class="sec" style="padding-bottom:80px"><div class="wrap">
+  <span class="label">Projects</span><h2 class="h-sec">Current projects.</h2>
+  <div class="stage" id="stage"><i class="rg c"></i><i class="rg"></i><i class="rg b"></i><div class="orb"></div>
+    <div class="disc" id="disc"><div class="bgi" id="bgi"></div><div class="in" id="in"></div></div></div>
+</div></section></main>
+<footer class="stub"><div class="wrap">NERDY · concept preview, not live</div></footer>
+<script>
+const stage = document.getElementById('stage'), disc = document.getElementById('disc'), inn = document.getElementById('in'), bgi = document.getElementById('bgi');
+const N = PROJECTS.length;
+const nodes = PROJECTS.map(p => { const a = document.createElement('a'); a.className = 'nd'; a.href = p.href; a.style.setProperty('--c', p.color);
+  a.innerHTML = `<span class="icon"><img src="${p.icon}" alt=""></span><span class="l">${p.name}</span>`; a.setAttribute('aria-label', p.name); stage.appendChild(a); return a; });
+const idle = `<div class="big">${N}</div><div class="e">Projects, music and games</div>`;
+inn.innerHTML = idle;
+let active = null, timer = 0;
+function set(i) {
+  clearTimeout(timer); active = i; nodes.forEach((n, k) => n.classList.toggle('on', k === i));
+  if (i === null) { inn.innerHTML = idle; disc.classList.remove('on'); return; }
+  const p = PROJECTS[i]; disc.classList.add('on');
+  bgi.style.backgroundImage = `url('${p.img || (document.documentElement.dataset.theme === 'dark' ? p.dark : p.light)}')`;
+  inn.innerHTML = `<div class="e">${p.group} · ${p.kind}</div><h3>${p.name}</h3><p>${p.tag}</p><a class="go" href="${p.href}">View project</a>`;
+}
+const later = () => { clearTimeout(timer); timer = setTimeout(() => set(null), 700); };
+nodes.forEach((n, i) => {
+  n.addEventListener('pointerenter', () => set(i)); n.addEventListener('focus', () => set(i));
+  n.addEventListener('pointerleave', later); n.addEventListener('blur', later);
+  n.addEventListener('click', e => { if (matchMedia('(hover: none)').matches && active !== i) { e.preventDefault(); set(i); } });
+});
+disc.addEventListener('pointerenter', () => clearTimeout(timer)); disc.addEventListener('pointerleave', later);
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let ang = -Math.PI / 2, speed = 1, last = performance.now();
+function frame(t) {
+  const dt = Math.min(64, t - last); last = t;
+  speed += ((active === null ? 1 : 0) - speed) * .08;
+  if (!reduced) ang += dt * 0.000075 * speed;
+  const W = stage.clientWidth, R = W * .395;
+  nodes.forEach((n, i) => {
+    const a = ang + i / N * Math.PI * 2, d = (Math.sin(a) + 1) / 2, s = 0.9 + d * .2;
+    const x = W / 2 + Math.cos(a) * R - n.offsetWidth / 2, y = W / 2 + Math.sin(a) * R - n.offsetWidth / 2;
+    n.style.transform = `translate(${x}px, ${y}px) scale(${s})`; n.style.zIndex = Math.round(d * 10);
+  });
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script></body></html>

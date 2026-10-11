@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NERDY — concept 10 Sticker table</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&family=Schibsted+Grotesk:wght@400..700&family=Martian+Mono:wdth,wght@75..112.5,300..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css"><script src="data.js"></script>
+<style>
+.bar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 40px; }
+.pill { font: 600 14px/1 var(--font); padding: 12px 18px; border-radius: 999px; border: 1px solid var(--line-2); background: var(--glass); color: var(--text); cursor: pointer; transition: background .3s, transform .3s var(--ease); }
+.pill:hover { background: var(--glass-2); transform: translateY(-2px); }
+.bar span { margin-left: 10px; font: 500 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--faint); }
+.desk { position: relative; margin-top: 18px; border-radius: 32px; border: 1px solid var(--line-2); overflow: hidden; background-color: color-mix(in srgb, var(--bg-2) 80%, transparent); background-image: radial-gradient(var(--line-2) 1.2px, transparent 1.6px); background-size: 24px 24px; box-shadow: inset 0 0 80px -30px rgba(0,0,0,.4); }
+.stk { position: absolute; left: 0; top: 0; display: block; padding: 7px; border-radius: 20px; background: #fff; color: #15131e; cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; box-shadow: 0 0 0 1px rgba(0,0,0,.08), 0 3px 0 rgba(0,0,0,.08), 0 20px 30px -14px rgba(0,0,0,.55); transition: transform .8s var(--ease), box-shadow .3s; }
+.stk img { -webkit-user-drag: none; pointer-events: none; }
+.stk.drag { cursor: grabbing; transition: box-shadow .3s; box-shadow: 0 0 0 1px rgba(0,0,0,.08), 0 40px 50px -16px rgba(0,0,0,.6); }
+.stk .pic { position: relative; border-radius: 14px; overflow: hidden; background: color-mix(in srgb, var(--c) 30%, #111); }
+.stk .pic img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.stk .cp { display: flex; align-items: center; gap: 10px; padding: 10px 6px 4px; }
+.stk .cp .icon { width: 32px; height: 32px; border-radius: 9px; box-shadow: none; }
+.stk .cp b { display: block; font: 700 15px/1.1 var(--display); letter-spacing: -.02em; } .stk .cp small { display: block; margin-top: 3px; font: 500 9.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: #6b6880; }
+.stk .tab { position: absolute; top: 14px; left: 14px; z-index: 2; padding: 5px 9px; border-radius: 999px; font: 600 9.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: #fff; background: var(--c); mix-blend-mode: normal; }
+</style></head><body>
+<header class="nav"><a class="brand" href="../index.html"><span class="brand-orb"></span>NERDY</a><div class="nav-r"><a class="back" href="index.html">&larr; All concepts</a><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch theme"><span class="knob"></span></button></div></header>
+<main><section class="sec"><div class="wrap">
+  <span class="label">Projects</span><h2 class="h-sec">Current projects.</h2>
+  <div class="bar"><button class="pill" id="tidy">Tidy up</button><button class="pill" id="mess">Shuffle</button><span>Drag them around. Click one to open it.</span></div>
+  <div class="desk" id="desk"></div>
+</div></section></main>
+<footer class="stub"><div class="wrap">NERDY · concept preview, not live</div></footer>
+<script>
+const desk = document.getElementById('desk');
+const SZ = p => p.phone ? { w: 196, ph: 236 } : { w: 288, ph: 168 };
+const els = PROJECTS.map(p => { const z = SZ(p), a = document.createElement('a'); a.className = 'stk'; a.href = p.href; a.style.setProperty('--c', p.color); a.style.width = z.w + 'px';
+  a.innerHTML = `<span class="tab">${p.group}</span><div class="pic" style="height:${z.ph}px">${shot(p)}</div><div class="cp"><span class="icon"><img src="${p.icon}" alt=""></span><span><b>${p.name}</b><small>${p.kind}</small></span></div>`;
+  desk.appendChild(a); return { p, a, x: 0, y: 0, r: 0, w: z.w, h: z.ph + 14 + 58 }; });
+let zTop = 10;
+const paint = (s, lift) => { s.a.style.transform = `translate(${s.x}px, ${s.y}px) rotate(${s.r}deg)${lift ? ' scale(1.05)' : ''}`; };
+function layout(messy) {
+  const W = desk.clientWidth, cols = W >= 1000 ? 4 : W >= 640 ? 3 : 2, cw = W / cols, ch = 350, rows = Math.ceil(PROJECTS.length / cols);
+  desk.style.height = rows * ch + 30 + 'px';
+  els.forEach((s, i) => {
+    const c = i % cols, r = Math.floor(i / cols), jx = messy ? (Math.random() - .5) * Math.max(0, cw - s.w - 10) : 0, jy = messy ? (Math.random() - .5) * 60 : 0;
+    s.x = Math.round(c * cw + (cw - s.w) / 2 + jx); s.y = Math.round(r * ch + 24 + (ch - s.h - 24) / 2 + jy); s.r = messy ? +((Math.random() - .5) * 16).toFixed(1) : 0; paint(s);
+  });
+}
+document.getElementById('tidy').onclick = () => layout(false);
+document.getElementById('mess').onclick = () => layout(true);
+els.forEach(s => {
+  let sx, sy, ox, oy, moved, id = null;
+  s.a.addEventListener('pointerdown', e => { id = e.pointerId; s.a.setPointerCapture(id); sx = e.clientX; sy = e.clientY; ox = s.x; oy = s.y; moved = false; s.a.style.zIndex = ++zTop; });
+  s.a.addEventListener('pointermove', e => {
+    if (id === null) return; const dx = e.clientX - sx, dy = e.clientY - sy;
+    if (!moved && Math.hypot(dx, dy) < 5) return; moved = true; s.a.classList.add('drag');
+    s.x = Math.max(-20, Math.min(desk.clientWidth - s.w + 20, ox + dx)); s.y = Math.max(-20, Math.min(desk.clientHeight - s.h + 20, oy + dy)); s.r *= .9; paint(s, true);
+  });
+  const end = () => { id = null; s.a.classList.remove('drag'); paint(s); };
+  s.a.addEventListener('pointerup', end); s.a.addEventListener('pointercancel', end);
+  s.a.addEventListener('click', e => { if (moved) { e.preventDefault(); moved = false; } });
+  s.a.addEventListener('dragstart', e => e.preventDefault());
+});
+layout(true); let lw = desk.clientWidth; addEventListener('resize', () => { if (desk.clientWidth !== lw) { lw = desk.clientWidth; layout(true); } });
+</script></body></html>

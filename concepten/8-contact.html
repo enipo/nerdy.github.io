@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NERDY — concept 8 Contact sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&family=Schibsted+Grotesk:wght@400..700&family=Martian+Mono:wdth,wght@75..112.5,300..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css"><script src="data.js"></script>
+<style>
+.roll { display: grid; gap: 38px; margin-top: 52px; }
+.scroller { overflow-x: auto; padding: 14px 0 70px; margin: -14px 0 -70px; scrollbar-width: thin; }
+.strip { position: relative; display: grid; grid-template-columns: 52px repeat(3, minmax(250px, 1fr)); min-width: 880px; background: #0c0b10; border-radius: 8px; padding: 34px 0 30px; box-shadow: 0 30px 60px -28px rgba(0,0,0,.7), inset 0 0 0 1px rgba(255,255,255,.05); }
+.strip::before, .strip::after { content: ''; position: absolute; left: 0; right: 0; height: 14px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='34' height='14'%3E%3Crect x='10' y='2' width='14' height='10' rx='3' fill='%23e9e4d4'/%3E%3C/svg%3E") repeat-x; opacity: .9; }
+.strip::before { top: 10px; } .strip::after { bottom: 10px; }
+.lead { display: grid; place-items: center; }
+.lead span { writing-mode: vertical-rl; transform: rotate(180deg); font: 500 11px/1 var(--mono); letter-spacing: .24em; text-transform: uppercase; color: #ff9a3c; opacity: .85; white-space: nowrap; }
+.fr { position: relative; display: block; padding: 0 12px; color: #efeef8; transition: transform .5s var(--ease), opacity .4s; }
+.fr .pic { position: relative; aspect-ratio: 3 / 2; border-radius: 3px; overflow: hidden; background: #000; box-shadow: 0 0 0 1px rgba(255,255,255,.08); }
+.fr .pic img { width: 100%; height: 100%; object-fit: cover; }
+.fr.ph .pic .bk { position: absolute; inset: 0; filter: blur(22px) saturate(1.4); opacity: .55; transform: scale(1.4); }
+.fr.ph .pic .fg { position: absolute; top: 8%; bottom: 0; left: 50%; width: auto; height: 92%; transform: translateX(-50%); object-fit: contain; border-radius: 10px 10px 0 0; box-shadow: 0 0 0 1px rgba(255,255,255,.18); }
+.fr .ed { display: flex; justify-content: space-between; gap: 8px; margin-top: 10px; font: 500 10px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: #ff9a3c; opacity: .8; }
+.fr .nm { margin: 12px 0 2px; font: 600 17px/1.2 var(--font); } .fr .tg { font-size: 13.5px; color: #9a98ad; line-height: 1.4; }
+.fr svg.ring { position: absolute; left: -2%; right: -2%; top: -9%; width: 104%; height: 66%; pointer-events: none; overflow: visible; }
+.fr svg.ring path { fill: none; stroke: #ff4d4d; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0; transition: stroke-dashoffset .7s var(--ease), opacity .15s; filter: drop-shadow(0 0 3px rgba(255,77,77,.5)); }
+.fr:hover, .fr:focus-visible { transform: translateY(-6px) scale(1.035); z-index: 2; }
+.fr:hover svg.ring path, .fr:focus-visible svg.ring path { stroke-dashoffset: 0; opacity: 1; }
+.roll:has(.fr:hover) .fr:not(:hover) { opacity: .4; }
+.empty { padding: 0 12px; } .empty .pic { aspect-ratio: 3 / 2; border-radius: 3px; background: #08070b; box-shadow: 0 0 0 1px rgba(255,255,255,.05); } .empty .ed { margin-top: 10px; font: 500 10px/1 var(--mono); letter-spacing: .14em; color: #ff9a3c; opacity: .35; }
+.note { margin: 18px 0 0; font: 500 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--faint); }
+</style></head><body>
+<header class="nav"><a class="brand" href="../index.html"><span class="brand-orb"></span>NERDY</a><div class="nav-r"><a class="back" href="index.html">&larr; All concepts</a><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch theme"><span class="knob"></span></button></div></header>
+<main><section class="sec"><div class="wrap">
+  <span class="label">Projects</span><h2 class="h-sec">Current projects.</h2>
+  <div class="roll" id="roll"></div>
+  <p class="note">Circle one to open it</p>
+</div></section></main>
+<footer class="stub"><div class="wrap">NERDY · concept preview, not live</div></footer>
+<script>
+let n = 0;
+const ring = '<svg class="ring" viewBox="0 0 200 110" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M20 58 C 14 14, 150 -2, 190 30 C 214 70, 140 112, 52 100 C 4 92, 6 40, 36 20"/></svg>';
+document.getElementById('roll').innerHTML = GROUPS.map(g => {
+  const ps = PROJECTS.filter(p => p.group === g);
+  const frames = ps.map(p => { n++; return `<a class="fr ${p.phone ? 'ph' : ''}" href="${p.href}">
+    <div class="pic">${p.phone ? `<img class="bk" src="${p.img}" alt=""><img class="fg" src="${p.img}" alt="" loading="lazy">` : shot(p)}</div>${ring}
+    <div class="ed"><span>▸ ${n}</span><span>${p.id}</span><span>${n}A</span></div>
+    <div class="nm">${p.name}</div><div class="tg">${p.tag}</div></a>`; });
+  while (frames.length < 3) { n++; frames.push(`<div class="empty"><div class="pic"></div><div class="ed"><span>▸ ${n}</span><span>—</span><span>${n}A</span></div></div>`); }
+  return `<div class="scroller"><div class="strip"><div class="lead"><span>${g} ▸</span></div>${frames.join('')}</div></div>`;
+}).join('');
+</script></body></html>

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NERDY — concept B Featured</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&family=Schibsted+Grotesk:wght@400..700&family=Martian+Mono:wdth,wght@75..112.5,300..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css"><script src="data.js"></script>
+<link rel="stylesheet" href="list.css"><script src="rows.js"></script>
+<style>
+.lst { max-width: 1040px; }
+.feat { position: relative; display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.25fr); gap: 40px; align-items: center; margin-top: 48px; padding: clamp(28px, 4vw, 52px); border-radius: 30px; border: 1px solid var(--line-2); overflow: hidden; isolation: isolate; background: var(--bg-2); box-shadow: var(--shadow); --c: var(--violet); }
+.feat::before { content: ''; position: absolute; inset: 0; z-index: -1; background: radial-gradient(70% 90% at 100% 0%, color-mix(in srgb, var(--c) 22%, transparent), transparent 70%); }
+.feat .tx { display: grid; gap: 16px; justify-items: start; }
+.feat .eb { font: 500 10.5px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.feat .hd { display: flex; align-items: center; gap: 16px; } .feat .icon { width: 64px; height: 64px; border-radius: 16px; }
+.feat h3 { margin: 0; font: 600 clamp(36px, 4.6vw, 58px)/1 var(--display); letter-spacing: -.04em; }
+.feat p { margin: 0; color: var(--muted); font-size: 17px; max-width: 40ch; }
+.feat .btn { display: inline-flex; align-items: center; gap: 10px; height: 48px; padding: 0 22px; border-radius: 999px; background: var(--btn-bg); color: var(--btn-fg); font: 600 15px/1 var(--font); margin-top: 4px; }
+.feat .btn svg { width: 18px; height: 18px; transition: transform .3s var(--ease); } .feat:hover .btn svg { transform: translateX(3px); }
+.feat .screen { aspect-ratio: 16 / 10; transition: transform .6s var(--ease); } .feat:hover .screen { transform: translateY(-4px); }
+@media (max-width: 860px) { .feat { grid-template-columns: 1fr; gap: 28px; } }
+</style></head><body>
+<header class="nav"><a class="brand" href="../index.html"><span class="brand-orb"></span>NERDY</a><div class="nav-r"><a class="back" href="index.html">&larr; All concepts</a><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch theme"><span class="knob"></span></button></div></header>
+<main><section class="sec"><div class="wrap">
+  <span class="label">Projects</span><h2 class="h-sec">Current projects.</h2>
+  <div id="feat"></div>
+  <div class="lst" id="lst"></div>
+</div></section></main>
+<footer class="stub"><div class="wrap">NERDY · concept preview, not live</div></footer>
+<script>
+const f = PROJECTS[0];
+document.getElementById('feat').innerHTML = `<a class="feat" href="${f.href}" style="--c:${f.color}">
+  <div class="tx"><span class="eb">Featured · ${f.kind}</span><div class="hd"><span class="icon"><img src="${f.icon}" alt=""></span><h3>${f.name}</h3></div>
+  <span class="chip">${f.status}</span><p>${f.desc}</p><span class="btn">View project ${ARROW}</span></div>
+  <div class="screen">${shot(f)}</div></a>`;
+document.getElementById('lst').innerHTML = groups(PROJECTS.slice(1), row);
+</script></body></html>

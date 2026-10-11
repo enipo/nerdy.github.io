@@ -261,8 +261,8 @@
 
   /* ---------- footer ---------- */
   footer { position: relative; padding: 40px 0 36px; overflow: hidden; border-top: 1px solid var(--line); }
-  .foot-mark { font: 900 clamp(60px, 17.5vw, 250px)/.8 var(--display); letter-spacing: -.05em; margin: 0 0 24px -.04em; background: var(--holo); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; opacity: .9; background-position: var(--fx, 50%) 0; user-select: none; }
-  .foot-row { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; font: 500 11px/1.4 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--faint); }
+  .foot-mark { font: 900 clamp(60px, 17.5vw, 250px)/.8 var(--display); letter-spacing: -.05em; margin: 0 0 24px -.04em; background: var(--holo); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; opacity: .9; background-position: var(--fx, 50%) 0; user-select: none; pointer-events: none; }
+  .foot-row { display: flex; position: relative; z-index: 1; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; font: 500 11px/1.4 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--faint); }
   .foot-row a { text-decoration: none; color: var(--muted); }
   .foot-row a:hover { color: var(--text); }
   .foot-row nav { display: flex; gap: 20px; flex-wrap: wrap; }

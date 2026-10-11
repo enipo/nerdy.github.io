@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NERDY — concept 4 Terminal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&family=Schibsted+Grotesk:wght@400..700&family=Martian+Mono:wdth,wght@75..112.5,300..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css"><script src="data.js"></script>
+<style>
+.win { margin-top: 48px; border-radius: 18px; overflow: hidden; border: 1px solid var(--line-2); background: color-mix(in srgb, var(--bg-2) 92%, transparent); box-shadow: var(--shadow); backdrop-filter: blur(22px); }
+.bar { display: flex; align-items: center; gap: 8px; padding: 14px 18px; border-bottom: 1px solid var(--line); font: 500 11px/1 var(--mono); letter-spacing: .08em; color: var(--faint); }
+.bar i { width: 11px; height: 11px; border-radius: 50%; background: var(--line-2); } .bar i:nth-child(1) { background: #ff6b8f; } .bar i:nth-child(2) { background: #ffc257; } .bar i:nth-child(3) { background: #5fe6c5; }
+.bar span { margin: 0 auto; transform: translateX(-20px); }
+.body { display: grid; grid-template-columns: minmax(300px, 1fr) minmax(0, 1.25fr); min-height: 560px; font: 400 14px/1.7 var(--mono); }
+.left { padding: 22px 0; border-right: 1px solid var(--line); }
+.cmd { padding: 0 22px 10px; color: var(--muted); } .cmd b { color: var(--ok); font-weight: 500; } .cmd u { text-decoration: none; color: var(--text); }
+.dir { padding: 14px 22px 4px; color: var(--faint); font-size: 12px; letter-spacing: .08em; }
+.it { display: grid; grid-template-columns: 22px 1fr auto; gap: 8px; align-items: center; padding: 8px 22px; cursor: pointer; border-left: 2px solid transparent; transition: background .2s; }
+.it .cur { color: var(--c); opacity: 0; } .it.sel { background: color-mix(in srgb, var(--c) 12%, transparent); border-left-color: var(--c); } .it.sel .cur { opacity: 1; }
+.it .nm { font-weight: 500; color: var(--text); } .it .st { font-size: 11px; color: var(--muted); letter-spacing: .06em; }
+.it .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--c); margin-right: 8px; }
+.hint { padding: 22px 22px 0; color: var(--faint); font-size: 12px; } kbd { font: inherit; padding: 1px 6px; border-radius: 5px; border: 1px solid var(--line-2); }
+.right { position: relative; padding: 26px; display: grid; grid-template-columns: 1fr auto; gap: 22px; align-content: start; overflow: hidden; }
+.right::before { content: ''; position: absolute; inset: 0; background: radial-gradient(70% 60% at 100% 0%, color-mix(in srgb, var(--c) 18%, transparent), transparent 70%); transition: background .5s; pointer-events: none; }
+.right > * { position: relative; }
+.pv-t { grid-column: 1 / -1; display: flex; gap: 16px; align-items: center; } .pv-t .icon { width: 56px; height: 56px; }
+.pv-t h3 { margin: 0; font: 600 28px/1.1 var(--display); letter-spacing: -.03em; font-family: var(--display); }
+.kv { display: grid; grid-template-columns: auto 1fr; gap: 6px 18px; margin: 4px 0 0; } .kv dt { color: var(--faint); } .kv dd { margin: 0; color: var(--text); }
+.readme { grid-column: 1; color: var(--muted); font: 400 15px/1.6 var(--font); margin: 20px 0 0; }
+.readme::before { content: '# README.md'; display: block; font: 500 12px/1 var(--mono); color: var(--c); margin-bottom: 10px; letter-spacing: .06em; }
+.pv-s { grid-row: 2 / span 3; grid-column: 2; width: 190px; }
+.pv-s.wide { width: 320px; } .pv-s .screen { aspect-ratio: 9/16; } .pv-s.wide .screen { aspect-ratio: 16/10; }
+.open { grid-column: 1; margin-top: 10px; justify-self: start; display: inline-flex; gap: 10px; align-items: center; height: 44px; padding: 0 20px; border-radius: 999px; background: var(--btn-bg); color: var(--btn-fg); font: 600 14px/1 var(--font); }
+.open svg { width: 16px; height: 16px; }
+.caret { display: inline-block; width: 8px; height: 15px; background: var(--ok); vertical-align: -2px; animation: bl 1s steps(1) infinite; } @keyframes bl { 50% { opacity: 0; } }
+@media (max-width: 860px) { .body { grid-template-columns: 1fr; } .left { border-right: 0; border-bottom: 1px solid var(--line); } .right { grid-template-columns: 1fr; } .pv-s, .pv-s.wide { grid-row: auto; grid-column: 1; width: 100%; max-width: 280px; } }
+</style></head><body>
+<header class="nav"><a class="brand" href="../index.html"><span class="brand-orb"></span>NERDY</a><div class="nav-r"><a class="back" href="index.html">&larr; All concepts</a><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch theme"><span class="knob"></span></button></div></header>
+<main><section class="sec"><div class="wrap">
+  <span class="label">Projects</span><h2 class="h-sec">Current projects.</h2>
+  <div class="win" id="win"><div class="bar"><i></i><i></i><i></i><span>nerdy — ~/projects</span></div>
+    <div class="body"><div class="left" id="left"></div><div class="right" id="right"></div></div></div>
+</div></section></main>
+<footer class="stub"><div class="wrap">NERDY · concept preview, not live</div></footer>
+<script>
+const left = document.getElementById('left'), right = document.getElementById('right'), win = document.getElementById('win');
+let sel = 0;
+left.innerHTML = '<div class="cmd"><b>~</b> $ <u>ls -l projects/</u> <span class="caret"></span></div>' + GROUPS.map(g => `<div class="dir">${g.toLowerCase()}/</div>` + PROJECTS.map((p, i) => p.group === g ? `<div class="it" data-i="${i}" style="--c:${p.color}"><span class="cur">&gt;</span><span class="nm"><span class="dot"></span>${p.name.toLowerCase().replace(/ /g, '-')}</span><span class="st">${p.status}</span></div>` : '').join('')).join('') + '<div class="hint"><kbd>&uarr;</kbd> <kbd>&darr;</kbd> browse · <kbd>enter</kbd> open</div>';
+const items = [...left.querySelectorAll('.it')];
+function show(i) {
+  sel = (i + PROJECTS.length) % PROJECTS.length; const p = PROJECTS[sel];
+  items.forEach(el => el.classList.toggle('sel', +el.dataset.i === sel));
+  right.style.setProperty('--c', p.color);
+  right.innerHTML = `
+   <div class="pv-t"><span class="icon"><img src="${p.icon}" alt=""></span><div><h3>${p.name}</h3><span class="chip">${p.status}</span></div></div>
+   <div><dl class="kv"><dt>type</dt><dd>${p.kind}</dd><dt>group</dt><dd>${p.group.toLowerCase()}</dd><dt>status</dt><dd>${p.status.toLowerCase()}</dd></dl>
+   <p class="readme">${p.desc}</p>
+   <a class="open" href="${p.href}">Open project ${ARROW}</a></div>
+   <div class="pv-s${p.phone ? '' : ' wide'}"><div class="screen">${shot(p)}</div></div>`;
+}
+items.forEach(el => { el.addEventListener('mouseenter', () => show(+el.dataset.i)); el.addEventListener('click', () => location.href = PROJECTS[+el.dataset.i].href); });
+addEventListener('keydown', e => {
+  if (e.key === 'ArrowDown') { show(sel + 1); e.preventDefault(); } else if (e.key === 'ArrowUp') { show(sel - 1); e.preventDefault(); } else if (e.key === 'Enter') location.href = PROJECTS[sel].href;
+});
+show(0);
+</script></body></html>

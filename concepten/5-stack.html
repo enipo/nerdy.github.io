@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NERDY — concept 5 Stack</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&family=Schibsted+Grotesk:wght@400..700&family=Martian+Mono:wdth,wght@75..112.5,300..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css"><script src="data.js"></script>
+<style>
+.stack { margin-top: 48px; padding-bottom: 8vh; }
+.sc { position: sticky; top: calc(84px + var(--i) * 16px); margin-bottom: 7vh; transform-origin: 50% 0; will-change: transform; }
+.in { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: center; min-height: min(62vh, 560px); padding: clamp(24px, 3.4vw, 48px); border-radius: 32px; border: 1px solid var(--line-2); overflow: hidden; isolation: isolate; background: var(--bg-2); box-shadow: 0 -20px 60px -30px rgba(0,0,0,.5), var(--shadow); }
+.in::before { content: ''; position: absolute; inset: 0; z-index: -1; background: radial-gradient(80% 90% at 85% 50%, color-mix(in srgb, var(--c) 30%, transparent), transparent 70%), linear-gradient(135deg, color-mix(in srgb, var(--c) 8%, var(--bg-2)), var(--bg-2)); }
+.big { position: absolute; z-index: -1; left: -1%; bottom: -9%; font: 800 clamp(120px, 24vw, 340px)/.8 var(--display); letter-spacing: -.06em; color: var(--c); opacity: .09; user-select: none; }
+.tx { display: grid; gap: 14px; justify-items: start; align-content: center; }
+.tx .meta { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font: 500 10.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.tx .meta b { color: var(--c); font-weight: 500; }
+.tx h3 { margin: 0; font: 600 clamp(36px, 5.4vw, 76px)/.98 var(--display); letter-spacing: -.04em; display: flex; align-items: center; gap: 18px; }
+.tx h3 .icon { width: clamp(44px, 5vw, 68px); height: clamp(44px, 5vw, 68px); }
+.tx p { margin: 0; color: var(--muted); max-width: 44ch; font-size: 17px; }
+.btn { display: inline-flex; align-items: center; gap: 10px; height: 48px; padding: 0 22px; border-radius: 999px; background: var(--btn-bg); color: var(--btn-fg); font: 600 15px/1 var(--font); margin-top: 6px; box-shadow: 0 10px 30px -10px var(--c); }
+.btn svg { width: 18px; height: 18px; transition: transform .3s var(--ease); } .btn:hover svg { transform: translateX(3px); }
+.vis { display: grid; place-items: center; min-height: 0; }
+.vis.ph .screen { width: min(62%, 270px); aspect-ratio: 9/16; transform: rotate(4deg); transition: transform .6s var(--ease); }
+.sc:hover .vis.ph .screen { transform: rotate(0); }
+.vis.land .screen { width: 100%; aspect-ratio: 16/10; transform: perspective(1200px) rotateY(-8deg) rotateX(2deg); transition: transform .6s var(--ease); }
+.sc:hover .vis.land .screen { transform: none; }
+.gtag { position: absolute; top: 20px; right: 24px; font: 500 10px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--faint); }
+@media (max-width: 800px) { .in { grid-template-columns: 1fr; min-height: 0; } .vis.ph .screen { width: 50%; } .sc { top: calc(76px + var(--i) * 10px); } }
+</style></head><body>
+<header class="nav"><a class="brand" href="../index.html"><span class="brand-orb"></span>NERDY</a><div class="nav-r"><a class="back" href="index.html">&larr; All concepts</a><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch theme"><span class="knob"></span></button></div></header>
+<main><section class="sec"><div class="wrap">
+  <span class="label">Projects</span><h2 class="h-sec">Current projects.</h2>
+  <div class="stack" id="stack"></div>
+</div></section></main>
+<footer class="stub"><div class="wrap">NERDY · concept preview, not live</div></footer>
+<script>
+const stack = document.getElementById('stack');
+stack.innerHTML = PROJECTS.map((p, i) => `
+<div class="sc" style="--i:${i};--c:${p.color}"><a class="in" href="${p.href}">
+  <span class="big" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span><span class="gtag">${p.group}</span>
+  <div class="tx"><div class="meta"><b>${String(i + 1).padStart(2, '0')}</b><span>${p.kind}</span><span class="chip">${p.status}</span></div>
+    <h3><span class="icon"><img src="${p.icon}" alt=""></span>${p.name}</h3>
+    <p>${p.desc}</p><span class="btn">View project ${ARROW}</span></div>
+  <div class="vis ${p.phone ? 'ph' : 'land'}"><div class="screen">${shot(p)}</div></div>
+</a></div>`).join('');
+/* kaarten die bedekt raken schalen iets in */
+const cards = [...stack.querySelectorAll('.sc')];
+function tick() {
+  cards.forEach((c, i) => {
+    const nx = cards[i + 1]; if (!nx) return;
+    const d = nx.getBoundingClientRect().top - c.getBoundingClientRect().top;
+    const k = Math.max(0, Math.min(1, 1 - d / innerHeight));
+    c.style.transform = `scale(${1 - k * .05})`; c.style.filter = `brightness(${1 - k * .25})`;
+  });
+}
+addEventListener('scroll', () => requestAnimationFrame(tick), { passive: true }); tick();
+</script></body></html>

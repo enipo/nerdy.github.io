@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NERDY — concept 2 Index</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&family=Schibsted+Grotesk:wght@400..700&family=Martian+Mono:wdth,wght@75..112.5,300..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css"><script src="data.js"></script>
+<style>
+.list { margin-top: 56px; border-top: 1px solid var(--line-2); }
+.gh { display: flex; align-items: center; gap: 12px; padding: 36px 0 14px; font: 500 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.gh::before { content: ''; width: 28px; height: 1px; background: var(--holo); }
+.gh em { margin-left: auto; font-style: normal; color: var(--faint); }
+.row { position: relative; display: grid; grid-template-columns: 56px 1fr auto 40px; align-items: center; gap: 24px; padding: 22px 0; border-top: 1px solid var(--line); transition: padding .5s var(--ease), color .3s; }
+.row:hover { padding-left: 18px; padding-right: 18px; }
+.row::before { content: ''; position: absolute; inset: 0 -2px; background: var(--c); opacity: 0; transition: opacity .35s; z-index: -1; border-radius: 14px; }
+.row:hover::before { opacity: .09; }
+.row .n { font: 500 12px/1 var(--mono); letter-spacing: .1em; color: var(--faint); }
+.row h3 { margin: 0; font: 500 clamp(34px, 7.4vw, 104px)/1 var(--display); letter-spacing: -.045em; transition: letter-spacing .6s var(--ease), color .3s, font-weight .5s; }
+.row:hover h3 { color: var(--c); font-weight: 700; letter-spacing: -.03em; }
+.row .info { display: grid; gap: 8px; justify-items: end; text-align: right; font: 500 10.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.row .arr { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--line-2); transition: background .3s, color .3s, transform .5s var(--ease); }
+.row .arr svg { width: 18px; height: 18px; }
+.row:hover .arr { background: var(--text); color: var(--bg); transform: rotate(-45deg); }
+.row .tag { display: none; }
+/* zwevende preview */
+.float { position: fixed; z-index: 40; left: 0; top: 0; pointer-events: none; width: 280px; border-radius: 20px; overflow: hidden; border: 1px solid var(--line-2); box-shadow: var(--shadow); background: var(--bg-2); opacity: 0; transform: translate(-50%, -50%) scale(.85) rotate(-4deg); transition: opacity .25s, transform .35s var(--ease); }
+.float.on { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(-4deg); }
+.float.wide { width: 420px; } .float img { width: 100%; display: block; aspect-ratio: 9/16; object-fit: cover; }
+.float.wide img { aspect-ratio: 16/10; }
+@media (hover: none), (max-width: 760px) { .float { display: none; } .row { grid-template-columns: 1fr 40px; } .row .n, .row .info { display: none; } .row .tag { display: block; grid-column: 1; color: var(--muted); font-size: 14px; margin-top: -14px; } .row:hover { padding-left: 0; padding-right: 0; } }
+</style></head><body>
+<header class="nav"><a class="brand" href="../index.html"><span class="brand-orb"></span>NERDY</a><div class="nav-r"><a class="back" href="index.html">&larr; All concepts</a><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch theme"><span class="knob"></span></button></div></header>
+<main><section class="sec"><div class="wrap">
+  <span class="label">Projects</span><h2 class="h-sec">Current projects.</h2>
+  <div class="list" id="list"></div>
+</div></section></main>
+<div class="float" id="float"></div>
+<footer class="stub"><div class="wrap">NERDY · concept preview, not live</div></footer>
+<script>
+let n = 0;
+document.getElementById('list').innerHTML = GROUPS.map(g => {
+  const ps = PROJECTS.filter(p => p.group === g);
+  return `<div class="gh">${g}<em>${String(ps.length).padStart(2, '0')}</em></div>` + ps.map(p => `
+  <a class="row" href="${p.href}" data-id="${p.id}" style="--c:${p.color}">
+    <span class="n">${String(++n).padStart(2, '0')}</span>
+    <div><h3>${p.name}</h3><div class="tag">${p.tag}</div></div>
+    <div class="info"><span>${p.kind}</span><span class="chip">${p.status}</span></div>
+    <span class="arr">${ARROW}</span>
+  </a>`).join('');
+}).join('');
+const fl = document.getElementById('float');
+document.querySelectorAll('.row').forEach(r => {
+  const p = PROJECTS.find(x => x.id === r.dataset.id);
+  r.addEventListener('mouseenter', () => { fl.className = 'float on' + (p.phone ? '' : ' wide'); fl.innerHTML = shot(p); });
+  r.addEventListener('mouseleave', () => fl.classList.remove('on'));
+  r.addEventListener('mousemove', e => { fl.style.left = e.clientX + 'px'; fl.style.top = e.clientY + 'px'; });
+});
+</script></body></html>

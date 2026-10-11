@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NERDY — concept 6 Launcher</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&family=Schibsted+Grotesk:wght@400..700&family=Martian+Mono:wdth,wght@75..112.5,300..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css"><script src="data.js"></script>
+<style>
+.folders { display: grid; grid-template-columns: 3.1fr 2fr 2fr; gap: 22px; margin-top: 52px; align-items: start; }
+.folder { padding: 22px 24px 30px; border-radius: 36px; background: var(--glass); border: 1px solid var(--line); box-shadow: var(--shadow), inset 0 1px 0 var(--edge); backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px); }
+.folder h3 { margin: 0 0 26px; font: 500 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 12px; }
+.folder h3::before { content: ''; width: 28px; height: 1px; background: var(--holo); }
+.apps { display: flex; flex-wrap: wrap; gap: 30px 22px; }
+.app { display: grid; justify-items: center; gap: 12px; width: 132px; padding: 0; border: 0; background: none; color: inherit; font: inherit; cursor: pointer; }
+.app .icon { width: 128px; height: 128px; border-radius: 28px; transition: transform .5s var(--ease), box-shadow .5s var(--ease); }
+.app:hover .icon, .app:focus-visible .icon { transform: translateY(-7px) scale(1.07); box-shadow: 0 26px 44px -14px var(--c), 0 0 0 1px var(--c); }
+.app:active .icon { transform: scale(.93); transition-duration: .12s; }
+.app .n { font: 600 15px/1.2 var(--font); text-align: center; }
+.hint { margin: 26px 0 0; font: 500 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--faint); }
+
+dialog { border: 0; padding: 0; background: transparent; color: var(--text); width: min(940px, 94vw); max-width: none; max-height: 94vh; overflow: visible; }
+dialog::backdrop { background: color-mix(in srgb, var(--bg) 55%, transparent); backdrop-filter: blur(16px) saturate(1.3); -webkit-backdrop-filter: blur(16px) saturate(1.3); }
+dialog[open] { animation: pop .5s var(--ease); } dialog[open]::backdrop { animation: fade .4s; }
+@keyframes pop { from { opacity: 0; transform: translateY(26px) scale(.92); } } @keyframes fade { from { opacity: 0; } }
+.sheet { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); border-radius: 34px; overflow: hidden; border: 1px solid var(--line-2); background: var(--bg-2); box-shadow: 0 60px 120px -30px rgba(0,0,0,.6); }
+.vis { position: relative; display: grid; place-items: center; padding: 36px; background: radial-gradient(90% 80% at 50% 0%, color-mix(in srgb, var(--c) 40%, transparent), transparent 75%), color-mix(in srgb, var(--c) 8%, var(--bg-3)); }
+.vis .screen { width: 100%; } .vis.ph .screen { width: min(240px, 100%); } .vis img { height: auto; }
+.txt { padding: 44px 40px; display: grid; gap: 16px; align-content: center; justify-items: start; }
+.txt .top { display: flex; align-items: center; gap: 16px; } .txt .icon { width: 64px; height: 64px; }
+.txt h3 { margin: 0; font: 600 clamp(30px, 4vw, 48px)/1 var(--display); letter-spacing: -.035em; }
+.txt .kind { font: 500 10.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.txt p { margin: 0; color: var(--muted); font-size: 17px; max-width: 40ch; }
+.btn { display: inline-flex; align-items: center; gap: 10px; height: 50px; padding: 0 24px; border-radius: 999px; background: var(--btn-bg); color: var(--btn-fg); font: 600 15px/1 var(--font); box-shadow: 0 10px 30px -10px var(--c); margin-top: 6px; }
+.btn svg { width: 18px; height: 18px; transition: transform .3s var(--ease); } .btn:hover svg { transform: translateX(3px); }
+.x { position: absolute; top: 16px; right: 16px; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line-2); background: color-mix(in srgb, var(--bg) 60%, transparent); color: var(--text); cursor: pointer; font-size: 20px; line-height: 1; z-index: 2; }
+.x:hover { background: var(--glass-2); }
+@media (max-width: 1000px) { .folders { grid-template-columns: 1fr; } }
+@media (max-width: 720px) { .sheet { grid-template-columns: 1fr; } .vis { padding: 24px; } .vis.ph .screen { width: 150px; } .txt { padding: 28px 24px 32px; } dialog { max-height: 92vh; overflow: auto; border-radius: 34px; } }
+</style></head><body>
+<header class="nav"><a class="brand" href="../index.html"><span class="brand-orb"></span>NERDY</a><div class="nav-r"><a class="back" href="index.html">&larr; All concepts</a><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch theme"><span class="knob"></span></button></div></header>
+<main><section class="sec"><div class="wrap">
+  <span class="label">Projects</span><h2 class="h-sec">Current projects.</h2>
+  <div class="folders" id="folders"></div>
+  <p class="hint">Tap an app to peek inside</p>
+</div></section></main>
+<dialog id="dlg" aria-label="Project"></dialog>
+<footer class="stub"><div class="wrap">NERDY · concept preview, not live</div></footer>
+<script>
+document.getElementById('folders').innerHTML = GROUPS.map(g => `<div class="folder"><h3>${g}</h3><div class="apps">` +
+  PROJECTS.filter(p => p.group === g).map(p => `<button class="app" data-id="${p.id}" style="--c:${p.color}"><span class="icon"><img src="${p.icon}" alt=""></span><span class="n">${p.name}</span></button>`).join('') + '</div></div>').join('');
+const dlg = document.getElementById('dlg');
+document.getElementById('folders').addEventListener('click', e => {
+  const b = e.target.closest('.app'); if (!b) return;
+  const p = PROJECTS.find(x => x.id === b.dataset.id);
+  dlg.style.setProperty('--c', p.color);
+  dlg.innerHTML = `<div class="sheet" style="--c:${p.color}"><button class="x" aria-label="Close" data-x>&times;</button>
+    <div class="vis ${p.phone ? 'ph' : ''}"><div class="screen">${shot(p)}</div></div>
+    <div class="txt"><div class="top"><span class="icon"><img src="${p.icon}" alt=""></span><div><span class="kind">${p.group} · ${p.kind}</span></div></div>
+      <h3>${p.name}</h3><span class="chip">${p.status}</span><p>${p.desc}</p><a class="btn" href="${p.href}">View project ${ARROW}</a></div></div>`;
+  dlg.showModal();
+});
+dlg.addEventListener('click', e => { if (e.target === dlg || e.target.closest('[data-x]')) dlg.close(); });
+</script></body></html>

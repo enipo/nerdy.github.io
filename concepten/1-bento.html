@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NERDY — concept 1 Bento</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&family=Schibsted+Grotesk:wght@400..700&family=Martian+Mono:wdth,wght@75..112.5,300..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css"><script src="data.js"></script>
+<style>
+.bento { display: grid; grid-template-columns: repeat(12, 1fr); grid-auto-rows: 120px; gap: 14px; margin-top: 48px; }
+.t { position: relative; overflow: hidden; border-radius: var(--r); border: 1px solid var(--line); background: var(--bg-2); box-shadow: var(--shadow); isolation: isolate; display: flex; flex-direction: column; justify-content: flex-end; padding: 24px; transition: transform .5s var(--ease), border-color .3s; }
+.t:hover { transform: translateY(-4px); border-color: color-mix(in srgb, var(--c) 60%, var(--line-2)); }
+.t::before { content: ''; position: absolute; inset: 0; z-index: -2; background: radial-gradient(90% 80% at 80% 0%, color-mix(in srgb, var(--c) 28%, transparent), transparent 70%); }
+.t .bg { position: absolute; z-index: -1; transition: transform .9s var(--ease); }
+.t:hover .bg { transform: scale(1.04); }
+.t.land .bg { inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .4; filter: saturate(.9); }
+.t.land::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(color-mix(in srgb, var(--bg) 35%, transparent), var(--bg) 78%); }
+.t.ph .bg { right: 22px; top: 22px; width: 40%; max-width: 230px; height: auto; border-radius: 22px; border: 1px solid var(--line-2); box-shadow: var(--shadow); transform: rotate(3deg); }
+.t.ph:hover .bg { transform: rotate(0) translateY(-6px); }
+.t .ic { position: absolute; top: 22px; left: 22px; width: 52px; height: 52px; }
+.t .meta { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; font: 500 10.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.t h3 { margin: 12px 0 6px; font: 600 clamp(24px, 2.6vw, 36px)/1.05 var(--display); letter-spacing: -.03em; }
+.t p { margin: 0; color: var(--muted); font-size: 15px; max-width: 34ch; }
+.t .grp { position: absolute; top: 28px; right: 24px; font: 500 10px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--c); }
+.t.ph .grp { top: auto; bottom: 24px; right: 24px; }
+/* plaatsing */
+.a { grid-column: span 7; grid-row: span 4; } .a .ic { top: 22px; }
+.b { grid-column: span 5; grid-row: span 4; }
+.c { grid-column: span 4; grid-row: span 4; }
+.d { grid-column: span 4; grid-row: span 4; }
+.e { grid-column: span 4; grid-row: span 4; }
+.f { grid-column: span 7; grid-row: span 3; }
+.g { grid-column: span 5; grid-row: span 3; }
+.t.ph p { max-width: 20ch; }
+.t.ph .meta { flex-direction: column; align-items: flex-start; gap: 10px; }
+.t.land .grp { top: 34px; }
+@media (max-width: 900px) { .bento { grid-auto-rows: 110px; } .a,.b,.c,.d,.e,.f,.g { grid-column: span 12; grid-row: span 4; } .t.ph .bg { width: 38%; } }
+</style></head><body>
+<header class="nav"><a class="brand" href="../index.html"><span class="brand-orb"></span>NERDY</a><div class="nav-r"><a class="back" href="index.html">&larr; All concepts</a><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch theme"><span class="knob"></span></button></div></header>
+<main><section class="sec"><div class="wrap">
+  <span class="label">Projects</span><h2 class="h-sec">Current projects.</h2>
+  <div class="bento" id="bento"></div>
+</div></section></main>
+<footer class="stub"><div class="wrap">NERDY · concept preview, not live</div></footer>
+<script>
+const cls = { mier: 'a land', drift: 'b ph', tbd: 'c ph', tonek: 'd ph', itp: 'e ph', tankeretank: 'f land', youcook: 'g land' };
+document.getElementById('bento').innerHTML = PROJECTS.map(p => `
+<a class="t ${cls[p.id]}" href="${p.href}" style="--c:${p.color}">
+  ${shot(p, 'bg')}
+  <span class="icon ic"><img src="${p.icon}" alt=""></span>
+  <span class="grp">${p.group}</span>
+  <div class="meta"><span>${p.kind}</span><span class="chip">${p.status}</span></div>
+  <h3>${p.name}</h3><p>${p.tag}</p>
+</a>`).join('');
+</script></body></html>

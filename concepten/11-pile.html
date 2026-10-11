@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NERDY — concept 11 Pile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&family=Schibsted+Grotesk:wght@400..700&family=Martian+Mono:wdth,wght@75..112.5,300..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css"><script src="data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/matter-js@0.19.0/build/matter.min.js"></script>
+<style>
+.bar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 40px; }
+.pill { font: 600 14px/1 var(--font); padding: 12px 18px; border-radius: 999px; border: 1px solid var(--line-2); background: var(--glass); color: var(--text); cursor: pointer; transition: background .3s, transform .3s var(--ease); }
+.pill:hover { background: var(--glass-2); transform: translateY(-2px); } .pill[aria-pressed='true'] { background: var(--btn-bg); color: var(--btn-fg); border-color: transparent; }
+.bar span { margin-left: 10px; font: 500 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--faint); }
+.stage { position: relative; margin-top: 18px; height: clamp(560px, 80vh, 800px); border-radius: 32px; border: 1px solid var(--line-2); overflow: hidden; background-color: color-mix(in srgb, var(--bg-2) 80%, transparent); background-image: radial-gradient(var(--line-2) 1.2px, transparent 1.6px); background-size: 24px 24px; box-shadow: inset 0 0 90px -30px rgba(0,0,0,.45); user-select: none; -webkit-user-select: none; }
+.stage::after { content: ''; position: absolute; inset: auto 0 0 0; height: 90px; background: linear-gradient(transparent, color-mix(in srgb, var(--bg) 55%, transparent)); pointer-events: none; }
+.pk { position: absolute; left: 0; top: 0; display: block; padding: 7px; border-radius: 20px; background: #fff; color: #15131e; cursor: grab; opacity: 0; will-change: transform; -webkit-user-drag: none; box-shadow: 0 0 0 1px rgba(0,0,0,.1), 0 14px 22px -10px rgba(0,0,0,.55); }
+.pk.live { opacity: 1; } .stage.dragging .pk { cursor: grabbing; }
+.pk img { -webkit-user-drag: none; pointer-events: none; }
+.pk .pic { position: relative; border-radius: 14px; overflow: hidden; background: color-mix(in srgb, var(--c) 30%, #111); }
+.pk .pic img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.pk .cp { display: flex; align-items: center; gap: 10px; padding: 10px 6px 4px; }
+.pk .cp .icon { width: 32px; height: 32px; border-radius: 9px; box-shadow: none; }
+.pk .cp b { display: block; font: 700 15px/1.1 var(--display); letter-spacing: -.02em; } .pk .cp small { display: block; margin-top: 3px; font: 500 9.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: #6b6880; }
+.pk .tab { position: absolute; top: 14px; left: 14px; z-index: 2; padding: 5px 9px; border-radius: 999px; font: 600 9.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: #fff; background: var(--c); }
+/* holografische foil: regenboog die meebeweegt met de draaihoek + glans */
+.foil, .glare { position: absolute; inset: 0; border-radius: inherit; pointer-events: none; }
+.foil { mix-blend-mode: multiply; opacity: .38; background: linear-gradient(115deg, #7cf4ff, #a98bff, #ff8fd8, #ffd89a, #7cf4ff, #a98bff, #ff8fd8, #ffd89a); background-size: 260% 100%; background-position: var(--fp, 0%) 0; }
+.glare { background: radial-gradient(circle at var(--gx, 30%) var(--gy, 10%), rgba(255,255,255,.85), transparent 48%); opacity: .5; mix-blend-mode: soft-light; }
+.pk:hover .glare { opacity: .9; }
+</style></head><body>
+<header class="nav"><a class="brand" href="../index.html"><span class="brand-orb"></span>NERDY</a><div class="nav-r"><a class="back" href="index.html">&larr; All concepts</a><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch theme"><span class="knob"></span></button></div></header>
+<main><section class="sec"><div class="wrap">
+  <span class="label">Projects</span><h2 class="h-sec">Current projects.</h2>
+  <div class="bar"><button class="pill" id="drop">Drop again</button><button class="pill" id="shake">Shake</button><button class="pill" id="zg" aria-pressed="false">Zero-g</button><span>Throw them around. Click one to open it.</span></div>
+  <div class="stage" id="stage"></div>
+</div></section></main>
+<footer class="stub"><div class="wrap">NERDY · concept preview, not live</div></footer>
+<script>
+const { Engine, Bodies, Body, Composite, Mouse, MouseConstraint, Events } = Matter;
+const stage = document.getElementById('stage');
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const SZ = p => p.phone ? { w: 196, ph: 250 } : { w: 288, ph: 178 };
+const items = PROJECTS.map(p => {
+  const z = SZ(p), el = document.createElement('a'); el.className = 'pk'; el.href = p.href; el.draggable = false; el.style.setProperty('--c', p.color); el.style.width = z.w + 'px';
+  el.innerHTML = '<span class="tab">' + p.group + '</span><div class="pic" style="height:' + z.ph + 'px">' + shot(p) + '</div><div class="cp"><span class="icon"><img src="' + p.icon + '" alt=""></span><span><b>' + p.name + '</b><small>' + p.kind + '</small></span></div><i class="foil"></i><i class="glare"></i>';
+  stage.appendChild(el); return { p, el, w: z.w, h: 0, body: null };
+});
+items.forEach(it => { it.h = it.el.offsetHeight; it.el.style.left = -it.w / 2 + 'px'; it.el.style.top = -it.h / 2 + 'px'; });
+let engine, mc, W, H, f, raf = 0, acc = 0, last = 0, ceiling = null, zero = false, started = false, timers = [];
+const mouse = Mouse.create(stage);
+function build() {
+  W = stage.clientWidth; H = stage.clientHeight; f = Math.max(.52, Math.min(1, W / 1060) * .96);
+  engine = Engine.create({ gravity: { x: 0, y: zero ? 0 : 1 } });
+  const o = { isStatic: true, friction: .6, render: { visible: false } };
+  Composite.add(engine.world, [Bodies.rectangle(W / 2, H + 30, W * 3, 60, o), Bodies.rectangle(-30, H / 2 - 3000, 60, 6400, o), Bodies.rectangle(W + 30, H / 2 - 3000, 60, 6400, o)]);
+  mc = MouseConstraint.create(engine, { mouse, constraint: { stiffness: .2, damping: .1, render: { visible: false } } });
+  Composite.add(engine.world, mc);
+  Events.on(mc, 'startdrag', () => stage.classList.add('dragging')); Events.on(mc, 'enddrag', () => stage.classList.remove('dragging'));
+  ceiling = null; items.forEach(it => { it.body = null; it.el.classList.remove('live'); });
+}
+function addBody(it, x, y) {
+  const b = Bodies.rectangle(x, y, it.w * f, it.h * f, { chamfer: { radius: 16 * f }, restitution: zero ? .85 : .3, friction: .5, frictionStatic: .7, frictionAir: zero ? .003 : .012, density: .0016, angle: (Math.random() - .5) * 1.3 });
+  Body.setAngularVelocity(b, (Math.random() - .5) * .14); Composite.add(engine.world, b); it.body = b; it.el.classList.add('live');
+}
+function spawn(gap) {
+  timers.forEach(clearTimeout); timers = [];
+  if (ceiling) { Composite.remove(engine.world, ceiling); ceiling = null; }
+  items.forEach((it, i) => timers.push(setTimeout(() => { if (it.body) Composite.remove(engine.world, it.body); addBody(it, W * (.16 + .68 * Math.random()), -it.h * f * .6 - 30); }, 150 + i * gap)));
+  timers.push(setTimeout(() => { ceiling = Bodies.rectangle(W / 2, -30, W * 3, 60, { isStatic: true }); Composite.add(engine.world, ceiling); }, 150 + items.length * gap + 2600));
+}
+function paint() {
+  items.forEach(it => {
+    const b = it.body; if (!b) return; const a = b.angle, x = b.position.x, y = b.position.y;
+    it.el.style.transform = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px) rotate(' + a.toFixed(3) + 'rad) scale(' + f + ')';
+    it.el.style.setProperty('--fp', (a * 70 + x * .14 + y * .06).toFixed(1) + '%');
+    it.el.style.setProperty('--gx', (50 + Math.sin(a) * 70).toFixed(0) + '%'); it.el.style.setProperty('--gy', (25 - Math.cos(a) * 40).toFixed(0) + '%');
+  });
+}
+function tick(t) { raf = requestAnimationFrame(tick); acc += Math.min(t - last, 50); last = t; while (acc >= 16.667) { Engine.update(engine, 16.667); acc -= 16.667; } paint(); }
+function run() { if (!raf && !reduced) { last = performance.now(); raf = requestAnimationFrame(tick); } }
+function halt() { cancelAnimationFrame(raf); raf = 0; }
+function start() {
+  build();
+  if (reduced) { items.forEach((it, i) => addBody(it, W * (.2 + .6 * ((i * 37 % 10) / 10)), 60 + i * 90)); for (let k = 0; k < 900; k++) Engine.update(engine, 16.667); paint(); return; }
+  spawn(started ? 90 : 260); started = true;
+}
+new IntersectionObserver(es => { const v = es[0].isIntersecting; if (v) { if (!started) start(); run(); } else halt(); }, { threshold: .3 }).observe(stage);
+document.getElementById('drop').onclick = () => { if (reduced) return start(); spawn(200); };
+document.getElementById('shake').onclick = () => items.forEach(it => { if (!it.body) return; Body.setVelocity(it.body, { x: (Math.random() - .5) * 34, y: -12 - Math.random() * 18 }); Body.setAngularVelocity(it.body, (Math.random() - .5) * .3); });
+document.getElementById('zg').onclick = e => {
+  zero = !zero; e.currentTarget.setAttribute('aria-pressed', zero); engine.gravity.y = zero ? 0 : 1;
+  items.forEach(it => { const b = it.body; if (!b) return; b.restitution = zero ? .85 : .3; b.frictionAir = zero ? .003 : .012; if (zero) { Body.setVelocity(b, { x: (Math.random() - .5) * 8, y: -2 - Math.random() * 6 }); Body.setAngularVelocity(b, (Math.random() - .5) * .1); } });
+};
+/* scrollen laat de stapel rammelen */
+let sy = scrollY;
+addEventListener('scroll', () => { const d = Math.abs(scrollY - sy); sy = scrollY; if (!raf || zero || d < 6) return; items.forEach(it => { if (it.body) Body.setVelocity(it.body, { x: it.body.velocity.x, y: it.body.velocity.y - Math.min(d, 50) * .055 }); }); }, { passive: true });
+/* klik na slepen mag geen link openen */
+let dx = 0, dy = 0;
+stage.addEventListener('pointerdown', e => { dx = e.clientX; dy = e.clientY; }, true);
+stage.addEventListener('click', e => { if (Math.hypot(e.clientX - dx, e.clientY - dy) > 6) e.preventDefault(); }, true);
+let lw = stage.clientWidth, rt = 0; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { if (stage.clientWidth !== lw) { lw = stage.clientWidth; if (started) start(); } }, 250); });
+</script></body></html>
